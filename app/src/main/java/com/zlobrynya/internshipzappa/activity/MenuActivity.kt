@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterTab
 import com.zlobrynya.internshipzappa.fragment.CategoryFragment
@@ -17,7 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
-
+import kotlinx.android.synthetic.main.activity_scrolling.*
 
 
 class MenuActivity: AppCompatActivity() {
@@ -26,7 +25,8 @@ class MenuActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_menu)
+        setContentView(R.layout.activity_scrolling)
+        setSupportActionBar(toolbar)
 
         //Get json data from file
         ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
