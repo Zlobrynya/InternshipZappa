@@ -1,7 +1,9 @@
 package com.zlobrynya.internshipzappa.adapter
 
+import android.content.Context
 import android.os.Build
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -11,7 +13,7 @@ import android.view.LayoutInflater
 import com.zlobrynya.internshipzappa.tools.json.Dish
 
 
-class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
+class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_menu, parent, false) as View
         return Holder(view)
@@ -23,6 +25,9 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>): RecyclerView.
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.nameDish?.text = myDataset[position].name
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+           holder.imageView!!.setImageDrawable(context.getDrawable(context.resources.getIdentifier(myDataset[position].pathImage,"drawable", context!!.packageName)))
+        }
     }
 
 

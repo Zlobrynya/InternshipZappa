@@ -20,8 +20,8 @@ import kotlinx.android.synthetic.main.activity_scrolling.*
 
 
 class MenuActivity: AppCompatActivity() {
-    private val imageResId = intArrayOf(R.drawable.hot, R.drawable.salad, R.drawable.broth,
-        R.drawable.soda, R.drawable.burger, R.drawable.beer )
+    private val imageResId = intArrayOf(R.mipmap.ic_hot, R.mipmap.ic_salad, R.mipmap.ic_broth,
+        R.mipmap.ic_soda, R.mipmap.ic_burger, R.mipmap.ic_beer )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

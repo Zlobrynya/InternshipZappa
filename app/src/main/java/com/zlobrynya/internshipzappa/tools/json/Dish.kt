@@ -3,10 +3,11 @@ package com.zlobrynya.internshipzappa.tools.json
 import android.os.Parcel
 import android.os.Parcelable
 
-class Dish(val name: String, val price: Int, val descr: String, val weight: String): Parcelable {
+class Dish(val name: String, val price: Int, val descr: String, val weight: String, val pathImage: String): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString()
     ) {
@@ -17,6 +18,7 @@ class Dish(val name: String, val price: Int, val descr: String, val weight: Stri
         parcel.writeInt(price)
         parcel.writeString(descr)
         parcel.writeString(weight)
+        parcel.writeString(pathImage)
     }
 
     override fun describeContents(): Int {

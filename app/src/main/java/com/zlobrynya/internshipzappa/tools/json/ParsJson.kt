@@ -107,24 +107,24 @@ class ParsJson {
     private fun parsJson(strJson: String, emitter: ObservableEmitter<MenuDish>) {
         val jsonObj = JSONObject(strJson)
         var menuDish = MenuDish()
-        menuDish.hotArray = getArray(jsonObj.getJSONArray("hot"))
-        menuDish.saladsArray = getArray(jsonObj.getJSONArray("salads"))
-        menuDish.soupArray = getArray(jsonObj.getJSONArray("soup"))
-        menuDish.burgerArray = getArray(jsonObj.getJSONArray("burger"))
-        menuDish.nonalcArray = getArray(jsonObj.getJSONArray("nonalc"))
-        menuDish.beerArray = getArray(jsonObj.getJSONArray("beer"))
+        menuDish.hotArray = getArray(jsonObj.getJSONArray("hot"),"hot")
+        menuDish.saladsArray = getArray(jsonObj.getJSONArray("salads"), "salads")
+        menuDish.soupArray = getArray(jsonObj.getJSONArray("soup"),"soup")
+        menuDish.burgerArray = getArray(jsonObj.getJSONArray("burger"), "burger")
+        menuDish.nonalcArray = getArray(jsonObj.getJSONArray("nonalc"), "nonalc")
+        menuDish.beerArray = getArray(jsonObj.getJSONArray("beer"), "beer")
         //Тут нужен RxJava2, что бы уведомить активити, что данные полученные и обработаны
         //https://startandroid.ru/ru/courses/rxjava/19-course/rxjava/435-urok-1.html
         //http://www.vogella.com/tutorials/RxJava/article.html
         emitter.onNext(menuDish)
     }
 
-    private fun getArray(jsonArray: JSONArray): ArrayList<Dish> {
+    private fun getArray(jsonArray: JSONArray, name: String = ""): ArrayList<Dish> {
         val locArrayList = ArrayList<Dish>()
         for (i in 0..jsonArray.length()-1){
             val jsObject = jsonArray.get(i) as JSONObject
             locArrayList.add(Dish(jsObject.getString("name"),jsObject.getInt("price"),
-                    jsObject.getString("descr"), jsObject.getString("weight")))
+                    jsObject.getString("descr"), jsObject.getString("weight"), name))
         }
         return locArrayList
     }

@@ -34,7 +34,7 @@ class CategoryFragment: Fragment() {
         adapterListCategory.addAll(listtDish)
         adapterListCategory.notifyDataSetChanged()*/
         val listtDish = categoryParcelable?.listMenu
-        viewAdapter = AdapterRecyclerMenu(listtDish!!)
+        viewAdapter = AdapterRecyclerMenu(listtDish!!, v.context!!)
         return v
     }
 
