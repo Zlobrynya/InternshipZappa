@@ -8,10 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.adapter.AdapterListCategory
+import com.zlobrynya.internshipzappa.adapter.AdapterListMenu
 import com.zlobrynya.internshipzappa.tools.json.Dish
 import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
-import kotlinx.android.synthetic.main.fragment_category_menu.*
 
 class CategoryFragment: Fragment() {
     private lateinit var v: View
@@ -20,7 +19,7 @@ class CategoryFragment: Fragment() {
         v = inflater.inflate(R.layout.fragment_category_menu,null)
 
         val categoryParcelable = arguments!!.getParcelable<CategoryParcelable>("Parcelable")
-        val adapterListCategory = AdapterListCategory(context, R.id.listViewDish)
+        val adapterListCategory = AdapterListMenu(context, R.id.listViewDish)
         //listViewDish.adapter = adapterListCategory
         val listView = v.findViewById<ListView>(R.id.listViewDish)
         listView.adapter = adapterListCategory

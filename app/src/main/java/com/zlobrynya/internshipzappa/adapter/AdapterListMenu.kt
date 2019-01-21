@@ -13,7 +13,7 @@ import android.widget.ImageView
 
 
 
-class AdapterListCategory(context: Context?, resource: Int) :
+class AdapterListMenu(context: Context?, resource: Int) :
     ArrayAdapter<Dish>(context, resource) {
 
     class Holder{
@@ -29,7 +29,7 @@ class AdapterListCategory(context: Context?, resource: Int) :
             holder = view.tag as Holder
         }else{
             val vi = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = vi.inflate(R.layout.item_category_menu, null)
+            view = vi.inflate(R.layout.item_menu, null)
             holder.nameDish = view.findViewById(R.id.nameDish)
             holder.imageView = view.findViewById(R.id.imageView)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

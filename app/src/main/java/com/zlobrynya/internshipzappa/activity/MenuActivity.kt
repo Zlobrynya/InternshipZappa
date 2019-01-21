@@ -1,11 +1,14 @@
 package com.zlobrynya.internshipzappa.activity
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.adapter.AdapterTab
 import com.zlobrynya.internshipzappa.fragment.CategoryFragment
 import com.zlobrynya.internshipzappa.tools.json.MenuDish
 import com.zlobrynya.internshipzappa.tools.json.ParsJson
@@ -15,7 +18,11 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
 
+
+
 class MenuActivity: AppCompatActivity() {
+    private val imageResId = intArrayOf(R.drawable.hot, R.drawable.salad, R.drawable.broth,
+        R.drawable.soda, R.drawable.burger, R.drawable.beer )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +40,13 @@ class MenuActivity: AppCompatActivity() {
                 }
 
                 override fun onNext(t: MenuDish) {
-                    viewPagerMenu.adapter = AdapterPageView(supportFragmentManager,6, t)
+                    viewPagerMenu.adapter = AdapterTab(supportFragmentManager, t, 6)
+                    sliding_tabs.setupWithViewPager(viewPagerMenu)
+                    for (i in 0..5){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
+                        }
+                    }
                 }
 
                 override fun onError(e: Throwable) {
@@ -41,12 +54,9 @@ class MenuActivity: AppCompatActivity() {
                 }
 
             })
-
-        //val adapter = AdapterPageView(supportFragmentManager,4)
-
     }
 
-    class AdapterPageView(val gm: FragmentManager, val countF: Int, val menuDish: MenuDish): FragmentPagerAdapter(gm) {
+     class AdapterPageView(val gm: FragmentManager, val countF: Int, val menuDish: MenuDish): FragmentPagerAdapter(gm) {
         override fun getItem(position: Int): Fragment? {
             when(position){
                 0 -> return CategoryFragment.newInstance(menuDish.hotArray)
