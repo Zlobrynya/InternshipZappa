@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.adapter.AdapterListMenu
 import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
 import com.zlobrynya.internshipzappa.tools.json.Dish
 import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
@@ -35,6 +35,7 @@ class CategoryFragment: Fragment() {
         adapterListCategory.notifyDataSetChanged()*/
         val listtDish = categoryParcelable?.listMenu
         viewAdapter = AdapterRecyclerMenu(listtDish!!, v.context!!)
+
         return v
     }
 
@@ -48,8 +49,6 @@ class CategoryFragment: Fragment() {
             adapter = viewAdapter
             setHasFixedSize(true)
         }
-        var count = viewAdapter.itemCount
-        Log.i("RecyclerView", count.toString())
     }
 
 

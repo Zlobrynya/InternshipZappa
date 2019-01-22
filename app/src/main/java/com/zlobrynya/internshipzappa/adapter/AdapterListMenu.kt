@@ -2,10 +2,12 @@ package com.zlobrynya.internshipzappa.adapter
 
 import android.content.Context
 import android.os.Build
+import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.TextView
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.json.Dish
@@ -13,7 +15,7 @@ import android.widget.ImageView
 
 
 
-class AdapterListCategory(context: Context?, resource: Int) :
+class AdapterListMenu(context: Context?, resource: Int) :
     ArrayAdapter<Dish>(context, resource) {
 
     class Holder{
@@ -34,9 +36,7 @@ class AdapterListCategory(context: Context?, resource: Int) :
             holder = view.tag as Holder
         }else{
             val vi = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = vi.inflate(R.layout.item_category_menu, null)
-            holder.buttonDish = view.findViewById(R.id.dishButton)
-            holder.imageView = view.findViewById(R.id.dishButton)
+            view = vi.inflate(R.layout.item_menu, null)
             holder.descDish = view.findViewById(R.id.descDish)
             holder.priceDish = view.findViewById(R.id.priceDish)
             holder.weightDish = view.findViewById(R.id.weightDish)
@@ -52,11 +52,6 @@ class AdapterListCategory(context: Context?, resource: Int) :
         holder.descDish!!.text = dish?.descr
         holder.weightDish!!.text = dish?.weight
         holder.priceDish!!.text = dish?.price.toString() + " руб."
-        holder.buttonDish!!.setOnClickListener {
-            if(holder.shapeDish!!.visibility == View.VISIBLE) holder.shapeDish!!.visibility = View.GONE
-            else
-            holder.shapeDish!!.visibility = View.VISIBLE
-        }
         return view!!
     }
 }

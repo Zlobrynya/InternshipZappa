@@ -22,8 +22,8 @@ import android.util.Log
 
 
 class MenuActivity: AppCompatActivity() {
-    private val imageResId = intArrayOf(R.mipmap.ic_hot, R.mipmap.ic_salad, R.mipmap.ic_broth,
-        R.mipmap.ic_soda, R.mipmap.ic_burger, R.mipmap.ic_beer )
+//    private val imageResId = intArrayOf(R.mipmap.ic_hot, R.mipmap.ic_salad, R.mipmap.ic_broth,
+//        R.mipmap.ic_soda, R.mipmap.ic_burger, R.mipmap.ic_beer )
 
     private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.broth,
         R.string.soda, R.string.burger, R.string.beer )
@@ -44,7 +44,6 @@ class MenuActivity: AppCompatActivity() {
                 if (scrollRange == -1) {
                     scrollRange = appBarLayout.totalScrollRange
                 }
-                Log.i("appBar", scrollRange.toString() + " " + verticalOffset)
                 if (scrollRange + verticalOffset == 0) {
                     toolbarLayout.title = title
                     isShow = true
