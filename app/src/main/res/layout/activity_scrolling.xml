@@ -11,26 +11,27 @@
 
 
     <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar"
+            android:id="@+id/appBar"
             android:fitsSystemWindows="true"
             android:layout_height="200dp"
             android:layout_width="match_parent"
+            android:elevation="5dp"
             android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/toolbar_layout"
+                android:id="@+id/toolbarLayout"
                 android:fitsSystemWindows="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:toolbarId="@+id/toolbar"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:elevation="5dp"
+                app:layout_scrollFlags="snap|scroll|exitUntilCollapsed"
                 app:contentScrim="?attr/colorPrimary">
             <!-- exitUntilCollapsed -->
 
             <ImageView android:layout_width="match_parent"
                        android:layout_height="match_parent"
-                       android:src="@drawable/rog"
-                       android:scaleType="fitXY"/>
+                       android:src="@mipmap/rog" android:scaleType="fitXY"/>
 
             <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"

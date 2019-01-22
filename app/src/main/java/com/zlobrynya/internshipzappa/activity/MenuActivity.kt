@@ -17,16 +17,43 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_scrolling.*
+import android.support.design.widget.AppBarLayout
+import android.util.Log
 
 
 class MenuActivity: AppCompatActivity() {
     private val imageResId = intArrayOf(R.mipmap.ic_hot, R.mipmap.ic_salad, R.mipmap.ic_broth,
         R.mipmap.ic_soda, R.mipmap.ic_burger, R.mipmap.ic_beer )
 
+    private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.broth,
+        R.string.soda, R.string.burger, R.string.beer )
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scrolling)
         setSupportActionBar(toolbar)
+        val title = getString(R.string.menu_toolbar)
+
+        appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            var isShow = true
+            var scrollRange = -1
+
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.totalScrollRange
+                }
+                Log.i("appBar", scrollRange.toString() + " " + verticalOffset)
+                if (scrollRange + verticalOffset == 0) {
+                    toolbarLayout.title = title
+                    isShow = true
+                } else if (isShow) {
+                    toolbarLayout.setTitle(" ")//carefull there should a space between double quote otherwise it wont work
+                    isShow = false
+                }
+            }
+        })
 
         //Get json data from file
         ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
@@ -44,7 +71,8 @@ class MenuActivity: AppCompatActivity() {
                     sliding_tabs.setupWithViewPager(viewPagerMenu)
                     for (i in 0..5){
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
+                            //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
+                            sliding_tabs.getTabAt(i)?.text = getString(stringId[i])
                         }
                     }
                 }
@@ -54,21 +82,6 @@ class MenuActivity: AppCompatActivity() {
                 }
 
             })
-    }
 
-     class AdapterPageView(val gm: FragmentManager, val countF: Int, val menuDish: MenuDish): FragmentPagerAdapter(gm) {
-        override fun getItem(position: Int): Fragment? {
-            when(position){
-                0 -> return CategoryFragment.newInstance(menuDish.hotArray)
-                1 -> return CategoryFragment.newInstance(menuDish.saladsArray)
-                2 -> return CategoryFragment.newInstance(menuDish.soupArray)
-                3 -> return CategoryFragment.newInstance(menuDish.nonalcArray)
-                4 -> return CategoryFragment.newInstance(menuDish.burgerArray)
-                5 -> return CategoryFragment.newInstance(menuDish.beerArray)
-            }
-            return Fragment::class.java.newInstance()
-        }
-
-        override fun getCount(): Int = countF
     }
 }

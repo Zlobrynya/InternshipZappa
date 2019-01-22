@@ -2,4 +2,14 @@
     <string name="app_name">InternshipZappa</string>
     <string name="menu_toolbar">Меню бара</string>
 
+
+    <!-- Name category menu -->
+    <string name="hot">Горячее</string>
+    <string name="salad">Салаты</string>
+    <string name="broth">Супы</string>
+    <string name="soda">Напитки</string>
+    <string name="burger">Бургеры</string>
+    <string name="beer">Пиво</string>
+
+
 </resources>
