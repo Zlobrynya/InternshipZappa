@@ -32,7 +32,7 @@ class AdapterListCategory(context: Context?, resource: Int) :
             holder = view.tag as Holder
         }else{
             val vi = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = vi.inflate(R.layout.full_item_category_menu, null)
+            view = vi.inflate(R.layout.item_category_menu, null)
             holder.buttonDish = view.findViewById(R.id.dishButton)
             holder.imageView = view.findViewById(R.id.dishButton)
             holder.descDish = view.findViewById(R.id.descDish)
@@ -45,7 +45,7 @@ class AdapterListCategory(context: Context?, resource: Int) :
             view.tag = holder
         }
 
-        var dish = getItem(position)
+        val dish = getItem(position)
         holder.buttonDish!!.text = dish?.name
         holder.descDish!!.text = dish?.descr
         holder.weightDish!!.text = dish?.weight
