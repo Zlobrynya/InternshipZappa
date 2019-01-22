@@ -12,6 +12,9 @@ import com.zlobrynya.internshipzappa.adapter.AdapterListCategory
 import com.zlobrynya.internshipzappa.tools.json.Dish
 import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
 import kotlinx.android.synthetic.main.fragment_category_menu.*
+import android.widget.AdapterView
+
+
 
 class CategoryFragment: Fragment() {
     private lateinit var v: View
@@ -24,11 +27,10 @@ class CategoryFragment: Fragment() {
         //listViewDish.adapter = adapterListCategory
         val listView = v.findViewById<ListView>(R.id.listViewDish)
         listView.adapter = adapterListCategory
-        var listtDish = categoryParcelable?.listMenu
+        val listtDish = categoryParcelable?.listMenu
         Log.i("CategoryFragment", listtDish?.size.toString())
         adapterListCategory.addAll(listtDish)
         adapterListCategory.notifyDataSetChanged()
-
         return v
     }
 
@@ -45,3 +47,4 @@ class CategoryFragment: Fragment() {
       }
     }
 }
+
