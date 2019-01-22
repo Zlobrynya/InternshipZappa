@@ -13,12 +13,17 @@ import android.widget.ImageView
 
 
 
-class AdapterListMenu(context: Context?, resource: Int) :
+class AdapterListCategory(context: Context?, resource: Int) :
     ArrayAdapter<Dish>(context, resource) {
 
     class Holder{
-        var nameDish: TextView? = null
-        var imageView: ImageView? = null
+        var buttonDish: Button? = null
+        var imageView: Button? = null
+        var descDish: TextView? = null
+        var priceDish: TextView? = null
+        var weightDish: TextView? = null
+        var shapeDish: CardView? = null
+
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -29,9 +34,13 @@ class AdapterListMenu(context: Context?, resource: Int) :
             holder = view.tag as Holder
         }else{
             val vi = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = vi.inflate(R.layout.item_menu, null)
-            holder.nameDish = view.findViewById(R.id.nameDish)
-            holder.imageView = view.findViewById(R.id.imageView)
+            view = vi.inflate(R.layout.item_category_menu, null)
+            holder.buttonDish = view.findViewById(R.id.dishButton)
+            holder.imageView = view.findViewById(R.id.dishButton)
+            holder.descDish = view.findViewById(R.id.descDish)
+            holder.priceDish = view.findViewById(R.id.priceDish)
+            holder.weightDish = view.findViewById(R.id.weightDish)
+            holder.shapeDish = view.findViewById(R.id.shapeDish)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.imageView!!.clipToOutline = true
             }
@@ -39,7 +48,15 @@ class AdapterListMenu(context: Context?, resource: Int) :
         }
 
         val dish = getItem(position)
-        holder.nameDish!!.text = dish?.name
+        holder.buttonDish!!.text = dish?.name
+        holder.descDish!!.text = dish?.descr
+        holder.weightDish!!.text = dish?.weight
+        holder.priceDish!!.text = dish?.price.toString() + " руб."
+        holder.buttonDish!!.setOnClickListener {
+            if(holder.shapeDish!!.visibility == View.VISIBLE) holder.shapeDish!!.visibility = View.GONE
+            else
+            holder.shapeDish!!.visibility = View.VISIBLE
+        }
         return view!!
     }
 }
