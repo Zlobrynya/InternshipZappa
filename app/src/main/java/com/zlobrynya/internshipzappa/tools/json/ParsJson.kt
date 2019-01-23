@@ -1,22 +1,18 @@
 package com.zlobrynya.internshipzappa.tools.json
 
 import android.content.Context
-import android.os.Environment
 import android.util.Log
+import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
 import java.io.*
-import org.reactivestreams.Subscriber
-import kotlin.math.log
-import kotlin.text.Charsets.UTF_8
 
 
 class ParsJson {
@@ -123,8 +119,12 @@ class ParsJson {
         val locArrayList = ArrayList<Dish>()
         for (i in 0..jsonArray.length()-1){
             val jsObject = jsonArray.get(i) as JSONObject
-            locArrayList.add(Dish(jsObject.getString("name"),jsObject.getInt("price"),
-                    jsObject.getString("descr"), jsObject.getString("weight"), name))
+            locArrayList.add(
+                Dish(
+                    jsObject.getString("name"), jsObject.getInt("price"),
+                    jsObject.getString("descr"), jsObject.getString("weight"), name
+                )
+            )
         }
         return locArrayList
     }

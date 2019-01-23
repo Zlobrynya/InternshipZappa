@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.tools.json
+package com.zlobrynya.internshipzappa.tools.parcelable
 
 import android.os.Parcel
 import android.os.Parcelable

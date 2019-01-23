@@ -5,16 +5,15 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
-import com.zlobrynya.internshipzappa.tools.json.Dish
+import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
 import kotlinx.android.synthetic.main.fragment_category_menu.*
+import android.view.MotionEvent
 
 class CategoryFragment: Fragment() {
     private lateinit var v: View

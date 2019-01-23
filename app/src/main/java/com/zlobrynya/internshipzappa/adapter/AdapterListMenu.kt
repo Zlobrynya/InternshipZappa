@@ -10,9 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.json.Dish
-import android.widget.ImageView
-
+import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 
 
 class AdapterListMenu(context: Context?, resource: Int) :

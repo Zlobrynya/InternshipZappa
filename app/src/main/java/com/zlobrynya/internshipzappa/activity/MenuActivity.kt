@@ -18,7 +18,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import android.support.design.widget.AppBarLayout
-import android.util.Log
+import android.support.design.widget.CoordinatorLayout
+import com.zlobrynya.internshipzappa.FixAppBarLayoutBehavior
+import kotlinx.android.synthetic.main.fragment_category_menu.*
 
 
 class MenuActivity: AppCompatActivity() {
@@ -35,6 +37,10 @@ class MenuActivity: AppCompatActivity() {
         setContentView(R.layout.activity_scrolling)
         setSupportActionBar(toolbar)
         val title = getString(R.string.menu_toolbar)
+        /*val behavior = FixAppBarLayoutBehavior()
+        val param = appBar.layoutParams as CoordinatorLayout.LayoutParams
+        param.setBehavior(behavior)*/
+
 
         appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var isShow = true
@@ -79,8 +85,6 @@ class MenuActivity: AppCompatActivity() {
                 override fun onError(e: Throwable) {
                     println(e.toString())
                 }
-
             })
-
     }
 }

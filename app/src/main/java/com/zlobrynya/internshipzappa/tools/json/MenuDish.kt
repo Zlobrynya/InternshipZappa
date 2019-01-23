@@ -1,5 +1,7 @@
 package com.zlobrynya.internshipzappa.tools.json
 
+import com.zlobrynya.internshipzappa.tools.parcelable.Dish
+
 class MenuDish {
     lateinit var hotArray: ArrayList<Dish>
     lateinit var saladsArray: ArrayList<Dish>

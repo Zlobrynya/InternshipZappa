@@ -12,7 +12,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.zlobrynya.internshipzappa.R
 import android.view.LayoutInflater
-import com.zlobrynya.internshipzappa.tools.json.Dish
+import com.zlobrynya.internshipzappa.tools.parcelable.Dish
+
+
+
 
 class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
@@ -36,7 +39,6 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
            holder.imageView!!.setImageDrawable(context.getDrawable(context.resources.getIdentifier(myDataset[position].pathImage,"drawable", context!!.packageName)))
         }
     }
-
 
     class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener{
         var nameDish: TextView? = null

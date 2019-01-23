@@ -2,7 +2,6 @@ package com.zlobrynya.internshipzappa.tools.parcelable
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.zlobrynya.internshipzappa.tools.json.Dish
 
 class CategoryParcelable() : Parcelable {
     constructor(parcel: Parcel) : this() {
