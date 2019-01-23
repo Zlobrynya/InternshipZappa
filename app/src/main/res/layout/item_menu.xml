@@ -55,36 +55,37 @@
 
 
         <TextView
-                android:text="TextView"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/descDish"
                 android:textColor="#000000"
-                android:textSize="14dp"
+                android:textSize="17sp"
+                android:lineSpacingMultiplier="0.6"
                 android:padding="10dp"
                 style="@style/textDish" android:textAlignment="center" app:layout_constraintHorizontal_bias="0.49"
                 app:layout_constraintVertical_bias="0.651"
                 android:theme="@style/textDescriptionDish"/>
         <TextView
-                android:text="TextView"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/weightDish"
                 android:layout_marginTop="65dp"
                 android:textColor="#000000"
-                android:textSize="12dp"
+                android:textSize="15sp"
                 style="@style/textDish" android:textAlignment="center" app:layout_constraintHorizontal_bias="0.49"
                 app:layout_constraintVertical_bias="0.651"
                 android:theme="@style/textDescriptionDish"
         />
         <TextView
-                android:text="TextView"
+                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/priceDish"
                 android:layout_marginTop="85dp"
                 android:textColor="#000000"
-                android:textSize="26dp"
+                android:textSize="26sp"
                 style="@style/textDish" android:textAlignment="center" app:layout_constraintHorizontal_bias="0.49"
                 app:layout_constraintVertical_bias="0.651"
                 android:theme="@style/textDescriptionDish"
