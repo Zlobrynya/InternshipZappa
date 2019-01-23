@@ -6,4 +6,5 @@
     <color name="tabBar">#cd7f32</color>
     <color name="white">#FFFFFF</color>
     <color name="OldLace">#FDF5E6</color>
+    <color name="textColor">#000000</color>
 </resources>

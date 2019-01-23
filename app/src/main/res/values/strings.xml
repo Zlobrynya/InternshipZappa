@@ -10,6 +10,6 @@
     <string name="soda">Напитки</string>
     <string name="burger">Бургеры</string>
     <string name="beer">Пиво</string>
-
+    <string name="authentication">authentication</string>
 
 </resources>

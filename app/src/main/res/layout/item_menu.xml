@@ -44,24 +44,34 @@
 
 
         <TextView
-                android:text="TextView"
+                android:text="textview"
                 android:layout_width="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="6dp"
+                android:lineSpacingMultiplier="0.5"
                 android:layout_height="60dp"
                 android:id="@+id/descDish"
-                android:textColor="#000000"
-                android:textSize="14dp"
-                style="@style/textDish" android:textAlignment="center" app:layout_constraintHorizontal_bias="0.49"
-                app:layout_constraintVertical_bias="0.651"/>
+                android:textColor="@color/textColor"
+                app:layout_constraintHorizontal_bias="0.49"
+                app:layout_constraintVertical_bias="0.651"
+                android:textSize="18sp"
+                android:lineSpacingExtra="4sp"
+                android:textAlignment="center"
+                android:theme="@style/textDescriptionDish"
+        />
         <TextView
-                android:text="TextView"
+                android:text="textview"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:id="@+id/weightDish"
                 android:layout_marginTop="65dp"
-                android:textColor="#000000"
-                android:textSize="12dp"
+                android:textColor="@color/textColor"
+                android:textSize="14sp"
                 style="@style/textDish" android:textAlignment="center" app:layout_constraintHorizontal_bias="0.49"
-                app:layout_constraintVertical_bias="0.651"/>
+                app:layout_constraintVertical_bias="0.651"
+                android:theme="@style/textDescriptionDish"
+        />
         <TextView
                 android:text="TextView"
                 android:layout_width="match_parent"
@@ -69,9 +79,11 @@
                 android:id="@+id/priceDish"
                 android:layout_marginTop="85dp"
                 android:textColor="#000000"
-                android:textSize="26dp"
+                android:textSize="26sp"
                 style="@style/textDish" android:textAlignment="center" app:layout_constraintHorizontal_bias="0.49"
-                app:layout_constraintVertical_bias="0.651"/>
+                app:layout_constraintVertical_bias="0.651"
+                android:theme="@style/textDescriptionDish"
+        />
     </android.support.v7.widget.CardView>
 
 </android.support.constraint.ConstraintLayout>
