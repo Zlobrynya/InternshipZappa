@@ -3,6 +3,7 @@ package com.zlobrynya.internshipzappa.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.support.design.widget.AppBarLayout
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -57,6 +58,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
                 imageView!!.clipToOutline = true
             }
             imageView!!.setOnClickListener(this)
+
         }
 
         override fun onClick(view: View) {

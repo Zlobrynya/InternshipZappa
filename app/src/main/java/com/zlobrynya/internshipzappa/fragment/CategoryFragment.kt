@@ -1,6 +1,8 @@
 package com.zlobrynya.internshipzappa.fragment
 
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -15,6 +17,7 @@ import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
 import com.zlobrynya.internshipzappa.tools.json.Dish
 import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
 import kotlinx.android.synthetic.main.fragment_category_menu.*
+
 
 class CategoryFragment: Fragment() {
     private lateinit var v: View
