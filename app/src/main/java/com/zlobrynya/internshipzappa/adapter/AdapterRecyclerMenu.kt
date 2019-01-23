@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.zlobrynya.internshipzappa.R
 import android.view.LayoutInflater
+import android.widget.ProgressBar
+import com.zlobrynya.internshipzappa.tools.DishImageView
 import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 
 
@@ -38,20 +40,23 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
         holder.descDish?.text = myDataset[position].descr
         holder.weightDish!!.text = myDataset[position].weight
         holder.priceDish!!.text = myDataset[position].price.toString() + " руб."
-        //Загрузка картинки из drawable
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-           holder.imageView!!.setImageDrawable(context.getDrawable(context.resources.getIdentifier(myDataset[position].pathImage,"drawable", context!!.packageName)))
+        //Проверка на то, загружено ли в imageView изображение
+        if (!holder.imageView!!.isImageLoad) {
+            holder.imageView?.progressBar = holder.progressBar
+            holder.imageView?.textView = holder.nameDish
+            holder.imageView?.setURL(myDataset[position].pathImage)
         }
     }
 
     //Класс помощник, для правильного отображение view
     class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener{
         var nameDish: TextView? = null
-        var imageView: ImageView? = null
+        var imageView: DishImageView? = null
         var descDish: TextView? = null
         var priceDish: TextView? = null
         var weightDish: TextView? = null
         var shapeDish: CardView? = null
+        var progressBar: ProgressBar? = null
 
         init {
             nameDish = v.findViewById(R.id.nameDish)
@@ -60,6 +65,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
             priceDish = v.findViewById(R.id.priceDish)
             weightDish = v.findViewById(R.id.weightDish)
             shapeDish = v.findViewById(R.id.shapeDish)
+            progressBar = v.findViewById(R.id.progressBar)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 imageView!!.clipToOutline = true
             }

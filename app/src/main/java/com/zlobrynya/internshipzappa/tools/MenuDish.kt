@@ -9,4 +9,5 @@ class MenuDish {
     lateinit var burgerArray: ArrayList<Dish>
     lateinit var nonalcArray: ArrayList<Dish>
     lateinit var beerArray: ArrayList<Dish>
+    var connect = true
 }

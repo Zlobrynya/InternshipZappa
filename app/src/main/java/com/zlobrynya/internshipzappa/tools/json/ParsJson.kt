@@ -15,6 +15,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
 import java.io.*
+import java.lang.Exception
 
 
 /*
@@ -44,14 +45,21 @@ class ParsJson {
     private fun downloadServer(url: String, emitter: ObservableEmitter<MenuDish>){
         var strJson: String
          doAsync {
-             val jsonUrl = URL(url)
-             val conn = jsonUrl.openConnection() as HttpURLConnection
-             conn.requestMethod = "GET"
-             val input = BufferedInputStream(conn.inputStream)
-             //перекодируем поток в строку
-             strJson = convertStreamToString(input)
-             writeCacheMenu(strJson)
-             parsJson(strJson, emitter)
+             try{
+                 val jsonUrl = URL(url)
+                 val conn = jsonUrl.openConnection() as HttpURLConnection
+                 conn.requestMethod = "GET"
+                 val input = BufferedInputStream(conn.inputStream)
+                 //перекодируем поток в строку
+                 strJson = convertStreamToString(input)
+                 writeCacheMenu(strJson)
+                 parsJson(strJson, emitter)
+             }catch (e: Exception){
+                 val menuDish = MenuDish()
+                 menuDish.connect = false
+                 emitter.onNext(menuDish)
+             }
+
         }
      }
 
@@ -124,14 +132,15 @@ class ParsJson {
         emitter.onNext(menuDish)
     }
 
-    private fun getArray(jsonArray: JSONArray, name: String = ""): ArrayList<Dish> {
+    private fun getArray(jsonArray: JSONArray, pathImg: String = ""): ArrayList<Dish> {
         val locArrayList = ArrayList<Dish>()
         for (i in 0..jsonArray.length()-1){
             val jsObject = jsonArray.get(i) as JSONObject
             locArrayList.add(
                 Dish(
                     jsObject.getString("name"), jsObject.getInt("price"),
-                    jsObject.getString("descr"), jsObject.getString("weight"), name
+                    jsObject.getString("descr"), jsObject.getString("weight"),
+                    jsObject.getString("photo")
                 )
             )
         }
