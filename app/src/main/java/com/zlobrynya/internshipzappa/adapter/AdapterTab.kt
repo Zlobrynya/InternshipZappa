@@ -1,11 +1,10 @@
 package com.zlobrynya.internshipzappa.adapter
 
-import android.graphics.drawable.Drawable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.zlobrynya.internshipzappa.fragment.CategoryFragment
-import com.zlobrynya.internshipzappa.tools.json.MenuDish
+import com.zlobrynya.internshipzappa.tools.MenuDish
 
 class AdapterTab(fm: FragmentManager?, val menuDish: MenuDish, val pageCount: Int) : FragmentPagerAdapter(fm) {
 

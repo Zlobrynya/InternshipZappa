@@ -2,14 +2,10 @@ package com.zlobrynya.internshipzappa.activity
 
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterTab
-import com.zlobrynya.internshipzappa.fragment.CategoryFragment
-import com.zlobrynya.internshipzappa.tools.json.MenuDish
+import com.zlobrynya.internshipzappa.tools.MenuDish
 import com.zlobrynya.internshipzappa.tools.json.ParsJson
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,9 +14,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import com.zlobrynya.internshipzappa.FixAppBarLayoutBehavior
-import kotlinx.android.synthetic.main.fragment_category_menu.*
+import android.view.Menu
+import android.view.MenuItem
 
 
 class MenuActivity: AppCompatActivity() {
@@ -30,17 +25,13 @@ class MenuActivity: AppCompatActivity() {
     private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.broth,
         R.string.soda, R.string.burger, R.string.beer )
 
-
+    var itemAuto: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scrolling)
         setSupportActionBar(toolbar)
         val title = getString(R.string.menu_toolbar)
-        /*val behavior = FixAppBarLayoutBehavior()
-        val param = appBar.layoutParams as CoordinatorLayout.LayoutParams
-        param.setBehavior(behavior)*/
-
 
         appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var isShow = true
@@ -52,13 +43,17 @@ class MenuActivity: AppCompatActivity() {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     toolbarLayout.title = title
+                    itemAuto?.isVisible = true
                     isShow = true
                 } else if (isShow) {
                     toolbarLayout.setTitle(" ")//carefull there should a space between double quote otherwise it wont work
+                    itemAuto?.isVisible = false
                     isShow = false
                 }
             }
         })
+
+
 
         //Get json data from file
         ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
@@ -86,5 +81,22 @@ class MenuActivity: AppCompatActivity() {
                     println(e.toString())
                 }
             })
+    }
+
+    //Нажатие на элементы actionbar
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_authentication) {
+            //val intent = Intent(this, SearchUsersActivity::class.java)
+            //startActivity(intent)
+        }
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_scrolling, menu)
+        itemAuto = menu.findItem(R.id.action_authentication)
+        itemAuto?.isVisible = false
+        return true
     }
 }

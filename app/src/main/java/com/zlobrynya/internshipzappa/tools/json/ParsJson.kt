@@ -1,7 +1,9 @@
 package com.zlobrynya.internshipzappa.tools.json
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import com.zlobrynya.internshipzappa.tools.MenuDish
 import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
@@ -37,8 +39,8 @@ class ParsJson {
     private fun downloadServer(url: String, emitter: ObservableEmitter<MenuDish>){
         var strJson: String
          doAsync {
-             val imageUrl = URL(url)
-             val conn = imageUrl.openConnection() as HttpURLConnection
+             val jsonUrl = URL(url)
+             val conn = jsonUrl.openConnection() as HttpURLConnection
              conn.requestMethod = "GET"
              val input = BufferedInputStream(conn.inputStream)
              strJson = convertStreamToString(input)
@@ -86,7 +88,6 @@ class ParsJson {
             }
 
         }
-
         return sb.toString()
     }
 
@@ -130,6 +131,7 @@ class ParsJson {
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         private var instance: ParsJson? = null
         fun getInstance(): ParsJson {
             if (instance == null)

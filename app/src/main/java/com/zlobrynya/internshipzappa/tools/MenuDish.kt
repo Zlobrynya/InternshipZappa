@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.tools.json
+package com.zlobrynya.internshipzappa.tools
 
 import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 
