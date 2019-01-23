@@ -6,6 +6,10 @@ import android.support.v4.app.FragmentPagerAdapter
 import com.zlobrynya.internshipzappa.fragment.CategoryFragment
 import com.zlobrynya.internshipzappa.tools.MenuDish
 
+/*
+ * Адаптер для TabLayout
+ */
+
 class AdapterTab(fm: FragmentManager?, val menuDish: MenuDish, val pageCount: Int) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {

@@ -17,6 +17,11 @@ import java.nio.charset.Charset
 import java.io.*
 
 
+/*
+ * Класс для полученние данных по меню
+ * получает данные с сервера, либо берет с кеша, если ранее получали данные с серва.
+*/
+
 class ParsJson {
     private val URLSERVER = "https://118dbdc8-bed8-4697-9c8e-452c67b8eeec.mock.pstmn.io/get_menu/"
     private val NAME_FILE = "/cache_menu.json"
@@ -24,7 +29,7 @@ class ParsJson {
 
     fun getMenu(context: Context): Observable<MenuDish> {
         this.context = context
-        //return Observable.defer({ Observable.just(menuDish) })
+        //с помощью RxJava2 передаем в активити, что данные получены
         return Observable.create(object : ObservableOnSubscribe<MenuDish> {
             override fun subscribe(emitter: ObservableEmitter<MenuDish>) {
                 if (checkCacheMenu()){
@@ -43,6 +48,7 @@ class ParsJson {
              val conn = jsonUrl.openConnection() as HttpURLConnection
              conn.requestMethod = "GET"
              val input = BufferedInputStream(conn.inputStream)
+             //перекодируем поток в строку
              strJson = convertStreamToString(input)
              writeCacheMenu(strJson)
              parsJson(strJson, emitter)
@@ -53,6 +59,8 @@ class ParsJson {
         Log.i("CheckCacheMenu", File(context.cacheDir.toString() + NAME_FILE).exists().toString())
         return File(context.cacheDir.toString() + NAME_FILE).exists()
     }
+
+
     private fun writeCacheMenu(strJson: String){
         val cacheFile = File(context.cacheDir.toString() + NAME_FILE)
         if (!cacheFile.exists()){
@@ -103,7 +111,7 @@ class ParsJson {
 
     private fun parsJson(strJson: String, emitter: ObservableEmitter<MenuDish>) {
         val jsonObj = JSONObject(strJson)
-        var menuDish = MenuDish()
+        val menuDish = MenuDish()
         menuDish.hotArray = getArray(jsonObj.getJSONArray("hot"),"hot")
         menuDish.saladsArray = getArray(jsonObj.getJSONArray("salads"), "salads")
         menuDish.soupArray = getArray(jsonObj.getJSONArray("soup"),"soup")

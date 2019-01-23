@@ -15,7 +15,9 @@ import android.view.LayoutInflater
 import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 
 
-
+/*
+* Адаптер для RecyclerMenu
+ */
 
 class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
@@ -30,6 +32,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
     //Обновление текста
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: Holder, position: Int) {
+        //В класс помощник записываем данные
         holder.nameDish?.text = myDataset[position].name
         holder.descDish?.text = myDataset[position].descr
         holder.weightDish!!.text = myDataset[position].weight
@@ -40,6 +43,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
         }
     }
 
+    //Класс помощник, для правильного отображение view
     class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener{
         var nameDish: TextView? = null
         var imageView: ImageView? = null
@@ -64,6 +68,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
         override fun onClick(view: View) {
             Log.d("Click", "onClick $position")
 
+            //при нажатии на изображение скрываем или показываем карточки с подробным описанием
             if (shapeDish!!.isShown){
                 shapeDish!!.visibility = View.GONE
             }else{

@@ -13,7 +13,10 @@ import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
 import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
 import kotlinx.android.synthetic.main.fragment_category_menu.*
-import android.view.MotionEvent
+
+/*
+*  Фрагмент для отображения списка блюд
+*/
 
 class CategoryFragment: Fragment() {
     private lateinit var v: View
@@ -23,15 +26,8 @@ class CategoryFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fragment_category_menu,null)
 
+        //Вытаскиваем ранее сохраненные файлы (при создании фрагамента)
         val categoryParcelable = arguments!!.getParcelable<CategoryParcelable>("Parcelable")
-        //arguments!!.remove("Parcelable")
-        //val adapterListCategory = AdapterListMenu(context, R.id.listViewDish)
-        /*listViewDish.adapter = adapterListCategory
-        val listView = v.findViewById<ListView>(R.id.listViewDish)
-        listView.adapter = adapterListCategory
-        Log.i("CategoryFragment", listtDish?.size.toString())
-        adapterListCategory.addAll(listtDish)
-        adapterListCategory.notifyDataSetChanged()*/
         val listtDish = categoryParcelable?.listMenu
         viewAdapter = AdapterRecyclerMenu(listtDish!!, v.context!!)
 
@@ -40,11 +36,10 @@ class CategoryFragment: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //настраиваем RecyclerView для отображение списка блюд
         viewManager = LinearLayoutManager(context)
         listRecyclerView.apply {
-            // use a linear layout manager
             layoutManager = viewManager
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
             setHasFixedSize(true)
         }
@@ -53,6 +48,7 @@ class CategoryFragment: Fragment() {
 
     companion object {
       fun newInstance(listDish: ArrayList<Dish>): Fragment{
+          //получаем данные с activity и загружаем в  Bundle
           val fragment = CategoryFragment()
           val args = Bundle()
           val categoryParcelable = CategoryParcelable()

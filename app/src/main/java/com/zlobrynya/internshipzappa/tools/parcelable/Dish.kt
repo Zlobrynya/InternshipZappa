@@ -3,6 +3,10 @@ package com.zlobrynya.internshipzappa.tools.parcelable
 import android.os.Parcel
 import android.os.Parcelable
 
+/*
+*  Класс для хранения данных после парсинга JSON
+* */
+
 class Dish(val name: String, val price: Int, val descr: String, val weight: String, val pathImage: String): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),

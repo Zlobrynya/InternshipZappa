@@ -33,6 +33,8 @@ class MenuActivity: AppCompatActivity() {
         setSupportActionBar(toolbar)
         val title = getString(R.string.menu_toolbar)
 
+        //Listener для проверки состояние actionbar, при раскрытом состоянии титул, кнопка скрывается
+        //при закрытом состоянии отображается титул и кнопка
         appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var isShow = true
             var scrollRange = -1
@@ -46,16 +48,16 @@ class MenuActivity: AppCompatActivity() {
                     itemAuto?.isVisible = true
                     isShow = true
                 } else if (isShow) {
-                    toolbarLayout.setTitle(" ")//carefull there should a space between double quote otherwise it wont work
+                    toolbarLayout.setTitle(" ")
                     itemAuto?.isVisible = false
                     isShow = false
                 }
             }
         })
 
-
-
         //Get json data from file
+        //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его
+        //и получаем обьект ManuDish, в котом содержатся данные разбитые по категориям
         ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<MenuDish> {
                 override fun onComplete() {
@@ -85,6 +87,7 @@ class MenuActivity: AppCompatActivity() {
 
     //Нажатие на элементы actionbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //проверка куда тыкнули и если это иконка авторизаци запускаем активити авторизации
         if (item.itemId == R.id.action_authentication) {
             //val intent = Intent(this, SearchUsersActivity::class.java)
             //startActivity(intent)
@@ -93,7 +96,7 @@ class MenuActivity: AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // создаем меню
         menuInflater.inflate(R.menu.menu_scrolling, menu)
         itemAuto = menu.findItem(R.id.action_authentication)
         itemAuto?.isVisible = false

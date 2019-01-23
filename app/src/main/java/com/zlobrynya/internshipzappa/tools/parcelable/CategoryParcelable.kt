@@ -3,6 +3,10 @@ package com.zlobrynya.internshipzappa.tools.parcelable
 import android.os.Parcel
 import android.os.Parcelable
 
+/**
+ *  Класс обертка для передачи данных из activity в fragment
+ * */
+
 class CategoryParcelable() : Parcelable {
     constructor(parcel: Parcel) : this() {
         parcel.readList(listMenu, null)
