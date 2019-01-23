@@ -58,7 +58,7 @@
     </EditText>
 
     <TextView
-            android:text="Введите номер телефона"
+            android:text="Повторите пароль"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,13 +72,13 @@
             android:layout_width="178dp"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="244dp"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="256dp"
             android:layout_marginRight="112dp" app:layout_constraintStart_toEndOf="@+id/textView2"
-            android:layout_marginStart="8dp">
+            android:layout_marginStart="20dp">
     </EditText>
 
     <Button
-            android:onClick="RegPerson"
+            android:onClick="SavePerson"
             android:id="@+id/btnReg"
             android:text="Зарегистрироваться"
             android:layout_width="wrap_content"
@@ -98,20 +98,12 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginLeft="248dp">
     </Button>
-    <ProgressBar
-            style="?android:attr/progressBarStyle"
+    <Button
+            android:onClick="ShowPerson"
+            android:text="Показать человека(убрать содержимое полей)"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="72dp"
-            android:layout_marginTop="12dp" app:layout_constraintTop_toBottomOf="@+id/btnReg"/>
-    <TextView
-            android:id="@+id/tvProgress"
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toEndOf="@+id/progressBar" android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/btnChangeEntry"
-            app:layout_constraintHorizontal_bias="0.314"/>
+            android:id="@+id/button" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/btnReg" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
 </android.support.constraint.ConstraintLayout>
