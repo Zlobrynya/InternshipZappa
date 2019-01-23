@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -14,9 +15,12 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import android.support.design.widget.AppBarLayout
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-
+import android.view.View
+import android.widget.Toast
+import android.widget.TextView
 
 class MenuActivity: AppCompatActivity() {
 //    private val imageResId = intArrayOf(R.mipmap.ic_hot, R.mipmap.ic_salad, R.mipmap.ic_broth,
@@ -25,6 +29,9 @@ class MenuActivity: AppCompatActivity() {
     private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.broth,
         R.string.soda, R.string.burger, R.string.beer )
 
+    //я догадываюсь, что то это та еще херн€, но € не знаю как это можно сделать по нормальному
+    private var menuActivity: MenuActivity? = null
+
     var itemAuto: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +39,7 @@ class MenuActivity: AppCompatActivity() {
         setContentView(R.layout.activity_scrolling)
         setSupportActionBar(toolbar)
         val title = getString(R.string.menu_toolbar)
+        menuActivity = this
 
         //Listener дл€ проверки состо€ние actionbar, при раскрытом состо€нии титул, кнопка скрываетс€
         //при закрытом состо€нии отображаетс€ титул и кнопка
@@ -68,14 +76,18 @@ class MenuActivity: AppCompatActivity() {
 
                 }
 
-                override fun onNext(t: MenuDish) {
-                    viewPagerMenu.adapter = AdapterTab(supportFragmentManager, t, 6)
-                    sliding_tabs.setupWithViewPager(viewPagerMenu)
-                    for (i in 0..5){
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
-                            sliding_tabs.getTabAt(i)?.text = getString(stringId[i])
+                override fun onNext(menuDish: MenuDish) {
+                    if (menuDish.connect){
+                        viewPagerMenu.adapter = AdapterTab(supportFragmentManager, menuDish, 6)
+                        sliding_tabs.setupWithViewPager(viewPagerMenu)
+                        for (i in 0..5){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
+                                sliding_tabs.getTabAt(i)?.text = getString(stringId[i])
+                            }
                         }
+                    }else{
+                        menuActivity!!.start()
                     }
                 }
 
@@ -85,12 +97,26 @@ class MenuActivity: AppCompatActivity() {
             })
     }
 
+    fun start(){
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+
     //Ќажатие на элементы actionbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //проверка куда тыкнули и если это иконка авторизаци запускаем активити авторизации
         if (item.itemId == R.id.action_authentication) {
             //val intent = Intent(this, SearchUsersActivity::class.java)
             //startActivity(intent)
+            // Toast.makeText(this, "“ут должна была открытьс€ авторизаци€. \n Ќо еЄ не успели сделать ;(. ", Toast.LENGTH_SHORT).show();
+
+            val toast = Toast.makeText(this, "“ут должна была открытьс€ авторизаци€. \n Ќо еЄ не успели сделать ;(. ", Toast.LENGTH_SHORT)
+            val v = toast.view.findViewById<View>(android.R.id.message) as TextView
+            v.gravity = Gravity.CENTER
+
+            toast.show()
         }
         return true
     }

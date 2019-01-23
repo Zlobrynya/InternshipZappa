@@ -15,7 +15,7 @@ import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
 import kotlinx.android.synthetic.main.fragment_category_menu.*
 
 /*
-*  Фрагмент для отображения списка блюд
+*  Р¤СЂР°РіРјРµРЅС‚ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ СЃРїРёСЃРєР° Р±Р»СЋРґ
 */
 
 class CategoryFragment: Fragment() {
@@ -26,7 +26,7 @@ class CategoryFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fragment_category_menu,null)
 
-        //Вытаскиваем ранее сохраненные файлы (при создании фрагамента)
+        //Р’С‹С‚Р°СЃРєРёРІР°РµРј СЂР°РЅРµРµ СЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ С„Р°Р№Р»С‹ (РїСЂРё СЃРѕР·РґР°РЅРёРё С„СЂР°РіР°РјРµРЅС‚Р°)
         val categoryParcelable = arguments!!.getParcelable<CategoryParcelable>("Parcelable")
         val listtDish = categoryParcelable?.listMenu
         viewAdapter = AdapterRecyclerMenu(listtDish!!, v.context!!)
@@ -36,7 +36,7 @@ class CategoryFragment: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //настраиваем RecyclerView для отображение списка блюд
+        //РЅР°СЃС‚СЂР°РёРІР°РµРј RecyclerView РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ СЃРїРёСЃРєР° Р±Р»СЋРґ
         viewManager = LinearLayoutManager(context)
         listRecyclerView.apply {
             layoutManager = viewManager
@@ -48,7 +48,7 @@ class CategoryFragment: Fragment() {
 
     companion object {
       fun newInstance(listDish: ArrayList<Dish>): Fragment{
-          //получаем данные с activity и загружаем в  Bundle
+          //РїРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ СЃ activity Рё Р·Р°РіСЂСѓР¶Р°РµРј РІ  Bundle
           val fragment = CategoryFragment()
           val args = Bundle()
           val categoryParcelable = CategoryParcelable()

@@ -7,7 +7,7 @@ import com.zlobrynya.internshipzappa.fragment.CategoryFragment
 import com.zlobrynya.internshipzappa.tools.MenuDish
 
 /*
- * Àäàïòåğ äëÿ TabLayout
+ * ĞĞ´Ğ°Ğ¿Ñ‚ĞµÑ€ Ğ´Ğ»Ñ TabLayout
  */
 
 class AdapterTab(fm: FragmentManager?, val menuDish: MenuDish, val pageCount: Int) : FragmentPagerAdapter(fm) {

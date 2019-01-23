@@ -15,11 +15,12 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
 import java.io.*
+import java.lang.Exception
 
 
 /*
- * Класс для полученние данных по меню
- * получает данные с сервера, либо берет с кеша, если ранее получали данные с серва.
+ * РљР»Р°СЃСЃ РґР»СЏ РїРѕР»СѓС‡РµРЅРЅРёРµ РґР°РЅРЅС‹С… РїРѕ РјРµРЅСЋ
+ * РїРѕР»СѓС‡Р°РµС‚ РґР°РЅРЅС‹Рµ СЃ СЃРµСЂРІРµСЂР°, Р»РёР±Рѕ Р±РµСЂРµС‚ СЃ РєРµС€Р°, РµСЃР»Рё СЂР°РЅРµРµ РїРѕР»СѓС‡Р°Р»Рё РґР°РЅРЅС‹Рµ СЃ СЃРµСЂРІР°.
 */
 
 class ParsJson {
@@ -29,7 +30,7 @@ class ParsJson {
 
     fun getMenu(context: Context): Observable<MenuDish> {
         this.context = context
-        //с помощью RxJava2 передаем в активити, что данные получены
+        //СЃ РїРѕРјРѕС‰СЊСЋ RxJava2 РїРµСЂРµРґР°РµРј РІ Р°РєС‚РёРІРёС‚Рё, С‡С‚Рѕ РґР°РЅРЅС‹Рµ РїРѕР»СѓС‡РµРЅС‹
         return Observable.create(object : ObservableOnSubscribe<MenuDish> {
             override fun subscribe(emitter: ObservableEmitter<MenuDish>) {
                 if (checkCacheMenu()){
@@ -44,14 +45,21 @@ class ParsJson {
     private fun downloadServer(url: String, emitter: ObservableEmitter<MenuDish>){
         var strJson: String
          doAsync {
-             val jsonUrl = URL(url)
-             val conn = jsonUrl.openConnection() as HttpURLConnection
-             conn.requestMethod = "GET"
-             val input = BufferedInputStream(conn.inputStream)
-             //перекодируем поток в строку
-             strJson = convertStreamToString(input)
-             writeCacheMenu(strJson)
-             parsJson(strJson, emitter)
+             try{
+                 val jsonUrl = URL(url)
+                 val conn = jsonUrl.openConnection() as HttpURLConnection
+                 conn.requestMethod = "GET"
+                 val input = BufferedInputStream(conn.inputStream)
+                 //РїРµСЂРµРєРѕРґРёСЂСѓРµРј РїРѕС‚РѕРє РІ СЃС‚СЂРѕРєСѓ
+                 strJson = convertStreamToString(input)
+                 writeCacheMenu(strJson)
+                 parsJson(strJson, emitter)
+             }catch (e: Exception){
+                 val menuDish = MenuDish()
+                 menuDish.connect = false
+                 emitter.onNext(menuDish)
+             }
+
         }
      }
 
@@ -118,20 +126,21 @@ class ParsJson {
         menuDish.burgerArray = getArray(jsonObj.getJSONArray("burger"), "burger")
         menuDish.nonalcArray = getArray(jsonObj.getJSONArray("nonalc"), "nonalc")
         menuDish.beerArray = getArray(jsonObj.getJSONArray("beer"), "beer")
-        //Тут нужен RxJava2, что бы уведомить активити, что данные полученные и обработаны
+        //РўСѓС‚ РЅСѓР¶РµРЅ RxJava2, С‡С‚Рѕ Р±С‹ СѓРІРµРґРѕРјРёС‚СЊ Р°РєС‚РёРІРёС‚Рё, С‡С‚Рѕ РґР°РЅРЅС‹Рµ РїРѕР»СѓС‡РµРЅРЅС‹Рµ Рё РѕР±СЂР°Р±РѕС‚Р°РЅС‹
         //https://startandroid.ru/ru/courses/rxjava/19-course/rxjava/435-urok-1.html
         //http://www.vogella.com/tutorials/RxJava/article.html
         emitter.onNext(menuDish)
     }
 
-    private fun getArray(jsonArray: JSONArray, name: String = ""): ArrayList<Dish> {
+    private fun getArray(jsonArray: JSONArray, pathImg: String = ""): ArrayList<Dish> {
         val locArrayList = ArrayList<Dish>()
         for (i in 0..jsonArray.length()-1){
             val jsObject = jsonArray.get(i) as JSONObject
             locArrayList.add(
                 Dish(
                     jsObject.getString("name"), jsObject.getInt("price"),
-                    jsObject.getString("descr"), jsObject.getString("weight"), name
+                    jsObject.getString("descr"), jsObject.getString("weight"),
+                    jsObject.getString("photo")
                 )
             )
         }

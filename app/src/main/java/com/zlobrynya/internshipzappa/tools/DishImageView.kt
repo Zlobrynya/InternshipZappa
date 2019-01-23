@@ -4,11 +4,15 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.os.Build
 import android.util.AttributeSet
 import android.util.Base64
+import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.zlobrynya.internshipzappa.R
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.*
@@ -16,54 +20,91 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 
+
+
 /*
-*  View на замену ImageView в item_category
-*  Качает с сервера Base64 код изображения, перекодирует, и вставляется в ImageView
-*  кроме того, сохраняет в кэш память, и при повторном запуске, качает уже с кэш памяти
-*  По окончании загрузки, делает видимой textView и скрывает prograssBar
+*  View РЅР° Р·Р°РјРµРЅСѓ ImageView РІ item_category
+*  РљР°С‡Р°РµС‚ СЃ СЃРµСЂРІРµСЂР° Base64 РєРѕРґ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ, РїРµСЂРµРєРѕРґРёСЂСѓРµС‚, Рё РІСЃС‚Р°РІР»СЏРµС‚СЃСЏ РІ ImageView
+*  РєСЂРѕРјРµ С‚РѕРіРѕ, СЃРѕС…СЂР°РЅСЏРµС‚ РІ РєСЌС€ РїР°РјСЏС‚СЊ, Рё РїСЂРё РїРѕРІС‚РѕСЂРЅРѕРј Р·Р°РїСѓСЃРєРµ, РєР°С‡Р°РµС‚ СѓР¶Рµ СЃ РєСЌС€ РїР°РјСЏС‚Рё
+*  РџРѕ РѕРєРѕРЅС‡Р°РЅРёРё Р·Р°РіСЂСѓР·РєРё, РґРµР»Р°РµС‚ РІРёРґРёРјРѕР№ textView Рё СЃРєСЂС‹РІР°РµС‚ prograssBar
  */
 
 class DishImageView(context: Context?, attrs: AttributeSet?) : ImageView(context, attrs) {
     var progressBar: ProgressBar? = null
     var textView: TextView? = null
-    private var bitmap: Bitmap? = null
-
+    var isImageLoad: Boolean = false;
+    //С‹СЂРµРјРµРЅРЅРѕ РїРѕРєР° РЅРµС‚ url РЅР° РЅР°СЃС‚РѕСЏС‰РёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+    private val string = listOf<String>("hot","salads","soup","nonalc","burger","beer")
+    private val SCALE = 0
 
     fun setURL(url: String){
-
+        if (checkFile(url)){
+            downloadFromFile(url)
+            textView?.visibility = View.VISIBLE
+            progressBar?.visibility = View.GONE
+        }else{
+            downloadImg(url)
+        }
+        isImageLoad = true
     }
 
+    private fun checkFile(path: String): Boolean{
+        return File(context.cacheDir.toString() + path.hashCode()).exists()
+    }
+
+    //СЂР°СЃРєРѕРґРёСЂСѓРµС‚ С„Р°Р№Р» РІ bitmap Рё СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ РІ imageView
     private fun downloadFromFile(path: String){
-
-    }
-
-    private fun toFile(name: String){
-
-    }
-
-    private fun downloadImg(url: String){
         doAsync {
-            val iamgeUrl = URL(url)
-            val conn = iamgeUrl.openConnection() as HttpURLConnection
-            conn.requestMethod = "GET"
-            val input = BufferedInputStream(conn.inputStream)
-            var base64 = getString(input)
-            val bitmap = devodeBase64(base64)
-
-            //удалить префикс 'data:image/png;base64,'
+            val options = BitmapFactory.Options()
+            options.inSampleSize = SCALE
+            val bitmap = BitmapFactory.decodeFile(context.cacheDir.toString() + path.hashCode(), options)
             uiThread {
                 setImageBitmap(bitmap)
             }
         }
+
     }
 
-    //Декодирует Base64 в Bitmap
+    private fun toFile(bitmap: Bitmap, path: String){
+        //СЃРѕР·РґР°РµС‚ РїРѕС‚РѕРє РґР»СЏ Р·Р°РїРёСЃРё С„Р°Р№Р»Р°, РіРґРµ РёРјСЏ С„Р°Р№Р»Р° РµСЃС‚СЊ hashCode СЃСЃС‹Р»РєРё РЅР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
+        //(С…Р·, РєР°Рє РµС‰Рµ РёС… РјРѕР¶РЅРѕ РЅР°Р·РІР°С‚СЊ)
+        val file = File(context.cacheDir.toString() + path.hashCode())
+        val fileOutputStream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+        fileOutputStream.close()
+    }
+
+    private fun downloadImg(url: String){
+        doAsync {
+            var bitmap: Bitmap? = null
+            try {
+                val iamgeUrl = URL(url)
+                val conn = iamgeUrl.openConnection() as HttpURLConnection
+                conn.requestMethod = "GET"
+                val input = BufferedInputStream(conn.inputStream)
+                val base64 = getString(input)
+                bitmap = devodeBase64(base64)
+                toFile(bitmap,url)
+            }catch (e: IOException){
+                Log.e("ErrorDownload", e.printStackTrace().toString())
+            }
+            uiThread {
+                setImageBitmap(bitmap)
+                textView?.visibility = View.VISIBLE
+                progressBar?.visibility = View.GONE
+            }
+        }
+    }
+
+    //Р”РµРєРѕРґРёСЂСѓРµС‚ Base64 РІ Bitmap
     private fun devodeBase64(base64: String): Bitmap{
+        //СѓРґР°Р»РёС‚СЊ РїСЂРµС„РёРєСЃ 'data:image/png;base64,'
         val strBase64 = base64.substring(base64.indexOf(",")+1)
         val stream = ByteArrayInputStream(Base64.decode(strBase64.toByteArray(), Base64.DEFAULT))
         return BitmapFactory.decodeStream(stream)
     }
 
+    //РџСЂРµРѕР±СЂР°Р·СѓРµС‚ РёР· РїРѕС‚РѕРєР° РІ СЃС‚СЂРѕРєСѓ
     private fun getString(inputStream: BufferedInputStream): String{
         val bufferSize = 1024
         val buffer = CharArray(bufferSize)
@@ -75,6 +116,7 @@ class DishImageView(context: Context?, attrs: AttributeSet?) : ImageView(context
                 break
             out.append(buffer, 0, rsz)
         }
+        input.close()
         return out.toString()
     }
 

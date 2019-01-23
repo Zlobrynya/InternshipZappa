@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 /**
- *  Класс обертка для передачи данных из activity в fragment
+ *  РљР»Р°СЃСЃ РѕР±РµСЂС‚РєР° РґР»СЏ РїРµСЂРµРґР°С‡Рё РґР°РЅРЅС‹С… РёР· activity РІ fragment
  * */
 
 class CategoryParcelable() : Parcelable {

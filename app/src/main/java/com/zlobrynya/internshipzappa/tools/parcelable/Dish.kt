@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 /*
-*  Класс для хранения данных после парсинга JSON
+*  РљР»Р°СЃСЃ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С… РїРѕСЃР»Рµ РїР°СЂСЃРёРЅРіР° JSON
 * */
 
 class Dish(val name: String, val price: Int, val descr: String, val weight: String, val pathImage: String): Parcelable {
