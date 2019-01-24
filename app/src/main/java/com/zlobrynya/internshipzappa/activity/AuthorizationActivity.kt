@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa
+package com.zlobrynya.internshipzappa.activity
 
 import android.content.Context
 import android.content.Intent
@@ -8,21 +8,23 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import com.zlobrynya.internshipzappa.tools.PostLoginData
+import com.zlobrynya.internshipzappa.R
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_entry.*
 
-class EntryActivity : AppCompatActivity() {
+class AuthorizationActivity : AppCompatActivity() {
 
     //!!!!!!!!!!!!!!
-    lateinit var entryActivity: EntryActivity
+    lateinit var authorizationActivity: AuthorizationActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_entry)
-        entryActivity = this
+        authorizationActivity = this
 
         btnEnter.setOnClickListener {
             val email = findViewById<EditText>(R.id.etEmailEntry)
@@ -31,7 +33,7 @@ class EntryActivity : AppCompatActivity() {
             Log.i("Log", email.text.toString())
 
             if (pass.text.toString().isEmpty()){
-                pushToast("Поле поряля не может быть пустым")
+                pushToast("Поле пароля не может быть пустым.")
                 return@setOnClickListener
             }
 
@@ -50,7 +52,7 @@ class EntryActivity : AppCompatActivity() {
 
                         override fun onNext(responseCode: Int) {
                             if (responseCode == 200)
-                                checkPass(email.text.toString(), pass.text.toString(), entryActivity)
+                                checkPass(email.text.toString(), pass.text.toString(), authorizationActivity)
                         }
 
                         override fun onError(e: Throwable) {
@@ -77,7 +79,7 @@ class EntryActivity : AppCompatActivity() {
     fun startActivityReg(view: View){
         val change_activity = Intent(this, RegActivity::class.java)
         startActivity(change_activity)
-        finish()
+        //finish()
     }
 
     //Пока сервер отвечает только 200, ВРЕМЕННОЕ решение
@@ -86,8 +88,8 @@ class EntryActivity : AppCompatActivity() {
         val savedLog = log
         val savedText = sharedPreferences.getInt(savedLog ,0)
         if (pass?.hashCode() == savedText){
-            Log.i("LOGGG", "LOGGG")
-            pushToast("Вы авторизовались")
+            pushToast("Вы авторизовались.")
+            finish()
         } else{
             pushToast("Неверный пароль или логин.")
         }

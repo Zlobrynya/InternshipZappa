@@ -1,9 +1,11 @@
-package com.zlobrynya.internshipzappa
+package com.zlobrynya.internshipzappa.activity
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.tools.PostLoginData
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -26,7 +28,7 @@ class RegActivity : AppCompatActivity() {
 
 
         if (etPasswordReg.text.toString().isEmpty() || etPasswordReg2.text.toString().isEmpty()) {
-            pushToast("Поле пороля не может быть пустым.")
+            pushToast("Поле пароля не может быть пустым")
             return
         }
 
@@ -37,7 +39,7 @@ class RegActivity : AppCompatActivity() {
 
 
         if (etPasswordReg.text.toString().hashCode() != etPasswordReg2.text.toString().hashCode())
-            Toast.makeText(this, "Пароли не совпадают", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Пароли не совпадают.", Toast.LENGTH_SHORT).show()
         else {
             val entryData = "login=" + log + "&password=" + password
 
@@ -60,7 +62,7 @@ class RegActivity : AppCompatActivity() {
                             editor.putInt(log,password.hashCode())
                             editor.apply()
 
-                            Toast.makeText(regActivity, "Register", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(regActivity, "Регистрация прошла успешно.", Toast.LENGTH_SHORT).show()
                             regActivity.finish()
                         }
                     }

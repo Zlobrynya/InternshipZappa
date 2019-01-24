@@ -117,15 +117,15 @@ class MenuActivity: AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //проверка куда тыкнули и если это иконка авторизаци запускаем активити авторизации
         if (item.itemId == R.id.action_authentication) {
-            //val intent = Intent(this, SearchUsersActivity::class.java)
-            //startActivity(intent)
+            val intent = Intent(this, AuthorizationActivity::class.java)
+            startActivity(intent)
             // Toast.makeText(this, "Тут должна была открыться авторизация. \n Но её не успели сделать ;(. ", Toast.LENGTH_SHORT).show();
 
-            val toast = Toast.makeText(this, "Тут должна была открыться авторизация. \n Но её не успели сделать ;(. ", Toast.LENGTH_SHORT)
+            /*val toast = Toast.makeText(this, "Тут должна была открыться авторизация. \n Но её не успели сделать ;(. ", Toast.LENGTH_SHORT)
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
 
-            toast.show()
+            toast.show()*/
         }
         return true
     }

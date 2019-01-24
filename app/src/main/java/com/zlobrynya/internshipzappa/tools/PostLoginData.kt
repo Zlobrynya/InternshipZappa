@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa
+package com.zlobrynya.internshipzappa.tools
 
 
 import io.reactivex.Observable
@@ -52,7 +52,8 @@ class PostLoginData {
         private var instance: PostLoginData? = null
         fun getInstance(): PostLoginData {
             if (instance == null)
-                instance = PostLoginData()
+                instance =
+                        PostLoginData()
             return instance as PostLoginData
 
         }
