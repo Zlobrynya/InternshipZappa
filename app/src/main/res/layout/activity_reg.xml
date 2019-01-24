@@ -17,93 +17,86 @@
             app:layout_constraintHorizontal_bias="0.463" android:id="@+id/textView6">
     </TextView>
 
-    <TextView
-            android:text="Введите E-mail"
-            android:layout_marginTop="124dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginStart="44dp" android:id="@+id/textView">
-    </TextView>
-
-    <EditText
-            android:id="@+id/etEmailReg"
-            android:inputType="textEmailAddress"
-            android:layout_width="213dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="108dp"
-            android:layout_marginRight="92dp" app:layout_constraintStart_toEndOf="@+id/textView"
-            android:layout_marginStart="8dp">
-    </EditText>
-
-    <TextView
-            android:text="Введите пароль"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="196dp"
-            android:layout_marginStart="36dp" android:id="@+id/textView3">
-    </TextView>
-
-    <EditText
-            android:id="@+id/etPasswordReg"
-            android:inputType="textPassword"
-            android:layout_width="200dp"
-            android:layout_height="45dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="168dp" app:layout_constraintStart_toEndOf="@+id/textView3"
-            android:layout_marginStart="8dp">
-    </EditText>
-
-    <TextView
-            android:text="Повторите пароль"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="272dp" android:layout_marginStart="4dp"
-            android:id="@+id/textView2">
-    </TextView>
-
-    <EditText
-            android:id="@+id/etPhoneReg"
-            android:inputType="textPassword"
-            android:layout_width="178dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="256dp"
-            android:layout_marginRight="112dp" app:layout_constraintStart_toEndOf="@+id/textView2"
-            android:layout_marginStart="20dp">
-    </EditText>
-
     <Button
-            android:onClick="SavePerson"
+            android:onClick="savePerson"
             android:id="@+id/btnReg"
             android:text="Зарегистрироваться"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="328dp" android:layout_marginLeft="36dp"
-            app:layout_constraintEnd_toStartOf="@+id/btnChangeEntry" android:layout_marginEnd="44dp">
+            android:layout_marginTop="60dp" app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp">
     </Button>
 
-    <Button
-            android:onClick="ChangeActivityEntry"
-            android:id="@+id/btnChangeEntry"
-            android:text="Вход"
-            android:layout_marginTop="328dp"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginLeft="248dp">
-    </Button>
-    <Button
-            android:onClick="ShowPerson"
-            android:text="Показать человека(убрать содержимое полей)"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView6" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.0" android:id="@+id/linearLayout3">
+        <TextView
+                android:text="Введите E-mail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView" tools:layout_editor_absoluteY="149dp" tools:layout_editor_absoluteX="53dp">
+        </TextView>
+        <EditText
+                android:id="@+id/etEmailReg"
+                android:inputType="textEmailAddress"
+                android:layout_width="213dp"
+                android:layout_height="wrap_content"
+                tools:layout_editor_absoluteY="106dp" tools:layout_editor_absoluteX="182dp">
+        </EditText>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/btnReg" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:id="@+id/linearLayout4">
+        <TextView
+                android:text="Введите пароль"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3" tools:layout_editor_absoluteY="196dp" tools:layout_editor_absoluteX="36dp">
+        </TextView>
+        <EditText
+                android:id="@+id/etPasswordReg"
+                android:inputType="textPassword"
+                android:layout_width="200dp"
+                android:layout_height="45dp"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:layout_editor_absoluteY="168dp">
+        </EditText>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:id="@+id/linearLayout5">
+        <TextView
+                android:text="Повторите пароль"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                android:id="@+id/textView2" tools:layout_editor_absoluteY="272dp">
+        </TextView>
+        <EditText
+                android:id="@+id/etPasswordReg2"
+                android:inputType="textPassword"
+                android:layout_width="178dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="112dp"
+                tools:layout_editor_absoluteY="256dp">
+        </EditText>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

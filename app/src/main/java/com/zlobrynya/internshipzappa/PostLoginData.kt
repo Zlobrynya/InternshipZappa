@@ -1,9 +1,6 @@
 package com.zlobrynya.internshipzappa
 
 
-import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
-import android.util.Log
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
@@ -12,7 +9,6 @@ import java.net.URL
 import java.io.*
 import java.lang.Exception
 import javax.net.ssl.HttpsURLConnection
-import kotlin.system.measureNanoTime
 
 
 class PostLoginData {
@@ -40,14 +36,6 @@ class PostLoginData {
                         output.flush()
                         output.close()
                         emitter.onNext(urlConnection.responseCode)
-                        /*val reader = BufferedReader(InputStreamReader(urlConnection.getInputStream(), "UTF-8"))
-                        var line: String? = null
-                        while (true){
-                            line = reader.readLine()
-                            if (line == null)
-                                break
-                            Log.i("Post", line)
-                        }*/
                     } catch (e: Exception) {
                         e.printStackTrace()
                     } finally {
