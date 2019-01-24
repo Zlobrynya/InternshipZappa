@@ -6,7 +6,6 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
-    compileOptions.encoding = 'windows-1251'
     defaultConfig {
         applicationId "com.zlobrynya.internshipzappa"
         minSdkVersion 19
