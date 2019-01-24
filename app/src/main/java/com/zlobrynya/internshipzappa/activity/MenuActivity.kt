@@ -15,12 +15,21 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import android.support.design.widget.AppBarLayout
+import android.util.Log
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.TextView
+import org.jetbrains.anko.doAsync
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.DataOutputStream
+import java.io.InputStreamReader
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
+
 
 class MenuActivity: AppCompatActivity() {
 //    private val imageResId = intArrayOf(R.mipmap.ic_hot, R.mipmap.ic_salad, R.mipmap.ic_broth,
@@ -29,7 +38,7 @@ class MenuActivity: AppCompatActivity() {
     private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.broth,
         R.string.soda, R.string.burger, R.string.beer )
 
-    //Я догадываюсь, что то это та еще херня, но я не знаю как это можно сделать по нормальному
+    //РЇ РґРѕРіР°РґС‹РІР°СЋСЃСЊ, С‡С‚Рѕ С‚Рѕ СЌС‚Рѕ С‚Р° РµС‰Рµ С…РµСЂРЅСЏ, РЅРѕ СЏ РЅРµ Р·РЅР°СЋ РєР°Рє СЌС‚Рѕ РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ РїРѕ РЅРѕСЂРјР°Р»СЊРЅРѕРјСѓ
     private var menuActivity: MenuActivity? = null
 
     var itemAuto: MenuItem? = null
@@ -41,8 +50,8 @@ class MenuActivity: AppCompatActivity() {
         val title = getString(R.string.menu_toolbar)
         menuActivity = this
 
-        //Listener для проверки состояние actionbar, при раскрытом состоянии титул, кнопка скрывается
-        //при закрытом состоянии отображается титул и кнопка
+        //Listener РґР»СЏ РїСЂРѕРІРµСЂРєРё СЃРѕСЃС‚РѕСЏРЅРёРµ actionbar, РїСЂРё СЂР°СЃРєСЂС‹С‚РѕРј СЃРѕСЃС‚РѕСЏРЅРёРё С‚РёС‚СѓР», РєРЅРѕРїРєР° СЃРєСЂС‹РІР°РµС‚СЃСЏ
+        //РїСЂРё Р·Р°РєСЂС‹С‚РѕРј СЃРѕСЃС‚РѕСЏРЅРёРё РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ С‚РёС‚СѓР» Рё РєРЅРѕРїРєР°
         appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var isShow = true
             var scrollRange = -1
@@ -64,8 +73,8 @@ class MenuActivity: AppCompatActivity() {
         })
 
         //Get json data from file
-        //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его
-        //и получаем обьект ManuDish, в котом содержатся данные разбитые по категориям
+        //Р’ РѕС‚РґРµР»СЊРЅРѕРј РїРѕС‚РѕРєРµ РїРѕРґРєР»СЋС‡Р°РµРјСЃСЏ Рє СЃРµСЂРІРµСЂСѓ Рё РєР°РєС‡Р°РµРј json С„Р°Р№Р», РїР°СЂСЃРёРј РµРіРѕ
+        //Рё РїРѕР»СѓС‡Р°РµРј РѕР±СЊРµРєС‚ ManuDish, РІ РєРѕС‚РѕРј СЃРѕРґРµСЂР¶Р°С‚СЃСЏ РґР°РЅРЅС‹Рµ СЂР°Р·Р±РёС‚С‹Рµ РїРѕ РєР°С‚РµРіРѕСЂРёСЏРј
         ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<MenuDish> {
                 override fun onComplete() {
@@ -104,15 +113,15 @@ class MenuActivity: AppCompatActivity() {
     }
 
 
-    //Нажатие на элементы actionbar
+    //РќР°Р¶Р°С‚РёРµ РЅР° СЌР»РµРјРµРЅС‚С‹ actionbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //проверка куда тыкнули и если это иконка авторизаци запускаем активити авторизации
+        //РїСЂРѕРІРµСЂРєР° РєСѓРґР° С‚С‹РєРЅСѓР»Рё Рё РµСЃР»Рё СЌС‚Рѕ РёРєРѕРЅРєР° Р°РІС‚РѕСЂРёР·Р°С†Рё Р·Р°РїСѓСЃРєР°РµРј Р°РєС‚РёРІРёС‚Рё Р°РІС‚РѕСЂРёР·Р°С†РёРё
         if (item.itemId == R.id.action_authentication) {
             //val intent = Intent(this, SearchUsersActivity::class.java)
             //startActivity(intent)
-            // Toast.makeText(this, "Тут должна была открыться авторизация. \n Но её не успели сделать ;(. ", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "РўСѓС‚ РґРѕР»Р¶РЅР° Р±С‹Р»Р° РѕС‚РєСЂС‹С‚СЊСЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ. \n РќРѕ РµС‘ РЅРµ СѓСЃРїРµР»Рё СЃРґРµР»Р°С‚СЊ ;(. ", Toast.LENGTH_SHORT).show();
 
-            val toast = Toast.makeText(this, "Тут должна была открыться авторизация. \n Но её не успели сделать ;(. ", Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(this, "РўСѓС‚ РґРѕР»Р¶РЅР° Р±С‹Р»Р° РѕС‚РєСЂС‹С‚СЊСЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ. \n РќРѕ РµС‘ РЅРµ СѓСЃРїРµР»Рё СЃРґРµР»Р°С‚СЊ ;(. ", Toast.LENGTH_SHORT)
             val v = toast.view.findViewById<View>(android.R.id.message) as TextView
             v.gravity = Gravity.CENTER
 
@@ -122,7 +131,7 @@ class MenuActivity: AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // создаем меню
+        // СЃРѕР·РґР°РµРј РјРµРЅСЋ
         menuInflater.inflate(R.menu.menu_scrolling, menu)
         itemAuto = menu.findItem(R.id.action_authentication)
         itemAuto?.isVisible = false
