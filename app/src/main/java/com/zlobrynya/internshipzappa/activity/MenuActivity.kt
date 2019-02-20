@@ -35,8 +35,8 @@ class MenuActivity: AppCompatActivity() {
 //    private val imageResId = intArrayOf(R.mipmap.ic_hot, R.mipmap.ic_salad, R.mipmap.ic_broth,
 //        R.mipmap.ic_soda, R.mipmap.ic_burger, R.mipmap.ic_beer )
 
-    private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.broth,
-        R.string.soda, R.string.burger, R.string.beer )
+    private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.soup, R.string.burger, R.string.combo,
+        R.string.beer, R.string.toping)
 
     //Я догадываюсь, что то это та еще херня, но я не знаю как это можно сделать по нормальному
     private var menuActivity: MenuActivity? = null
@@ -114,7 +114,7 @@ class MenuActivity: AppCompatActivity() {
 
 
     //Нажатие на элементы actionbar
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
         //проверка куда тыкнули и если это иконка авторизаци запускаем активити авторизации
         if (item.itemId == R.id.action_authentication) {
             val intent = Intent(this, AuthorizationActivity::class.java)
@@ -128,13 +128,13 @@ class MenuActivity: AppCompatActivity() {
             toast.show()*/
         }
         return true
-    }
+    }*/
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+   /* override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // создаем меню
         menuInflater.inflate(R.menu.menu_scrolling, menu)
         itemAuto = menu.findItem(R.id.action_authentication)
         itemAuto?.isVisible = false
         return true
-    }
+    }*/
 }
