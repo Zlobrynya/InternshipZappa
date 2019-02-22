@@ -9,7 +9,7 @@ class FullDescriptionScreen : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.full_description_screen)
         //Создание RecyclerView
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
