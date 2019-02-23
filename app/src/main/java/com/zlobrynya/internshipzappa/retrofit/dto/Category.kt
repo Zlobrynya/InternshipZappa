@@ -1,10 +1,16 @@
 package com.zlobrynya.internshipzappa.retrofit.dto
 
-import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.annotation.JsonInclude
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder("class_id", "name")
-class JacksonCl {
+class Category {
 
     @JsonProperty("class_id")
     @get:JsonProperty("class_id")

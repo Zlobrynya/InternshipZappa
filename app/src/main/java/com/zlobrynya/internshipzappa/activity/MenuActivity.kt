@@ -24,6 +24,7 @@ import android.view.View
 import android.widget.Toast
 import android.widget.TextView
 import com.zlobrynya.internshipzappa.retrofit.dto.CatList
+import com.zlobrynya.internshipzappa.retrofit.dto.ListCategory
 import org.jetbrains.anko.doAsync
 import org.json.JSONObject
 import retrofit2.Call
@@ -81,13 +82,14 @@ class MenuActivity: AppCompatActivity() {
         val call = service?.getAllCategories()
 
 
-        call?.enqueue(object : retrofit2.Callback<CatList> {
-            override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
+        call?.enqueue(object : retrofit2.Callback<ListCategory> {
+            override fun onResponse(call: Call<ListCategory>, response: Response<ListCategory>) {
                 val body = response?.body()
                 val categories = body?.categories
+
                 Toast.makeText(applicationContext, "that's fine", Toast.LENGTH_LONG).show()
             }
-            override fun onFailure(call: Call<CatList>, t: Throwable) {
+            override fun onFailure(call: Call<ListCategory>, t: Throwable) {
 
                 Toast.makeText(applicationContext, "error reading JSON", Toast.LENGTH_LONG).show()
             }
