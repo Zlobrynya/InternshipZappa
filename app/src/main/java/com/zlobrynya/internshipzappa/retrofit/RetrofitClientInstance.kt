@@ -2,6 +2,7 @@ package com.zlobrynya.internshipzappa.retrofit
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.jackson.JacksonConverterFactory
 
 object RetrofitClientInstance {
 
@@ -13,7 +14,7 @@ object RetrofitClientInstance {
             if (retrofit == null) {
                 retrofit = retrofit2.Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(JacksonConverterFactory.create())
                     .build()
             }
 

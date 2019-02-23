@@ -80,10 +80,9 @@ class MenuActivity: AppCompatActivity() {
         val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
         val call = service?.getAllCategories()
 
+
         call?.enqueue(object : retrofit2.Callback<CatList> {
-
             override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
-
                 val body = response?.body()
                 val categories = body?.categories
                 Toast.makeText(applicationContext, "that's fine", Toast.LENGTH_LONG).show()
