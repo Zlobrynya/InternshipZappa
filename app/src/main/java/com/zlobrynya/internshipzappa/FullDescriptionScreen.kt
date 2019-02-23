@@ -26,12 +26,13 @@ class FullDescriptionScreen : AppCompatActivity() {
         //Создание RecyclerView
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.setLayoutManager(layoutManager)
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = AdapterRecommendDish(generateValues())
 
         //UIL
         val imageLoader: ImageLoader = ImageLoader.getInstance()
-        var imageUrl = "drawable://" + R.drawable.noimage
+        var imageUrl = "drawable://" + R.drawable.sup_boston_louxi
+        dishPhoto.setImageResource(R.drawable.noimage)
         imageLoader.displayImage(imageUrl, dishPhoto)
         imageLoader.displayImage(imageUrl, topingPhoto)
     }
