@@ -12,6 +12,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.nostra13.universalimageloader.core.ImageLoader
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.zlobrynya.internshipzappa.R
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -26,15 +28,15 @@ import java.net.URL
 *  View на замену ImageView в item_category
 *  Качает с сервера Base64 код изображения, перекодирует, и вставляется в ImageView
 *  кроме того, сохраняет в кэш память, и при повторном запуске, качает уже с кэш памяти
-*  По окончании загрузки, делает видимой textView и скрывает prograssBar
+*  По окончании загрузки, делает видимой textView и скрывает progressBar
  */
 
 class DishImageView(context: Context?, attrs: AttributeSet?) : ImageView(context, attrs) {
     var progressBar: ProgressBar? = null
     var textView: TextView? = null
-    var isImageLoad: Boolean = false;
-    //ыременно пока нет url на настоящие изображения
-    private val string = listOf<String>("hot","salads","soup","nonalc","burger","beer")
+    var isImageLoad: Boolean = false
+    //временно пока нет url на настоящие изображения
+    //private val string = listOf<String>("hot","salads","soup","nonalc","burger","beer")
     private val SCALE = 0
 
     fun setURL(url: String){

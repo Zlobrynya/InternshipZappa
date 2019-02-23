@@ -17,7 +17,6 @@ import java.nio.charset.Charset
 import java.io.*
 import java.lang.Exception
 
-
 /*
  * Класс для полученние данных по меню
  * получает данные с сервера, либо берет с кеша, если ранее получали данные с серва.

@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import android.support.design.widget.AppBarLayout
+import com.zlobrynya.internshipzappa.retrofit.*
 import android.util.Log
 import android.view.Gravity
 import android.view.Menu
@@ -22,8 +23,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.TextView
+import com.zlobrynya.internshipzappa.retrofit.dto.CatList
 import org.jetbrains.anko.doAsync
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Response
 import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.InputStreamReader
@@ -72,9 +76,28 @@ class MenuActivity: AppCompatActivity() {
             }
         })
 
+        //Пока что сюда запихну обращение к серверу за списком блюд
+        val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
+        val call = service?.getAllCategories()
+
+        call?.enqueue(object : retrofit2.Callback<CatList> {
+
+            override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
+
+                val body = response?.body()
+                val categories = body?.categories
+                Toast.makeText(applicationContext, "that's fine", Toast.LENGTH_LONG).show()
+            }
+            override fun onFailure(call: Call<CatList>, t: Throwable) {
+
+                Toast.makeText(applicationContext, "error reading JSON", Toast.LENGTH_LONG).show()
+            }
+        })
+
+
         //Get json data from file
         //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его
-        //и получаем обьект ManuDish, в котом содержатся данные разбитые по категориям
+        //и получаем обьект MenuDish, в котом содержатся данные разбитые по категориям
         ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<MenuDish> {
                 override fun onComplete() {
@@ -111,30 +134,4 @@ class MenuActivity: AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
-
-    //Нажатие на элементы actionbar
-    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //проверка куда тыкнули и если это иконка авторизаци запускаем активити авторизации
-        if (item.itemId == R.id.action_authentication) {
-            val intent = Intent(this, AuthorizationActivity::class.java)
-            startActivity(intent)
-            // Toast.makeText(this, "Тут должна была открыться авторизация. \n Но её не успели сделать ;(. ", Toast.LENGTH_SHORT).show();
-
-            /*val toast = Toast.makeText(this, "Тут должна была открыться авторизация. \n Но её не успели сделать ;(. ", Toast.LENGTH_SHORT)
-            val v = toast.view.findViewById<View>(android.R.id.message) as TextView
-            v.gravity = Gravity.CENTER
-
-            toast.show()*/
-        }
-        return true
-    }*/
-
-   /* override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // создаем меню
-        menuInflater.inflate(R.menu.menu_scrolling, menu)
-        itemAuto = menu.findItem(R.id.action_authentication)
-        itemAuto?.isVisible = false
-        return true
-    }*/
 }

@@ -4,7 +4,9 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.nostra13.universalimageloader.core.ImageLoader
 import com.zlobrynya.internshipzappa.R
+
 
 class MainActivity : AppCompatActivity() {
 
