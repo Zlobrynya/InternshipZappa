@@ -21,19 +21,16 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical" android:id="@+id/CS1">
             <ImageView
-
                     android:id="@+id/dishPhoto"
                     android:layout_height="260dp"
                     android:layout_width="401dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_marginStart="8dp"
                     android:scaleType="centerCrop"
-                    android:layout_marginBottom="648dp"
+                    android:layout_marginBottom="628dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-                    app:srcCompat="@drawable/sup_boston_louxi">
+            >
             </ImageView>
 
             <ImageView
