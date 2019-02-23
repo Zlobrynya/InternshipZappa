@@ -23,7 +23,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.TextView
+import com.zlobrynya.internshipzappa.database.Database
+import com.zlobrynya.internshipzappa.database.MenuDB
 import com.zlobrynya.internshipzappa.retrofit.dto.CatList
+import com.zlobrynya.internshipzappa.retrofit.dto.DishList
 import org.jetbrains.anko.doAsync
 import org.json.JSONObject
 import retrofit2.Call
@@ -75,7 +78,11 @@ class MenuActivity: AppCompatActivity() {
                 }
             }
         })
+        //db
 
+        val menuDb = MenuDB(applicationContext)
+
+        //Toast.makeText(applicationContext, menuDb.getCountRow().toString(), Toast.LENGTH_LONG).show()
         //Пока что сюда запихну обращение к серверу за списком блюд
         val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
         val call = service?.getAllCategories()
@@ -86,14 +93,46 @@ class MenuActivity: AppCompatActivity() {
 
                 val body = response?.body()
                 val categories = body?.categories
-                Toast.makeText(applicationContext, "that's fine", Toast.LENGTH_LONG).show()
+                //Toast.makeText(applicationContext, "that's fine", Toast.LENGTH_LONG).show()
+                categories?.forEach {
+                    val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
+                    //Toast.makeText(applicationContext, it.class_id.toString(), Toast.LENGTH_LONG).show()
+                    //запрос к блюдам категории
+                    val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
+                    val call = service?.getAllDishes(url)
+                    call?.enqueue(object : retrofit2.Callback<DishList>{
+                        override fun onFailure(call: Call<DishList>, t: Throwable) {
+
+                            Toast.makeText(applicationContext, "error reading JSON dishes", Toast.LENGTH_LONG).show()
+
+                        }
+
+                        override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
+                            val body = response?.body()
+                            val dishes = body?.menu
+                            //catSize.text = dishes?.get(0)?.name.toString()
+                            //dishes?.forEach { Toast.makeText(applicationContext, it.item_id.toString(), Toast.LENGTH_LONG).show() }
+                            //Toast.makeText(applicationContext, "u got the data", Toast.LENGTH_LONG).show()
+
+                            //запись в бд
+                            dishes?.forEach {
+                                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
+                                //menuDb.addAllData(dishes)
+                            }
+                        }
+                    })
+                }
+
+                //Toast.makeText(applicationContext, menuDb.getCountRow().toString(), Toast.LENGTH_LONG).show()
+
             }
             override fun onFailure(call: Call<CatList>, t: Throwable) {
+                Toast.makeText(applicationContext, "error reading JSON categories", Toast.LENGTH_LONG).show()
 
-                Toast.makeText(applicationContext, "error reading JSON", Toast.LENGTH_LONG).show()
             }
         })
-
+        menuDb.closeDataBase()
+        menuDb.deleteDB()
 
         //Get json data from file
         //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его

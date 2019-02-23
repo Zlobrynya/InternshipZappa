@@ -3,6 +3,7 @@ package com.zlobrynya.internshipzappa.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
+import com.zlobrynya.internshipzappa.retrofit.dto.DishDTO
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
 
 
@@ -50,12 +51,12 @@ class MenuDB(context: Context) {
         var DATABASE_CREATE_SCRIPT = "create table if not exists " +
                 NAME_TABLE + " (" + DISH_ID + " integer, " +
                 TITLE + " text not null, " +
-                PRICE + " integer, " +
+                PRICE + " Double, " +
                 PHOTO_URL + " text not null, " +
                 DESC_LONG + " text not null, " +
                 DESC_SHORT + " text not null, " +
                 WEIGHT + " text not null, " +
-                CATEGORY + " text not null, " +
+                CATEGORY + " integer, " +
                 RECOMEND + " text not null);"
         //создается таблица
         sqLiteDatabase!!.execSQL(DATABASE_CREATE_SCRIPT)
@@ -75,28 +76,29 @@ class MenuDB(context: Context) {
     }
 
     //добавляем лист данных в бд
-    fun addAllData(arrayDish: ArrayList<DescriptionDish>) {
+    fun addAllData(arrayDish: List<DishDTO>) {
         for (dish in arrayDish){
             addData(dish)
         }
     }
 
     //добавляем одну строку в бд
-    fun addData(dish: DescriptionDish){
-        val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.dishId + ",\"" +
-                dish.title + "\"," + dish.price + ",\"" + dish.photoUrl + "\",\"" +
-                dish.descLong + "\",\"" + dish.descShort + "\",\"" + dish.weight + "\",\"" +
-                dish.category + "\",\"" + dish.recommended + "\");"
+    fun addData(dish: DishDTO){
+        val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.item_id + ",\"" +
+                dish.name + "\"," + dish.price + ",\"" + dish.photo + "\",\"" +
+                dish.desc_long + "\",\"" + dish.desc_short + "\",\"" + dish.weight + "\",\"" +
+                dish.class_id + "\",\"" + dish.recommended + "\");"
         sqLiteDatabase!!.execSQL(query)
     }
 
     //получаем описание блюда
-    fun getDescriptionDish(index: Int): DescriptionDish{
+    fun getDescriptionDish(index: Int): DishDTO{
         val query = "SELECT * FROM " + NAME_TABLE + " WHERE " + DISH_ID + "=" + index
         val cursor = sqLiteDatabase!!.rawQuery(query, null)
-        var dish = DescriptionDish()
+        var dish = DishDTO()
         if(cursor.count != 0){
             cursor.moveToFirst()
+            dish = getDish(cursor)
             dish = getDish(cursor)
         }
         cursor.close()
@@ -104,10 +106,10 @@ class MenuDB(context: Context) {
     }
 
     //вернет ArrayList<DescriptionDish> определенной категории
-    fun getCategoryDish(category: String): ArrayList<DescriptionDish>{
+    fun getCategoryDish(category: String): List<DishDTO>{
         val query = "SELECT * FROM " + NAME_TABLE + " WHERE " + CATEGORY + "=\"" + category + "\""
         val cursor = sqLiteDatabase!!.rawQuery(query, null)
-        val arrayDish = arrayListOf<DescriptionDish>()
+        val arrayDish = arrayListOf<DishDTO>()
         //cursor.moveToNext() - если больше строк нету то возвращает false
         while (cursor.moveToNext())
             arrayDish.add(getDish(cursor))
@@ -123,16 +125,16 @@ class MenuDB(context: Context) {
     }
 
     //получаем заполненный класс с бд
-    private fun getDish(cursor: Cursor): DescriptionDish {
-        val dish = DescriptionDish()
-        dish.dishId = cursor.getInt(cursor.getColumnIndex(DISH_ID))
-        dish.title = cursor.getString(cursor.getColumnIndex(TITLE))
-        dish.descLong = cursor.getString(cursor.getColumnIndex(DESC_LONG))
-        dish.descShort = cursor.getString(cursor.getColumnIndex(DESC_SHORT))
-        dish.photoUrl = cursor.getString(cursor.getColumnIndex(PHOTO_URL))
+    private fun getDish(cursor: Cursor): DishDTO {
+        val dish = DishDTO()
+        dish.item_id = cursor.getInt(cursor.getColumnIndex(DISH_ID))
+        dish.name = cursor.getString(cursor.getColumnIndex(TITLE))
+        dish.desc_long = cursor.getString(cursor.getColumnIndex(DESC_LONG))
+        dish.desc_short = cursor.getString(cursor.getColumnIndex(DESC_SHORT))
+        dish.photo = cursor.getString(cursor.getColumnIndex(PHOTO_URL))
         dish.recommended = cursor.getString(cursor.getColumnIndex(RECOMEND))
-        dish.category = cursor.getString(cursor.getColumnIndex(CATEGORY))
-        dish.price = cursor.getInt(cursor.getColumnIndex(PRICE))
+        dish.class_id = cursor.getInt(cursor.getColumnIndex(CATEGORY))
+        dish.price = cursor.getDouble(cursor.getColumnIndex(PRICE))
         return dish
     }
 
