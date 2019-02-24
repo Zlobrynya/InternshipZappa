@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
+import com.zlobrynya.internshipzappa.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
 import kotlinx.android.synthetic.main.fragment_category_menu.*
@@ -22,13 +23,15 @@ class CategoryFragment: Fragment() {
     private lateinit var v: View
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-
+    private lateinit var menuDb: MenuDB
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fragment_category_menu,null)
 
         //Вытаскиваем ранее сохраненные файлы (при создании фрагамента)
         val categoryParcelable = arguments!!.getParcelable<CategoryParcelable>("Parcelable")
         val listtDish = categoryParcelable?.listMenu
+        menuDb = MenuDB(v.context)
+
         viewAdapter = AdapterRecyclerMenu(listtDish!!, v.context!!)
 
         return v
