@@ -10,7 +10,7 @@ import com.zlobrynya.internshipzappa.tools.MenuDish
  * Адаптер для TabLayout
  */
 
-class AdapterTab(fm: FragmentManager?, val menuDish: MenuDish, val pageCount: Int) : FragmentPagerAdapter(fm) {
+class    AdapterTab(fm: FragmentManager?, val menuDish: MenuDish, val pageCount: Int) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         when(position){
