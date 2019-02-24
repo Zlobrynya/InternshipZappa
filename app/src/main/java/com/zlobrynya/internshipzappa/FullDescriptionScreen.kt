@@ -23,15 +23,15 @@ class FullDescriptionScreen : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = layoutManager
 
-        val dish = DescriptionDish()
-        var getDish= MenuDB(this)
-        showDishDescription(getDish.getDescriptionDish(1))
+        var getDish = MenuDB(this)
+        var dish:DescriptionDish = getDish.getDescriptionDish(0)
+        showDishDescription(getDish.getDescriptionDish(0))
         recyclerView.adapter = AdapterRecommendDish(listRecDish(dish))
     }
 
 
     fun showDishDescription(dish: DescriptionDish){
-        dishCena.setText((dish.price).toString())
+        dishCena.text = (dish.price).toString()
         val imageLoader: ImageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(dish.photoUrl, dishPhoto)
     }
@@ -40,11 +40,12 @@ class FullDescriptionScreen : AppCompatActivity() {
         var str = dish.recommended
         var delimiter = ';'
         var parts = str.split(delimiter)
-        Log.d("Список", parts.size.toString())
         var list: ArrayList<DescriptionDish> = ArrayList()
         var getDish = MenuDB(this)
         for (i in 0..parts.size){
-            list.add(getDish.getDescriptionDish(i))
+            if (parts.contains("$i")) {
+                list.add(getDish.getDescriptionDish(i))
+            }
         }
         return list
     }
