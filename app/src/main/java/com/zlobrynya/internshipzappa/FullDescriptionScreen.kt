@@ -25,7 +25,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         val imageLoader: ImageLoader = ImageLoader.getInstance()
         var imageUrl = "drawable://" + R.drawable.noimage
         imageLoader.displayImage(imageUrl, dishPhoto)
-        imageLoader.displayImage(imageUrl, topingPhoto)
+        //imageLoader.displayImage(imageUrl, topingPhoto)
     }
 
     private fun generateValues(): List<String> {
