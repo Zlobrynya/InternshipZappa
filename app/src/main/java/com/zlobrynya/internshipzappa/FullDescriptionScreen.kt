@@ -17,7 +17,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         //Создание RecyclerView
         val layoutManager = LinearLayoutManager(this@FullDescriptionScreen, LinearLayoutManager.HORIZONTAL, false)
         val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.setLayoutManager(layoutManager)
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = AdapterRecommendDish(generateValues())
 
         //UIL
