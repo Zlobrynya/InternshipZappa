@@ -62,7 +62,6 @@ class MenuDB(context: Context) {
     }
 
 
-
     //закрываем БД
     fun closeDataBase() {
         if (sqLiteDatabase!!.isOpen())
@@ -102,6 +101,7 @@ class MenuDB(context: Context) {
         cursor.close()
         return dish
     }
+
 
     //вернет ArrayList<DescriptionDish> определенной категории
     fun getCategoryDish(category: String): ArrayList<DescriptionDish>{

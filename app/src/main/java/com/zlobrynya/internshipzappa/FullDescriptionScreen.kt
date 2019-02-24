@@ -1,12 +1,15 @@
 package com.zlobrynya.internshipzappa
 
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.nostra13.universalimageloader.core.ImageLoader
+import com.zlobrynya.internshipzappa.database.MenuDB
+import com.zlobrynya.internshipzappa.tools.DescriptionDish
 import kotlinx.android.synthetic.main.full_description_screen.*
-import kotlinx.android.synthetic.main.rect_recommend_dish.*
 
 class FullDescriptionScreen : AppCompatActivity() {
 
@@ -16,24 +19,25 @@ class FullDescriptionScreen : AppCompatActivity() {
 
         //Создание RecyclerView
         val layoutManager = LinearLayoutManager(this@FullDescriptionScreen, LinearLayoutManager.HORIZONTAL, false)
-        val recyclerView: RecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = AdapterRecommendDish(generateValues())
 
-        //UIL
+        var getDish= MenuDB(this)
+        showDishDescription(getDish.getDescriptionDish(2))
+        recyclerView.adapter = AdapterRecommendDish(listRecDish(dish = DescriptionDish()))
+    }
 
+
+    fun showDishDescription(dish: DescriptionDish){
+        dishCena.setText((dish.price).toString())
         val imageLoader: ImageLoader = ImageLoader.getInstance()
-        var imageUrl = "drawable://" + R.drawable.noimage
-        imageLoader.displayImage(imageUrl, dishPhoto)
-        //imageLoader.displayImage(imageUrl, topingPhoto)
+        imageLoader.displayImage(dish.photoUrl, dishPhoto)
     }
 
-    private fun generateValues(): List<String> {
-        val values = ArrayList<String>()
-        for (i in 0..2){
-            values.add("Медово-горчичный соус, $i")
-        }
-        return values
+    fun listRecDish(dish: DescriptionDish): ArrayList<DescriptionDish>{
+        var str = dish.recommended
+        var delimiter = ';'
+        var parts: ArrayList<DescriptionDish> = str.split(delimiter) as ArrayList<DescriptionDish>
+        return parts
     }
-
 }

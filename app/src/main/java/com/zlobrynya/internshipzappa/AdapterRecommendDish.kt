@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.nostra13.universalimageloader.core.ImageLoader
-import kotlinx.android.synthetic.main.full_description_screen.*
+import com.zlobrynya.internshipzappa.tools.DescriptionDish
 
-class AdapterRecommendDish(private val values: List<String>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
+class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
 
     override fun getItemCount() = values.size
 
@@ -19,18 +19,21 @@ class AdapterRecommendDish(private val values: List<String>): RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder?.textView?.text = values[position]
+        holder?.toping_price?.text = (values[position].price).toString()
         val imageLoader: ImageLoader = ImageLoader.getInstance()
-        var imageUrl = "drawable://" + R.drawable.noimage
-        imageLoader.displayImage(imageUrl, holder.toping_photo)
+        imageLoader.displayImage(values[position].photoUrl, holder.toping_photo)
     }
 
-    class ViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!){
-        var textView: TextView? = null
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+        var toping_name: TextView? = null
         var toping_photo: ImageView? = null
+        var toping_price: TextView? = null
+        var toping_ves: TextView? = null
         init{
-            textView = itemView?.findViewById(R.id.topingName)
+            toping_name = itemView?.findViewById(R.id.topingName)
             toping_photo = itemView?.findViewById(R.id.topingPhoto)
+            toping_price = itemView?.findViewById(R.id.topingPrice)
+            toping_ves = itemView?.findViewById(R.id.topingVes)
         }
     }
 }
