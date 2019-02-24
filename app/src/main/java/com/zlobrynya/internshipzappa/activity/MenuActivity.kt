@@ -16,39 +16,25 @@ import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import android.support.design.widget.AppBarLayout
 import com.zlobrynya.internshipzappa.retrofit.*
-import android.util.Log
-import android.view.Gravity
-import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
-import android.widget.TextView
-import com.zlobrynya.internshipzappa.database.Database
 import com.zlobrynya.internshipzappa.database.MenuDB
 import com.zlobrynya.internshipzappa.retrofit.dto.CatList
 import com.zlobrynya.internshipzappa.retrofit.dto.DishList
-import org.jetbrains.anko.doAsync
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
-import java.io.BufferedReader
-import java.io.DataOutputStream
-import java.io.InputStreamReader
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 
 class MenuActivity: AppCompatActivity() {
-//    private val imageResId = intArrayOf(R.mipmap.ic_hot, R.mipmap.ic_salad, R.mipmap.ic_broth,
-//        R.mipmap.ic_soda, R.mipmap.ic_burger, R.mipmap.ic_beer )
 
     private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.soup, R.string.burger, R.string.combo,
         R.string.beer, R.string.toping)
 
     //Я догадываюсь, что то это та еще херня, но я не знаю как это можно сделать по нормальному
     private var menuActivity: MenuActivity? = null
-
     var itemAuto: MenuItem? = null
+
+    private lateinit var menuDb: MenuDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,30 +43,7 @@ class MenuActivity: AppCompatActivity() {
         val title = getString(R.string.menu_toolbar)
         menuActivity = this
 
-        //Listener для проверки состояние actionbar, при раскрытом состоянии титул, кнопка скрывается
-        //при закрытом состоянии отображается титул и кнопка
-        appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            var isShow = true
-            var scrollRange = -1
-
-            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.totalScrollRange
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    toolbarLayout.title = title
-                    itemAuto?.isVisible = true
-                    isShow = true
-                } else if (isShow) {
-                    toolbarLayout.setTitle(" ")
-                    itemAuto?.isVisible = false
-                    isShow = false
-                }
-            }
-        })
-        //db
-
-        val menuDb = MenuDB(applicationContext)
+        menuDb = MenuDB(applicationContext)
 
         //Toast.makeText(applicationContext, menuDb.getCountRow().toString(), Toast.LENGTH_LONG).show()
         //Пока что сюда запихну обращение к серверу за списком блюд
@@ -113,11 +76,10 @@ class MenuActivity: AppCompatActivity() {
                             //catSize.text = dishes?.get(0)?.name.toString()
                             //dishes?.forEach { Toast.makeText(applicationContext, it.item_id.toString(), Toast.LENGTH_LONG).show() }
                             //Toast.makeText(applicationContext, "u got the data", Toast.LENGTH_LONG).show()
-
+                            menuDb.addAllData(dishes!!)
                             //запись в бд
-                            dishes?.forEach {
+                            dishes.forEach {
                                 Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-                                //menuDb.addAllData(dishes)
                             }
                         }
                     })
@@ -131,8 +93,6 @@ class MenuActivity: AppCompatActivity() {
 
             }
         })
-        menuDb.closeDataBase()
-        menuDb.deleteDB()
 
         //Get json data from file
         //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его
@@ -172,5 +132,11 @@ class MenuActivity: AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        menuDb.closeDataBase()
+
     }
 }
