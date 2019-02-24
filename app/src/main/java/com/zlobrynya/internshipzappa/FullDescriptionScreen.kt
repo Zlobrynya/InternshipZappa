@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.zlobrynya.internshipzappa.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
@@ -22,9 +23,10 @@ class FullDescriptionScreen : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = layoutManager
 
+        val dish = DescriptionDish()
         var getDish= MenuDB(this)
-        showDishDescription(getDish.getDescriptionDish(2))
-        recyclerView.adapter = AdapterRecommendDish(listRecDish(dish = DescriptionDish()))
+        showDishDescription(getDish.getDescriptionDish(1))
+        recyclerView.adapter = AdapterRecommendDish(listRecDish(dish))
     }
 
 
@@ -37,7 +39,13 @@ class FullDescriptionScreen : AppCompatActivity() {
     fun listRecDish(dish: DescriptionDish): ArrayList<DescriptionDish>{
         var str = dish.recommended
         var delimiter = ';'
-        var parts: ArrayList<DescriptionDish> = str.split(delimiter) as ArrayList<DescriptionDish>
-        return parts
+        var parts = str.split(delimiter)
+        Log.d("Список", parts.size.toString())
+        var list: ArrayList<DescriptionDish> = ArrayList()
+        var getDish = MenuDB(this)
+        for (i in 0..parts.size){
+            list.add(getDish.getDescriptionDish(i))
+        }
+        return list
     }
 }
