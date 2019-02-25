@@ -4,7 +4,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
 import com.zlobrynya.internshipzappa.retrofit.dto.DishDTO
-import com.zlobrynya.internshipzappa.tools.DescriptionDish
 
 
 /*
@@ -59,7 +58,7 @@ class MenuDB(context: Context) {
                 DESC_LONG + " text not null, " +
                 DESC_SHORT + " text not null, " +
                 WEIGHT + " text not null, " +
-                CATEGORY + " integer, " +
+                CATEGORY + " text not null, " +
                 RECOMEND + " text not null);"
         //создается таблица
         sqLiteDatabase!!.execSQL(DATABASE_CREATE_SCRIPT)
@@ -94,7 +93,7 @@ class MenuDB(context: Context) {
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.item_id + ",\"" +
                 dish.name + "\"," + dish.price + ",\"" + dish.photo + "\",\"" +
                 dish.desc_long + "\",\"" + dish.desc_short + "\",\"" + dish.weight + "\",\"" +
-                dish.class_id + "\",\"" + dish.recommended + "\");"
+                dish.class_name + "\",\"" + dish.recommended + "\");"
         sqLiteDatabase!!.execSQL(query)
     }
 
@@ -140,7 +139,7 @@ class MenuDB(context: Context) {
         dish.desc_short = cursor.getString(cursor.getColumnIndex(DESC_SHORT))
         dish.photo = cursor.getString(cursor.getColumnIndex(PHOTO_URL))
         dish.recommended = cursor.getString(cursor.getColumnIndex(RECOMEND))
-        dish.class_id = cursor.getInt(cursor.getColumnIndex(CATEGORY))
+        dish.class_name = cursor.getString(cursor.getColumnIndex(CATEGORY))
         dish.price = cursor.getDouble(cursor.getColumnIndex(PRICE))
         dish.weight = cursor.getInt(cursor.getColumnIndex(WEIGHT))
         return dish

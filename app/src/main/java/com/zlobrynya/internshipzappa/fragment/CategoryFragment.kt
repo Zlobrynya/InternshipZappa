@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 
 import android.view.LayoutInflater
 import android.view.View
@@ -25,15 +26,17 @@ class CategoryFragment: Fragment() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var menuDb: MenuDB
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fragment_category_menu,null)
-
-        //Вытаскиваем ранее сохраненные файлы (при создании фрагамента)
-        val categoryParcelable = arguments!!.getParcelable<CategoryParcelable>("Parcelable")
-        val listtDish = menuDb.getCategoryDish("мясо")
         menuDb = MenuDB(v.context)
 
-        viewAdapter = AdapterRecyclerMenu(listtDish!!, v.context!!)
+        val category = arguments!!.getString("category")
+        //Log.i("CategoryFragment",category)
+        val listDish = menuDb.getCategoryDish(category)
+        //Log.i("CategoryFragment",listDish.size.toString())
+
+        viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
 
         return v
     }
@@ -51,13 +54,11 @@ class CategoryFragment: Fragment() {
 
 
     companion object {
-      fun newInstance(listDish: ArrayList<DishDTO>): Fragment{
+      fun newInstance(category: String): Fragment{
           //получаем данные с activity и загружаем в  Bundle
           val fragment = CategoryFragment()
           val args = Bundle()
-          val categoryParcelable = CategoryParcelable()
-          categoryParcelable.listMenu = listDish
-          args.putParcelable("Parcelable", categoryParcelable)
+          args.putString("category", category)
           fragment.arguments = args
           return fragment
       }

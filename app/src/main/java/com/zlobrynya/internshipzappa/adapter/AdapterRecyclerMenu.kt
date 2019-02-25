@@ -26,7 +26,7 @@ import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 * Адаптер для RecyclerMenu
  */
 
-class AdapterRecyclerMenu(private val myDataset: List<DishDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
+class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_menu, parent, false) as View
         return Holder(view)

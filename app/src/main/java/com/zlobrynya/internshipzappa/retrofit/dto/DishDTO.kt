@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DishDTO(
     @SerializedName("item_id") var item_id: Int = 0,
-    @SerializedName("class_id") var class_id: Int = 0,
+    @SerializedName("class_name") var class_name: String = "",
     @SerializedName("name") var name: String ="",
     @SerializedName("price") var price: Double = 0.0,
     @SerializedName("photo") var photo: String = "",

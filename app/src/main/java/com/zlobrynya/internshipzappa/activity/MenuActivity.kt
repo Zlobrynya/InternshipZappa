@@ -7,20 +7,18 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterTab
-import com.zlobrynya.internshipzappa.tools.MenuDish
-import com.zlobrynya.internshipzappa.tools.json.ParsJson
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_scrolling.*
-import android.support.design.widget.AppBarLayout
 import android.util.Log
 import com.zlobrynya.internshipzappa.retrofit.*
-import android.view.MenuItem
 import android.widget.Toast
+import com.zlobrynya.internshipzappa.database.CategoryDB
 import com.zlobrynya.internshipzappa.database.MenuDB
+import com.zlobrynya.internshipzappa.retrofit.dto.CatDTO
 import com.zlobrynya.internshipzappa.retrofit.dto.CatList
 import com.zlobrynya.internshipzappa.retrofit.dto.DishList
 import retrofit2.Call
@@ -28,26 +26,17 @@ import retrofit2.Response
 
 
 class MenuActivity: AppCompatActivity() {
-
-    private val stringId = intArrayOf(R.string.hot, R.string.salad, R.string.soup, R.string.burger, R.string.combo,
-        R.string.beer, R.string.toping)
-
-    //Я догадываюсь, что то это та еще херня, но я не знаю как это можно сделать по нормальному
-    private var menuActivity: MenuActivity? = null
-    var itemAuto: MenuItem? = null
-
     private lateinit var menuDb: MenuDB
+    private lateinit var categoryDB: CategoryDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scrolling)
         setSupportActionBar(toolbar)
-        val title = getString(R.string.menu_toolbar)
-        menuActivity = this
 
-        menuDb = MenuDB(applicationContext)
-        Log.i("row", menuDb.getCountRow().toString())
-        Toast.makeText(applicationContext, menuDb.getDescriptionDish(26).desc_long, Toast.LENGTH_LONG).show()
+        menuDb = MenuDB(this)
+        categoryDB = CategoryDB(this)
+
         //выполняем проверку обновлений,
         LogCheck.getInstance().getLog().subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<String>{
@@ -58,18 +47,20 @@ class MenuActivity: AppCompatActivity() {
                 }
 
                 override fun onNext(t: String) {
-                    checkPass(t,applicationContext,menuDb)
+                    Log.i("CheckJS","onNext")
+                    checkPass(t,this@MenuActivity)
 
                 }
 
                 override fun onError(e: Throwable) {
+                    Log.i("CheckJS",e.message)
                 }
             })
 
         //Get json data from file
         //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его
         //и получаем обьект MenuDish, в котом содержатся данные разбитые по категориям
-        ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
+        /*ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<MenuDish> {
                 override fun onComplete() {
                     println("Complete")
@@ -96,7 +87,7 @@ class MenuActivity: AppCompatActivity() {
                 override fun onError(e: Throwable) {
                     println(e.toString())
                 }
-            })
+            })*/
     }
 
     fun start(){
@@ -108,64 +99,36 @@ class MenuActivity: AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         menuDb.closeDataBase()
-
+        categoryDB.closeDataBase()
     }
 
     //сверяем дату обновления, если нет совпадений - обновляем бд
-    private fun checkPass(log: String, context: Context, menuDb: MenuDB){
+    private fun checkPass(log: String, context: Context){
         val sharedPreferences = context.getSharedPreferences("endpoint", Context.MODE_PRIVATE)
         val savedLog = "logK"
         val savedText = sharedPreferences.getInt(savedLog ,0)
-        if (log?.hashCode() == savedText){
-
+        if (log.hashCode() == savedText){
+            setCategories(categoryDB.getCategory())
         } else{
             val editor = sharedPreferences.edit()
             editor.putInt("logK", log.hashCode())
             editor.apply()
 
+            //чистим таблицы
             menuDb.clearTableDB()
-            //Пока что сюда запихну обращение к серверу за списком блюд
+            categoryDB.clearTableDB()
+
+            //обращение к серверу за списком блюд
             val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
             val call = service?.getAllCategories()
-
             call?.enqueue(object : retrofit2.Callback<CatList> {
-
                 override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
-
-                    val body = response?.body()
+                    val body = response.body()
                     val categories = body?.categories
-
-                    categories?.forEach {
-                        val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
-
-                        //запрос к блюдам категории
-                        val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
-                        val call = service?.getAllDishes(url)
-                        call?.enqueue(object : retrofit2.Callback<DishList>{
-                            override fun onFailure(call: Call<DishList>, t: Throwable) {
-
-                                Toast.makeText(context, "error reading JSON dishes", Toast.LENGTH_LONG).show()
-
-                            }
-                            override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
-
-                                val body = response?.body()
-                                val dishes = body?.menu
-                                dishes?.forEach {
-                                    //экранирование ковычек
-                                    it.desc_long = it.desc_short.replace('\"', '\'')
-                                    it.desc_long = it.desc_long.replace('\"', '\'')
-                                    it.desc_long = it.name.replace('\"', '\'')
-                                    it.desc_long = it.photo.replace('\"', '\'')
-                                    it.desc_long = it.recommended.replace('\"', '\'')
-                                    Log.i("replace", it.desc_long)}
-
-                                menuDb.addAllData(dishes!!)
-                                Log.i("row2", menuDb.getCountRow().toString())
-
-                            }
-                        })
-                    }
+                    //добавляем в бд категории
+                    categoryDB.addAllData(categories!!)
+                    setCategories(categories)
+                    getCategoriesMenu(categories)
                 }
                 override fun onFailure(call: Call<CatList>, t: Throwable) {
                     Toast.makeText(context, "error reading JSON categories", Toast.LENGTH_LONG).show()
@@ -173,5 +136,61 @@ class MenuActivity: AppCompatActivity() {
             })
         }
     }
+
+    //устанавливаем в табы категориии
+    private fun setCategories(categories: List<CatDTO>){
+        //Log.i("categories", categories.size.toString())
+        //Log.i("categories", "$categories")
+
+        viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
+        sliding_tabs.setupWithViewPager(viewPagerMenu)
+        for (i in 0..5){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
+                sliding_tabs.getTabAt(i)?.text = categories.get(i).name
+            }
+        }
+    }
+
+    //получаем с сервера категории меню
+    private fun getCategoriesMenu(categories: List<CatDTO>){
+        categories.forEach {
+            val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
+            Log.i("URRL",url)
+            val nameCategory = it.name
+            //запрос к блюдам категории
+            val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
+            val call = service?.getAllDishes(url)
+
+            call?.enqueue(object : retrofit2.Callback<DishList>{
+                override fun onFailure(call: Call<DishList>, t: Throwable) {
+                    Toast.makeText(this@MenuActivity, "error reading JSON dishes", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
+                    val body = response.body()
+                    val dishes = body?.menu
+                    dishes?.forEach {
+                        //экранирование ковыче
+                        try {
+                            it.desc_short = it.desc_short.replace('\"', '\'')
+                            it.desc_long = it.desc_long.replace('\"', '\'')
+                            it.name = it.name.replace('\"', '\'')
+                            it.photo = it.photo.replace('\"', '\'')
+                            it.recommended = it.recommended.replace('\"', '\'')
+                        }catch (e: IllegalArgumentException){
+                            Log.i("error",e.message)
+                        }
+                        it.class_name = nameCategory
+                        //Log.i("replace", it.desc_long)
+                    }
+                    menuDb.addAllData(dishes!!)
+                    //Log.i("row2", menuDb.getCountRow().toString())
+                }
+            })
+        }
+    }
+
+
 }
 
