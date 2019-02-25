@@ -1,9 +1,9 @@
-package com.zlobrynya.internshipzappa.database
+package com.zlobrynya.internshipzappa.tools.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
-import com.zlobrynya.internshipzappa.retrofit.dto.DishDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 
 
 /*
@@ -104,7 +104,6 @@ class MenuDB(context: Context) {
         var dish = DishDTO()
         if(cursor.count != 0){
             cursor.moveToFirst()
-            dish = getDish(cursor)
             dish = getDish(cursor)
         }
         cursor.close()

@@ -17,20 +17,12 @@
                   android:theme="@style/AppTheme">
         </activity>
         <activity android:name=".activity.MenuActivity"
-                  android:screenOrientation="locked"
-                  android:theme="@style/AppTheme.NoActionBar">
+                  android:screenOrientation="locked">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.AuthorizationActivity"
-                  android:theme="@style/AppTheme"
-                  android:screenOrientation="locked"/>
-        <activity android:name=".activity.RegActivity"
-                  android:theme="@style/AppTheme"
-                  android:screenOrientation="locked"/>
     </application>
 
 </manifest>

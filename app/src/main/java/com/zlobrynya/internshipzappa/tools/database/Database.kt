@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.database
+package com.zlobrynya.internshipzappa.tools.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

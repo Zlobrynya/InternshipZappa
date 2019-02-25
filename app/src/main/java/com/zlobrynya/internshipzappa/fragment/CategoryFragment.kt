@@ -4,17 +4,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
-import com.zlobrynya.internshipzappa.database.MenuDB
-import com.zlobrynya.internshipzappa.retrofit.dto.DishDTO
-import com.zlobrynya.internshipzappa.tools.parcelable.Dish
-import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
+import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import kotlinx.android.synthetic.main.fragment_category_menu.*
 
 /*

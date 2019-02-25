@@ -1,6 +1,6 @@
-package com.zlobrynya.internshipzappa.retrofit
+package com.zlobrynya.internshipzappa.tools.retrofit
 
-import com.zlobrynya.internshipzappa.retrofit.dto.CatList
+import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
 import retrofit2.Call
 import retrofit2.http.GET
 

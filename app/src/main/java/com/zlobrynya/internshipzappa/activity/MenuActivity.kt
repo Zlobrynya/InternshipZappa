@@ -12,15 +12,20 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_menu.*
-import kotlinx.android.synthetic.main.activity_scrolling.*
 import android.util.Log
-import com.zlobrynya.internshipzappa.retrofit.*
+import com.zlobrynya.internshipzappa.tools.retrofit.*
 import android.widget.Toast
-import com.zlobrynya.internshipzappa.database.CategoryDB
-import com.zlobrynya.internshipzappa.database.MenuDB
-import com.zlobrynya.internshipzappa.retrofit.dto.CatDTO
-import com.zlobrynya.internshipzappa.retrofit.dto.CatList
-import com.zlobrynya.internshipzappa.retrofit.dto.DishList
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
+import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache
+import com.nostra13.universalimageloader.core.ImageLoader
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader
+import com.zlobrynya.internshipzappa.tools.database.CategoryDB
+import com.zlobrynya.internshipzappa.tools.database.MenuDB
+import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
+import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
 import retrofit2.Call
 import retrofit2.Response
 
@@ -29,10 +34,22 @@ class MenuActivity: AppCompatActivity() {
     private lateinit var menuDb: MenuDB
     private lateinit var categoryDB: CategoryDB
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scrolling)
-        setSupportActionBar(toolbar)
+        setContentView(R.layout.activity_menu)
+
+        //!!!!!!!!!!!!временно здесь, потом передет в mainactivity
+        val config = ImageLoaderConfiguration.Builder(this)
+            .threadPoolSize(3)
+            .denyCacheImageMultipleSizesInMemory()
+            .memoryCache(UsingFreqLimitedMemoryCache(8 * 1024 * 1024)) // 2 Mb
+            .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 60 * 30).toLong()))
+            .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
+            .build()
+        ImageLoader.getInstance().init(config)
+        //!!!!!!!!!!!!
 
         menuDb = MenuDB(this)
         categoryDB = CategoryDB(this)
@@ -127,7 +144,6 @@ class MenuActivity: AppCompatActivity() {
                     val categories = body?.categories
                     //добавляем в бд категории
                     categoryDB.addAllData(categories!!)
-                    setCategories(categories)
                     getCategoriesMenu(categories)
                 }
                 override fun onFailure(call: Call<CatList>, t: Throwable) {
@@ -144,7 +160,7 @@ class MenuActivity: AppCompatActivity() {
 
         viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
         sliding_tabs.setupWithViewPager(viewPagerMenu)
-        for (i in 0..5){
+        for (i in 0..categories.size){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
                 sliding_tabs.getTabAt(i)?.text = categories.get(i).name
@@ -156,7 +172,6 @@ class MenuActivity: AppCompatActivity() {
     private fun getCategoriesMenu(categories: List<CatDTO>){
         categories.forEach {
             val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
-            Log.i("URRL",url)
             val nameCategory = it.name
             //запрос к блюдам категории
             val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
@@ -185,6 +200,7 @@ class MenuActivity: AppCompatActivity() {
                         //Log.i("replace", it.desc_long)
                     }
                     menuDb.addAllData(dishes!!)
+                    setCategories(categories)
                     //Log.i("row2", menuDb.getCountRow().toString())
                 }
             })

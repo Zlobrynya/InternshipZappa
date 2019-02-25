@@ -1,8 +1,6 @@
-package com.zlobrynya.internshipzappa.retrofit
+package com.zlobrynya.internshipzappa.tools.retrofit
 
 import android.util.Log
-import android.widget.TextView
-import android.widget.Toast
 import java.net.HttpURLConnection
 import java.net.URL
 import org.jetbrains.anko.doAsync

@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.retrofit.dto
+package com.zlobrynya.internshipzappa.tools.retrofit.dto
 
 import com.google.gson.annotations.SerializedName
 
