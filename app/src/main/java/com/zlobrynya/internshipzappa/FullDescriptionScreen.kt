@@ -61,10 +61,8 @@ class FullDescriptionScreen : AppCompatActivity() {
         var parts = str.split(delimiter)
         var list: ArrayList<DescriptionDish> = ArrayList()
         var getDish = MenuDB(this)
-        for (i in 0..parts.size){
-            if (parts.contains("$i")) {
-                list.add(getDish.getDescriptionDish(i))
-            }
+        for (i in 0..parts.size-1){
+            list.add(getDish.getDescriptionDish(parts.get(i).toInt()))
         }
         return list
     }
