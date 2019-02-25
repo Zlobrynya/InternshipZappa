@@ -2,35 +2,48 @@ package com.zlobrynya.internshipzappa
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
+import android.view.Window
+import android.widget.ProgressBar
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
 import kotlinx.android.synthetic.main.full_description_screen.*
+import kotlinx.android.synthetic.main.rect_recommend_dish.*
 
 class FullDescriptionScreen : AppCompatActivity() {
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.full_description_screen)
+
+        //ToolBar
+        var toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         //Создание RecyclerView
         val layoutManager = LinearLayoutManager(this@FullDescriptionScreen, LinearLayoutManager.HORIZONTAL, false)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = layoutManager
 
+
         var getDish = MenuDB(this)
-        var dish:DescriptionDish = getDish.getDescriptionDish(0)
-        showDishDescription(getDish.getDescriptionDish(0))
+        var dish:DescriptionDish = getDish.getDescriptionDish(3)
+        //showDishDescription(getDish.getDescriptionDish(3))
         recyclerView.adapter = AdapterRecommendDish(listRecDish(dish))
     }
-
 
     fun showDishDescription(dish: DescriptionDish){
         dishCena.text = (dish.price).toString()
@@ -62,13 +75,16 @@ class FullDescriptionScreen : AppCompatActivity() {
         var list: ArrayList<DescriptionDish> = ArrayList()
         var getDish = MenuDB(this)
         for (i in 0..parts.size-1){
+            Log.d("Индекс", "$i")
             list.add(getDish.getDescriptionDish(parts.get(i).toInt()))
         }
         return list
     }
 
-    fun otherDishDisc(){
-        val intent: Intent = Intent(this, FullDescriptionScreen::class.java)
-        //место для обработчика кнопки для перехода на рекомендованное блюдо
+    fun addToping(){
+        btnToping.visibility = View.GONE
+        btnPlus.visibility = View.VISIBLE
+        btnMinus.visibility = View.VISIBLE
+        tvCounter.visibility = View.VISIBLE
     }
 }
