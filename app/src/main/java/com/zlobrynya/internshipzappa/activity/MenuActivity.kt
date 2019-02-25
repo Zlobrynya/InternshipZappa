@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -45,54 +46,22 @@ class MenuActivity: AppCompatActivity() {
 
         menuDb = MenuDB(applicationContext)
 
-        //Toast.makeText(applicationContext, menuDb.getCountRow().toString(), Toast.LENGTH_LONG).show()
-        //Пока что сюда запихну обращение к серверу за списком блюд
-        val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
-        val call = service?.getAllCategories()
-
-        call?.enqueue(object : retrofit2.Callback<CatList> {
-
-            override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
-
-                val body = response?.body()
-                val categories = body?.categories
-                //Toast.makeText(applicationContext, "that's fine", Toast.LENGTH_LONG).show()
-                categories?.forEach {
-                    val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
-                    //Toast.makeText(applicationContext, it.class_id.toString(), Toast.LENGTH_LONG).show()
-                    //запрос к блюдам категории
-                    val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
-                    val call = service?.getAllDishes(url)
-                    call?.enqueue(object : retrofit2.Callback<DishList>{
-                        override fun onFailure(call: Call<DishList>, t: Throwable) {
-
-                            Toast.makeText(applicationContext, "error reading JSON dishes", Toast.LENGTH_LONG).show()
-
-                        }
-
-                        override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
-                            val body = response?.body()
-                            val dishes = body?.menu
-                            //catSize.text = dishes?.get(0)?.name.toString()
-                            //dishes?.forEach { Toast.makeText(applicationContext, it.item_id.toString(), Toast.LENGTH_LONG).show() }
-                            //Toast.makeText(applicationContext, "u got the data", Toast.LENGTH_LONG).show()
-                            menuDb.addAllData(dishes!!)
-                            //запись в бд
-                            dishes.forEach {
-                                Toast.makeText(applicationContext, it.toString(), Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    })
+        //выполняем проверку обновлений,
+        LogCheck.getInstance().getLog().subscribeOn(Schedulers.newThread())
+            ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<String>{
+                override fun onComplete() {
                 }
 
-                //Toast.makeText(applicationContext, menuDb.getCountRow().toString(), Toast.LENGTH_LONG).show()
+                override fun onSubscribe(d: Disposable) {
+                }
 
-            }
-            override fun onFailure(call: Call<CatList>, t: Throwable) {
-                Toast.makeText(applicationContext, "error reading JSON categories", Toast.LENGTH_LONG).show()
+                override fun onNext(t: String) {
+                    checkPass(t,applicationContext,menuDb)
+                }
 
-            }
-        })
+                override fun onError(e: Throwable) {
+                }
+            })
 
         //Get json data from file
         //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его
@@ -121,7 +90,6 @@ class MenuActivity: AppCompatActivity() {
                         menuActivity!!.start()
                     }
                 }
-
                 override fun onError(e: Throwable) {
                     println(e.toString())
                 }
@@ -138,5 +106,57 @@ class MenuActivity: AppCompatActivity() {
         super.onDestroy()
         menuDb.closeDataBase()
 
+    }
+}
+
+//сверяем дату обновления, если нет совпадений - обновляем бд
+private fun checkPass(log: String, context: Context, menuDb: MenuDB){
+    val sharedPreferences = context.getSharedPreferences("endpoint", Context.MODE_PRIVATE)
+    val savedLog = "logK"
+    val savedText = sharedPreferences.getInt(savedLog ,0)
+    if (log?.hashCode() == savedText){
+
+    } else{
+        val editor = sharedPreferences.edit()
+        editor.putInt("logK", log.hashCode())
+        editor.apply()
+
+        //Пока что сюда запихну обращение к серверу за списком блюд
+        val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
+        val call = service?.getAllCategories()
+
+        call?.enqueue(object : retrofit2.Callback<CatList> {
+
+            override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
+
+                val body = response?.body()
+                val categories = body?.categories
+
+                categories?.forEach {
+                    val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
+
+                    //запрос к блюдам категории
+                    val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
+                    val call = service?.getAllDishes(url)
+                    call?.enqueue(object : retrofit2.Callback<DishList>{
+                        override fun onFailure(call: Call<DishList>, t: Throwable) {
+
+                            Toast.makeText(context, "error reading JSON dishes", Toast.LENGTH_LONG).show()
+
+                        }
+                        override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
+
+                            val body = response?.body()
+                            val dishes = body?.menu
+                            menuDb.addAllData(dishes!!)
+
+                        }
+                    })
+                }
+            }
+            override fun onFailure(call: Call<CatList>, t: Throwable) {
+                Toast.makeText(context, "error reading JSON categories", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 }

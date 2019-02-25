@@ -81,14 +81,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
         }
 
         override fun onClick(view: View) {
-            Log.d("Click", "onClick $position")
-
-            //при нажатии на изображение скрываем или показываем карточки с подробным описанием
-            if (shapeDish!!.isShown){
-                shapeDish!!.visibility = View.GONE
-            }else{
-                shapeDish!!.visibility = View.VISIBLE
-            }
+            //тут будет стар view Ильи и передача id intent'ом
         }
     }
 }
