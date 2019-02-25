@@ -21,7 +21,6 @@ class LogCheck {
                     val conn = endpointUtl.openConnection() as HttpURLConnection
                     var strLog: String
                     try {
-
                         conn.requestMethod = "GET"
                         val input = BufferedInputStream(conn.inputStream)
                         strLog = convertStreamToString(input)

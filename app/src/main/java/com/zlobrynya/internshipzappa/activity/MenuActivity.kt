@@ -107,56 +107,57 @@ class MenuActivity: AppCompatActivity() {
         menuDb.closeDataBase()
 
     }
-}
 
-//сверяем дату обновления, если нет совпадений - обновляем бд
-private fun checkPass(log: String, context: Context, menuDb: MenuDB){
-    val sharedPreferences = context.getSharedPreferences("endpoint", Context.MODE_PRIVATE)
-    val savedLog = "logK"
-    val savedText = sharedPreferences.getInt(savedLog ,0)
-    if (log?.hashCode() == savedText){
+    //сверяем дату обновления, если нет совпадений - обновляем бд
+    private fun checkPass(log: String, context: Context, menuDb: MenuDB){
+        val sharedPreferences = context.getSharedPreferences("endpoint", Context.MODE_PRIVATE)
+        val savedLog = "logK"
+        val savedText = sharedPreferences.getInt(savedLog ,0)
+        if (log?.hashCode() == savedText){
 
-    } else{
-        val editor = sharedPreferences.edit()
-        editor.putInt("logK", log.hashCode())
-        editor.apply()
+        } else{
+            val editor = sharedPreferences.edit()
+            editor.putInt("logK", log.hashCode())
+            editor.apply()
 
-        //Пока что сюда запихну обращение к серверу за списком блюд
-        val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
-        val call = service?.getAllCategories()
+            //Пока что сюда запихну обращение к серверу за списком блюд
+            val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
+            val call = service?.getAllCategories()
 
-        call?.enqueue(object : retrofit2.Callback<CatList> {
+            call?.enqueue(object : retrofit2.Callback<CatList> {
 
-            override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
+                override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
 
-                val body = response?.body()
-                val categories = body?.categories
+                    val body = response?.body()
+                    val categories = body?.categories
 
-                categories?.forEach {
-                    val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
+                    categories?.forEach {
+                        val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
 
-                    //запрос к блюдам категории
-                    val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
-                    val call = service?.getAllDishes(url)
-                    call?.enqueue(object : retrofit2.Callback<DishList>{
-                        override fun onFailure(call: Call<DishList>, t: Throwable) {
+                        //запрос к блюдам категории
+                        val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
+                        val call = service?.getAllDishes(url)
+                        call?.enqueue(object : retrofit2.Callback<DishList>{
+                            override fun onFailure(call: Call<DishList>, t: Throwable) {
 
-                            Toast.makeText(context, "error reading JSON dishes", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "error reading JSON dishes", Toast.LENGTH_LONG).show()
 
-                        }
-                        override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
+                            }
+                            override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
 
-                            val body = response?.body()
-                            val dishes = body?.menu
-                            menuDb.addAllData(dishes!!)
+                                val body = response?.body()
+                                val dishes = body?.menu
+                                menuDb.addAllData(dishes!!)
 
-                        }
-                    })
+                            }
+                        })
+                    }
                 }
-            }
-            override fun onFailure(call: Call<CatList>, t: Throwable) {
-                Toast.makeText(context, "error reading JSON categories", Toast.LENGTH_LONG).show()
-            }
-        })
+                override fun onFailure(call: Call<CatList>, t: Throwable) {
+                    Toast.makeText(context, "error reading JSON categories", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
     }
 }
+
