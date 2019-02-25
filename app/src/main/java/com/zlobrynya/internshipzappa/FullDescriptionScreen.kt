@@ -1,13 +1,15 @@
 package com.zlobrynya.internshipzappa
 
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
+import android.content.Intent
+import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
+import android.view.View
 import com.nostra13.universalimageloader.core.ImageLoader
+import com.nostra13.universalimageloader.core.assist.FailReason
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
 import kotlinx.android.synthetic.main.full_description_screen.*
@@ -32,8 +34,25 @@ class FullDescriptionScreen : AppCompatActivity() {
 
     fun showDishDescription(dish: DescriptionDish){
         dishCena.text = (dish.price).toString()
+        dishName.text = (dish.title).toString()
+        dishVes.text = (dish.weight).toString()
         val imageLoader: ImageLoader = ImageLoader.getInstance()
-        imageLoader.displayImage(dish.photoUrl, dishPhoto)
+        imageLoader.displayImage(dish.photoUrl, dishPhoto, object: ImageLoadingListener {
+            override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
+                progressBar.visibility = View.GONE
+            }
+
+            override fun onLoadingStarted(imageUri: String?, view: View?) {
+                progressBar.visibility = View.VISIBLE
+            }
+
+            override fun onLoadingCancelled(imageUri: String?, view: View?) {
+            }
+
+            override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
+            }
+
+        })
     }
 
     fun listRecDish(dish: DescriptionDish): ArrayList<DescriptionDish>{
@@ -48,5 +67,10 @@ class FullDescriptionScreen : AppCompatActivity() {
             }
         }
         return list
+    }
+
+    fun otherDishDisc(){
+        val intent: Intent = Intent(this, FullDescriptionScreen::class.java)
+        //место для обработчика кнопки для перехода на рекомендованное блюдо
     }
 }
