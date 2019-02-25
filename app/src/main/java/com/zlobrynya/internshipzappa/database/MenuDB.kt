@@ -46,9 +46,12 @@ class MenuDB(context: Context) {
     init {
         database = Database(context)
         sqLiteDatabase = database!!.writableDatabase
+        createTable()
+    }
 
+    private fun createTable(){
         //запрос на создание табдлицы если ее не было
-        var DATABASE_CREATE_SCRIPT = "create table if not exists " +
+        val DATABASE_CREATE_SCRIPT = "create table if not exists " +
                 NAME_TABLE + " (" + DISH_ID + " integer, " +
                 TITLE + " text not null, " +
                 PRICE + " Double, " +
@@ -62,8 +65,6 @@ class MenuDB(context: Context) {
         sqLiteDatabase!!.execSQL(DATABASE_CREATE_SCRIPT)
     }
 
-
-
     //закрываем БД
     fun closeDataBase() {
         if (sqLiteDatabase!!.isOpen())
@@ -73,6 +74,12 @@ class MenuDB(context: Context) {
     fun deleteDB(){
         closeDataBase()
         database!!.deleteBD()
+    }
+
+    //очищает таблицу
+    fun clearTableDB(){
+        sqLiteDatabase!!.execSQL("delete from "+ NAME_TABLE);
+        createTable()
     }
 
     //добавляем лист данных в бд
@@ -106,7 +113,7 @@ class MenuDB(context: Context) {
     }
 
     //вернет ArrayList<DescriptionDish> определенной категории
-    fun getCategoryDish(category: String): List<DishDTO>{
+    fun getCategoryDish(category: String): ArrayList<DishDTO>{
         val query = "SELECT * FROM " + NAME_TABLE + " WHERE " + CATEGORY + "=\"" + category + "\""
         val cursor = sqLiteDatabase!!.rawQuery(query, null)
         val arrayDish = arrayListOf<DishDTO>()
