@@ -46,7 +46,8 @@ class MenuActivity: AppCompatActivity() {
         menuActivity = this
 
         menuDb = MenuDB(applicationContext)
-        Log.i("rows", menuDb.getCountRow().toString())
+        Log.i("row", menuDb.getCountRow().toString())
+        Toast.makeText(applicationContext, menuDb.getDescriptionDish(26).desc_long, Toast.LENGTH_LONG).show()
         //выполняем проверку обновлений,
         LogCheck.getInstance().getLog().subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<String>{
@@ -58,7 +59,7 @@ class MenuActivity: AppCompatActivity() {
 
                 override fun onNext(t: String) {
                     checkPass(t,applicationContext,menuDb)
-                    Log.i("rows", menuDb.getCountRow().toString())
+
                 }
 
                 override fun onError(e: Throwable) {
@@ -68,7 +69,7 @@ class MenuActivity: AppCompatActivity() {
         //Get json data from file
         //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его
         //и получаем обьект MenuDish, в котом содержатся данные разбитые по категориям
-        /*ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
+        ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<MenuDish> {
                 override fun onComplete() {
                     println("Complete")
@@ -95,7 +96,7 @@ class MenuActivity: AppCompatActivity() {
                 override fun onError(e: Throwable) {
                     println(e.toString())
                 }
-            })*/
+            })
     }
 
     fun start(){
@@ -121,7 +122,7 @@ class MenuActivity: AppCompatActivity() {
             val editor = sharedPreferences.edit()
             editor.putInt("logK", log.hashCode())
             editor.apply()
-            //зачищаем локальную БД
+
             menuDb.clearTableDB()
             //Пока что сюда запихну обращение к серверу за списком блюд
             val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
@@ -150,7 +151,17 @@ class MenuActivity: AppCompatActivity() {
 
                                 val body = response?.body()
                                 val dishes = body?.menu
+                                dishes?.forEach {
+                                    //экранирование ковычек
+                                    it.desc_long = it.desc_short.replace('\"', '\'')
+                                    it.desc_long = it.desc_long.replace('\"', '\'')
+                                    it.desc_long = it.name.replace('\"', '\'')
+                                    it.desc_long = it.photo.replace('\"', '\'')
+                                    it.desc_long = it.recommended.replace('\"', '\'')
+                                    Log.i("replace", it.desc_long)}
+
                                 menuDb.addAllData(dishes!!)
+                                Log.i("row2", menuDb.getCountRow().toString())
 
                             }
                         })
