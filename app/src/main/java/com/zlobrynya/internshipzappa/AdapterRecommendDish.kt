@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -48,15 +49,16 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+        var i: Int = 1
         var toping_name: TextView? = null
         var toping_photo: ImageView? = null
         var toping_price: TextView? = null
         var toping_ves: TextView? = null
-        var spinner: View? = null
-        var btn_toping: View? = null
-        var btn_plus: View? = null
-        var btn_minus: View? = null
-        var tv_counter: View? = null
+        var spinner: ProgressBar? = null
+        var btn_toping: Button? = null
+        var btn_plus: Button? = null
+        var btn_minus: Button? = null
+        var tv_counter: TextView? = null
         init{
             toping_name = itemView?.findViewById(R.id.topingName)
             toping_photo = itemView?.findViewById(R.id.topingPhoto)
@@ -74,7 +76,10 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
                 tv_counter?.visibility = View.VISIBLE
             }
             btn_plus?.setOnClickListener{
-                tv_counter?.text
+                tv_counter?.text = (i++).toString()
+            }
+            btn_minus?.setOnClickListener{
+                tv_counter?.text = (i--).toString()
             }
         }
     }
