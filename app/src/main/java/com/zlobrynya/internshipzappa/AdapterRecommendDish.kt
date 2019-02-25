@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
+import kotlinx.android.synthetic.main.rect_recommend_dish.*
 
 
 class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
@@ -53,6 +54,9 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
         var toping_ves: TextView? = null
         var spinner: View? = null
         var btn_toping: View? = null
+        var btn_plus: View? = null
+        var btn_minus: View? = null
+        var tv_counter: View? = null
         init{
             toping_name = itemView?.findViewById(R.id.topingName)
             toping_photo = itemView?.findViewById(R.id.topingPhoto)
@@ -60,6 +64,18 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
             toping_ves = itemView?.findViewById(R.id.topingVes)
             spinner = itemView?.findViewById(R.id.progressBar2)
             btn_toping = itemView?.findViewById(R.id.btnToping)
+            btn_plus = itemView?.findViewById(R.id.btnPlus)
+            btn_minus = itemView?.findViewById(R.id.btnMinus)
+            tv_counter = itemView?.findViewById(R.id.tvCounter)
+            btn_toping?.setOnClickListener {
+                btn_toping?.visibility = View.GONE
+                btn_plus?.visibility = View.VISIBLE
+                btn_minus?.visibility = View.VISIBLE
+                tv_counter?.visibility = View.VISIBLE
+            }
+            btn_plus?.setOnClickListener{
+                tv_counter?.text
+            }
         }
     }
 }
