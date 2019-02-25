@@ -20,14 +20,16 @@ import kotlinx.android.synthetic.main.full_description_screen.*
 
 class FullDescriptionScreen : AppCompatActivity() {
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.full_description_screen)
 
-        //var toolbar = findViewById(R.id.toolbar) as Toolbar
-        //setSupportActionBar(toolbar)
-        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar()!!.setDisplayShowTitleEnabled(false)
+        //ToolBar
+        var toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         //Создание RecyclerView
         val layoutManager = LinearLayoutManager(this@FullDescriptionScreen, LinearLayoutManager.HORIZONTAL, false)
