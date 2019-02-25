@@ -23,26 +23,29 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
     override fun getItemCount() = values.size
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent?.context).inflate(R.layout.rect_recommend_dish, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.rect_recommend_dish, parent, false)
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder?.toping_price?.text = (values[position].price).toString()
+        holder.toping_price?.text = (values[position].price).toString()
         val imageLoader: ImageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(values[position].photoUrl, holder.toping_photo, object: ImageLoadingListener{
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                holder?.spinner?.visibility = View.GONE
+                holder.spinner?.visibility = View.GONE
             }
 
             override fun onLoadingStarted(imageUri: String?, view: View?) {
-                holder?.spinner?.visibility = View.VISIBLE
+                imageLoader.displayImage("drawable://"+R.drawable.noimage, holder.toping_photo)
+                holder.spinner?.visibility = View.VISIBLE
             }
 
             override fun onLoadingCancelled(imageUri: String?, view: View?) {
+                imageLoader.displayImage("drawable://"+R.drawable.noimage, holder.toping_photo)
             }
 
             override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
+                imageLoader.displayImage("drawable://"+R.drawable.noimage, holder.toping_photo)
             }
 
         })
@@ -60,15 +63,15 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
         var btn_minus: Button? = null
         var tv_counter: TextView? = null
         init{
-            toping_name = itemView?.findViewById(R.id.topingName)
-            toping_photo = itemView?.findViewById(R.id.topingPhoto)
-            toping_price = itemView?.findViewById(R.id.topingPrice)
-            toping_ves = itemView?.findViewById(R.id.topingVes)
-            spinner = itemView?.findViewById(R.id.progressBar2)
-            btn_toping = itemView?.findViewById(R.id.btnToping)
-            btn_plus = itemView?.findViewById(R.id.btnPlus)
-            btn_minus = itemView?.findViewById(R.id.btnMinus)
-            tv_counter = itemView?.findViewById(R.id.tvCounter)
+            toping_name = itemView.findViewById(R.id.topingName)
+            toping_photo = itemView.findViewById(R.id.topingPhoto)
+            toping_price = itemView.findViewById(R.id.topingPrice)
+            toping_ves = itemView.findViewById(R.id.topingVes)
+            spinner = itemView.findViewById(R.id.progressBar2)
+            btn_toping = itemView.findViewById(R.id.btnToping)
+            btn_plus = itemView.findViewById(R.id.btnPlus)
+            btn_minus = itemView.findViewById(R.id.btnMinus)
+            tv_counter = itemView.findViewById(R.id.tvCounter)
             btn_toping?.setOnClickListener {
                 btn_toping?.visibility = View.GONE
                 btn_plus?.visibility = View.VISIBLE
@@ -76,10 +79,10 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
                 tv_counter?.visibility = View.VISIBLE
             }
             btn_plus?.setOnClickListener{
-                tv_counter?.text = (i++).toString()
+                tv_counter?.text = (++i).toString()
             }
             btn_minus?.setOnClickListener{
-                tv_counter?.text = (i--).toString()
+                tv_counter?.text = (--i).toString()
             }
         }
     }

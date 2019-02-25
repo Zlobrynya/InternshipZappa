@@ -41,14 +41,27 @@ class FullDescriptionScreen : AppCompatActivity() {
 
         var getDish = MenuDB(this)
         var dish:DescriptionDish = getDish.getDescriptionDish(3)
-        //showDishDescription(getDish.getDescriptionDish(3))
+        showDishDescription(getDish.getDescriptionDish(3))
         recyclerView.adapter = AdapterRecommendDish(listRecDish(dish))
     }
 
     fun showDishDescription(dish: DescriptionDish){
-        dishCena.text = (dish.price).toString()
-        dishName.text = (dish.title).toString()
-        dishVes.text = (dish.weight).toString()
+        if (dish.price == null){
+            dishCena.text = "-"
+        } else{
+            dishCena.text = (dish.price).toString()
+        }
+        if (dish.weight == null){
+            dishVes.visibility = View.GONE
+        } else{
+            dishVes.text = (dish.weight).toString()
+        }
+        if (dish.title == null){
+            dishVes.text = "Без наименования"
+        } else{
+            dishName.text = (dish.title).toString()
+        }
+
         val imageLoader: ImageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(dish.photoUrl, dishPhoto, object: ImageLoadingListener {
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
@@ -56,13 +69,16 @@ class FullDescriptionScreen : AppCompatActivity() {
             }
 
             override fun onLoadingStarted(imageUri: String?, view: View?) {
+                imageLoader.displayImage("drawable://"+R.drawable.noimage,dishPhoto)
                 progressBar.visibility = View.VISIBLE
             }
 
             override fun onLoadingCancelled(imageUri: String?, view: View?) {
+                imageLoader.displayImage("drawable://"+R.drawable.noimage,dishPhoto)
             }
 
             override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
+                imageLoader.displayImage("drawable://"+R.drawable.noimage,dishPhoto)
             }
 
         })
@@ -81,10 +97,4 @@ class FullDescriptionScreen : AppCompatActivity() {
         return list
     }
 
-    fun addToping(){
-        btnToping.visibility = View.GONE
-        btnPlus.visibility = View.VISIBLE
-        btnMinus.visibility = View.VISIBLE
-        tvCounter.visibility = View.VISIBLE
-    }
 }
