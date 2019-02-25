@@ -33,7 +33,7 @@ class ParsJson {
         return Observable.create(object : ObservableOnSubscribe<MenuDish> {
             override fun subscribe(emitter: ObservableEmitter<MenuDish>) {
                 if (checkCacheMenu()){
-                    parsJson(downloadFile(), emitter)
+ //                   parsJson(downloadFile(), emitter)
                 }else{
                     downloadServer(URLSERVER, emitter)
                 }
@@ -52,7 +52,7 @@ class ParsJson {
                  //перекодируем поток в строку
                  strJson = convertStreamToString(input)
                  writeCacheMenu(strJson)
-                 parsJson(strJson, emitter)
+ //                parsJson(strJson, emitter)
              }catch (e: Exception){
                  val menuDish = MenuDish()
                  menuDish.connect = false
@@ -116,7 +116,7 @@ class ParsJson {
         return String(byteArray, Charset.forName("windows-1251"))
     }
 
-    private fun parsJson(strJson: String, emitter: ObservableEmitter<MenuDish>) {
+    /*private fun parsJson(strJson: String, emitter: ObservableEmitter<MenuDish>) {
         val jsonObj = JSONObject(strJson)
         val menuDish = MenuDish()
         menuDish.hotArray = getArray(jsonObj.getJSONArray("hot"),"hot")
@@ -129,7 +129,7 @@ class ParsJson {
         //https://startandroid.ru/ru/courses/rxjava/19-course/rxjava/435-urok-1.html
         //http://www.vogella.com/tutorials/RxJava/article.html
         emitter.onNext(menuDish)
-    }
+    }*/
 
     private fun getArray(jsonArray: JSONArray, pathImg: String = ""): ArrayList<Dish> {
         val locArrayList = ArrayList<Dish>()

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
 import com.zlobrynya.internshipzappa.database.MenuDB
+import com.zlobrynya.internshipzappa.retrofit.dto.DishDTO
 import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 import com.zlobrynya.internshipzappa.tools.parcelable.CategoryParcelable
 import kotlinx.android.synthetic.main.fragment_category_menu.*
@@ -29,7 +30,7 @@ class CategoryFragment: Fragment() {
 
         //Вытаскиваем ранее сохраненные файлы (при создании фрагамента)
         val categoryParcelable = arguments!!.getParcelable<CategoryParcelable>("Parcelable")
-        val listtDish = categoryParcelable?.listMenu
+        val listtDish = menuDb.getCategoryDish("мясо")
         menuDb = MenuDB(v.context)
 
         viewAdapter = AdapterRecyclerMenu(listtDish!!, v.context!!)
@@ -50,7 +51,7 @@ class CategoryFragment: Fragment() {
 
 
     companion object {
-      fun newInstance(listDish: ArrayList<Dish>): Fragment{
+      fun newInstance(listDish: ArrayList<DishDTO>): Fragment{
           //получаем данные с activity и загружаем в  Bundle
           val fragment = CategoryFragment()
           val args = Bundle()

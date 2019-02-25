@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.widget.ProgressBar
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
+import com.zlobrynya.internshipzappa.retrofit.dto.DishDTO
 import com.zlobrynya.internshipzappa.tools.ImageDishUIL
 //import com.zlobrynya.internshipzappa.tools.DishImageView
 import com.zlobrynya.internshipzappa.tools.parcelable.Dish
@@ -25,7 +26,7 @@ import com.zlobrynya.internshipzappa.tools.parcelable.Dish
 * Адаптер для RecyclerMenu
  */
 
-class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
+class AdapterRecyclerMenu(private val myDataset: List<DishDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_menu, parent, false) as View
         return Holder(view)
@@ -40,16 +41,11 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
     override fun onBindViewHolder(holder: Holder, position: Int) {
         //В класс помощник записываем данные
         holder.nameDish?.text = myDataset[position].name
-        holder.descDish?.text = myDataset[position].descr
-        holder.weightDish!!.text = myDataset[position].weight
-        holder.priceDish!!.text = myDataset[position].price.toString() + " руб."
-        holder.imageView?.uilImage(myDataset[position].pathImage)
-        //Проверка на то, загружено ли в imageView изображение
-      /*if (!holder.imageView!!.isImageLoad) {
-            holder.imageView?.progressBar = holder.progressBar
-            holder.imageView?.textView = holder.nameDish
-            holder.imageView?.setURL(myDataset[position].pathImage)
-        }*/
+        holder.descDish?.text = myDataset[position].desc_short
+        holder.weightDish!!.text = myDataset[position].weight.toString()
+        holder.priceDish!!.text = myDataset[position].price.toString() + " Р"
+        holder.imageView?.uilImage(myDataset[position].photo)
+
     }
 
     //Класс помощник, для правильного отображение view
@@ -81,7 +77,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<Dish>, val context: C
         }
 
         override fun onClick(view: View) {
-            //тут будет стар view Ильи и передача id intent'ом
+            //тут будет старт view Ильи и передача id intent'ом
         }
     }
 }
