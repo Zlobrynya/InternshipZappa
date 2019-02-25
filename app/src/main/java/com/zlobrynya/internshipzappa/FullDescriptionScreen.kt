@@ -11,12 +11,14 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.widget.ProgressBar
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
 import kotlinx.android.synthetic.main.full_description_screen.*
+import kotlinx.android.synthetic.main.rect_recommend_dish.*
 
 class FullDescriptionScreen : AppCompatActivity() {
 
@@ -36,12 +38,12 @@ class FullDescriptionScreen : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = layoutManager
 
+
         var getDish = MenuDB(this)
-        var dish:DescriptionDish = getDish.getDescriptionDish(1)
-        showDishDescription(getDish.getDescriptionDish(1))
+        var dish:DescriptionDish = getDish.getDescriptionDish(3)
+        //showDishDescription(getDish.getDescriptionDish(3))
         recyclerView.adapter = AdapterRecommendDish(listRecDish(dish))
     }
-
 
     fun showDishDescription(dish: DescriptionDish){
         dishCena.text = (dish.price).toString()
@@ -79,8 +81,10 @@ class FullDescriptionScreen : AppCompatActivity() {
         return list
     }
 
-    fun otherDishDisc(){
-        val intent: Intent = Intent(this, FullDescriptionScreen::class.java)
-        //место для обработчика кнопки для перехода на рекомендованное блюдо
+    fun addToping(){
+        btnToping.visibility = View.GONE
+        btnPlus.visibility = View.VISIBLE
+        btnMinus.visibility = View.VISIBLE
+        tvCounter.visibility = View.VISIBLE
     }
 }

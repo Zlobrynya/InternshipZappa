@@ -19,45 +19,48 @@
                 android:orientation="vertical" android:id="@+id/CS1">
             <ImageView
                     android:id="@+id/dishPhoto"
-                    android:layout_height="314dp"
+                    android:layout_height="500dp"
                     android:layout_width="0dp"
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintBottom_toBottomOf="@+id/constraintLayout" android:layout_marginBottom="152dp">
             </ImageView>
 
             <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="274dp"
+                    android:layout_height="301dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:background="@drawable/shape" android:layout_marginTop="312dp"
-                    app:layout_constraintTop_toTopOf="parent" android:id="@+id/constraintLayout">
+                    android:background="@drawable/shape"
+                    android:id="@+id/constraintLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    android:layout_marginTop="328dp" app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                         android:text="Бостон Лохи"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/dishName"
-                        android:textSize="20sp"
+                        android:textSize="24sp"
                         android:textColor="#FFFFFF"
                         android:layout_marginStart="28dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="52dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                />
+                        android:textStyle="bold"/>
                 <TextView
                         android:text="Сливочный суп с копчёной форелью, морковью и картофелем."
                         android:id="@+id/dishOpisanie"
                         android:textSize="16sp"
-                        android:textColor="#BCBCBC"
+                        android:textColor="#B2FFFFFF"
                         android:layout_width="340dp"
-                        android:layout_height="104dp"
-                        android:layout_marginTop="64dp"
+                        android:layout_height="112dp"
+                        android:layout_marginTop="100dp"
                         app:layout_constraintTop_toTopOf="parent"
                         android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="@+id/dishName"
                         android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.363"/>
+                        app:layout_constraintHorizontal_bias="0.259"/>
                 <TextView
                         android:text="280 Г"
                         android:layout_width="wrap_content"
@@ -65,31 +68,31 @@
                         android:id="@+id/dishVes"
                         android:textSize="12sp"
                         android:textColor="#BCBCBC"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginStart="28dp" android:layout_marginBottom="104dp"
+                        app:layout_constraintStart_toStartOf="@+id/btnOrderDish"
+                        android:layout_marginStart="8dp" android:layout_marginBottom="84dp"
                         app:layout_constraintBottom_toBottomOf="parent"/>
                 <TextView
                         android:text="240 Р"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/dishCena"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginStart="28dp"
                         android:textColor="#FFFFFF"
-                        android:textSize="24sp" android:layout_marginBottom="32dp"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        android:textSize="24sp" android:layout_marginBottom="84dp"
+                        app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="@+id/btnOrderDish"/>
                 <Button
                         android:text="Отличный супчик"
                         android:fontFamily="Roboto"
                         android:textColor="#FFFFFF"
                         android:padding="5dp"
-                        android:layout_width="wrap_content"
+                        android:layout_width="325dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/btnOrderDish"
                         android:textSize="20sp"
                         android:background="@drawable/btn_shape"
-                        android:layout_marginEnd="16dp" app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginBottom="24dp" app:layout_constraintBottom_toBottomOf="parent"/>
+                        android:layout_marginEnd="32dp" app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"/>
             </android.support.constraint.ConstraintLayout>
             <android.support.v7.widget.RecyclerView
                     android:orientation="horizontal"
@@ -98,7 +101,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="8dp"
-                    android:background="#2D2E30" android:id="@+id/recyclerView"
+                    android:background="#000000" android:id="@+id/recyclerView"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout" android:layout_marginTop="20dp">
             </android.support.v7.widget.RecyclerView>
@@ -120,7 +123,8 @@
                     android:layout_marginStart="8dp" android:layout_marginTop="8dp"
                     app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-                    android:progressDrawable="@color/colorAccent"/>
+                    android:indeterminateDrawable="@drawable/spinner_ring"
+                    android:indeterminateOnly="true"/>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
     <android.support.v7.widget.Toolbar
