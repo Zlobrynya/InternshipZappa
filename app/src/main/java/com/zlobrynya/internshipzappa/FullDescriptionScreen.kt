@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
@@ -26,8 +27,8 @@ class FullDescriptionScreen : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         var getDish = MenuDB(this)
-        var dish:DescriptionDish = getDish.getDescriptionDish(0)
-        showDishDescription(getDish.getDescriptionDish(0))
+        var dish:DescriptionDish = getDish.getDescriptionDish(3)
+        showDishDescription(getDish.getDescriptionDish(3))
         recyclerView.adapter = AdapterRecommendDish(listRecDish(dish))
     }
 
@@ -61,9 +62,10 @@ class FullDescriptionScreen : AppCompatActivity() {
         var parts = str.split(delimiter)
         var list: ArrayList<DescriptionDish> = ArrayList()
         var getDish = MenuDB(this)
-        for (i in 0..parts.size){
+        for (i in 0 .. parts.size-1){
+            Log.d("Индекс", "$i")
             if (parts.contains("$i")) {
-                list.add(getDish.getDescriptionDish(parts.get(i).toInt()))
+                list.add(getDish.getDescriptionDish(parts[i].toInt()))
             }
         }
         return list
