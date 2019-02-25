@@ -63,7 +63,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         var getDish = MenuDB(this)
         for (i in 0..parts.size){
             if (parts.contains("$i")) {
-                list.add(getDish.getDescriptionDish(i))
+                list.add(getDish.getDescriptionDish(parts.get(i).toInt()))
             }
         }
         return list
