@@ -2,12 +2,15 @@ package com.zlobrynya.internshipzappa
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
+import android.view.Window
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
@@ -21,14 +24,19 @@ class FullDescriptionScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.full_description_screen)
 
+        //var toolbar = findViewById(R.id.toolbar) as Toolbar
+        //setSupportActionBar(toolbar)
+        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()!!.setDisplayShowTitleEnabled(false)
+
         //Создание RecyclerView
         val layoutManager = LinearLayoutManager(this@FullDescriptionScreen, LinearLayoutManager.HORIZONTAL, false)
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = layoutManager
 
         var getDish = MenuDB(this)
-        var dish:DescriptionDish = getDish.getDescriptionDish(3)
-        showDishDescription(getDish.getDescriptionDish(3))
+        var dish:DescriptionDish = getDish.getDescriptionDish(1)
+        showDishDescription(getDish.getDescriptionDish(1))
         recyclerView.adapter = AdapterRecommendDish(listRecDish(dish))
     }
 
@@ -62,11 +70,9 @@ class FullDescriptionScreen : AppCompatActivity() {
         var parts = str.split(delimiter)
         var list: ArrayList<DescriptionDish> = ArrayList()
         var getDish = MenuDB(this)
-        for (i in 0 .. parts.size-1){
+        for (i in 0..parts.size-1){
             Log.d("Индекс", "$i")
-            if (parts.contains("$i")) {
-                list.add(getDish.getDescriptionDish(parts[i].toInt()))
-            }
+            list.add(getDish.getDescriptionDish(parts.get(i).toInt()))
         }
         return list
     }
