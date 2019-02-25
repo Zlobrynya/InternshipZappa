@@ -74,37 +74,6 @@ class MenuActivity: AppCompatActivity() {
                 }
             })
 
-        //Get json data from file
-        //В отдельном потоке подключаемся к серверу и какчаем json файл, парсим его
-        //и получаем обьект MenuDish, в котом содержатся данные разбитые по категориям
-        /*ParsJson.getInstance().getMenu(this).subscribeOn(Schedulers.newThread())
-            ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<MenuDish> {
-                override fun onComplete() {
-                    println("Complete")
-                }
-
-                override fun onSubscribe(d: Disposable) {
-
-                }
-
-                override fun onNext(menuDish: MenuDish) {
-                    if (menuDish.connect){
-                        viewPagerMenu.adapter = AdapterTab(supportFragmentManager, menuDish, 6)
-                        sliding_tabs.setupWithViewPager(viewPagerMenu)
-                        for (i in 0..5){
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
-                                sliding_tabs.getTabAt(i)?.text = getString(stringId[i])
-                            }
-                        }
-                    }else{
-                        menuActivity!!.start()
-                    }
-                }
-                override fun onError(e: Throwable) {
-                    println(e.toString())
-                }
-            })*/
     }
 
     fun start(){

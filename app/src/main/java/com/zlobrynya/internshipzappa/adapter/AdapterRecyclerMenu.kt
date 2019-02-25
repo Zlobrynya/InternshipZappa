@@ -14,6 +14,8 @@ import android.widget.ProgressBar
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import android.graphics.Bitmap
+import android.util.Log
+import android.widget.Toast
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
@@ -26,7 +28,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 
 class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
 
-    lateinit var options: DisplayImageOptions;
+    lateinit var options: DisplayImageOptions
 
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
@@ -53,7 +55,10 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         //В класс помощник записываем данные
         holder.nameDish?.text = myDataset[position].name
         holder.descDish?.text = myDataset[position].desc_short
-        holder.weightDish!!.text = myDataset[position].weight.toString()
+        //Toast.makeText(context, myDataset[position].desc_short, Toast.LENGTH_LONG).show()
+        Log.i("short_desc", myDataset[position].desc_short)
+        //Log.i("short_desc", myDataset[position].name)
+//        holder.weightDish!!.text = myDataset[position].weight.toString()
         holder.priceDish!!.text = myDataset[position].price.toString() + " Р"
         val imageLoader: ImageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(myDataset[position].photo, holder.imageView, options, object: ImageLoadingListener {
@@ -88,16 +93,15 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         init {
             nameDish = v.findViewById(R.id.nameDish)
             imageView = v.findViewById(R.id.imageView)
-            descDish = v.findViewById(R.id.descDish)
+            descDish = v.findViewById(R.id.shortDescDish)
             priceDish = v.findViewById(R.id.priceDish)
-            weightDish = v.findViewById(R.id.weightDish)
-            shapeDish = v.findViewById(R.id.shapeDish)
             progressBar = v.findViewById(R.id.progressBar)
             imageView!!.setOnClickListener(this)
         }
 
         override fun onClick(view: View) {
             //тут будет старт view Ильи и передача id intent'ом
+
         }
     }
 }
