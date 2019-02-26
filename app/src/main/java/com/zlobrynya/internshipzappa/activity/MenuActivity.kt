@@ -31,6 +31,8 @@ import retrofit2.Call
 import retrofit2.Response
 import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
+import com.zlobrynya.internshipzappa.tools.GetDataServer
+import com.zlobrynya.internshipzappa.tools.OurException
 
 
 class MenuActivity: AppCompatActivity() {
@@ -56,11 +58,42 @@ class MenuActivity: AppCompatActivity() {
 
         menuDb = MenuDB(this)
         categoryDB = CategoryDB(this)
-        logCheck()
+        //качаем данные
+        val getDataServer = GetDataServer(this)
+        getDataServer.getData()
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<List<CatDTO>> {
+                override fun onComplete() = println("Complete getAllCategories")
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: List<CatDTO>) {
+                    setCategories(t)
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.e("err","------------------------")
+                    e.printStackTrace()
+                    Log.e("err","------------------------")
+                }
+            })
+    }
+
+    //устанавливаем в табы категориии
+    private fun setCategories(categories: List<CatDTO>){
+        viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
+        sliding_tabs.setupWithViewPager(viewPagerMenu)
+        for (i in 0..categories.size){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
+                sliding_tabs.getTabAt(i)?.text = categories.get(i).name
+            }
+        }
     }
 
 
-    private fun logCheck(){
+ /*   private fun logCheck(){
         //выполняем проверку обновлений,
         LogCheck.getInstance().getLog().subscribeOn(Schedulers.newThread())
             ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<LogClass>{
@@ -142,7 +175,7 @@ class MenuActivity: AppCompatActivity() {
             categoryDB.clearTableDB()
 
             //обращение к серверу за списком блюд
-            val service = RetrofitClientInstance.retrofitInstance?.create(GetCatService::class.java)
+            val service = RetrofitClientInstance.retrofitInstance?.create(GetRequest::class.java)
             val call = service?.getAllCategories()
             call?.enqueue(object : retrofit2.Callback<CatList> {
                 override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
@@ -159,17 +192,7 @@ class MenuActivity: AppCompatActivity() {
         }
     }
 
-    //устанавливаем в табы категориии
-    private fun setCategories(categories: List<CatDTO>){
-        viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
-        sliding_tabs.setupWithViewPager(viewPagerMenu)
-        for (i in 0..categories.size){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
-                sliding_tabs.getTabAt(i)?.text = categories.get(i).name
-            }
-        }
-    }
+
 
     //получаем с сервера категории меню
     private fun getCategoriesMenu(categories: List<CatDTO>){
@@ -180,7 +203,7 @@ class MenuActivity: AppCompatActivity() {
             Log.i("Retrofit","Start " + nameCategory)
 
             //запрос к блюдам категории
-            val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
+            val service = RetrofitClientInstance.retrofitInstance?.create(GetRequest::class.java)
             val call = service?.getAllDishes(url)
 
             call?.enqueue(object : retrofit2.Callback<DishList>{
@@ -218,7 +241,7 @@ class MenuActivity: AppCompatActivity() {
             Log.i("Retrofit","End " + nameCategory)
         }
 
-    }
+    }*/
 
 
 }
