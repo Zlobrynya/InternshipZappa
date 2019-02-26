@@ -29,7 +29,7 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
         if (holder?.toping_price?.text == "price" || holder?.toping_price == null){
             holder?.toping_price?.text = "-"
         } else{
-            holder?.toping_price?.text = (values[position].price).toString()
+            holder?.toping_price?.text = (values[position].price).toString() + " Р"
         }
         if (holder?.toping_ves == null || values[position].weight == "weight"){
             holder?.toping_ves?.visibility = View.GONE

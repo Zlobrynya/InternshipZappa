@@ -52,7 +52,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         if (dish.price.toString() == "price" || dish.price == null){
             dishCena.text = "-"
         } else{
-            dishCena.text = (dish.price).toString()
+            dishCena.text = (dish.price).toString() + " Р"
         }
         if (dish.weight == null || dish.weight == "weight"){
             dishVes.visibility = View.GONE
