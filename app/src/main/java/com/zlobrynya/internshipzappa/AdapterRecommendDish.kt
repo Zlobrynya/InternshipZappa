@@ -1,9 +1,8 @@
 package com.zlobrynya.internshipzappa
 
-import android.content.Intent
 import android.graphics.Bitmap
-import android.support.v7.view.menu.MenuView
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,6 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
-import kotlinx.android.synthetic.main.rect_recommend_dish.*
-
 
 class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
 
@@ -30,13 +27,14 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.toping_price?.text = (values[position].price).toString()
         val imageLoader: ImageLoader = ImageLoader.getInstance()
+        Log.i("url", values[position].photoUrl   )
         imageLoader.displayImage(values[position].photoUrl, holder.toping_photo, object: ImageLoadingListener{
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                 holder.spinner?.visibility = View.GONE
             }
 
             override fun onLoadingStarted(imageUri: String?, view: View?) {
-                imageLoader.displayImage("drawable://"+R.drawable.noimage, holder.toping_photo)
+                //imageLoader.displayImage("drawable://"+R.drawable.noimage, holder.toping_photo)
                 holder.spinner?.visibility = View.VISIBLE
             }
 

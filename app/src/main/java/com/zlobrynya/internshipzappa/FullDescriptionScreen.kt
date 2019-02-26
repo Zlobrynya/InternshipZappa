@@ -69,7 +69,7 @@ class FullDescriptionScreen : AppCompatActivity() {
             }
 
             override fun onLoadingStarted(imageUri: String?, view: View?) {
-                imageLoader.displayImage("drawable://"+R.drawable.noimage,dishPhoto)
+                //imageLoader.displayImage("drawable://"+R.drawable.noimage,dishPhoto)
                 progressBar.visibility = View.VISIBLE
             }
 
@@ -92,7 +92,8 @@ class FullDescriptionScreen : AppCompatActivity() {
         var getDish = MenuDB(this)
         for (i in 0..parts.size-1){
             Log.d("Индекс", "$i")
-            list.add(getDish.getDescriptionDish(parts.get(i).toInt()))
+            if (!parts.get(i).contains("non"))
+                list.add(getDish.getDescriptionDish(parts.get(i).toInt()))
         }
         return list
     }
