@@ -11,16 +11,17 @@ import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.Observer
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
+import io.reactivex.Flowable
+
+
+
 
 class GetDataServer(val context: Context) {
     private var menuDb: MenuDB
@@ -122,58 +123,57 @@ class GetDataServer(val context: Context) {
     private fun getCategoriesMenu(categories: List<CatDTO>, emitter: ObservableEmitter<List<CatDTO>>) {
         Log.i("CategoriesMenu","getCategoriesMenu")
 
-        Observable.create<Int> { sbr ->
-                categories.forEach {
-                    val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
-                    val nameCategory = it.name
-                    Log.i("Retrofit","Start " + nameCategory)
 
-                    RetrofitClientInstance.getInstance()
-                        .getAllDishes(url)
-                        ?.subscribeOn(Schedulers.io())
-                        ?.observeOn(AndroidSchedulers.mainThread())
-                        ?.subscribe(object : Observer<Response<DishList>> {
-                            override fun onComplete() {}
+        val f = Observable.create<Int> { t -> t.onNext(1) }.count()
+        f.subscribe { x -> Log.e("fd",x.toString()) }
 
-                            override fun onSubscribe(d: Disposable) {}
 
-                            override fun onNext(t: Response<DishList>) {
-                                Log.i("getAllDishes DishList","c")
-                                if (t.code() == 200) {
-                                    val body = t.body()
-                                    val dishes = body?.menu
-                                    dishes?.forEach {
-                                        //экранирование ковычек
-                                        try {
-                                            it.desc_short = it.desc_short.replace('\"', '\'')
-                                            it.desc_long = it.desc_long.replace('\"', '\'')
-                                            it.name = it.name.replace('\"', '\'')
-                                            it.photo = it.photo.replace('\"', '\'')
-                                            it.recommended = it.recommended.replace('\"', '\'')
-                                        }catch (e: IllegalArgumentException){
-                                            Log.i("error",e.message)
-                                        }
-                                        it.class_name = nameCategory
-                                    }
-                                    menuDb.addAllData(dishes!!)
-                                    Log.i("getAllDishes","compl")
-                                    sbr.onNext(1)
-                                    //посылаем сообщение что мы тут закончили
-                                } else {
-                                    //посылаем Error с кодом ошибки сервера
-                                    emitter.onError(OurException(t.code()))
+        categories.forEach {
+            val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
+            val nameCategory = it.name
+            Log.i("Retrofit","Start " + nameCategory)
+
+            RetrofitClientInstance.getInstance()
+                .getAllDishes(url)
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(object : Observer<Response<DishList>> {
+                    override fun onComplete() {}
+
+                    override fun onSubscribe(d: Disposable) {}
+
+                    override fun onNext(t: Response<DishList>) {
+                        Log.i("getAllDishes DishList","c")
+                        if (t.code() == 200) {
+                            val body = t.body()
+                            val dishes = body?.menu
+                            dishes?.forEach {
+                                //экранирование ковычек
+                                try {
+                                    it.desc_short = it.desc_short.replace('\"', '\'')
+                                    it.desc_long = it.desc_long.replace('\"', '\'')
+                                    it.name = it.name.replace('\"', '\'')
+                                    it.photo = it.photo.replace('\"', '\'')
+                                    it.recommended = it.recommended.replace('\"', '\'')
+                                }catch (e: IllegalArgumentException){
+                                    Log.i("error",e.message)
                                 }
+                                it.class_name = nameCategory
                             }
+                            menuDb.addAllData(dishes!!)
+                            Log.i("getAllDishes","compl")
+                            //посылаем сообщение что мы тут закончили
+                        } else {
+                            //посылаем Error с кодом ошибки сервера
+                            emitter.onError(OurException(t.code()))
+                        }
+                    }
 
-                            override fun onError(e: Throwable) {
-                                println(e.toString())
-                                emitter.onError(e)
-                            }
-                        })}
-            }.count()
-            .subscribe({ sum: Long -> Log.e("eeer", sum.toString())})
-           // .count() //считаем сколько пришло
-           // .doOnSubscribe { x -> Log.e("comp", x.toString()) }//тут отправляем в что все ок, все скачалось
-        //.filter { x -> x == categories.size.toLong() } //ждем когда все скачается
+                    override fun onError(e: Throwable) {
+                        println(e.toString())
+                        emitter.onError(e)
+                    }
+                })
+        }
     }
 }
