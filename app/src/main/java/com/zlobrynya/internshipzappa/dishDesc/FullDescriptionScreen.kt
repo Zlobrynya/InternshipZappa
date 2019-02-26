@@ -32,6 +32,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         var toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
         setSupportActionBar(toolbar)
+        //supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         //Создание RecyclerView
