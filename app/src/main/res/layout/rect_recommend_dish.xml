@@ -17,7 +17,7 @@
                 android:id="@+id/btnMinus"
                 android:background="@drawable/btn_shape" android:textColor="@color/colorAccent"
                 android:layout_marginBottom="12dp" app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="64dp"
+                android:layout_marginEnd="68dp"
                 android:visibility="gone" app:layout_constraintEnd_toEndOf="parent"/>
         <ImageView
                 android:scaleType="centerCrop"

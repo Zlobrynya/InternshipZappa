@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.support.v7.view.menu.MenuView
@@ -7,15 +8,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
+import kotlinx.android.synthetic.main.full_description_screen.*
 import kotlinx.android.synthetic.main.rect_recommend_dish.*
+import java.security.AccessController.getContext
 
 
 class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
@@ -30,6 +30,23 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.toping_price?.text = (values[position].price).toString()
         val imageLoader: ImageLoader = ImageLoader.getInstance()
+
+        if (holder?.toping_price?.text == "price" || holder?.toping_price == null){
+            holder?.toping_price?.text = "-"
+        } else{
+            holder?.toping_price?.text = (values[position].price).toString()
+        }
+        if (holder?.toping_ves == null || values[position].weight == "weight"){
+            holder?.toping_ves?.visibility = View.GONE
+        } else{
+            holder?.toping_ves?.text = values[position].weight
+        }
+        if (holder?.toping_name == null || values[position].title == "title"){
+            holder?.toping_name?.text = "Без наименования"
+        } else{
+            holder?.toping_name?.text = values[position].title
+        }
+
         imageLoader.displayImage(values[position].photoUrl, holder.toping_photo, object: ImageLoadingListener{
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                 holder.spinner?.visibility = View.GONE
@@ -82,7 +99,15 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
                 tv_counter?.text = (++i).toString()
             }
             btn_minus?.setOnClickListener{
-                tv_counter?.text = (--i).toString()
+                if (tv_counter?.text == "1") {
+                    btn_toping?.visibility = View.VISIBLE
+                    btn_plus?.visibility = View.GONE
+                    btn_minus?.visibility = View.GONE
+                    tv_counter?.visibility = View.GONE
+                    Toast.makeText(itemView.context, "Топинг убран из заказа", Toast.LENGTH_SHORT).show()
+                } else {
+                    tv_counter?.text = (--i).toString()
+                }
             }
         }
     }

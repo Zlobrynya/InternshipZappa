@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -38,7 +39,8 @@ class FullDescriptionScreen : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = layoutManager
 
-
+        //val imageLoader: ImageLoader = ImageLoader.getInstance()
+        //imageLoader.displayImage("drawable://" + R.drawable.sup_boston_louxi, dishPhoto)
         var getDish = MenuDB(this)
         var dish:DescriptionDish = getDish.getDescriptionDish(3)
         showDishDescription(getDish.getDescriptionDish(3))
@@ -46,20 +48,25 @@ class FullDescriptionScreen : AppCompatActivity() {
     }
 
     fun showDishDescription(dish: DescriptionDish){
-        if (dish.price == null){
+        if (dish.price.toString() == "price" || dish.price == null){
             dishCena.text = "-"
         } else{
             dishCena.text = (dish.price).toString()
         }
-        if (dish.weight == null){
+        if (dish.weight == null || dish.weight == "weight"){
             dishVes.visibility = View.GONE
         } else{
-            dishVes.text = (dish.weight).toString()
+            dishVes.text = dish.weight
         }
-        if (dish.title == null){
-            dishVes.text = "Без наименования"
+        if (dish.title == null || dish.title == "title"){
+            dishName.text = "Без наименования"
         } else{
-            dishName.text = (dish.title).toString()
+            dishName.text = dish.title
+        }
+        if (dish.descLong == "description_long" || dish.descLong == null){
+            dishOpisanie.visibility = View.GONE
+        } else{
+            dishOpisanie.text = dish.descLong
         }
 
         val imageLoader: ImageLoader = ImageLoader.getInstance()
