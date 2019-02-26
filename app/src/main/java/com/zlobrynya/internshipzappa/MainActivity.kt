@@ -47,10 +47,10 @@ class MainActivity : AppCompatActivity(){
         val menuDB = MenuDB(this)
         if (menuDB.getCountRow() == 0){
             val array = arrayListOf<DescriptionDish>()
-            array.add(getDescriptionDish(0,250,"https://na-rogah-api.herokuapp.com/photos/e56f473023.jpg","1;2;3"))
-            array.add(getDescriptionDish(1,200,"https://na-rogah-api.herokuapp.com/photos/e56f473023.jpg","0;2;3"))
-            array.add(getDescriptionDish(2,150,"https://na-rogah-api.herokuapp.com/photos/e56f473023.jpg","0;1;3"))
-            array.add(getDescriptionDish(3,2000,"https://na-rogah-api.herokuapp.com/photos/e56f473023.jpg","0;1;2"))
+            array.add(getDescriptionDish(0,250,"https://na-rogah-api.herokuapp.com/photos/504a517002.jpg","1;2;3"))
+            array.add(getDescriptionDish(1,200,"https://na-rogah-api.herokuapp.com/photos/b02b7f8067.jpg","0;2;3"))
+            array.add(getDescriptionDish(2,150,"https://na-rogah-api.herokuapp.com/photos/a4aa616024.jpg","0;1;3"))
+            array.add(getDescriptionDish(3,2000,"https://na-rogah-api.herokuapp.com/photos/15b6ee2008.jpg","0;1;2"))
             menuDB.addAllData(array)
         }
         menuDB.closeDataBase()

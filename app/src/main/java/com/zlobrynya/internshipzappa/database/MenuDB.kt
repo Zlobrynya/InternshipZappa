@@ -89,6 +89,10 @@ class MenuDB(context: Context) {
         sqLiteDatabase!!.execSQL(query)
     }
 
+    fun checkData(dish: DescriptionDish){
+
+    }
+
     //получаем описание блюда
     fun getDescriptionDish(index: Int): DescriptionDish{
         val query = "SELECT * FROM " + NAME_TABLE + " WHERE " + DISH_ID + "=" + index

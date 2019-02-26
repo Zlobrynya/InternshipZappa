@@ -24,7 +24,7 @@
                     android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    android:layout_marginBottom="120dp" app:layout_constraintBottom_toBottomOf="@+id/constraintLayout">
+                    android:layout_marginBottom="124dp" app:layout_constraintBottom_toBottomOf="@+id/constraintLayout">
             </ImageView>
 
             <android.support.constraint.ConstraintLayout
@@ -131,7 +131,7 @@
     <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="39dp"
             android:background="@color/black_alpha_40"
             app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:layout_constraintStart_toStartOf="parent"
