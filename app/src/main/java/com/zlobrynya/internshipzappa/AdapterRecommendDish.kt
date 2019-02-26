@@ -1,9 +1,6 @@
 package com.zlobrynya.internshipzappa
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.Bitmap
-import android.support.v7.view.menu.MenuView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +10,6 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.tools.DescriptionDish
-import kotlinx.android.synthetic.main.full_description_screen.*
-import kotlinx.android.synthetic.main.rect_recommend_dish.*
-import java.security.AccessController.getContext
 
 
 class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
@@ -28,9 +22,9 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.toping_price?.text = (values[position].price).toString()
-        val imageLoader: ImageLoader = ImageLoader.getInstance()
 
+        val imageLoader: ImageLoader = ImageLoader.getInstance()
+        //Проверка получены ли данные
         if (holder?.toping_price?.text == "price" || holder?.toping_price == null){
             holder?.toping_price?.text = "-"
         } else{
@@ -53,7 +47,7 @@ class AdapterRecommendDish(private val values: ArrayList<DescriptionDish>): Recy
             }
 
             override fun onLoadingStarted(imageUri: String?, view: View?) {
-                imageLoader.displayImage("drawable://"+R.drawable.noimage, holder.toping_photo)
+                //imageLoader.displayImage("drawable://"+R.drawable.noimage, holder.toping_photo)
                 holder.spinner?.visibility = View.VISIBLE
             }
 
