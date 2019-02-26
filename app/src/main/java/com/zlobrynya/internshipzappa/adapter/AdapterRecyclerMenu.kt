@@ -59,7 +59,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         Log.i("short_desc", myDataset[position].desc_short)
         //Log.i("short_desc", myDataset[position].name)
 //        holder.weightDish!!.text = myDataset[position].weight.toString()
-        holder.priceDish!!.text = myDataset[position].price.toString() + " Р"
+        holder.priceDish!!.text = myDataset[position].price.toInt().toString() + " \u20BD"
         val imageLoader: ImageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(myDataset[position].photo, holder.imageView, options, object: ImageLoadingListener {
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
@@ -86,8 +86,6 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         var imageView: ImageView? = null
         var descDish: TextView? = null
         var priceDish: TextView? = null
-        var weightDish: TextView? = null
-        var shapeDish: CardView? = null
         var progressBar: ProgressBar? = null
 
         init {

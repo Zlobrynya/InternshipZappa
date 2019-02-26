@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -28,6 +29,8 @@ import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
 import retrofit2.Call
 import retrofit2.Response
+import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
 
 
 class MenuActivity: AppCompatActivity() {
@@ -53,33 +56,68 @@ class MenuActivity: AppCompatActivity() {
 
         menuDb = MenuDB(this)
         categoryDB = CategoryDB(this)
+        logCheck()
+    }
 
+
+    private fun logCheck(){
         //выполняем проверку обновлений,
         LogCheck.getInstance().getLog().subscribeOn(Schedulers.newThread())
-            ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<String>{
+            ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<LogClass>{
                 override fun onComplete() {
                 }
 
                 override fun onSubscribe(d: Disposable) {
                 }
 
-                override fun onNext(t: String) {
-                    Log.i("CheckJS","onNext")
-                    checkPass(t,this@MenuActivity)
-
+                override fun onNext(t: LogClass) {
+                    Log.i("CheckJS",t.str)
+                    if (t.code == 200){
+                        checkPass(t.str,this@MenuActivity)
+                    }else{
+                        checkResponseCode(t.code)
+                    }
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("CheckJS",e.message)
+                    e.printStackTrace()
+                }
+
+                //проверка кода ответа
+                private fun checkResponseCode(code: Int){
+                    if (code == 0)
+                        allert("Проверьте интернет соединение.")
+                    else if (code >= 500 && code <= 599)
+                        allert("Проблемы на сервере")
                 }
             })
-
     }
 
-    fun start(){
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+    //вызов диалога
+    private fun allert(text: String){
+        val builder = AlertDialog.Builder(this)
+        if (menuDb.getCountRow() ==  0){
+            builder.setTitle("Упс! Что то не так!")
+                .setMessage(text)
+                .setCancelable(false)
+                .setPositiveButton("Повторить соединение.",
+                    { dialog, id ->
+                        run {
+                            logCheck()
+                            dialog.cancel()
+                        }
+                    })
+                .setNegativeButton("Закрыть",
+                    { dialog, id ->
+                        run {
+                            dialog.cancel()
+                        }
+                    })
+            val alert = builder.create()
+            alert.show()
+        } else{
+            setCategories(categoryDB.getCategory())
+        }
     }
 
     override fun onDestroy() {
@@ -97,7 +135,6 @@ class MenuActivity: AppCompatActivity() {
             setCategories(categoryDB.getCategory())
         } else{
             val editor = sharedPreferences.edit()
-            editor.putInt("logK", log.hashCode())
             editor.apply()
 
             //чистим таблицы
@@ -111,7 +148,7 @@ class MenuActivity: AppCompatActivity() {
                 override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
                     val body = response.body()
                     val categories = body?.categories
-                    //добавляем в бд категории
+                    Log.i("Response", response.message())
                     categoryDB.addAllData(categories!!)
                     getCategoriesMenu(categories)
                 }
@@ -124,9 +161,6 @@ class MenuActivity: AppCompatActivity() {
 
     //устанавливаем в табы категориии
     private fun setCategories(categories: List<CatDTO>){
-        //Log.i("categories", categories.size.toString())
-        //Log.i("categories", "$categories")
-
         viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
         sliding_tabs.setupWithViewPager(viewPagerMenu)
         for (i in 0..categories.size){
@@ -139,9 +173,12 @@ class MenuActivity: AppCompatActivity() {
 
     //получаем с сервера категории меню
     private fun getCategoriesMenu(categories: List<CatDTO>){
+        Log.i("Retrofit","Start")
         categories.forEach {
             val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
             val nameCategory = it.name
+            Log.i("Retrofit","Start " + nameCategory)
+
             //запрос к блюдам категории
             val service = RetrofitClientInstance.retrofitInstance?.create(GetDishService::class.java)
             val call = service?.getAllDishes(url)
@@ -154,8 +191,11 @@ class MenuActivity: AppCompatActivity() {
                 override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
                     val body = response.body()
                     val dishes = body?.menu
+
+                    Log.i("Retrofit","start")
+
                     dishes?.forEach {
-                        //экранирование ковыче
+                        //экранирование ковычек
                         try {
                             it.desc_short = it.desc_short.replace('\"', '\'')
                             it.desc_long = it.desc_long.replace('\"', '\'')
@@ -166,14 +206,18 @@ class MenuActivity: AppCompatActivity() {
                             Log.i("error",e.message)
                         }
                         it.class_name = nameCategory
-                        //Log.i("replace", it.desc_long)
                     }
                     menuDb.addAllData(dishes!!)
+                    Log.i("Retrofit","End Download" + nameCategory)
+                    //контрольный запрос на сервер для уточнение количетсво записей в бд и на сервере, что б в случае чего презагрузить бд
+                    //
                     setCategories(categories)
-                    //Log.i("row2", menuDb.getCountRow().toString())
                 }
             })
+
+            Log.i("Retrofit","End " + nameCategory)
         }
+
     }
 
 

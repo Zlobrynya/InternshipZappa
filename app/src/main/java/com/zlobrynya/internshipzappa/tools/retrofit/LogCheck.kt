@@ -11,26 +11,30 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 
 class LogCheck {
-    fun getLog():Observable<String>{
-        return Observable.create(object : ObservableOnSubscribe<String> {
-            override fun subscribe(emitter: ObservableEmitter<String>) {
+
+    fun getLog():Observable<LogClass>{
+        return Observable.create(object : ObservableOnSubscribe<LogClass> {
+            override fun subscribe(emitter: ObservableEmitter<LogClass>) {
                 doAsync{
+                    val logClass = LogClass()
                     val endpointUtl = URL("https://na-rogah-api.herokuapp.com/check_update")
                     val conn = endpointUtl.openConnection() as HttpURLConnection
-                    var strLog: String
                     try {
                         conn.requestMethod = "GET"
+                        logClass.code = conn.responseCode
+                        //Log.i("parse", conn.responseCode.toString())
                         val input = BufferedInputStream(conn.inputStream)
-                        strLog = convertStreamToString(input)
-                        Log.i("parse", strLog)
-                        emitter.onNext(strLog)
+                        logClass.str = convertStreamToString(input)
+                        Log.i("parse", logClass.str)
+                        emitter.onNext(logClass)
                     } catch (e: Exception) {
-                        Log.i("parse", "error")
+                        emitter.onNext(logClass)
                     }
                 }
             }
         })
     }
+
     private fun convertStreamToString(input: InputStream): String {
         val reader = BufferedReader(InputStreamReader(input))
         val sb = StringBuilder()
