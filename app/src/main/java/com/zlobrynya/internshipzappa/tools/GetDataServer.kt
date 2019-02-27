@@ -168,7 +168,7 @@ class GetDataServer(val context: Context) {
         val composite = CompositeDisposable()
 
         categories.forEach {
-            val url = "https://na-rogah-api.herokuapp.com/get_menu1/" + it.class_id.toString()
+            val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
             val nameCategory = it.name
             Log.i("CategoriesMenu","Start " + nameCategory)
 

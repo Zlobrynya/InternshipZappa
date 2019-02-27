@@ -5,6 +5,5 @@
     <item
             android:id="@+id/action_authentication"
             app:showAsAction="always"
-            android:icon="@drawable/ic_auto"
-            android:title="@string/authentication"/>
+            android:icon="@drawable/ic_auto"/>
 </menu>
