@@ -33,6 +33,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_menu, parent, false) as View
+
         /*опции UIL
         * кэширует в память, дикс
         *
@@ -81,7 +82,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
     }
 
     //Класс помощник, для правильного отображение view
-    class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener{
+    class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         var nameDish: TextView? = null
         var imageView: ImageView? = null
         var descDish: TextView? = null
