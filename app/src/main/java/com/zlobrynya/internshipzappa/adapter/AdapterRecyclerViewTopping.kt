@@ -21,26 +21,16 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 
 
 /*
-* Адаптер для RecyclerMenu
+* Адаптер для отобрадежения топингов и напитков
+* RecyclerMenu
+*
  */
 
-class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerViewTopping.Holder>() {
-
-    lateinit var options: DisplayImageOptions
-
+class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val context: Context):
+    RecyclerView.Adapter<AdapterRecyclerViewTopping.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_topping_menu, parent, false) as View
-
-        /*опции UIL
-        * кэширует в память, дикс
-        *
-        * */
-        /*options = DisplayImageOptions.Builder()
-            .cacheInMemory(true)
-            .cacheOnDisk(true)
-            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-            .build()*/
         return Holder(view)
     }
 
@@ -54,41 +44,15 @@ class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val 
         //В класс помощник записываем данные
         holder.nameTop?.text = myDataset[position].name
         holder.weightTop?.text = myDataset[position].weight.toString() + " г"
-        //Toast.makeText(context, myDataset[position].desc_short, Toast.LENGTH_LONG).show()
-        //Log.i("short_desc", myDataset[position].desc_short)
-        //Log.i("short_desc", myDataset[position].name)
-//        holder.weightDish!!.text = myDataset[position].weight.toString()
-        holder.priceTop!!.text = myDataset[position].price.toString() + " Р"
-        /*val imageLoader: ImageLoader = ImageLoader.getInstance()
-        imageLoader.displayImage(myDataset[position].photo, holder.imageView, options, object: ImageLoadingListener {
-            override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                holder.progressBar!!.visibility = View.GONE
-            }
-
-            override fun onLoadingStarted(imageUri: String?, view: View?) {
-            }
-
-            override fun onLoadingCancelled(imageUri: String?, view: View?) {
-                holder.progressBar!!.visibility = View.GONE
-            }
-
-            override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
-                holder.progressBar!!.visibility = View.GONE
-            }
-
-        })*/
+        holder.priceTop!!.text = myDataset[position].price.toString() + " \u20BD"
     }
 
 
     //Класс помощник, для правильного отображение view для топпингов
     class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         var nameTop: TextView? = null
-        //var imageView: ImageView? = null
         var weightTop: TextView? = null
         var priceTop: TextView? = null
-        //var weightDish: TextView? = null
-        //var shapeDish: CardView? = null
-        //var progressBar: ProgressBar? = null
         var addButton: Button? = null
         var counterOn: FrameLayout? = null
         var counter: TextView? = null
@@ -97,11 +61,8 @@ class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val 
 
         init {
             nameTop = v.findViewById(R.id.nameTopping)
-            //imageView = v.findViewById(R.id.imageView)
             weightTop = v.findViewById(R.id.weightTopping)
             priceTop = v.findViewById(R.id.priceTopping)
-            //progressBar = v.findViewById(R.id.progressBar)
-            //imageView!!.setOnClickListener(this)
             counterOn = v.findViewById(R.id.counterOn)
             addButton = v.findViewById(R.id.addButton)
             counter = v.findViewById(R.id.counter)
@@ -125,14 +86,16 @@ class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val 
                     plusButton!!.visibility = View.GONE
                 }
             }
+
             if (view == minusButton) {
                 counter!!.text = (counter!!.text.toString().toInt() - 1).toString()
                 if (counter!!.text == "0") {
                     counterOn!!.visibility = View.GONE
                     addButton!!.visibility = View.VISIBLE
                     counter!!.text = "1"
-                }else if (counter!!.text == "14"){plusButton!!.visibility = View.VISIBLE}
-
+                }else if (counter!!.text == "14"){
+                    plusButton!!.visibility = View.VISIBLE
+                }
             }
         }
     }

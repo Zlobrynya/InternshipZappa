@@ -28,12 +28,11 @@ class CategoryFragment: Fragment() {
         menuDb = MenuDB(v.context)
 
         val category = arguments!!.getString("category")
-        //Log.i("CategoryFragment",category)
         val listDish = menuDb.getCategoryDish(category)
-        //Log.i("CategoryFragment",listDish.size.toString())
-        if(category != "Топинги") {
-            viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
-        }else{ viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)}
+        when (category){
+            "Топинги", "Напитки" -> viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)
+             else -> viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
+        }
         return v
     }
 

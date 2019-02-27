@@ -39,8 +39,6 @@ class MenuActivity: AppCompatActivity() {
     private lateinit var menuDb: MenuDB
     private lateinit var categoryDB: CategoryDB
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
@@ -100,7 +98,6 @@ class MenuActivity: AppCompatActivity() {
         }
     }
 
-
     //вызов диалога
     private fun allert(text: String){
         val builder = AlertDialog.Builder(this)
@@ -127,7 +124,6 @@ class MenuActivity: AppCompatActivity() {
             setCategories(categoryDB.getCategory())
         }
     }
-
 
 }
 
