@@ -7,7 +7,7 @@
     <string name="code_0">Проверьте интернет соединение.</string>
     <string name="code_503">Техническое обслуживание сервера.</string>
     <string name="code_else">Случилось что то непостижимое, раз вы увидели это сообщение. Попробуйте попозже зайти.</string>
-
+    <string name="add">ДОБАВИТЬ</string>
 
 
 </resources>

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#FFFFFF</color>
     <color name="black_alpha_40">#66000000</color>
     <color name="colorPrimary">#303030</color>
     <color name="colorPrimaryDark">#000000</color>
@@ -12,4 +9,5 @@
     <color name="OldLace">#FDF5E6</color>
     <color name="textColor">#000000</color>
     <color name="NotSelected">#B3FFFFFF</color>
+    <color name="back_launch">#1E1E1E</color>
 </resources>

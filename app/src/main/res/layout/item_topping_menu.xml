@@ -46,7 +46,7 @@
         />
         <Button
                 android:id="@+id/addButton"
-                android:text="ДОБАВИТЬ"
+                android:text="@string/add"
                 android:textColor="@color/white"
                 android:layout_width="100dp"
                 android:layout_height="28dp"

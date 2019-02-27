@@ -29,6 +29,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val context: Context):
     RecyclerView.Adapter<AdapterRecyclerViewTopping.Holder>() {
 
+
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_topping_menu, parent, false) as View
         return Holder(view)
@@ -80,6 +81,7 @@ class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val 
                 view.visibility = View.GONE
                 counterOn!!.visibility = View.VISIBLE
             }
+
             if (view == plusButton) {
                 counter!!.text = (counter!!.text.toString().toInt() + 1).toString()
                 if(counter!!.text == "15"){

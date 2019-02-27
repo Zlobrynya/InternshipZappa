@@ -36,56 +36,17 @@ import com.zlobrynya.internshipzappa.tools.OurException
 
 
 class MenuActivity: AppCompatActivity() {
-    private lateinit var menuDb: MenuDB
     private lateinit var categoryDB: CategoryDB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+        supportActionBar!!.setTitle(R.string.menu_toolbar)
 
-        //!!!!!!!!!!!!временно здесь, потом передет в mainactivity
-        val config = ImageLoaderConfiguration.Builder(this)
-            .threadPoolSize(3)
-            .denyCacheImageMultipleSizesInMemory()
-            .memoryCache(UsingFreqLimitedMemoryCache(8 * 1024 * 1024)) // 2 Mb
-            .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 60 * 30).toLong()))
-            .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
-            .build()
-        ImageLoader.getInstance().init(config)
-        //!!!!!!!!!!!!
-
-        menuDb = MenuDB(this)
         categoryDB = CategoryDB(this)
-        getData()
+        setCategories(categoryDB.getCategory())
     }
 
-    //качаем данные c сервера
-    private fun getData(){
-        val getDataServer = GetDataServer(this)
-        getDataServer.getData()
-            .subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : Observer<List<CatDTO>> {
-                override fun onComplete() = println("Complete getAllCategories")
-
-                override fun onSubscribe(d: Disposable) {}
-
-                override fun onNext(t: List<CatDTO>) {
-                    setCategories(t)
-                }
-
-                override fun onError(e: Throwable) {
-                    val outE = e as OurException
-                    Log.e("err", outE.codeRequest.toString())
-                    when (outE.codeRequest){
-                        0 -> allert(getString(R.string.code_0))
-                        404, 500 -> allert(getString(R.string.code_404))
-                        503 -> allert(getString(R.string.code_503))
-                        else -> allert(getString(R.string.code_else))
-                    }
-                }
-            })
-    }
 
     //устанавливаем в табы категориии
     private fun setCategories(categories: List<CatDTO>){
@@ -95,33 +56,6 @@ class MenuActivity: AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 sliding_tabs.getTabAt(i)?.text = categories.get(i).name
             }
-        }
-    }
-
-    //вызов диалога
-    private fun allert(text: String){
-        val builder = AlertDialog.Builder(this)
-        if (menuDb.getCountRow() ==  0){
-            builder.setTitle("Упс! Что то не так!")
-                .setMessage(text)
-                .setCancelable(false)
-                .setPositiveButton("Повторить соединение."
-                ) { dialog, id ->
-                    run {
-                        getData()
-                        dialog.cancel()
-                    }
-                }
-                .setNegativeButton("Закрыть"
-                ) { dialog, id ->
-                    run {
-                        dialog.cancel()
-                    }
-                }
-            val alert = builder.create()
-            alert.show()
-        } else{
-            setCategories(categoryDB.getCategory())
         }
     }
 

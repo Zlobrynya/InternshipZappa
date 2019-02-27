@@ -33,9 +33,9 @@ class GetDataServer(val context: Context) {
         categoryDB = CategoryDB(context)
     }
 
-    fun getData(): Observable<List<CatDTO>> {
-        return Observable.create(object : ObservableOnSubscribe<List<CatDTO>> {
-            override fun subscribe(emitter: ObservableEmitter<List<CatDTO>>) {
+    fun getData(): Observable<Boolean> {
+        return Observable.create(object : ObservableOnSubscribe<Boolean> {
+            override fun subscribe(emitter: ObservableEmitter<Boolean>) {
                 RetrofitClientInstance.getInstance()
                     .getLogServer()
                     .subscribeOn(Schedulers.io())
@@ -70,7 +70,7 @@ class GetDataServer(val context: Context) {
         })
     }
 
-    private fun checkPass(log: String, emitter: ObservableEmitter<List<CatDTO>>) {
+    private fun checkPass(log: String, emitter: ObservableEmitter<Boolean>) {
         val sharedPreferences = context.getSharedPreferences("endpoint", Context.MODE_PRIVATE)
         val savedLog = "logK"
         val savedText = sharedPreferences.getInt(savedLog, 0)
@@ -93,18 +93,22 @@ class GetDataServer(val context: Context) {
                     }
 
                     override fun onNext(t: Response<ResponseBody>) {
-                        if (t.code() == 200) {
-                            val countSerBD = t.body().toString().toInt()
-                            val countLocBD = menuDb.getCountRow()
-                            if (countLocBD == countSerBD)
-                                emitter.onNext(categoryDB.getCategory())
-                            else{
-                                clearBD()
-                                getCategory(emitter)
+                        try {
+                            if (t.code() == 200) {
+                                val countSerBD = t.body().toString().toInt()
+                                val countLocBD = menuDb.getCountRow()
+                                if (countLocBD == countSerBD)
+                                    emitter.onNext(true)
+                                else{
+                                    clearBD()
+                                    getCategory(emitter)
+                                }
+                            } else {
+                                //посылаем Error с кодом ошибки сервера
+                                emitter.onError(OurException(t.code()))
                             }
-                        } else {
-                            //посылаем Error с кодом ошибки сервера
-                            emitter.onError(OurException(t.code()))
+                        }catch (e: Throwable){
+                            emitter.onError(OurException())
                         }
                     }
 
@@ -130,7 +134,7 @@ class GetDataServer(val context: Context) {
         categoryDB.clearTableDB()
     }
 
-    private fun getCategory(emitter: ObservableEmitter<List<CatDTO>>) {
+    private fun getCategory(emitter: ObservableEmitter<Boolean>) {
         RetrofitClientInstance.getInstance()
             .getAllCategories()
             ?.subscribeOn(Schedulers.io())
@@ -161,7 +165,7 @@ class GetDataServer(val context: Context) {
     }
 
     @SuppressLint("CheckResult")
-    private fun getCategoriesMenu(categories: List<CatDTO>, emitter: ObservableEmitter<List<CatDTO>>) {
+    private fun getCategoriesMenu(categories: List<CatDTO>, emitter: ObservableEmitter<Boolean>) {
         Log.i("CategoriesMenu","getCategoriesMenu")
         val countCat = categories.size-1
         var countComplite = 0;
@@ -205,7 +209,7 @@ class GetDataServer(val context: Context) {
                                    composite.clear()
                                }else if (countComplite == countCat)
                                    //посылаем сообщение что мы тут закончили
-                                   emitter.onNext(categories)
+                                   emitter.onNext(true)
                                else countComplite++;
                            } else {
                                //посылаем Error с кодом ошибки сервера
@@ -224,6 +228,5 @@ class GetDataServer(val context: Context) {
                        }})!!
            )
         }
-        //Observable.fromIterable(listObservable).count().subscribe { x -> Log.e("CategoriesMenu", x.toString()) }
     }
 }
