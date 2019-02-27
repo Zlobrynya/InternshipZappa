@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
+import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerViewTopping
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import kotlinx.android.synthetic.main.fragment_category_menu.*
 
@@ -30,9 +31,9 @@ class CategoryFragment: Fragment() {
         //Log.i("CategoryFragment",category)
         val listDish = menuDb.getCategoryDish(category)
         //Log.i("CategoryFragment",listDish.size.toString())
-
-        viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
-
+        if(category != "Топинги") {
+            viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
+        }else{ viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)}
         return v
     }
 
