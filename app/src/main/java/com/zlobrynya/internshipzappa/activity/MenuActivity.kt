@@ -58,7 +58,11 @@ class MenuActivity: AppCompatActivity() {
 
         menuDb = MenuDB(this)
         categoryDB = CategoryDB(this)
-        //качаем данные
+        getData()
+    }
+
+    //качаем данные c сервера
+    private fun getData(){
         val getDataServer = GetDataServer(this)
         getDataServer.getData()
             .subscribeOn(Schedulers.io())
@@ -73,6 +77,14 @@ class MenuActivity: AppCompatActivity() {
                 }
 
                 override fun onError(e: Throwable) {
+                    val outE = e as OurException
+                    Log.e("err", outE.codeRequest.toString())
+                    when (outE.codeRequest){
+                        0 -> allert(getString(R.string.code_0))
+                        404, 500 -> allert(getString(R.string.code_404))
+                        503 -> allert(getString(R.string.code_503))
+                        else -> allert(getString(R.string.code_else))
+                    }
                     Log.e("err","------------------------")
                     e.printStackTrace()
                     Log.e("err","------------------------")
@@ -86,45 +98,11 @@ class MenuActivity: AppCompatActivity() {
         sliding_tabs.setupWithViewPager(viewPagerMenu)
         for (i in 0..categories.size){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //sliding_tabs.getTabAt(i)?.icon = getDrawable(imageResId[i])
                 sliding_tabs.getTabAt(i)?.text = categories.get(i).name
             }
         }
     }
 
-
- /*   private fun logCheck(){
-        //выполняем проверку обновлений,
-        LogCheck.getInstance().getLog().subscribeOn(Schedulers.newThread())
-            ?.observeOn(AndroidSchedulers.mainThread())?.subscribe(object : Observer<LogClass>{
-                override fun onComplete() {
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onNext(t: LogClass) {
-                    Log.i("CheckJS",t.str)
-                    if (t.code == 200){
-                        checkPass(t.str,this@MenuActivity)
-                    }else{
-                        checkResponseCode(t.code)
-                    }
-                }
-
-                override fun onError(e: Throwable) {
-                    e.printStackTrace()
-                }
-
-                //проверка кода ответа
-                private fun checkResponseCode(code: Int){
-                    if (code == 0)
-                        allert("Проверьте интернет соединение.")
-                    else if (code >= 500 && code <= 599)
-                        allert("Проблемы на сервере")
-                }
-            })
-    }
 
     //вызов диалога
     private fun allert(text: String){
@@ -136,7 +114,7 @@ class MenuActivity: AppCompatActivity() {
                 .setPositiveButton("Повторить соединение.",
                     { dialog, id ->
                         run {
-                            logCheck()
+                            getData()
                             dialog.cancel()
                         }
                     })
@@ -152,96 +130,6 @@ class MenuActivity: AppCompatActivity() {
             setCategories(categoryDB.getCategory())
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        menuDb.closeDataBase()
-        categoryDB.closeDataBase()
-    }
-
-    //сверяем дату обновления, если нет совпадений - обновляем бд
-    private fun checkPass(log: String, context: Context){
-        val sharedPreferences = context.getSharedPreferences("endpoint", Context.MODE_PRIVATE)
-        val savedLog = "logK"
-        val savedText = sharedPreferences.getInt(savedLog ,0)
-        if (log.hashCode() == savedText){
-            setCategories(categoryDB.getCategory())
-        } else{
-            val editor = sharedPreferences.edit()
-            editor.apply()
-
-            //чистим таблицы
-            menuDb.clearTableDB()
-            categoryDB.clearTableDB()
-
-            //обращение к серверу за списком блюд
-            val service = RetrofitClientInstance.retrofitInstance?.create(GetRequest::class.java)
-            val call = service?.getAllCategories()
-            call?.enqueue(object : retrofit2.Callback<CatList> {
-                override fun onResponse(call: Call<CatList>, response: Response<CatList>) {
-                    val body = response.body()
-                    val categories = body?.categories
-                    Log.i("Response", response.message())
-                    categoryDB.addAllData(categories!!)
-                    getCategoriesMenu(categories)
-                }
-                override fun onFailure(call: Call<CatList>, t: Throwable) {
-                    Toast.makeText(context, "error reading JSON categories", Toast.LENGTH_LONG).show()
-                }
-            })
-        }
-    }
-
-
-
-    //получаем с сервера категории меню
-    private fun getCategoriesMenu(categories: List<CatDTO>){
-        Log.i("Retrofit","Start")
-        categories.forEach {
-            val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
-            val nameCategory = it.name
-            Log.i("Retrofit","Start " + nameCategory)
-
-            //запрос к блюдам категории
-            val service = RetrofitClientInstance.retrofitInstance?.create(GetRequest::class.java)
-            val call = service?.getAllDishes(url)
-
-            call?.enqueue(object : retrofit2.Callback<DishList>{
-                override fun onFailure(call: Call<DishList>, t: Throwable) {
-                    Toast.makeText(this@MenuActivity, "error reading JSON dishes", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onResponse(call: Call<DishList>, response: Response<DishList>) {
-                    val body = response.body()
-                    val dishes = body?.menu
-
-                    Log.i("Retrofit","start")
-
-                    dishes?.forEach {
-                        //экранирование ковычек
-                        try {
-                            it.desc_short = it.desc_short.replace('\"', '\'')
-                            it.desc_long = it.desc_long.replace('\"', '\'')
-                            it.name = it.name.replace('\"', '\'')
-                            it.photo = it.photo.replace('\"', '\'')
-                            it.recommended = it.recommended.replace('\"', '\'')
-                        }catch (e: IllegalArgumentException){
-                            Log.i("error",e.message)
-                        }
-                        it.class_name = nameCategory
-                    }
-                    menuDb.addAllData(dishes!!)
-                    Log.i("Retrofit","End Download" + nameCategory)
-                    //контрольный запрос на сервер для уточнение количетсво записей в бд и на сервере, что б в случае чего презагрузить бд
-                    //
-                    setCategories(categories)
-                }
-            })
-
-            Log.i("Retrofit","End " + nameCategory)
-        }
-
-    }*/
 
 
 }

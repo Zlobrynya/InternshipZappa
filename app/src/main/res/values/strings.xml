@@ -2,16 +2,12 @@
     <string name="app_name">InternshipZappa</string>
     <string name="menu_toolbar">Меню</string>
 
+    <!-- allert messege -->
+    <string name="code_404">Сервер не доступен.</string>
+    <string name="code_0">Проверьте интернет соединение.</string>
+    <string name="code_503">Техническое обслуживание сервера.</string>
+    <string name="code_else">Случилось что то непостижимое, раз вы увидели это сообщение. Попробуйте попозже зайти.</string>
 
-    <!-- Name category menu -->
-    <string name="hot">Мясо</string>
-    <string name="salad">Супы</string>
-    <string name="soup">Салаты</string>
-    <string name="burger">Бургеры</string>
-    <string name="combo">Комбо</string>
-    <string name="beer">Напитки</string>
-    <string name="toping">Топинги</string>
-    <string name="authentication">authentication</string>
-    <string name="noconnect">Мы не можем ничего скачать ;(. \n У Вас не включен интернет. \n Пожалуйста, включите передачу данных и нажмите на кнопку снизу.</string>
+
 
 </resources>

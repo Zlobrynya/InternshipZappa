@@ -3,10 +3,8 @@ package com.zlobrynya.internshipzappa.tools
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
-import com.zlobrynya.internshipzappa.tools.retrofit.GetRequest
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
@@ -16,11 +14,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Response
-import io.reactivex.Flowable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
 
 
+/*
+* Либо помещаем в сервис и он вызывается с определенной переодичностью
+* */
 
 
 class GetDataServer(val context: Context) {
@@ -73,11 +74,15 @@ class GetDataServer(val context: Context) {
         val sharedPreferences = context.getSharedPreferences("endpoint", Context.MODE_PRIVATE)
         val savedLog = "logK"
         val savedText = sharedPreferences.getInt(savedLog, 0)
+        Log.i("checkPass", savedText.toString())
+        Log.i("checkPass", log.hashCode().toString())
+
         //если проходит проверку посылаем весь список
         if (log.hashCode() == savedText) {
             emitter.onNext(categoryDB.getCategory())
         } else {
             val editor = sharedPreferences.edit()
+            editor.putInt(savedLog,log.hashCode())
             editor.apply()
 
             //чистим таблицы
@@ -122,58 +127,67 @@ class GetDataServer(val context: Context) {
     @SuppressLint("CheckResult")
     private fun getCategoriesMenu(categories: List<CatDTO>, emitter: ObservableEmitter<List<CatDTO>>) {
         Log.i("CategoriesMenu","getCategoriesMenu")
-
-
-        val f = Observable.create<Int> { t -> t.onNext(1) }.count()
-        f.subscribe { x -> Log.e("fd",x.toString()) }
-
+        val countCat = categories.size-1
+        var countComplite = 0;
+        val composite = CompositeDisposable()
 
         categories.forEach {
-            val url = "https://na-rogah-api.herokuapp.com/get_menu/" + it.class_id.toString()
+            val url = "https://na-rogah-api.herokuapp.com/get_menu1/" + it.class_id.toString()
             val nameCategory = it.name
-            Log.i("Retrofit","Start " + nameCategory)
+            Log.i("CategoriesMenu","Start " + nameCategory)
 
-            RetrofitClientInstance.getInstance()
-                .getAllDishes(url)
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(object : Observer<Response<DishList>> {
-                    override fun onComplete() {}
 
-                    override fun onSubscribe(d: Disposable) {}
+           composite.add(
+               RetrofitClientInstance.getInstance()
+                   .getAllDishes(url)
+                   ?.subscribeOn(Schedulers.io())
+                   ?.observeOn(AndroidSchedulers.mainThread())
+                   ?.subscribeWith(object : DisposableObserver<Response<DishList>>() {
+                       override fun onComplete() {}
+                       override fun onNext(t: Response<DishList>) {
+                           Log.i("CategoriesMenu","c")
+                           if (t.code() == 200) {
+                               val body = t.body()
+                               val dishes = body?.menu
+                               dishes?.forEach {
+                                   //экранирование ковычек
+                                   try {
+                                       it.desc_short = it.desc_short.replace('\"', '\'')
+                                       it.desc_long = it.desc_long.replace('\"', '\'')
+                                       it.name = it.name.replace('\"', '\'')
+                                       it.photo = it.photo.replace('\"', '\'')
+                                       it.recommended = it.recommended.replace('\"', '\'')
+                                   }catch (e: IllegalArgumentException){
+                                       Log.i("error",e.message)
+                                   }
+                                   it.class_name = nameCategory
+                               }
+                               menuDb.addAllData(dishes!!)
 
-                    override fun onNext(t: Response<DishList>) {
-                        Log.i("getAllDishes DishList","c")
-                        if (t.code() == 200) {
-                            val body = t.body()
-                            val dishes = body?.menu
-                            dishes?.forEach {
-                                //экранирование ковычек
-                                try {
-                                    it.desc_short = it.desc_short.replace('\"', '\'')
-                                    it.desc_long = it.desc_long.replace('\"', '\'')
-                                    it.name = it.name.replace('\"', '\'')
-                                    it.photo = it.photo.replace('\"', '\'')
-                                    it.recommended = it.recommended.replace('\"', '\'')
-                                }catch (e: IllegalArgumentException){
-                                    Log.i("error",e.message)
-                                }
-                                it.class_name = nameCategory
-                            }
-                            menuDb.addAllData(dishes!!)
-                            Log.i("getAllDishes","compl")
-                            //посылаем сообщение что мы тут закончили
-                        } else {
-                            //посылаем Error с кодом ошибки сервера
-                            emitter.onError(OurException(t.code()))
-                        }
-                    }
+                               //считаем сколько потоков завершилось
+                               if (countComplite < 0){
+                                   composite.clear()
+                               }else if (countComplite == countCat)
+                                   emitter.onNext(categories)
+                               else countComplite++;
+                               //посылаем сообщение что мы тут закончили
+                           } else {
+                               //посылаем Error с кодом ошибки сервера
+                               Log.e("CategoriesMenu","t.code()")
+                               countComplite = -5
+                               composite.clear()
+                               emitter.onError(OurException(t.code()))
+                           }
+                       }
 
-                    override fun onError(e: Throwable) {
-                        println(e.toString())
-                        emitter.onError(e)
-                    }
-                })
+                       override fun onError(e: Throwable) {
+                           println(e.toString())
+                           countComplite = -5
+                           composite.clear()
+                           emitter.onError(e)
+                       }})!!
+           )
         }
+        //Observable.fromIterable(listObservable).count().subscribe { x -> Log.e("CategoriesMenu", x.toString()) }
     }
 }
