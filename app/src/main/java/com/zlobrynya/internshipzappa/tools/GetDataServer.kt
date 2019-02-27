@@ -79,19 +79,55 @@ class GetDataServer(val context: Context) {
 
         //если проходит проверку посылаем весь список
         if (log.hashCode() == savedText) {
-            emitter.onNext(categoryDB.getCategory())
+            RetrofitClientInstance.getInstance()
+                .getDishCount()
+                .subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(object : Observer<Response<ResponseBody>> {
+                    override fun onComplete() {
+                        println("Complete")
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+
+                    }
+
+                    override fun onNext(t: Response<ResponseBody>) {
+                        if (t.code() == 200) {
+                            val countSerBD = t.body().toString().toInt()
+                            val countLocBD = menuDb.getCountRow()
+                            if (countLocBD == countSerBD)
+                                emitter.onNext(categoryDB.getCategory())
+                            else{
+                                clearBD()
+                                getCategory(emitter)
+                            }
+                        } else {
+                            //посылаем Error с кодом ошибки сервера
+                            emitter.onError(OurException(t.code()))
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        println(e.toString())
+                        emitter.onError(OurException())
+                    }
+
+                })
         } else {
             val editor = sharedPreferences.edit()
             editor.putInt(savedLog,log.hashCode())
             editor.apply()
-
-            //чистим таблицы
-            menuDb.clearTableDB()
-            categoryDB.clearTableDB()
-
+            clearBD()
             //получаем категории
             getCategory(emitter)
         }
+    }
+
+    private fun clearBD(){
+        //чистим таблицы
+        menuDb.clearTableDB()
+        categoryDB.clearTableDB()
     }
 
     private fun getCategory(emitter: ObservableEmitter<List<CatDTO>>) {
@@ -168,9 +204,9 @@ class GetDataServer(val context: Context) {
                                if (countComplite < 0){
                                    composite.clear()
                                }else if (countComplite == countCat)
+                                   //посылаем сообщение что мы тут закончили
                                    emitter.onNext(categories)
                                else countComplite++;
-                               //посылаем сообщение что мы тут закончили
                            } else {
                                //посылаем Error с кодом ошибки сервера
                                Log.e("CategoriesMenu","t.code()")

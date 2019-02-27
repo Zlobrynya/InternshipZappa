@@ -85,9 +85,6 @@ class MenuActivity: AppCompatActivity() {
                         503 -> allert(getString(R.string.code_503))
                         else -> allert(getString(R.string.code_else))
                     }
-                    Log.e("err","------------------------")
-                    e.printStackTrace()
-                    Log.e("err","------------------------")
                 }
             })
     }
@@ -111,19 +108,19 @@ class MenuActivity: AppCompatActivity() {
             builder.setTitle("Упс! Что то не так!")
                 .setMessage(text)
                 .setCancelable(false)
-                .setPositiveButton("Повторить соединение.",
-                    { dialog, id ->
-                        run {
-                            getData()
-                            dialog.cancel()
-                        }
-                    })
-                .setNegativeButton("Закрыть",
-                    { dialog, id ->
-                        run {
-                            dialog.cancel()
-                        }
-                    })
+                .setPositiveButton("Повторить соединение."
+                ) { dialog, id ->
+                    run {
+                        getData()
+                        dialog.cancel()
+                    }
+                }
+                .setNegativeButton("Закрыть"
+                ) { dialog, id ->
+                    run {
+                        dialog.cancel()
+                    }
+                }
             val alert = builder.create()
             alert.show()
         } else{
