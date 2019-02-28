@@ -47,7 +47,7 @@ class GetDataServer(val context: Context) {
 
                         override fun onNext(t: Response<ResponseBody>) {
                             if (t.code() == 200) {
-                                checkPass(t.body().toString(), emitter)
+                                checkPass(t.body()!!.string(), emitter)
                             } else {
                                 //посылаем Error с кодом ошибки сервера
                                 closeBD()
@@ -79,6 +79,8 @@ class GetDataServer(val context: Context) {
         val savedLog = context.getString(R.string.key_shared_log)
         val savedText = sharedPreferences.getInt(savedLog, 0)
 
+        Log.i("Log",log + " " + savedText)
+
         //если проходит проверку посылаем весь список
         if (log.hashCode() == savedText) {
             RetrofitClientInstance.getInstance()
@@ -92,7 +94,7 @@ class GetDataServer(val context: Context) {
                     override fun onNext(t: Response<ResponseBody>) {
                         try {
                             if (t.code() == 200) {
-                                val countSerBD = t.body().toString().toInt()
+                                val countSerBD = t.body()!!.string().toInt()
                                 val countLocBD = menuDb.getCountRow()
                                 if (countLocBD == countSerBD){
                                     closeBD()

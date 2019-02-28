@@ -3,6 +3,7 @@ package com.zlobrynya.internshipzappa.tools.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
+import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 
 
@@ -24,7 +25,7 @@ Full description screen
 *
 * */
 
-class MenuDB(context: Context) {
+class MenuDB(val context: Context) {
     private val DISH_ID = "dish_id"
     private val TITLE = "title"
     private val PRICE = "price"
@@ -81,6 +82,11 @@ class MenuDB(context: Context) {
 
     //добавляем одну строку в бд
     fun addData(dish: DishDTO){
+        if (dish.name.isEmpty())
+            dish.name = context.getString(R.string.no_name)
+        if (dish.photo.isEmpty())
+            dish.photo = "null"
+
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.item_id + ",\"" +
                 dish.name + "\"," + dish.price + ",\"" + dish.photo + "\",\"" +
                 dish.desc_long + "\",\"" + dish.desc_short + "\",\"" + dish.weight + "\",\"" +

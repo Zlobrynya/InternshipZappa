@@ -104,6 +104,8 @@ class FullDescriptionScreen : AppCompatActivity() {
                 if (!parts.get(i).contains("null"))
                     list.add(menuDB.getDescriptionDish(parts.get(i).toInt()))
             }
+            if (list.size == 0)
+                textView7.visibility = View.GONE
         }
         return list
     }
