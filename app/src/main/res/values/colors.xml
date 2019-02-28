@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black_alpha_40">#66000000</color>
-    <color name="colorPrimary">#303030</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#FF1C2A</color>
-    <color name="tabBar">#FFFFFF</color>
+    <color name="color_primary">#303030</color>
+    <color name="color_primary_dark">#000000</color>
+    <color name="color_accent">#FF1C2A</color>
+    <color name="text_tab_bar_select">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
-    <color name="OldLace">#FDF5E6</color>
-    <color name="textColor">#000000</color>
-    <color name="NotSelected">#B3FFFFFF</color>
+    <color name="old_lace">#FDF5E6</color>
+    <color name="text_color">#000000</color>
+    <color name="text_tab_bar_not_select">#808080</color>
     <color name="back_launch">#1E1E1E</color>
 </resources>

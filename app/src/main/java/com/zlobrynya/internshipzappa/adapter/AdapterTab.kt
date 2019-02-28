@@ -14,7 +14,6 @@ import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 class AdapterTab(fm: FragmentManager?, val listDTO: List<CatDTO>, val pageCount: Int) : FragmentPagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
-        Log.i("categories", listDTO.get(position).name)
         if (position < listDTO.size)
             return CategoryFragment.newInstance(listDTO.get(position).name)
 

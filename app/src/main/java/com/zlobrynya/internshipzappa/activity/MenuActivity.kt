@@ -42,6 +42,7 @@ class MenuActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
         supportActionBar!!.setTitle(R.string.menu_toolbar)
+        supportActionBar!!.elevation = 0.0F
 
         categoryDB = CategoryDB(this)
         setCategories(categoryDB.getCategory())

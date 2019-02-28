@@ -45,7 +45,7 @@ class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val 
         //В класс помощник записываем данные
         holder.nameTop?.text = myDataset[position].name
         holder.weightTop?.text = myDataset[position].weight.toString() + " г"
-        holder.priceTop!!.text = myDataset[position].price.toString() + " \u20BD"
+        holder.priceTop!!.text = myDataset[position].price.toInt().toString() + " \u20BD"
     }
 
 
