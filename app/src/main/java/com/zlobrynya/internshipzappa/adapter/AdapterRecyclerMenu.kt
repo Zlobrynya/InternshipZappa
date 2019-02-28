@@ -51,14 +51,14 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
 
     //Класс помощник, для правильного отображение view
     inner class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
-        var id = 0
+        var idDish = 0
 
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishDTO) = with(itemView){
             //В класс помощник записываем данные
             nameDish?.text = dishDTO.name
             shortDescDish?.text = dishDTO.desc_short
-            id = dishDTO.item_id
+            idDish = dishDTO.item_id
             priceDish!!.text = dishDTO.price.toInt().toString() + context.getString(R.string.rub)
 
             //загрузка изображений
@@ -88,7 +88,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         override fun onClick(view: View) {
             //тут будет старт view Ильи и передача id intent'ом
             val intent = Intent(context, FullDescriptionScreen::class.java)
-            intent.putExtra("id", id)
+            intent.putExtra(context.getString(R.string.key_id), idDish)
             context.startActivity(intent)
         }
     }

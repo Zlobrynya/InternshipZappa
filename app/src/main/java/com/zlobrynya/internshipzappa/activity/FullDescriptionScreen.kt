@@ -101,7 +101,6 @@ class FullDescriptionScreen : AppCompatActivity() {
             val delimiter = ';'
             val parts = str.split(delimiter)
             for (i in 0..parts.size-1){
-                Log.d("Индекс", "$i")
                 if (!parts.get(i).contains("null"))
                     list.add(menuDB.getDescriptionDish(parts.get(i).toInt()))
             }
