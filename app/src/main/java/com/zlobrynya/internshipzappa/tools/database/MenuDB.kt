@@ -33,12 +33,8 @@ class MenuDB(context: Context) {
     private val DESC_SHORT = "description_short"
     private val WEIGHT = "weight"
     private val CATEGORY = "category"
-
-    //!!!!!!!!!!!!!!!!!!
     private val RECOMEND = "recommended"
-    //!!!!!!!!!!!!!!!!
     private val NAME_TABLE = "menu"
-
     private var database: Database? = null
     private var sqLiteDatabase: SQLiteDatabase? = null
 
@@ -68,11 +64,6 @@ class MenuDB(context: Context) {
     fun closeDataBase() {
         if (sqLiteDatabase!!.isOpen())
             sqLiteDatabase!!.close()
-    }
-
-    fun deleteDB(){
-        closeDataBase()
-        database!!.deleteBD()
     }
 
     //очищает таблицу

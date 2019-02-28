@@ -7,14 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class Database(val context: Context) : SQLiteOpenHelper(context, DATABASE_NAME , null, DATABASE_VERSION) {
 
-
     override fun onCreate(db: SQLiteDatabase) {}
 
-
     //метод для обновление (ручного) бд
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-
-    }
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
     fun deleteBD(){
         context.deleteDatabase(DATABASE_NAME)

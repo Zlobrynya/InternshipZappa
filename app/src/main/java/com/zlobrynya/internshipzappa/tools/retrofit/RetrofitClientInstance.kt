@@ -12,7 +12,6 @@ import retrofit2.http.Url
 
 class RetrofitClientInstance {
 
-    private var retrofit: Retrofit? = null
     private val BASE_URL = "https://na-rogah-api.herokuapp.com"
     private var getRequest: GetRequest? = null
 

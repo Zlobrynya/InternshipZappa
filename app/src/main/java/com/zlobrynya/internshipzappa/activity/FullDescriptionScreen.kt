@@ -14,7 +14,7 @@ import com.zlobrynya.internshipzappa.adapter.AdapterRecommendDish
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
-import kotlinx.android.synthetic.main.full_description_screen.*
+import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import android.view.MenuItem
 
 
@@ -26,10 +26,10 @@ class FullDescriptionScreen : AppCompatActivity() {
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.full_description_screen)
+        setContentView(R.layout.activity_full_description_screen)
 
         val intent = intent
-        val id = intent.getIntExtra("id",0)
+        val id = intent.getIntExtra(getString(R.string.key_id),0)
 
         //ToolBar
         toolbar.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
@@ -37,7 +37,8 @@ class FullDescriptionScreen : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
-        scrollView.smoothScrollTo(0,0)
+        //что бы при открытии скрол был наверху, а не так что бы при открытии активити оказывались по середине
+         scrollView.smoothScrollTo(0,0)
 
         //Создание RecyclerView
         val layoutManager = LinearLayoutManager(this@FullDescriptionScreen, LinearLayoutManager.HORIZONTAL, false)
@@ -55,15 +56,12 @@ class FullDescriptionScreen : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     fun showDishDescription(dish: DishDTO){
         //Проверка получены ли данные
-        if (dish.price == 0.0){
-            dishCena.text = "-"
-        } else{
-            dishCena.text = (dish.price.toInt()).toString() + " \u20BD"
-        }
+        dishCena.text = if (dish.price == 0.0) getString(R.string.munis) else (dish.price.toInt()).toString() + getString(R.string.rub)
+
         if (dish.weight == 0){
             dishVes.visibility = View.GONE
         } else{
-            dishVes.text = dish.weight.toString() + " Г"
+            dishVes.text = dish.weight.toString() + getString(R.string.gr)
         }
 
         dishName.text = dish.name
@@ -104,7 +102,7 @@ class FullDescriptionScreen : AppCompatActivity() {
             val parts = str.split(delimiter)
             for (i in 0..parts.size-1){
                 Log.d("Индекс", "$i")
-                if (!parts.get(i).contains("non"))
+                if (!parts.get(i).contains("null"))
                     list.add(menuDB.getDescriptionDish(parts.get(i).toInt()))
             }
         }

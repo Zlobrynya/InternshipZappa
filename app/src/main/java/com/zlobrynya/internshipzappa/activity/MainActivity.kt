@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import android.view.View
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache
@@ -16,9 +15,7 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.GetDataServer
 import com.zlobrynya.internshipzappa.tools.OurException
-import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -28,6 +25,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var menuDb: MenuDB
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : Observer<Boolean> {
-                override fun onComplete() = println("Complete getAllCategories")
+                override fun onComplete() {}
 
                 override fun onSubscribe(d: Disposable) {}
 
@@ -81,17 +80,17 @@ class MainActivity : AppCompatActivity() {
     private fun allert(text: String){
         val builder = AlertDialog.Builder(this)
         if (menuDb.getCountRow() ==  0){
-            builder.setTitle("Упс! Что то не так!")
+            builder.setTitle(getString(R.string.something_wrong))
                 .setMessage(text)
                 .setCancelable(false)
-                .setPositiveButton("Повторить соединение."
-                ) { dialog, id ->
+                .setPositiveButton(getString(R.string.repeat_connection)
+                ) { dialog, _ ->
                     run {
                         getData()
                         dialog.cancel()
                     }
                 }
-                .setNegativeButton("Закрыть"
+                .setNegativeButton(getString(R.string.close)
                 ) { dialog, id ->
                     run {
                         dialog.cancel()
@@ -103,8 +102,6 @@ class MainActivity : AppCompatActivity() {
             startMenu()
         }
     }
-
-
 
     fun startMenu(){
         val intent = Intent(this, MenuActivity::class.java)

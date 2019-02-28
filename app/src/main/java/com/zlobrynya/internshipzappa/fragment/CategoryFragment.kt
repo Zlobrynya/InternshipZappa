@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -23,15 +24,16 @@ class CategoryFragment: Fragment() {
     private lateinit var viewManager: RecyclerView.LayoutManager
     private lateinit var menuDb: MenuDB
 
+    @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.fragment_category_menu,null)
         menuDb = MenuDB(v.context)
 
-        val category = arguments!!.getString("category")
-        val listDish = menuDb.getCategoryDish(category)
+        val category = arguments?.getString(getString(R.string.key_category))
+        val listDish = menuDb.getCategoryDish(category!!)
         when (category){
-            "Топинги", "Напитки" -> viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)
-             else -> viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
+            getString(R.string.category_topping), getString(R.string.category_drinks) -> viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)
+            else -> viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
         }
         return v
     }

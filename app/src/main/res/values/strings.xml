@@ -7,7 +7,42 @@
     <string name="code_0">Проверьте интернет соединение.</string>
     <string name="code_503">Техническое обслуживание сервера.</string>
     <string name="code_else">Случилось что то непостижимое, раз вы увидели это сообщение. Попробуйте попозже зайти.</string>
+    <string name="something_wrong">Упс! Что то не так!</string>
+    <string name="repeat_connection">Повторить соединение.</string>
+    <string name="close">Закрыть</string>
+
+    <!-- layout -->
+    <string name="topping">Топинг</string>
+    <string name="default_num"> г</string>
+    <string name="no_name">Без наименования</string>
+    <string name="no_price">-</string>
+    <string name="plus">+</string>
+    <string name="munis">-</string>
+    <string name="read_more">ПОДРОБНЕЕ</string>
+    <string name="great_choice">Отличный выбор</string>
+    <string name="recommendation">К этому блюду рекомендуют</string>
     <string name="add">ДОБАВИТЬ</string>
+
+    <!--доп строки общие-->
+    <string name="rub"> ₽</string>
+    <string name="gr"> г</string>
+    <string name="zero_num">0</string>
+    <string name="category_topping">Топинги</string>
+    <string name="category_drinks">Напитки</string>
+
+    <!-- название парметров (ключи) -->
+    <string name="key_id">id</string>
+    <string name="key_category">category</string>
+    <string name="key_shared_log">logK</string>
+    <string name="key_shared_name">endpoint</string>
+
+    <!-- доп строки адаптер топингов/рекоменд -->
+    <string name="max_order">15</string>
+    <string name="topping_delete">Топинг убран из заказа</string>
+
+
+
+
 
 
 </resources>

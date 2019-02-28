@@ -7,6 +7,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Url
 
 
@@ -15,8 +16,8 @@ interface GetRequest {
     @GET("/get_classes")
     fun getAllCategories() : Observable<Response<CatList>>
 
-    @GET
-    fun getAllDishes(@Url url: String) : Observable<Response<DishList>>
+    @GET("/get_menu/{category_id}")
+    fun getAllDishes(@Path(value = "category_id", encoded = true) catId: String) : Observable<Response<DishList>>
 
     @GET("/check_update")
     fun getLogServer() : Observable<Response<ResponseBody>>
