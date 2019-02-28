@@ -44,9 +44,9 @@ class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val 
             nameTopping.text = dishDTO.name
             weightTopping.text = dishDTO.weight.toString() + context.getString(R.string.gr)
             priceTopping.text = dishDTO.price.toInt().toString() + context.getString(R.string.rub)
-            addButton!!.setOnClickListener(this@Holder)
+            /*addButton!!.setOnClickListener(this@Holder)
             plusButton!!.setOnClickListener(this@Holder)
-            minusButton!!.setOnClickListener(this@Holder)
+            minusButton!!.setOnClickListener(this@Holder)*/
         }
 
         override fun onClick(view: View) = with(itemView){

@@ -81,9 +81,9 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                 }
             })
 
-            btnToping.setOnClickListener(this@ViewHolder)
+            /*btnToping.setOnClickListener(this@ViewHolder)
             btnPlus.setOnClickListener(this@ViewHolder)
-            btnMinus.setOnClickListener(this@ViewHolder)
+            btnMinus.setOnClickListener(this@ViewHolder)*/
         }
 
         override fun onClick(view: View) = with(itemView) {
