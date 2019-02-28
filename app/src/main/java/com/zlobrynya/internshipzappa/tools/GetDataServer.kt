@@ -50,12 +50,14 @@ class GetDataServer(val context: Context) {
                                 checkPass(t.body().toString(), emitter)
                             } else {
                                 //посылаем Error с кодом ошибки сервера
+                                closeBD()
                                 emitter.onError(OurException(t.code()))
                             }
                         }
 
                         override fun onError(e: Throwable) {
                             println(e.toString())
+                            closeBD()
                             emitter.onError(OurException())
                         }
 
@@ -64,6 +66,13 @@ class GetDataServer(val context: Context) {
             }
         })
     }
+
+    //метод закрытие бд
+    private fun closeBD(){
+        menuDb.closeDataBase()
+        categoryDB.closeDataBase()
+    }
+
 
     private fun checkPass(log: String, emitter: ObservableEmitter<Boolean>) {
         val sharedPreferences = context.getSharedPreferences(context.getString(R.string.key_shared_name), Context.MODE_PRIVATE)
@@ -85,9 +94,10 @@ class GetDataServer(val context: Context) {
                             if (t.code() == 200) {
                                 val countSerBD = t.body().toString().toInt()
                                 val countLocBD = menuDb.getCountRow()
-                                if (countLocBD == countSerBD)
+                                if (countLocBD == countSerBD){
+                                    closeBD()
                                     emitter.onNext(true)
-                                else{
+                                } else{
                                     clearBD()
                                     getCategory(emitter)
                                 }
@@ -96,6 +106,7 @@ class GetDataServer(val context: Context) {
                                 emitter.onError(OurException(t.code()))
                             }
                         }catch (e: Throwable){
+                            closeBD()
                             emitter.onError(OurException())
                         }
                     }
@@ -140,6 +151,7 @@ class GetDataServer(val context: Context) {
                         getCategoriesMenu(categories, emitter)
                     } else {
                         //посылаем Error с кодом ошибки сервера
+                        closeBD()
                         emitter.onError(OurException(t.code()))
                     }
 
@@ -147,6 +159,7 @@ class GetDataServer(val context: Context) {
 
                 override fun onError(e: Throwable) {
                     println(e.toString())
+                    closeBD()
                     emitter.onError(OurException())
                 }
             })
@@ -189,14 +202,17 @@ class GetDataServer(val context: Context) {
                                 //считаем сколько потоков завершилось
                                 if (countComplite < 0){
                                     composite.clear()
-                                }else if (countComplite == countCat)
+                                }else if (countComplite == countCat){
                                     //посылаем сообщение что мы тут закончили
+                                    closeBD()
                                     emitter.onNext(true)
+                                }
                                 else countComplite++;
                             } else {
                                 //посылаем Error с кодом ошибки сервера
                                 countComplite = -5
                                 composite.clear()
+                                closeBD()
                                 emitter.onError(OurException(t.code()))
                             }
                         }
@@ -205,6 +221,7 @@ class GetDataServer(val context: Context) {
                             println(e.toString())
                             countComplite = -5
                             composite.clear()
+                            closeBD()
                             emitter.onError(e)
                         }})!!
            )

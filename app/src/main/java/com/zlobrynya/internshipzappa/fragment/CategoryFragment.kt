@@ -49,6 +49,11 @@ class CategoryFragment: Fragment() {
         }
     }
 
+    override fun onDestroy() {
+        menuDb.closeDataBase()
+        super.onDestroy()
+    }
+
 
     companion object {
       fun newInstance(category: String): Fragment{

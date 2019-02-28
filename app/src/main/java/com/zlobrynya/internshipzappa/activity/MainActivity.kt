@@ -76,10 +76,15 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
+    override fun onDestroy() {
+        menuDb.closeDataBase()
+        super.onDestroy()
+    }
+
     //вызов диалога
     private fun allert(text: String){
         val builder = AlertDialog.Builder(this)
-        if (menuDb.getCountRow() ==  0){
+        if (menuDb.getCountRow() == 0){
             builder.setTitle(getString(R.string.something_wrong))
                 .setMessage(text)
                 .setCancelable(false)

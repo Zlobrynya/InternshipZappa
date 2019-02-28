@@ -13,7 +13,7 @@
 
     <!-- layout -->
     <string name="topping">Топинг</string>
-    <string name="default_num"> г</string>
+    <string name="default_num">1</string>
     <string name="no_name">Без наименования</string>
     <string name="no_price">-</string>
     <string name="plus">+</string>
@@ -39,10 +39,4 @@
     <!-- доп строки адаптер топингов/рекоменд -->
     <string name="max_order">15</string>
     <string name="topping_delete">Топинг убран из заказа</string>
-
-
-
-
-
-
 </resources>
