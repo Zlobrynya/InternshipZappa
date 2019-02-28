@@ -63,7 +63,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         if (dish.weight == 0){
             dishVes.visibility = View.GONE
         } else{
-            dishVes.text = dish.weight.toString()
+            dishVes.text = dish.weight.toString() + " Г"
         }
 
         dishName.text = dish.name
