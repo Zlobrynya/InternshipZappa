@@ -39,10 +39,4 @@
     <!-- доп строки адаптер топингов/рекоменд -->
     <string name="max_order">15</string>
     <string name="topping_delete">Топинг убран из заказа</string>
-
-
-
-
-
-
 </resources>

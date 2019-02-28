@@ -69,7 +69,6 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
                 }
 
                 override fun onLoadingStarted(imageUri: String?, view: View?) {
-
                 }
 
                 override fun onLoadingCancelled(imageUri: String?, view: View?) {

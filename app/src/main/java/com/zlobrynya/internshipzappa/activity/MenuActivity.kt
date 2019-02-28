@@ -49,8 +49,14 @@ class MenuActivity: AppCompatActivity() {
     }
 
 
+    override fun onDestroy() {
+        categoryDB.closeDataBase()
+        super.onDestroy()
+    }
+
     //устанавливаем в табы категориии
     private fun setCategories(categories: List<CatDTO>){
+        Log.i("cat","$categories")
         viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
         sliding_tabs.setupWithViewPager(viewPagerMenu)
         for (i in 0..categories.size){

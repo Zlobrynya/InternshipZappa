@@ -108,6 +108,11 @@ class FullDescriptionScreen : AppCompatActivity() {
         return list
     }
 
+    override fun onDestroy() {
+        menuDB.closeDataBase()
+        super.onDestroy()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
             android.R.id.home -> {
