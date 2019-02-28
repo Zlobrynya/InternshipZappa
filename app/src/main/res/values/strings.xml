@@ -13,7 +13,7 @@
 
     <!-- layout -->
     <string name="topping">Топинг</string>
-    <string name="default_num"> г</string>
+    <string name="default_num">1</string>
     <string name="no_name">Без наименования</string>
     <string name="no_price">-</string>
     <string name="plus">+</string>
