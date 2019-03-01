@@ -57,7 +57,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         //Проверка получены ли данные
         dishCena.text = if (dish.price == 0.0) getString(R.string.munis) else (dish.price.toInt()).toString() + getString(R.string.rub)
 
-        if (dish.weight == 0){
+        if (dish.weight == "null"){
             dishVes.visibility = View.GONE
         } else{
             dishVes.text = dish.weight.toString() + getString(R.string.gr)

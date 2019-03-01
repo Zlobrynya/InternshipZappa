@@ -137,7 +137,7 @@ class MenuDB(val context: Context) {
         dish.recommended = cursor.getString(cursor.getColumnIndex(RECOMEND))
         dish.class_name = cursor.getString(cursor.getColumnIndex(CATEGORY))
         dish.price = cursor.getDouble(cursor.getColumnIndex(PRICE))
-        dish.weight = cursor.getInt(cursor.getColumnIndex(WEIGHT))
+        dish.weight = cursor.getString(cursor.getColumnIndex(WEIGHT))
         return dish
     }
 

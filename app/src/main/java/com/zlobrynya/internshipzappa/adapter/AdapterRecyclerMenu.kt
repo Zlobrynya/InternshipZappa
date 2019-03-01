@@ -74,7 +74,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             })
 
             if (!(dishDTO.desc_long.isEmpty() && dishDTO.price.toInt() == 0
-                    && dishDTO.weight == 0))
+                    && dishDTO.weight == "null"))
                 imageView!!.setOnClickListener(this@Holder)
         }
 
