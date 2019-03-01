@@ -45,7 +45,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             topingPrice.text = if (dishDTO.price == 0.0) "-"
             else dishDTO.price.toInt().toString() + context.getString(R.string.rub)
 
-            if (dishDTO.weight == 0){
+            if (dishDTO.weight == "null"){
                 topingVes.visibility = View.GONE
             } else{
                 topingVes.text = dishDTO.weight.toString() + context.getString(R.string.gr)

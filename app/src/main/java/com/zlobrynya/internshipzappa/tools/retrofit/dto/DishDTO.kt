@@ -10,6 +10,6 @@ data class DishDTO(
     @SerializedName("photo") var photo: String = "null",
     @SerializedName("desc_short") var desc_short: String = "null",
     @SerializedName("desc_long") var desc_long: String = "null",
-    @SerializedName("weight") var weight: Int = 0,
+    @SerializedName("weight") var weight: String = "null",
     @SerializedName("recommended") var recommended: String = "null"
 )
