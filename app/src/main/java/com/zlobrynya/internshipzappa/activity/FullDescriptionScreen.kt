@@ -22,7 +22,7 @@ class FullDescriptionScreen : AppCompatActivity() {
     private lateinit var menuDB: MenuDB
 
 
-    @Suppress("DEPRECATION")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_description_screen)
@@ -57,10 +57,10 @@ class FullDescriptionScreen : AppCompatActivity() {
         //Проверка получены ли данные
         dishCena.text = if (dish.price == 0.0) getString(R.string.munis) else (dish.price.toInt()).toString() + getString(R.string.rub)
 
-        if (dish.weight == "null"){
+        if (dish.weight == ""){
             dishVes.visibility = View.GONE
         } else{
-            dishVes.text = dish.weight.toString() + getString(R.string.gr)
+            dishVes.text = dish.weight + getString(R.string.gr)
         }
 
         dishName.text = dish.name

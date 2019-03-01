@@ -34,8 +34,8 @@
         <TextView
                 android:id="@+id/priceTopping"
                 android:layout_width="46dp"
-                android:textSize="16sp"
-                android:layout_height="20dp"
+                android:textSize="20sp"
+                android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="8dp"

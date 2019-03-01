@@ -3,10 +3,12 @@ package com.zlobrynya.internshipzappa.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import android.view.LayoutInflater
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.item_topping_menu.view.*
 
@@ -42,7 +44,10 @@ class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val 
         fun bind(dishDTO: DishDTO) = with(itemView){
             //В класс помощник записываем данные
             nameTopping.text = dishDTO.name
-            weightTopping.text = dishDTO.weight.toString() + context.getString(R.string.gr)
+            Log.i("cat", dishDTO.class_name)
+            if (dishDTO.weight == "null") weightTopping.visibility = View.GONE
+            else if (dishDTO.class_name == "Напитки") weightTopping.text = dishDTO.weight + " мл"
+            else weightTopping.text = dishDTO.weight + " г"
             priceTopping.text = dishDTO.price.toInt().toString() + context.getString(R.string.rub)
 
             //TODO на следующий спринт
