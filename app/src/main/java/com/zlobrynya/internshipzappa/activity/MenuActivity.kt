@@ -35,6 +35,7 @@ class MenuActivity: AppCompatActivity() {
         Log.i("cat","$categories")
         viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
         Log.i("cat","$categories")
+        Log.i("cat","$categories")
         sliding_tabs.setupWithViewPager(viewPagerMenu)
         for (i in 0..categories.size){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
