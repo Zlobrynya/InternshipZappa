@@ -11,9 +11,7 @@ import android.view.LayoutInflater
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import android.graphics.Bitmap
-import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.assist.FailReason
-import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.activity.FullDescriptionScreen
 import kotlinx.android.synthetic.main.item_menu.view.*

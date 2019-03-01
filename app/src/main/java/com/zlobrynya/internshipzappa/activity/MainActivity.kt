@@ -8,7 +8,6 @@ import android.support.v7.app.AlertDialog
 import android.util.Log
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
-import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache
 import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
