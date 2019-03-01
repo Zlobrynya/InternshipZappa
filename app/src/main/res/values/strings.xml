@@ -24,8 +24,8 @@
     <string name="add">ДОБАВИТЬ</string>
 
     <!--доп строки общие-->
-    <string name="rub"> ₽</string>
-    <string name="gr"> г</string>
+    <string name="rub">\u0020₽</string>
+    <string name="gr">\u0020г</string>
     <string name="zero_num">0</string>
     <string name="category_topping">Топинги</string>
     <string name="category_drinks">Напитки</string>
