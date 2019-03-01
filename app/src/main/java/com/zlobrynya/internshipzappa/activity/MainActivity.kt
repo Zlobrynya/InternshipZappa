@@ -9,8 +9,10 @@ import android.util.Log
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache
+import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
+import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.GetDataServer
@@ -32,12 +34,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val options = DisplayImageOptions.Builder()
+            .cacheInMemory(true)
+            .cacheOnDisk(true)
+            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
+            .build()
+
+
         val config = ImageLoaderConfiguration.Builder(this)
-            .threadPoolSize(3)
-            .denyCacheImageMultipleSizesInMemory()
-            .memoryCache(UsingFreqLimitedMemoryCache(8 * 1024 * 1024)) // 2 Mb
+            .threadPoolSize(5)
             .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 30).toLong()))
             .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
+            .defaultDisplayImageOptions(options)
             .build()
         ImageLoader.getInstance().init(config)
 

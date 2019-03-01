@@ -37,15 +37,9 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
         var imageLoader: ImageLoader
-        var options: DisplayImageOptions
 
         init {
             imageLoader = ImageLoader.getInstance()
-            options = DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-                .build()
         }
         // Установка данных в view
         @SuppressLint("SetTextI18n")
@@ -61,7 +55,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
 
             topingName.text = dishDTO.name
 
-            imageLoader.displayImage(dishDTO.photo, topingPhoto, options, object: ImageLoadingListener{
+            imageLoader.displayImage(dishDTO.photo, topingPhoto, object: ImageLoadingListener{
                 override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                     progressBar2.visibility = View.GONE
                 }

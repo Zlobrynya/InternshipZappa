@@ -16,7 +16,7 @@
 
         <TextView
                 android:id="@+id/nameTopping"
-                android:layout_width="196dp"
+                android:layout_width="0dp"
                 android:layout_height="24dp"
                 android:textSize="20sp"
                 android:textColor="@color/white"
@@ -24,7 +24,7 @@
                 android:layout_marginTop="2dp" app:layout_constraintTop_toTopOf="parent"/>
         <TextView
                 android:id="@+id/weightTopping"
-                android:layout_width="135dp"
+                android:layout_width="0dp"
                 android:textSize="12sp"
                 android:layout_height="15dp"
                 android:textColor="#99FFFFFF"

@@ -25,19 +25,8 @@ import kotlinx.android.synthetic.main.item_menu.view.*
 
 class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
 
-    lateinit var options: DisplayImageOptions
-
-
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_menu, parent, false) as View
-
-        //опции UIL кэширует в память
-        options = DisplayImageOptions.Builder()
-            .cacheInMemory(true)
-            .cacheOnDisk(true)
-            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-            .build()
-
         return Holder(view)
     }
 
@@ -67,7 +56,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
 
             //загрузка изображений
             val imageLoader: ImageLoader = ImageLoader.getInstance()
-            imageLoader.displayImage(dishDTO.photo, imageView, options, object: ImageLoadingListener {
+            imageLoader.displayImage(dishDTO.photo, imageView, object: ImageLoadingListener {
                 override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                     progressBar!!.visibility = View.GONE
                 }
