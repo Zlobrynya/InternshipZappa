@@ -15,6 +15,7 @@ import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import android.view.MenuItem
+import java.util.*
 
 
 class FullDescriptionScreen : AppCompatActivity() {
@@ -94,7 +95,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         })
     }
 
-    fun listRecDish(str: String): ArrayList<DishDTO>{
+    fun listRecDish(str: String): ArrayList<DishDTO> {
         val list: ArrayList<DishDTO> = ArrayList()
         if (!str.isEmpty()){
             val delimiter = ';'
