@@ -28,6 +28,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private lateinit var menuDb: MenuDB
 
+    companion object {
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +51,6 @@ class MainActivity : AppCompatActivity() {
             .defaultDisplayImageOptions(options)
             .build()
         ImageLoader.getInstance().init(config)
-
         ImageLoader.getInstance().displayImage("drawable://"+ R.drawable.launch_screan,launch)
 
         menuDb = MenuDB(this)

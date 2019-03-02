@@ -61,21 +61,22 @@
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/topingVes" app:layout_constraintVertical_bias="0.9"/>
+                app:layout_constraintTop_toBottomOf="@+id/topingVes" app:layout_constraintVertical_bias="1.0"
+                android:layout_marginEnd="4dp" app:layout_constraintEnd_toStartOf="@+id/btnToping"
+                app:layout_constraintHorizontal_bias="0.0"/>
         <android.support.v7.widget.AppCompatButton
                 android:padding="5dp"
                 android:text="@string/topping"
                 android:textSize="12sp"
                 android:textColor="#FFFFFF"
-                android:layout_width="78dp"
+                android:layout_width="wrap_content"
                 android:layout_height="26dp"
                 android:id="@+id/btnToping"
                 android:background="@drawable/btn_shape"
                 android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginBottom="6dp" app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/topingPrice" android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/topingVes"
-                app:layout_constraintHorizontal_bias="1.0" app:layout_constraintVertical_bias="0.913"/>
+                app:layout_constraintVertical_bias="1.0"/>
         <ProgressBar
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
