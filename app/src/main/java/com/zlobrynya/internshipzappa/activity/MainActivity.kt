@@ -22,16 +22,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import android.net.Uri
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var menuDb: MenuDB
-
-    companion object {
-
-    }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,8 +50,9 @@ class MainActivity : AppCompatActivity() {
 
         menuDb = MenuDB(this)
         getData()
-
     }
+
+
 
     //качаем данные c сервера
     private fun getData(){
