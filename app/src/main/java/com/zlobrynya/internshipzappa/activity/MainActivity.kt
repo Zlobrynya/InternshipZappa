@@ -81,10 +81,34 @@ class MainActivity : AppCompatActivity() {
                     val outE = e as OurException
                     Log.e("err", outE.codeRequest.toString())
                     when (outE.codeRequest){
-                        0 -> allert(getString(R.string.code_0))
-                        404, 500 -> allert(getString(R.string.code_404))
-                        503 -> allert(getString(R.string.code_503))
-                        else -> allert(getString(R.string.code_else))
+                        0 -> {
+                            if (menuDb.getCountRow() == 0){
+                                allert(getString(R.string.code_0))
+                            }else{
+                                allert(getString(R.string.offline))
+                            }
+                                }
+                        404, 500 -> {
+                            if (menuDb.getCountRow() == 0){
+                                allert(getString(R.string.code_404))
+                            }else{
+                                allert(getString(R.string.offline))
+                            }
+                        }
+                        503 -> {
+                            if (menuDb.getCountRow() == 0){
+                                allert(getString(R.string.code_503))
+                            }else{
+                                allert(getString(R.string.offline))
+                            }
+                        }
+                        else -> {
+                            if (menuDb.getCountRow() == 0){
+                                allert(getString(R.string.code_0))
+                            }else{
+                                allert(getString(R.string.offline))
+                            }
+                        }
                     }
                 }
             })
@@ -98,7 +122,6 @@ class MainActivity : AppCompatActivity() {
     //вызов диалога
     private fun allert(text: String){
         val builder = AlertDialog.Builder(this)
-        if (menuDb.getCountRow() == 0){
             builder.setTitle(getString(R.string.something_wrong))
                 .setMessage(text)
                 .setCancelable(false)
@@ -109,10 +132,10 @@ class MainActivity : AppCompatActivity() {
                         dialog.cancel()
                     }
                 }
-                .setNegativeButton(getString(R.string.close)
+                .setNegativeButton(getString(R.string.well)
                 ) { dialog, id ->
                     run {
-                        dialog.cancel()
+                        startMenu()
                     }
                 }
                 .setNeutralButton(getString(R.string.call)){
@@ -126,9 +149,6 @@ class MainActivity : AppCompatActivity() {
                 }
             val alert = builder.create()
             alert.show()
-        } else{
-            startMenu()
-        }
     }
 
     fun startMenu(){
