@@ -53,8 +53,8 @@ class MenuActivity: AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
 
         if (!ImageLoader.getInstance().isInited){
             val options = DisplayImageOptions.Builder()
