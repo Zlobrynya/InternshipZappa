@@ -2,6 +2,7 @@ package com.zlobrynya.internshipzappa.activity
 
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -28,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var menuDb: MenuDB
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -51,8 +51,12 @@ class MainActivity : AppCompatActivity() {
         ImageLoader.getInstance().displayImage("drawable://"+ R.drawable.launch_screan,launch)
 
         menuDb = MenuDB(this)
-        getData()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        getData()
     }
 
     //качаем данные c сервера
@@ -106,6 +110,15 @@ class MainActivity : AppCompatActivity() {
                 ) { dialog, id ->
                     run {
                         dialog.cancel()
+                    }
+                }
+                .setNeutralButton(getString(R.string.call)){
+                    dialog, id ->
+                    run {
+                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+7(8142)63-23-89"))
+                        if (intent.resolveActivity(packageManager) != null) {
+                            startActivity(intent)
+                        }
                     }
                 }
             val alert = builder.create()
