@@ -2,6 +2,7 @@ package com.zlobrynya.internshipzappa.activity
 
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -22,11 +23,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import android.net.Uri
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var menuDb: MenuDB
+
+    companion object {
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +54,13 @@ class MainActivity : AppCompatActivity() {
         ImageLoader.getInstance().displayImage("drawable://"+ R.drawable.launch_screan,launch)
 
         menuDb = MenuDB(this)
-        getData()
+
     }
 
-
+    override fun onStart() {
+        super.onStart()
+        getData()
+    }
 
     //качаем данные c сервера
     private fun getData(){
@@ -105,6 +113,15 @@ class MainActivity : AppCompatActivity() {
                 ) { dialog, id ->
                     run {
                         dialog.cancel()
+                    }
+                }
+                .setNeutralButton(getString(R.string.call)){
+                    dialog, id ->
+                    run {
+                        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+7(8142)63-23-89"))
+                        if (intent.resolveActivity(packageManager) != null) {
+                            startActivity(intent)
+                        }
                     }
                 }
             val alert = builder.create()

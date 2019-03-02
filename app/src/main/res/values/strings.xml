@@ -3,16 +3,17 @@
     <string name="menu_toolbar">Меню</string>
 
     <!-- allert messege -->
-    <string name="code_404">Сервер не доступен.</string>
-    <string name="code_0">Проверьте интернет соединение.</string>
-    <string name="code_503">Техническое обслуживание сервера.</string>
-    <string name="code_else">Случилось что то непостижимое, раз вы увидели это сообщение. Попробуйте попозже зайти.</string>
+    <string name="code_404">Сервер не доступен. Работа будет продолжена в оффлайн режиме. Меню может быть неактуальным.</string>
+    <string name="code_0">Проверьте интернет соединение. Работа будет продолжена в оффлайн режиме. Меню может быть неактуальным.</string>
+    <string name="code_503">Техническое обслуживание сервера. Работа будет продолжена в оффлайн режиме. Меню может быть неактуальным.</string>
+    <string name="code_else">Случилось что то непостижимое, раз вы увидели это сообщение. Попробуйте попозже зайти. Работа будет продолжена в оффлайн режиме. Меню может быть неактуальным.</string>
     <string name="something_wrong">Упс! Что то не так!</string>
     <string name="repeat_connection">Повторить соединение.</string>
     <string name="close">Закрыть</string>
+    <string name="call">Позвонить в ресторан</string>
 
     <!-- layout -->
-    <string name="topping">Топинг</string>
+    <string name="topping">Вкусно</string>
     <string name="default_num">1</string>
     <string name="no_name">Без наименования</string>
     <string name="no_price">-</string>

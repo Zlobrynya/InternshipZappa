@@ -1,7 +1,6 @@
 package com.zlobrynya.internshipzappa.adapter
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,9 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
+import android.graphics.*
+import android.graphics.Bitmap
+
 
 
 /*
@@ -56,6 +58,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             imageLoader.displayImage(dishDTO.photo, topingPhoto, object: ImageLoadingListener{
                 override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                     progressBar2.visibility = View.GONE
+                    topingPhoto.setImageBitmap(getRoundedCornerBitmap(loadedImage!!))
                 }
 
                 override fun onLoadingStarted(imageUri: String?, view: View?) {
@@ -72,6 +75,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                     imageLoader.displayImage("drawable://"+ R.drawable.no_toping, topingPhoto)
                 }
             })
+
 
             /*btnToping.setOnClickListener(this@ViewHolder)
             btnPlus.setOnClickListener(this@ViewHolder)
@@ -108,6 +112,28 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                     }
                 }
             }
+        }
+
+        fun getRoundedCornerBitmap(bitmap: Bitmap): Bitmap {
+            val output = Bitmap.createBitmap(
+                bitmap.width,
+                bitmap.height, Bitmap.Config.ARGB_8888
+            )
+            val canvas = Canvas(output)
+
+            val paint = Paint()
+            val rect = Rect(0, 0, bitmap.width, bitmap.height)
+            val rectF = RectF(rect)
+            val roundPx = 9f
+
+            paint.setAntiAlias(true)
+            canvas.drawARGB(0, 0, 0, 0)
+            canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
+
+            paint.setXfermode(PorterDuffXfermode(PorterDuff.Mode.SRC_IN))
+            canvas.drawBitmap(bitmap, rect, rect, paint)
+
+            return output
         }
     }
 }

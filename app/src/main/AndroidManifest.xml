@@ -4,6 +4,9 @@
           xmlns:tools="http://schemas.android.com/tools" package="com.zlobrynya.internshipzappa">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <uses-feature android:name="android.hardware.telephony"/>
 
     <application
             android:allowBackup="true"
