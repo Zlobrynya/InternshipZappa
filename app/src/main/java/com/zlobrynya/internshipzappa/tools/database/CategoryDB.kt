@@ -21,8 +21,7 @@ class CategoryDB(context: Context) {
         //запрос на создание табдлицы если ее не было
         val DATABASE_CREATE_SCRIPT = "create table if not exists " +
                 NAME_TABLE + " (" + CAT_ID + " integer, " +
-                CATEGORY + " text not null, " +
-                ORDER + " integer);"
+                CATEGORY + " text not null, " + ORDER + " integer);"
         //создается таблица
         sqLiteDatabase!!.execSQL(DATABASE_CREATE_SCRIPT)
     }
@@ -55,7 +54,7 @@ class CategoryDB(context: Context) {
     //добавляем одну строку в бд
     fun addData(dish: CatDTO){
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.class_id + ",\"" +
-                dish.name + "\"" + dish.order + "\");"
+                dish.name + "\", " + dish.order + ");"
         sqLiteDatabase!!.execSQL(query)
     }
 

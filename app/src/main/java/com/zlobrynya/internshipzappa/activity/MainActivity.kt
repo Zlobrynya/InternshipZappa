@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                             }else{
                                 allert(getString(R.string.offline))
                             }
-                                }
+                        }
                         404, 500 -> {
                             if (menuDb.getCountRow() == 0){
                                 allert(getString(R.string.code_404))
