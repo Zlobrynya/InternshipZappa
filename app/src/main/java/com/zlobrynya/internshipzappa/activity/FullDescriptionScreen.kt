@@ -15,6 +15,12 @@ import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import android.view.MenuItem
+import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
+import com.nostra13.universalimageloader.core.DisplayImageOptions
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
+import com.nostra13.universalimageloader.core.assist.ImageScaleType
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import java.util.*
 
 
@@ -122,6 +128,27 @@ class FullDescriptionScreen : AppCompatActivity() {
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+
+        if (!ImageLoader.getInstance().isInited){
+            val options = DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
+                .build()
+
+            val config = ImageLoaderConfiguration.Builder(this)
+                .threadPoolSize(5)
+                .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 30).toLong()))
+                .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
+                .defaultDisplayImageOptions(options)
+                .build()
+            ImageLoader.getInstance().init(config)
         }
     }
 }

@@ -21,6 +21,8 @@ import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 class MenuActivity: AppCompatActivity() {
     private lateinit var categoryDB: CategoryDB
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
@@ -69,7 +71,6 @@ class MenuActivity: AppCompatActivity() {
                 .build()
             ImageLoader.getInstance().init(config)
         }
-
     }
 }
 
