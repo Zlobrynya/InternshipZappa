@@ -34,6 +34,7 @@ class FullDescriptionScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_description_screen)
+        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this@FullDescriptionScreen))
 
         val intent = intent
         val id = intent.getIntExtra(getString(R.string.key_id),0)
@@ -78,7 +79,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         } else{
             dishOpisanie.text = dish.desc_long
         }
-
+        
         val imageLoader: ImageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(dish.photo, dishPhoto, object: ImageLoadingListener {
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
