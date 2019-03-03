@@ -10,7 +10,8 @@ class CategoryDB(context: Context) {
     private val NAME_TABLE = "category"
     private val CAT_ID = "cat_id"
     private val CATEGORY = "category"
-    private val ORDER = "order"
+    private val CORDER = "corder"
+
     init {
         database = Database(context)
         sqLiteDatabase = database!!.writableDatabase
@@ -21,7 +22,8 @@ class CategoryDB(context: Context) {
         //запрос на создание табдлицы если ее не было
         val DATABASE_CREATE_SCRIPT = "create table if not exists " +
                 NAME_TABLE + " (" + CAT_ID + " integer, " +
-                CATEGORY + " text not null, " + ORDER + " integer);"
+                CATEGORY + " text not null, " +
+                CORDER + " integer);"
         //создается таблица
         sqLiteDatabase!!.execSQL(DATABASE_CREATE_SCRIPT)
     }
@@ -54,7 +56,7 @@ class CategoryDB(context: Context) {
     //добавляем одну строку в бд
     fun addData(dish: CatDTO){
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.class_id + ",\"" +
-                dish.name + "\", " + dish.order + ");"
+                dish.name + "\"," + dish.order + ");"
         sqLiteDatabase!!.execSQL(query)
     }
 
@@ -67,8 +69,8 @@ class CategoryDB(context: Context) {
         while (cursor.moveToNext()){
             val class_id = cursor.getInt(cursor.getColumnIndex(CAT_ID))
             val name = cursor.getString(cursor.getColumnIndex(CATEGORY))
-            val order = cursor.getInt(cursor.getColumnIndex(ORDER))
-            val dish = CatDTO(class_id, name, order)
+            val corder = cursor.getInt(cursor.getColumnIndex(CORDER))
+            val dish = CatDTO(class_id, name, corder)
             arrayDish.add(dish)
         }
         cursor.close()

@@ -79,36 +79,17 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onError(e: Throwable) {
                     val outE = e as OurException
+                    val menu_db = menuDb.getCountRow()
                     Log.e("err", outE.codeRequest.toString())
                     when (outE.codeRequest){
-                        0 -> {
-                            if (menuDb.getCountRow() == 0){
-                                allert(getString(R.string.code_0))
-                            }else{
-                                allert(getString(R.string.offline))
-                            }
-                        }
-                        404, 500 -> {
-                            if (menuDb.getCountRow() == 0){
-                                allert(getString(R.string.code_404))
-                            }else{
-                                allert(getString(R.string.offline))
-                            }
-                        }
-                        503 -> {
-                            if (menuDb.getCountRow() == 0){
-                                allert(getString(R.string.code_503))
-                            }else{
-                                allert(getString(R.string.offline))
-                            }
-                        }
-                        else -> {
-                            if (menuDb.getCountRow() == 0){
-                                allert(getString(R.string.code_0))
-                            }else{
-                                allert(getString(R.string.offline))
-                            }
-                        }
+                        0 -> if (menu_db == 0) allert(getString(R.string.code_0))
+                             else allert(getString(R.string.offline))
+                        404, 500 -> if (menu_db == 0) allert(getString(R.string.code_404))
+                                    else allert(getString(R.string.offline))
+                        503 -> if (menu_db == 0) allert(getString(R.string.code_503))
+                               else allert(getString(R.string.offline))
+                        else -> if (menu_db == 0) allert(getString(R.string.code_0))
+                                else allert(getString(R.string.offline))
                     }
                 }
             })

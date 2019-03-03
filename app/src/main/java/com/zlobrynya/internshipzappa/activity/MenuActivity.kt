@@ -43,12 +43,17 @@ class MenuActivity: AppCompatActivity() {
     private fun setCategories(categories: List<CatDTO>){
         Log.i("cat","$categories")
         viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
-        Log.i("cat","$categories")
-        Log.i("cat","$categories")
+
         sliding_tabs.setupWithViewPager(viewPagerMenu)
+
+
         for (i in 0..categories.size){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                sliding_tabs.getTabAt(i)?.text = categories.get(i).name
+            for (CatDTO in categories ){
+                if (CatDTO.order == i + 1) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        sliding_tabs.getTabAt(i)?.text = CatDTO.name
+                    }
+                }
             }
         }
     }
