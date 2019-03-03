@@ -12,6 +12,8 @@
     <string name="call">Позвонить в ресторан</string>
     <string name="offline">Работа будет продолжена в оффлайн режиме. Меню может быть неактуальным.</string>
     <string name="well">Хорошо</string>
+    <string name="close_app">Закрыть приложение</string>
+
 
     <!-- layout -->
     <string name="topping">Вкусно</string>

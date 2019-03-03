@@ -69,7 +69,7 @@ class MenuActivity: AppCompatActivity() {
                 .build()
 
             val config = ImageLoaderConfiguration.Builder(this)
-                .threadPoolSize(5)
+                .threadPoolSize(3)
                 .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 30).toLong()))
                 .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
                 .defaultDisplayImageOptions(options)

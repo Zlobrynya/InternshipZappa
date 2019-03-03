@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.assist.FailReason
@@ -85,12 +86,13 @@ class FullDescriptionScreen : AppCompatActivity() {
             }
 
             override fun onLoadingStarted(imageUri: String?, view: View?) {
+                imageLoader.displayImage("drawable://"+ R.drawable.menu,dishPhoto)
                 progressBar.visibility = View.VISIBLE
             }
 
             override fun onLoadingCancelled(imageUri: String?, view: View?) {
-                progressBar.visibility = View.GONE
-                imageLoader.displayImage("drawable://"+ R.drawable.no_menu_duscr,dishPhoto)
+                progressBar.visibility = View.VISIBLE
+                imageLoader.displayImage("drawable://"+ R.drawable.menu,dishPhoto)
             }
 
             override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
@@ -143,7 +145,7 @@ class FullDescriptionScreen : AppCompatActivity() {
                 .build()
 
             val config = ImageLoaderConfiguration.Builder(this)
-                .threadPoolSize(5)
+                .threadPoolSize(3)
                 .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 30).toLong()))
                 .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
                 .defaultDisplayImageOptions(options)

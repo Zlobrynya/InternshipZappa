@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val config = ImageLoaderConfiguration.Builder(this)
-            .threadPoolSize(5)
+            .threadPoolSize(3)
             .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 30).toLong()))
             .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
             .defaultDisplayImageOptions(options)
@@ -82,14 +82,14 @@ class MainActivity : AppCompatActivity() {
                     val menu_db = menuDb.getCountRow()
                     Log.e("err", outE.codeRequest.toString())
                     when (outE.codeRequest){
-                        0 -> if (menu_db == 0) allert(getString(R.string.code_0))
-                             else allert(getString(R.string.offline))
-                        404, 500 -> if (menu_db == 0) allert(getString(R.string.code_404))
-                                    else allert(getString(R.string.offline))
-                        503 -> if (menu_db == 0) allert(getString(R.string.code_503))
-                               else allert(getString(R.string.offline))
-                        else -> if (menu_db == 0) allert(getString(R.string.code_0))
-                                else allert(getString(R.string.offline))
+                        0 -> if (menu_db == 0) allert(getString(R.string.code_0), R.string.close_app)
+                             else allert(getString(R.string.offline), R.string.well)
+                        404, 500 -> if (menu_db == 0) allert(getString(R.string.code_404), R.string.close_app)
+                                    else allert(getString(R.string.offline), R.string.well)
+                        503 -> if (menu_db == 0) allert(getString(R.string.code_503), R.string.close_app)
+                               else allert(getString(R.string.offline), R.string.well)
+                        else -> if (menu_db == 0) allert(getString(R.string.code_0), R.string.close_app)
+                                else allert(getString(R.string.offline), R.string.well)
                     }
                 }
             })
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //вызов диалога
-    private fun allert(text: String){
+    private fun allert(text: String, id: Int){
         val builder = AlertDialog.Builder(this)
             builder.setTitle(getString(R.string.something_wrong))
                 .setMessage(text)
@@ -113,14 +113,8 @@ class MainActivity : AppCompatActivity() {
                         dialog.cancel()
                     }
                 }
-                .setNegativeButton(getString(R.string.well)
-                ) { dialog, id ->
-                    run {
-                        startMenu()
-                    }
-                }
                 .setNeutralButton(getString(R.string.call)){
-                    dialog, id ->
+                        dialog, _ ->
                     run {
                         val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+7(8142)63-23-89"))
                         if (intent.resolveActivity(packageManager) != null) {
@@ -128,9 +122,50 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
+                .setNegativeButton(getString(id)
+                ) { dialog, _ ->
+                    run {
+                        when(id){
+                            R.string.close_app -> this.finish()
+                            R.string.well -> startMenu()
+                        }
+                    }
+                }
             val alert = builder.create()
             alert.show()
     }
+
+   /* private fun allertNoInternet(text: String){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.something_wrong))
+            .setMessage(text)
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.repeat_connection)
+            ) { dialog, _ ->
+                run {
+                    getData()
+                    dialog.cancel()
+                }
+            }
+            .setNegativeButton(getString(R.string.well)
+            ) { dialog, id ->
+                run {
+                    startMenu()
+                }
+            }
+            .setNeutralButton(getString(R.string.call)){
+                    dialog, id ->
+                run {
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+7(8142)63-23-89"))
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    }
+                }
+            }
+        val alert = builder.create()
+        alert.show()
+    }*/
+
 
     fun startMenu(){
         val intent = Intent(this, MenuActivity::class.java)

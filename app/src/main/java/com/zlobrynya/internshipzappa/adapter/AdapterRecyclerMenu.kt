@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import com.nostra13.universalimageloader.core.ImageLoader
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import android.graphics.Bitmap
+import android.util.Log
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.activity.FullDescriptionScreen
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.item_menu.view.*
 class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_menu, parent, false) as View
+        val view = LayoutInflater.from(parent.context).inflate(com.zlobrynya.internshipzappa.R.layout.item_menu, parent, false) as View
         return Holder(view)
     }
 
@@ -36,6 +37,13 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         holder.bind(myDataset.get(position))
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
     //Класс помощник, для правильного отображение view
     inner class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         var idDish = 0
@@ -50,8 +58,6 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
-
-
             //загрузка изображений
             val imageLoader: ImageLoader = ImageLoader.getInstance()
             imageLoader.displayImage(dishDTO.photo, imageView, object: ImageLoadingListener {
@@ -60,15 +66,17 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
                 }
 
                 override fun onLoadingStarted(imageUri: String?, view: View?) {
+                    progressBar!!.visibility = View.VISIBLE
                 }
 
                 override fun onLoadingCancelled(imageUri: String?, view: View?) {
-                    progressBar!!.visibility = View.GONE
-                    imageLoader.displayImage("drawable://"+ R.drawable.no_in_menu, imageView)
+                    progressBar.visibility = View.VISIBLE
+                    imageLoader.displayImage("drawable://"+ R.drawable.menu, imageView)
                 }
 
                 override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
                     progressBar!!.visibility = View.GONE
+                    Log.e("errLoading", failReason.toString())
                     imageLoader.displayImage("drawable://"+ R.drawable.no_in_menu, imageView)
                 }
             })
@@ -79,7 +87,6 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         }
 
         override fun onClick(view: View) {
-            //тут будет старт view Ильи и передача id intent'ом
             val intent = Intent(context, FullDescriptionScreen::class.java)
             intent.putExtra(context.getString(R.string.key_id), idDish)
             context.startActivity(intent)
