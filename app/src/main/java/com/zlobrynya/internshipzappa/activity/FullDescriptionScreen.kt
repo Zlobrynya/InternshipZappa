@@ -22,6 +22,9 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
+import com.squareup.picasso.Picasso
+import java.lang.Exception
+import java.security.AccessController.getContext
 import java.util.*
 
 
@@ -79,7 +82,19 @@ class FullDescriptionScreen : AppCompatActivity() {
         } else{
             dishOpisanie.text = dish.desc_long
         }
-        
+
+        Picasso.get()
+            .load(dish.photo)
+            .placeholder(R.drawable.menu)
+            .into(dishPhoto, object:com.squareup.picasso.Callback{
+                override fun onSuccess() {
+                    progressBar.visibility = View.GONE
+                }
+
+                override fun onError(e: Exception?) {}
+
+            })
+        /*
         val imageLoader: ImageLoader = ImageLoader.getInstance()
         imageLoader.displayImage(dish.photo, dishPhoto, object: ImageLoadingListener {
             override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
@@ -102,6 +117,7 @@ class FullDescriptionScreen : AppCompatActivity() {
             }
 
         })
+        */
     }
 
     fun listRecDish(str: String): ArrayList<DishDTO> {
