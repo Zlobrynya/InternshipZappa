@@ -34,7 +34,7 @@ class FullDescriptionScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_description_screen)
-        ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this@FullDescriptionScreen))
+        //ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this@FullDescriptionScreen))
 
         val intent = intent
         val id = intent.getIntExtra(getString(R.string.key_id),0)
