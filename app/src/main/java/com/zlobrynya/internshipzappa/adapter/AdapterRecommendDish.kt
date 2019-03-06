@@ -14,7 +14,11 @@ import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import android.graphics.*
 import android.graphics.Bitmap
-
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_full_description_screen.*
+import kotlinx.android.synthetic.main.activity_full_description_screen.view.*
+import java.lang.Exception
+import java.util.zip.Inflater
 
 
 /*
@@ -55,6 +59,17 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
 
             topingName.text = dishDTO.name
 
+            Picasso.get()
+                .load(dishDTO.photo)
+                .placeholder(R.drawable.menu)
+                .into(dishPhoto, object:com.squareup.picasso.Callback{
+                    override fun onSuccess() {
+                        progressBar.visibility = View.GONE
+                    }
+
+                    override fun onError(e: Exception?) {}
+                })
+            /*
             imageLoader.displayImage(dishDTO.photo, topingPhoto, object: ImageLoadingListener{
                 override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
                     progressBar2.visibility = View.GONE
@@ -75,11 +90,26 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                     imageLoader.displayImage("drawable://"+ R.drawable.no_toping, topingPhoto)
                 }
             })
-
+            */
 
             /*btnToping.setOnClickListener(this@ViewHolder)
             btnPlus.setOnClickListener(this@ViewHolder)
             btnMinus.setOnClickListener(this@ViewHolder)*/
+
+
+            fun getView(position:Int, convertView:View, parent:ViewGroup) {
+                var v = super.getView(position, convertView, parent)
+
+                val img = v.getTag() as ImageView
+                if (img == null)
+                {
+                    img = v.findViewById(R.id.imageOrders) as ImageView
+                    v.setTag(img) // <<< THIS LINE !!!!
+                }
+                val url = (getItem(position) as Map).get(TAG_IMAGE)
+                Picasso.with(v.getContext()).load(url).into(img)
+                return v
+            }
         }
 
         override fun onClick(view: View) = with(itemView) {

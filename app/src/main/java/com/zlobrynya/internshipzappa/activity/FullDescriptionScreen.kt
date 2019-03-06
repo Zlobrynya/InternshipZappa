@@ -92,7 +92,6 @@ class FullDescriptionScreen : AppCompatActivity() {
                 }
 
                 override fun onError(e: Exception?) {}
-
             })
         /*
         val imageLoader: ImageLoader = ImageLoader.getInstance()
