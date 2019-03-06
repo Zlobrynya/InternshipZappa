@@ -93,30 +93,6 @@ class FullDescriptionScreen : AppCompatActivity() {
 
                 override fun onError(e: Exception?) {}
             })
-        /*
-        val imageLoader: ImageLoader = ImageLoader.getInstance()
-        imageLoader.displayImage(dish.photo, dishPhoto, object: ImageLoadingListener {
-            override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                progressBar.visibility = View.GONE
-            }
-
-            override fun onLoadingStarted(imageUri: String?, view: View?) {
-                imageLoader.displayImage("drawable://"+ R.drawable.menu,dishPhoto)
-                progressBar.visibility = View.VISIBLE
-            }
-
-            override fun onLoadingCancelled(imageUri: String?, view: View?) {
-                progressBar.visibility = View.VISIBLE
-                imageLoader.displayImage("drawable://"+ R.drawable.menu,dishPhoto)
-            }
-
-            override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
-                progressBar.visibility = View.GONE
-                imageLoader.displayImage("drawable://"+ R.drawable.no_menu_duscr,dishPhoto)
-            }
-
-        })
-        */
     }
 
     fun listRecDish(str: String): ArrayList<DishDTO> {

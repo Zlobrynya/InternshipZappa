@@ -26,7 +26,7 @@ import java.util.zip.Inflater
 * */
 class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
 
-    override fun getItemCount() = values.size
+    override fun getItemCount() = values!!.size
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_rect_recommend_dish, parent, false)
@@ -62,54 +62,19 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             Picasso.get()
                 .load(dishDTO.photo)
                 .placeholder(R.drawable.menu)
-                .into(dishPhoto, object:com.squareup.picasso.Callback{
+                .into(topingPhoto, object:com.squareup.picasso.Callback{
                     override fun onSuccess() {
-                        progressBar.visibility = View.GONE
+                        progressBar2.visibility = View.GONE
                     }
 
                     override fun onError(e: Exception?) {}
                 })
-            /*
-            imageLoader.displayImage(dishDTO.photo, topingPhoto, object: ImageLoadingListener{
-                override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                    progressBar2.visibility = View.GONE
-                    topingPhoto.setImageBitmap(getRoundedCornerBitmap(loadedImage!!))
-                }
-
-                override fun onLoadingStarted(imageUri: String?, view: View?) {
-                    progressBar2.visibility = View.VISIBLE
-                }
-
-                override fun onLoadingCancelled(imageUri: String?, view: View?) {
-                    progressBar2.visibility = View.GONE
-                    imageLoader.displayImage("drawable://"+ R.drawable.no_toping, topingPhoto)
-                }
-
-                override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
-                    progressBar2.visibility = View.GONE
-                    imageLoader.displayImage("drawable://"+ R.drawable.no_toping, topingPhoto)
-                }
-            })
-            */
 
             /*btnToping.setOnClickListener(this@ViewHolder)
             btnPlus.setOnClickListener(this@ViewHolder)
             btnMinus.setOnClickListener(this@ViewHolder)*/
 
 
-            fun getView(position:Int, convertView:View, parent:ViewGroup) {
-                var v = super.getView(position, convertView, parent)
-
-                val img = v.getTag() as ImageView
-                if (img == null)
-                {
-                    img = v.findViewById(R.id.imageOrders) as ImageView
-                    v.setTag(img) // <<< THIS LINE !!!!
-                }
-                val url = (getItem(position) as Map).get(TAG_IMAGE)
-                Picasso.with(v.getContext()).load(url).into(img)
-                return v
-            }
         }
 
         override fun onClick(view: View) = with(itemView) {

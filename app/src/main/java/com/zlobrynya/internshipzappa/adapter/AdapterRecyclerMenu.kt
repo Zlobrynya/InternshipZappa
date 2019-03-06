@@ -14,8 +14,11 @@ import android.graphics.Bitmap
 import android.util.Log
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
+import com.squareup.picasso.Picasso
 import com.zlobrynya.internshipzappa.activity.FullDescriptionScreen
 import kotlinx.android.synthetic.main.item_menu.view.*
+import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
+import java.lang.Exception
 
 
 /*
@@ -58,29 +61,16 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
-            //загрузка изображений
-            val imageLoader: ImageLoader = ImageLoader.getInstance()
-            imageLoader.displayImage(dishDTO.photo, imageView, object: ImageLoadingListener {
-                override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                    progressBar!!.visibility = View.GONE
-                }
+            Picasso.get()
+                .load(dishDTO.photo)
+                .placeholder(R.drawable.menu)
+                .into(imageView, object:com.squareup.picasso.Callback{
+                    override fun onSuccess() {
+                        progressBar.visibility = View.GONE
+                    }
 
-                override fun onLoadingStarted(imageUri: String?, view: View?) {
-                    progressBar!!.visibility = View.VISIBLE
-                }
-
-                override fun onLoadingCancelled(imageUri: String?, view: View?) {
-                    progressBar.visibility = View.VISIBLE
-                    imageLoader.displayImage("drawable://"+ R.drawable.menu, imageView)
-                }
-
-                override fun onLoadingFailed(imageUri: String?, view: View?, failReason: FailReason?) {
-                    progressBar!!.visibility = View.GONE
-                    Log.e("errLoading", failReason.toString())
-                    imageLoader.displayImage("drawable://"+ R.drawable.no_in_menu, imageView)
-                }
-            })
-
+                    override fun onError(e: Exception?) {}
+                })
             if (!(dishDTO.desc_long.isEmpty() && dishDTO.price.toInt() == 0
                     && dishDTO.weight == "null"))
                 imageView!!.setOnClickListener(this@Holder)
