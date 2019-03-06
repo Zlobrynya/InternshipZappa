@@ -43,7 +43,7 @@ private constructor(context: Context) {
 
             try {
                 val httpCacheDir = File(context.cacheDir, "http")
-                val httpCacheSize = (2 * 2).toLong()
+                val httpCacheSize = (2 * 2).toLong() //Размеры чисто для теста. Реальные цифры 1024 * 1024 * 10 = 10MB
                 HttpResponseCache.install(httpCacheDir, httpCacheSize)
             } catch (e: IOException) {
                 Log.i(TAG, "HTTP response cache installation failed:$e")
