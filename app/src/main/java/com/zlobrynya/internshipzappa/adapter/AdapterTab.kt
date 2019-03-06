@@ -15,9 +15,7 @@ class AdapterTab(fm: FragmentManager?, val listDTO: List<CatDTO>, val pageCount:
 
     override fun getItem(position: Int): Fragment {
         if (position < listDTO.size)
-            Log.i("countercat",position.toString())
             for( CatDTO in listDTO ){
-                Log.i("countercat",CatDTO.name)
                 if (CatDTO.order == position + 1)
                     return CategoryFragment.newInstance(CatDTO.name)
             }

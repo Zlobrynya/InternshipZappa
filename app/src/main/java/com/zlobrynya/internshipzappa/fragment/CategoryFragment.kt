@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,7 @@ class CategoryFragment: Fragment() {
             getString(R.string.category_topping), getString(R.string.category_drinks) -> viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)
             else -> viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
         }
+        menuDb.closeDataBase()
         return v
     }
 
@@ -50,10 +52,22 @@ class CategoryFragment: Fragment() {
     }
 
     override fun onDestroy() {
+        Log.i("dbclose" , "dbclosed")
         menuDb.closeDataBase()
         super.onDestroy()
     }
 
+    override fun onResume() {
+
+        menuDb = MenuDB(v.context)
+        super.onResume()
+    }
+
+    override fun onStop() {
+
+        menuDb.closeDataBase()
+        super.onStop()
+    }
 
     companion object {
       fun newInstance(category: String): Fragment{

@@ -54,11 +54,10 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             nameDish?.text = dishDTO.name
             shortDescDish?.text = dishDTO.desc_short
             idDish = dishDTO.item_id
-
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
-            //загрузка изображений
+            /*//загрузка изображений
             val imageLoader: ImageLoader = ImageLoader.getInstance()
             imageLoader.displayImage(dishDTO.photo, imageView, object: ImageLoadingListener {
                 override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
@@ -79,7 +78,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
                     Log.e("errLoading", failReason.toString())
                     imageLoader.displayImage("drawable://"+ R.drawable.no_in_menu, imageView)
                 }
-            })
+            })*/
 
             if (!(dishDTO.desc_long.isEmpty() && dishDTO.price.toInt() == 0
                     && dishDTO.weight == "null"))
