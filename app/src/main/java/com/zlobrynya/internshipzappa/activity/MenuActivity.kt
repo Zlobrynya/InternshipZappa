@@ -60,22 +60,6 @@ class MenuActivity: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        if (!ImageLoader.getInstance().isInited){
-            val options = DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-                .build()
-
-            val config = ImageLoaderConfiguration.Builder(this)
-                .threadPoolSize(3)
-                .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 30).toLong()))
-                .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
-                .defaultDisplayImageOptions(options)
-                .build()
-            ImageLoader.getInstance().init(config)
-        }
     }
 }
 

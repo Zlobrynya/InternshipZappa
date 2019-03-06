@@ -61,10 +61,10 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
-            Picasso.get()
-                .load(dishDTO.photo)
-                .placeholder(R.drawable.menu)
-                .into(imageView, object:com.squareup.picasso.Callback{
+            PicassoCache.getPicassoInstance(getContext())
+                ?.load(dishDTO.photo)
+                ?.placeholder(R.drawable.menu)
+                ?.into(imageView, object:com.squareup.picasso.Callback{
                     override fun onSuccess() {
                         progressBar.visibility = View.GONE
                     }

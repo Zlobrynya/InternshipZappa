@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import android.graphics.*
 import android.graphics.Bitmap
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.PicassoProvider
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import kotlinx.android.synthetic.main.activity_full_description_screen.view.*
 import java.lang.Exception
@@ -34,17 +35,14 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
         return ViewHolder(itemView)
     }
 
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(values.get(position))
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
-        var imageLoader: ImageLoader
 
-        init {
-            imageLoader = ImageLoader.getInstance()
-        }
         // Установка данных в view
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishDTO) = with(itemView){
@@ -58,11 +56,12 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             }
 
             topingName.text = dishDTO.name
-
-            Picasso.get()
-                .load(dishDTO.photo)
-                .placeholder(R.drawable.menu)
-                .into(topingPhoto, object:com.squareup.picasso.Callback{
+            Picasso.get().setIndicatorsEnabled(true)
+            //Picasso.Builder(context)
+            PicassoCache.getPicassoInstance(getContext())
+                ?.load(dishDTO.photo)
+                ?.placeholder(R.drawable.menu)
+                ?.into(topingPhoto, object:com.squareup.picasso.Callback{
                     override fun onSuccess() {
                         progressBar2.visibility = View.GONE
                     }
