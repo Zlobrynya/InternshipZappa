@@ -35,6 +35,7 @@ class CategoryFragment: Fragment() {
             getString(R.string.category_topping), getString(R.string.category_drinks) -> viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)
             else -> viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
         }
+        menuDb.closeDataBase()
         return v
     }
 
