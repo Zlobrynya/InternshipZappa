@@ -28,36 +28,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     private lateinit var menuDb: MenuDB
 
-    companion object {
-
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val options = DisplayImageOptions.Builder()
-            .cacheInMemory(true)
-            .cacheOnDisk(true)
-            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-            .build()
-
-
-        val config = ImageLoaderConfiguration.Builder(this)
-            .threadPoolSize(3)
-            .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 30).toLong()))
-            .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
-            .defaultDisplayImageOptions(options)
-            .build()
-        ImageLoader.getInstance().init(config)
-        ImageLoader.getInstance().displayImage("drawable://"+ R.drawable.launch_screan,launch)
-
+        Log.i("check","it's fine")
         menuDb = MenuDB(this)
 
     }
 
     override fun onStart() {
+
         super.onStart()
         getData()
     }
@@ -78,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onError(e: Throwable) {
+                    Log.i("check","that's not fine")
                     val outE = e as OurException
                     val menu_db = menuDb.getCountRow()
                     Log.e("err", outE.codeRequest.toString())
@@ -109,6 +91,7 @@ class MainActivity : AppCompatActivity() {
                 .setPositiveButton(getString(R.string.repeat_connection)
                 ) { dialog, _ ->
                     run {
+                        Log.i("check","it's fine")
                         getData()
                         dialog.cancel()
                     }

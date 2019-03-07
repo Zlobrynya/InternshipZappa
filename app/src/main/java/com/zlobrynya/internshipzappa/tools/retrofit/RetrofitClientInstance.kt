@@ -1,6 +1,7 @@
 package com.zlobrynya.internshipzappa.tools.retrofit
 
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
+import com.zlobrynya.internshipzappa.tools.retrofit.dto.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
 import io.reactivex.Observable
 import okhttp3.ResponseBody
@@ -12,7 +13,7 @@ import retrofit2.http.Url
 
 class RetrofitClientInstance {
 
-    private val BASE_URL = "https://na-rogah-api.herokuapp.com"
+    private val BASE_URL = "https://na-rogah-api.herokuapp.com/api/v1"
     private var getRequest: GetRequest? = null
 
     init {
@@ -27,9 +28,9 @@ class RetrofitClientInstance {
 
     fun getAllDishes(url: String) : Observable<Response<DishList>> = getRequest!!.getAllDishes(url)
 
-    fun getLogServer() : Observable<Response<ResponseBody>> = getRequest!!.getLogServer()
+    fun getLogServer() : Observable<Response<CheckDTO>> = getRequest!!.getLogServer()
 
-    fun getDishCount() : Observable<Response<ResponseBody>> = getRequest!!.getDishCount()
+    //fun getDishCount() : Observable<Response<ResponseBody>> = getRequest!!.getDishCount()
 
     companion object {
         private var instance: RetrofitClientInstance? = null
