@@ -14,13 +14,13 @@ import retrofit2.http.Url
 
 interface GetRequest {
 
-    @GET("/categories")
+    @GET("categories")
     fun getAllCategories() : Observable<Response<CatList>>
 
-    @GET("/menu/{category_id}")
+    @GET("menu/{category_id}")
     fun getAllDishes(@Path(value = "category_id", encoded = true) catId: String) : Observable<Response<DishList>>
 
-    @GET("/check_update")
+    @GET("check_update")
     fun getLogServer() : Observable<Response<CheckDTO>>
 
     /*@GET("/get_dish_count")

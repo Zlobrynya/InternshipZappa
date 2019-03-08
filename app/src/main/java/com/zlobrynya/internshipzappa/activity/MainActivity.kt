@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onError(e: Throwable) {
                     Log.i("check","that's not fine")
+                    e.printStackTrace()
                     val outE = e as OurException
                     val menu_db = menuDb.getCountRow()
                     Log.e("err", outE.codeRequest.toString())
