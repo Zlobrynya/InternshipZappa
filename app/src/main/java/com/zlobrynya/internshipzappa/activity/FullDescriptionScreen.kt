@@ -16,6 +16,10 @@ import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import android.view.MenuItem
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
 import com.nostra13.universalimageloader.core.DisplayImageOptions
@@ -23,6 +27,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import java.lang.Exception
 import java.security.AccessController.getContext
 import java.util.*
@@ -83,15 +88,18 @@ class FullDescriptionScreen : AppCompatActivity() {
             dishOpisanie.text = dish.desc_long
         }
 
-        Picasso.get()
-            .load(dish.photo)
+        //Glide
+        Glide.with(this@FullDescriptionScreen)
+            .asBitmap()
+            .load("https://na-rogah-api.herokuapp.com/api/v1/photos/d780d09jpg") // Изображение для теста. Исходное значение dish.photo
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.menu)
-            .into(dishPhoto, object:com.squareup.picasso.Callback{
-                override fun onSuccess() {
+            .into(object: SimpleTarget<Bitmap>(){
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     progressBar.visibility = View.GONE
+                    dishPhoto.setImageBitmap(resource)
                 }
 
-                override fun onError(e: Exception?) {}
             })
     }
 
@@ -100,7 +108,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         if (!str.isEmpty()){
             val delimiter = ';'
             val parts = str.split(delimiter)
-            for (i in 0..parts.size-1){
+            for (i in 0 until parts.size){
                 if (!parts.get(i).contains("null"))
                     list.add(menuDB.getDescriptionDish(parts.get(i).toInt()))
             }

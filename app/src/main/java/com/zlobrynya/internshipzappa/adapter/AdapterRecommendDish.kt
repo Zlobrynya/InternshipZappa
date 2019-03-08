@@ -24,7 +24,11 @@ import kotlinx.android.synthetic.main.activity_full_description_screen.view.*
 import java.lang.Exception
 import java.util.zip.Inflater
 import android.provider.MediaStore.Images.Media.getBitmap
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.squareup.picasso.Callback
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 
 
 /*
@@ -61,49 +65,19 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             }
 
             topingName.text = dishDTO.name
-            Picasso.get().setIndicatorsEnabled(true)
-            Picasso.Builder(context)
-            /*
-            Picasso.get()
-                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/7b75577png")//фото для теста скругления
-                .placeholder(R.drawable.menu)
-                .into(topingPhoto, object:com.squareup.picasso.Callback{
 
-                    override fun onSuccess() {
+            //Glide
+            Glide.with(context)
+                .asBitmap()
+                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/7b75577png") // Изображение для теста. Исходное значение dishDTO.photo
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.no_toping)
+                .into(object:SimpleTarget<Bitmap>(){
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar2.visibility = View.GONE
-                        Picasso.get()
-                            .load("https://na-rogah-api.herokuapp.com/api/v1/photos/7b75577png")//фото для теста скругления
-                            .into(object:com.squareup.picasso.Target {
-
-                                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-
-                                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
-
-                                override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-                                    progressBar2.visibility = View.GONE
-                                    topingPhoto.setImageBitmap(getRoundedCornerBitmap(bitmap))
-                                }
-                            })
+                        topingPhoto.setImageBitmap(getRoundedCornerBitmap(resource))
                     }
 
-                    override fun onError(e: Exception?) {}
-
-                })
-            */
-            //Скругление краёв
-            Picasso.get()
-                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/7b75577png")//фото для теста скругления
-                .placeholder(R.drawable.menu)
-                .into(object:com.squareup.picasso.Target {
-
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-
-                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
-
-                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-                        progressBar2.visibility = View.GONE
-                        topingPhoto.setImageBitmap(getRoundedCornerBitmap(bitmap))
-                    }
                 })
 
             /*btnToping.setOnClickListener(this@ViewHolder)
