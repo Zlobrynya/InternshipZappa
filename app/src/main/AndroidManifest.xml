@@ -1,38 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.zlobrynya.internshipzappa">
 
-          xmlns:tools="http://schemas.android.com/tools" package="com.zlobrynya.internshipzappa">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
-    <uses-feature android:name="android.hardware.telephony"/>
+    <uses-feature android:name="android.hardware.telephony" />
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:largeHeap="true"
-            android:theme="@style/AppTheme" android:fullBackupContent="true">
-
-        <activity android:name=".activity.FullDescriptionScreen"
-                  android:theme="@style/AppTheme.NoBar"
-                  android:screenOrientation="locked"/>
-
-        <activity android:name=".activity.MainActivity"
-                  android:screenOrientation="locked"
-                  android:theme="@style/AppTheme.NoBar">
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.BookingActivity"
+            android:theme="@style/AppTheme.NoBar" />
+        <activity
+            android:name=".activity.FullDescriptionScreen"
+            android:screenOrientation="locked"
+            android:theme="@style/AppTheme.NoBar" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="locked"
+            android:theme="@style/AppTheme.NoBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activity.MenuActivity"
-                  android:screenOrientation="locked">
-        </activity>
+        <activity
+            android:name=".activity.MenuActivity"
+            android:screenOrientation="locked" />
     </application>
 
 </manifest>
