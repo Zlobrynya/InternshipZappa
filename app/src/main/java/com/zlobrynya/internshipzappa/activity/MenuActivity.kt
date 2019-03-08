@@ -43,7 +43,7 @@ class MenuActivity: AppCompatActivity() {
     private fun setCategories(categories: List<CatDTO>){
         Log.i("cat","$categories")
         viewPagerMenu.adapter = AdapterTab(supportFragmentManager, categories, categories.size)
-        viewPagerMenu.offscreenPageLimit = 3
+        viewPagerMenu.offscreenPageLimit = 7
         sliding_tabs.setupWithViewPager(viewPagerMenu)
 
 

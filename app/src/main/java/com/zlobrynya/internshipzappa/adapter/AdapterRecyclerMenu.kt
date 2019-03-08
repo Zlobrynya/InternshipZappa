@@ -69,7 +69,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             //Glide
             Glide.with(this)
                 .asBitmap()
-                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/d780d09jpg") // Изображение для теста. Исходное значение dishDTO.photo
+                .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.menu)
                 .into(object: SimpleTarget<Bitmap>(){

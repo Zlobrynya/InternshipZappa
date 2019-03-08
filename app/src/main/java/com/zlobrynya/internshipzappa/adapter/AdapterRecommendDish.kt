@@ -69,7 +69,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             //Glide
             Glide.with(context)
                 .asBitmap()
-                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/7b75577png") // Изображение для теста. Исходное значение dishDTO.photo
+                .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.no_toping)
                 .into(object:SimpleTarget<Bitmap>(){
