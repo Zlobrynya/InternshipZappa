@@ -2,6 +2,7 @@ package com.zlobrynya.internshipzappa.activity
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import android.view.MenuItem
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
@@ -42,7 +44,6 @@ class FullDescriptionScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_description_screen)
-        //ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(this@FullDescriptionScreen))
 
         val intent = intent
         val id = intent.getIntExtra(getString(R.string.key_id),0)
@@ -94,12 +95,18 @@ class FullDescriptionScreen : AppCompatActivity() {
             .load("https://na-rogah-api.herokuapp.com/api/v1/photos/d780d09jpg") // Изображение для теста. Исходное значение dish.photo
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.menu)
+            .error(R.drawable.menu)
             .into(object: SimpleTarget<Bitmap>(){
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     progressBar.visibility = View.GONE
                     dishPhoto.setImageBitmap(resource)
                 }
 
+                override fun onLoadFailed(errorDrawable: Drawable?) {
+                    super.onLoadFailed(errorDrawable)
+                    progressBar.visibility = View.GONE
+                    dishPhoto.setImageDrawable(errorDrawable)
+                }
             })
     }
 
@@ -136,21 +143,6 @@ class FullDescriptionScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        if (!ImageLoader.getInstance().isInited){
-            val options = DisplayImageOptions.Builder()
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-                .build()
-
-            val config = ImageLoaderConfiguration.Builder(this)
-                .threadPoolSize(3)
-                .diskCache(LimitedAgeDiskCache(cacheDir, null, HashCodeFileNameGenerator(), (60 * 30).toLong()))
-                .imageDownloader(BaseImageDownloader(this)) // connectTimeout (5 s), readTimeout (30 s)
-                .defaultDisplayImageOptions(options)
-                .build()
-            ImageLoader.getInstance().init(config)
-        }
     }
 }
+

@@ -6,29 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.nostra13.universalimageloader.core.ImageLoader
-import com.nostra13.universalimageloader.core.assist.FailReason
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import android.graphics.*
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.provider.MediaStore
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.PicassoProvider
-import kotlinx.android.synthetic.main.activity_full_description_screen.*
-import kotlinx.android.synthetic.main.activity_full_description_screen.view.*
-import java.lang.Exception
-import java.util.zip.Inflater
-import android.provider.MediaStore.Images.Media.getBitmap
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.squareup.picasso.Callback
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import kotlinx.android.synthetic.main.activity_full_description_screen.*
 
 
 /*
@@ -72,12 +60,18 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                 .load("https://na-rogah-api.herokuapp.com/api/v1/photos/7b75577png") // Изображение для теста. Исходное значение dishDTO.photo
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.no_toping)
+                .error(R.drawable.no_toping)
                 .into(object:SimpleTarget<Bitmap>(){
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar2.visibility = View.GONE
                         topingPhoto.setImageBitmap(getRoundedCornerBitmap(resource))
                     }
 
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        super.onLoadFailed(errorDrawable)
+                        progressBar2.visibility = View.GONE
+                        topingPhoto.setImageDrawable(errorDrawable)
+                    }
                 })
 
             /*btnToping.setOnClickListener(this@ViewHolder)

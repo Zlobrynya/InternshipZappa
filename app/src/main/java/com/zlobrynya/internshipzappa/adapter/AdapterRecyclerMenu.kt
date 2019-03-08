@@ -8,23 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import android.view.LayoutInflater
-import com.nostra13.universalimageloader.core.ImageLoader
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import android.graphics.Bitmap
-import android.util.Log
+import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.nostra13.universalimageloader.core.assist.FailReason
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
-import com.squareup.picasso.Picasso
 import com.zlobrynya.internshipzappa.activity.FullDescriptionScreen
-import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import kotlinx.android.synthetic.main.item_menu.view.*
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
-import java.lang.Exception
-
 
 /*
 * Адаптер для RecyclerMenu отображение каточек блюда активити MenuActivity
@@ -72,12 +65,17 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
                 .load("https://na-rogah-api.herokuapp.com/api/v1/photos/d780d09jpg") // Изображение для теста. Исходное значение dishDTO.photo
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.menu)
+                .error(R.drawable.menu)
                 .into(object: SimpleTarget<Bitmap>(){
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar.visibility = View.GONE
                         imageView.setImageBitmap(resource)
                     }
-
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        super.onLoadFailed(errorDrawable)
+                        progressBar.visibility = View.GONE
+                        imageView.setImageDrawable(errorDrawable)
+                    }
                 })
 
             if (!(dishDTO.desc_long.isEmpty() && dishDTO.price.toInt() == 0
