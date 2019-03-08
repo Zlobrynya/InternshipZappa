@@ -32,7 +32,7 @@ class CategoryFragment: Fragment() {
         val category = arguments?.getString(getString(R.string.key_category))
         val listDish = menuDb.getCategoryDish(category!!)
         when (category){
-            getString(R.string.category_topping), getString(R.string.category_drinks) -> viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)
+            getString(R.string.category_topping) -> viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)
             else -> viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
         }
         menuDb.closeDataBase()

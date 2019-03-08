@@ -35,6 +35,7 @@ class MenuDB(val context: Context) {
     private val WEIGHT = "weight"
     private val CATEGORY = "category"
     private val RECOMEND = "recommended"
+    private val DELIVERY = "delivery"
     private val NAME_TABLE = "menu"
     private var database: Database? = null
     private var sqLiteDatabase: SQLiteDatabase? = null
@@ -56,7 +57,8 @@ class MenuDB(val context: Context) {
                 DESC_SHORT + " text not null, " +
                 WEIGHT + " text not null, " +
                 CATEGORY + " text not null, " +
-                RECOMEND + " text not null);"
+                RECOMEND + " text not null, " +
+                DELIVERY + " text not null);"
         //создается таблица
         sqLiteDatabase!!.execSQL(DATABASE_CREATE_SCRIPT)
     }
@@ -90,7 +92,7 @@ class MenuDB(val context: Context) {
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.item_id + ",\"" +
                 dish.name + "\"," + dish.price + ",\"" + dish.photo + "\",\"" +
                 dish.desc_long + "\",\"" + dish.desc_short + "\",\"" + dish.weight + "\",\"" +
-                dish.class_name + "\",\"" + dish.recommended + "\");"
+                dish.class_name + "\",\"" + dish.recommended + "\",\"" + dish.delivery + "\");"
         sqLiteDatabase!!.execSQL(query)
     }
 
@@ -138,6 +140,7 @@ class MenuDB(val context: Context) {
         dish.class_name = cursor.getString(cursor.getColumnIndex(CATEGORY))
         dish.price = cursor.getDouble(cursor.getColumnIndex(PRICE))
         dish.weight = cursor.getString(cursor.getColumnIndex(WEIGHT))
+        dish.delivery = cursor.getString(cursor.getColumnIndex(DELIVERY))
         return dish
     }
 

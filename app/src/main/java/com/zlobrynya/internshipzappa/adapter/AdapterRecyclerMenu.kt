@@ -57,7 +57,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             nameDish?.text = dishDTO.name
             shortDescDish?.text = dishDTO.desc_short
             idDish = dishDTO.item_id
-
+            Log.i("delivery", dishDTO.delivery)
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 

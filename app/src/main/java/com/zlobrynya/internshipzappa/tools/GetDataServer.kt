@@ -86,14 +86,16 @@ class GetDataServer(val context: Context) {
         val savedLog = context.getString(R.string.key_shared_log)
         val savedText = sharedPreferences.getInt(savedLog, 0)
 
-        Log.i("Log",log + " " + savedText)
+        Log.i("Log",log.hashCode().toString() + " " + savedText)
 
         //если проходит проверку посылаем весь список
         if (log.hashCode() == savedText) {
             val countLocBD = menuDb.getCountRow()
+            Log.i("Log", countLocBD.toString() + " " + count.toString())
             if (countLocBD == count){
                 closeBD()
             }else{
+                Log.i("Log","db is updating")
                 clearBD()
                 getCategory(emitter)
             }
