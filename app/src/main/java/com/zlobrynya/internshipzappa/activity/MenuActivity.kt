@@ -57,5 +57,9 @@ class MenuActivity: AppCompatActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
 }
 

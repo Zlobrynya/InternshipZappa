@@ -14,11 +14,21 @@ import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import android.graphics.*
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.provider.MediaStore
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.PicassoProvider
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import kotlinx.android.synthetic.main.activity_full_description_screen.view.*
 import java.lang.Exception
 import java.util.zip.Inflater
+import android.provider.MediaStore.Images.Media.getBitmap
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.squareup.picasso.Callback
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 
 
 /*
@@ -34,17 +44,14 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
         return ViewHolder(itemView)
     }
 
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(values.get(position))
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
-        var imageLoader: ImageLoader
 
-        init {
-            imageLoader = ImageLoader.getInstance()
-        }
         // Установка данных в view
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishDTO) = with(itemView){
@@ -59,15 +66,18 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
 
             topingName.text = dishDTO.name
 
-            Picasso.get()
-                .load(dishDTO.photo)
-                .placeholder(R.drawable.menu)
-                .into(topingPhoto, object:com.squareup.picasso.Callback{
-                    override fun onSuccess() {
+            //Glide
+            Glide.with(context)
+                .asBitmap()
+                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/7b75577png") // Изображение для теста. Исходное значение dishDTO.photo
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.no_toping)
+                .into(object:SimpleTarget<Bitmap>(){
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar2.visibility = View.GONE
+                        topingPhoto.setImageBitmap(getRoundedCornerBitmap(resource))
                     }
 
-                    override fun onError(e: Exception?) {}
                 })
 
             /*btnToping.setOnClickListener(this@ViewHolder)

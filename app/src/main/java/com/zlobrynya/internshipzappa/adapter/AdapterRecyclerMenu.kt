@@ -12,10 +12,15 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import android.graphics.Bitmap
 import android.util.Log
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import com.squareup.picasso.Picasso
 import com.zlobrynya.internshipzappa.activity.FullDescriptionScreen
+import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import kotlinx.android.synthetic.main.item_menu.view.*
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import java.lang.Exception
@@ -61,16 +66,20 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
-            Picasso.get()
-                .load(dishDTO.photo)
+            //Glide
+            Glide.with(this)
+                .asBitmap()
+                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/d780d09jpg") // Изображение для теста. Исходное значение dishDTO.photo
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.menu)
-                .into(imageView, object:com.squareup.picasso.Callback{
-                    override fun onSuccess() {
+                .into(object: SimpleTarget<Bitmap>(){
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar.visibility = View.GONE
+                        imageView.setImageBitmap(resource)
                     }
 
-                    override fun onError(e: Exception?) {}
                 })
+
             if (!(dishDTO.desc_long.isEmpty() && dishDTO.price.toInt() == 0
                     && dishDTO.weight == "null"))
                 imageView!!.setOnClickListener(this@Holder)
