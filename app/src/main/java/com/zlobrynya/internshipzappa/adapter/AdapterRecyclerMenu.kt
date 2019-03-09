@@ -18,7 +18,6 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.nostra13.universalimageloader.core.assist.FailReason
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
-import com.squareup.picasso.Picasso
 import com.zlobrynya.internshipzappa.activity.FullDescriptionScreen
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import kotlinx.android.synthetic.main.item_menu.view.*

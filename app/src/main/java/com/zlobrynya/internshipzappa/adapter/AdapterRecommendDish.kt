@@ -17,8 +17,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.PicassoProvider
+
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import kotlinx.android.synthetic.main.activity_full_description_screen.view.*
 import java.lang.Exception
@@ -26,7 +25,7 @@ import java.util.zip.Inflater
 import android.provider.MediaStore.Images.Media.getBitmap
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.squareup.picasso.Callback
+
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 
