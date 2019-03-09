@@ -26,7 +26,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import java.lang.Exception
 import java.security.AccessController.getContext

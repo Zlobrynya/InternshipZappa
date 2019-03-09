@@ -94,6 +94,7 @@ class GetDataServer(val context: Context) {
             Log.i("Log", countLocBD.toString() + " " + count.toString())
             if (countLocBD == count){
                 closeBD()
+                emitter.onNext(true)
             }else{
                 Log.i("Log","db is updating")
                 clearBD()
