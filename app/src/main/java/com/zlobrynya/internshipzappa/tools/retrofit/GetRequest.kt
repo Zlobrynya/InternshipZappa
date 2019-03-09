@@ -1,6 +1,7 @@
 package com.zlobrynya.internshipzappa.tools.retrofit
 
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
+import com.zlobrynya.internshipzappa.tools.retrofit.dto.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
 import io.reactivex.Observable
 import okhttp3.ResponseBody
@@ -13,16 +14,16 @@ import retrofit2.http.Url
 
 interface GetRequest {
 
-    @GET("/get_classes")
+    @GET("categories")
     fun getAllCategories() : Observable<Response<CatList>>
 
-    @GET("/get_menu/{category_id}")
+    @GET("menu/{category_id}")
     fun getAllDishes(@Path(value = "category_id", encoded = true) catId: String) : Observable<Response<DishList>>
 
-    @GET("/check_update")
-    fun getLogServer() : Observable<Response<ResponseBody>>
+    @GET("check_update")
+    fun getLogServer() : Observable<Response<CheckDTO>>
 
-    @GET("/get_dish_count")
-    fun getDishCount() : Observable<Response<ResponseBody>>
+    /*@GET("/get_dish_count")
+    fun getDishCount() : Observable<Response<ResponseBody>>*/
 
 }

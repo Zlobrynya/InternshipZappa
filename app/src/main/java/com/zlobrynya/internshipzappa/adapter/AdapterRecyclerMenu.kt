@@ -11,11 +11,15 @@ import android.view.LayoutInflater
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.zlobrynya.internshipzappa.activity.FullDescriptionScreen
+import kotlinx.android.synthetic.main.item_menu.view.*
+import com.nostra13.universalimageloader.core.assist.FailReason
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
 import kotlinx.android.synthetic.main.item_menu.view.*
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 
@@ -55,14 +59,14 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             nameDish?.text = dishDTO.name
             shortDescDish?.text = dishDTO.desc_short
             idDish = dishDTO.item_id
-
+            Log.i("delivery", dishDTO.delivery)
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
             //Glide
             Glide.with(this)
                 .asBitmap()
-                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/d780d09jpg") // Изображение для теста. Исходное значение dishDTO.photo
+                .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.menu)
                 .error(R.drawable.menu)

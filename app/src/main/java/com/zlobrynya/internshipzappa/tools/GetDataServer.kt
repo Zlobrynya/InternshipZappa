@@ -9,6 +9,7 @@ import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
+import com.zlobrynya.internshipzappa.tools.retrofit.dto.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -37,25 +38,31 @@ class GetDataServer(val context: Context) {
     fun getData(): Observable<Boolean> {
         return Observable.create(object : ObservableOnSubscribe<Boolean> {
             override fun subscribe(emitter: ObservableEmitter<Boolean>) {
+                Log.i("check","it's fine1")
                 RetrofitClientInstance.getInstance()
                     .getLogServer()
                     .subscribeOn(Schedulers.io())
                     ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe(object : Observer<Response<ResponseBody>> {
+                    ?.subscribe(object : Observer<Response<CheckDTO>> {
                         override fun onComplete() {}
-                        override fun onSubscribe(d: Disposable) {}
-
-                        override fun onNext(t: Response<ResponseBody>) {
+                        override fun onSubscribe(d: Disposable) {
+                            }
+                        override fun onNext(t: Response<CheckDTO>) {
+                            Log.i("check",t.body()!!.toString())
                             if (t.code() == 200) {
-                                checkPass(t.body()!!.string(), emitter)
+                                //
+                                Log.i("check",t.body()!!.date)
+                                checkPass(t.body()!!.date, emitter, t.body()!!.count)
                             } else {
                                 //посылаем Error с кодом ошибки сервера
+                                Log.e("err", t.code().toString())
                                 closeBD()
                                 emitter.onError(OurException(t.code()))
                             }
                         }
 
                         override fun onError(e: Throwable) {
+                            Log.i("check","that's not fineIn")
                             println(e.toString())
                             closeBD()
                             emitter.onError(OurException())
@@ -74,27 +81,37 @@ class GetDataServer(val context: Context) {
     }
 
 
-    private fun checkPass(log: String, emitter: ObservableEmitter<Boolean>) {
+    private fun checkPass(log: String, emitter: ObservableEmitter<Boolean>, count: Int) {
         val sharedPreferences = context.getSharedPreferences(context.getString(R.string.key_shared_name), Context.MODE_PRIVATE)
         val savedLog = context.getString(R.string.key_shared_log)
         val savedText = sharedPreferences.getInt(savedLog, 0)
 
-        Log.i("Log",log + " " + savedText)
+        Log.i("Log",log.hashCode().toString() + " " + savedText)
 
         //если проходит проверку посылаем весь список
         if (log.hashCode() == savedText) {
-            RetrofitClientInstance.getInstance()
-                .getDishCount()
+            val countLocBD = menuDb.getCountRow()
+            Log.i("Log", countLocBD.toString() + " " + count.toString())
+            if (countLocBD == count){
+                closeBD()
+                emitter.onNext(true)
+            }else{
+                Log.i("Log","db is updating")
+                clearBD()
+                getCategory(emitter)
+            }
+            /*RetrofitClientInstance.getInstance()
+                .getLogServer()
                 .subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(object : Observer<Response<ResponseBody>> {
+                ?.subscribe(object : Observer<Response<CheckDTO>> {
                     override fun onComplete() {}
                     override fun onSubscribe(d: Disposable) {}
 
-                    override fun onNext(t: Response<ResponseBody>) {
+                    override fun onNext(t: Response<CheckDTO>) {
                         try {
                             if (t.code() == 200) {
-                                val countSerBD = t.body()!!.string().toInt()
+                                val countSerBD = t.body()!!.count
                                 val countLocBD = menuDb.getCountRow()
                                 if (countLocBD == countSerBD){
                                     closeBD()
@@ -118,7 +135,7 @@ class GetDataServer(val context: Context) {
                         emitter.onError(OurException())
                     }
 
-                })
+                })*/
         } else {
             val editor = sharedPreferences.edit()
             editor.putInt(savedLog,log.hashCode())

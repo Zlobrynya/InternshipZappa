@@ -12,8 +12,16 @@ import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import android.graphics.*
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import android.net.Uri
+import android.provider.MediaStore
+import kotlinx.android.synthetic.main.activity_full_description_screen.*
+import kotlinx.android.synthetic.main.activity_full_description_screen.view.*
+import java.lang.Exception
+import java.util.zip.Inflater
+import android.provider.MediaStore.Images.Media.getBitmap
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
@@ -57,7 +65,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             //Glide
             Glide.with(context)
                 .asBitmap()
-                .load("https://na-rogah-api.herokuapp.com/api/v1/photos/7b75577png") // Изображение для теста. Исходное значение dishDTO.photo
+                .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.no_toping)
                 .error(R.drawable.no_toping)

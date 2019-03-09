@@ -28,7 +28,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import java.lang.Exception
 import java.security.AccessController.getContext
@@ -92,7 +91,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         //Glide
         Glide.with(this@FullDescriptionScreen)
             .asBitmap()
-            .load("https://na-rogah-api.herokuapp.com/api/v1/photos/d780d09jpg") // Изображение для теста. Исходное значение dish.photo
+            .load(dish.photo) // Изображение для теста. Исходное значение dish.photo
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.menu)
             .error(R.drawable.menu)
