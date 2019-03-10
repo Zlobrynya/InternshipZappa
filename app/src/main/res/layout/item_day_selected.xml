@@ -4,7 +4,7 @@
     android:layout_width="56dp"
     android:layout_height="56dp"
     android:layout_marginEnd="9dp"
-    android:background="@drawable/item_day_shape"
+    android:background="@drawable/item_day_selected_shape"
     android:orientation="vertical">
 
     <TextView
@@ -31,4 +31,3 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </LinearLayout>
-

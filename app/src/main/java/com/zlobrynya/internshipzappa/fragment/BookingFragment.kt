@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterDays
 import kotlinx.android.synthetic.main.fragment_booking.view.*
@@ -15,7 +16,7 @@ import java.util.*
 /**
  * Фрагмент брони(выбор даты и времени)
  */
-class BookingFragment : Fragment() {
+class BookingFragment : Fragment(), AdapterDays.OnNoteListener {
 
     /**
      * Список дней для отображения
@@ -33,7 +34,7 @@ class BookingFragment : Fragment() {
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         view.days_recycler.layoutManager = layoutManager
         initRecycleView()
-        view.days_recycler.adapter = AdapterDays(schedule)
+        view.days_recycler.adapter = AdapterDays(schedule, this)
         return view
     }
 
@@ -43,5 +44,14 @@ class BookingFragment : Fragment() {
             calendar.add(Calendar.DATE, DAY_OFFSET)
             schedule.add(calendar.time)
         }
+    }
+
+    /**
+     * Реализация интерфейса для обработки нажатий на элементы ресайклер вью
+     * @param position Позиция элемента
+     */
+    override fun onNoteClick(position: Int) {
+        schedule[position]
+        //Toast.makeText(context, "Нажал", Toast.LENGTH_SHORT).show()
     }
 }
