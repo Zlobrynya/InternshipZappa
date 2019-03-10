@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.AdapterDays
 import kotlinx.android.synthetic.main.fragment_booking.view.*
@@ -38,9 +37,14 @@ class BookingFragment : Fragment(), AdapterDays.OnNoteListener {
         return view
     }
 
+    /**
+     * Набивает данными список для ресайклер вью
+     */
     private fun initRecycleView() {
         val calendar: Calendar = Calendar.getInstance()
-        for (i in 0..7) {
+        schedule.add(calendar.time) // Вне цикла добавим один элемент (т.е. текущий день) в список
+        for (i in 0..5) {
+            // В цикле добавим еще нужное число дней, увеличивая дату на 1 день (DAY_OFFSET)
             calendar.add(Calendar.DATE, DAY_OFFSET)
             schedule.add(calendar.time)
         }
@@ -52,6 +56,5 @@ class BookingFragment : Fragment(), AdapterDays.OnNoteListener {
      */
     override fun onNoteClick(position: Int) {
         schedule[position]
-        //Toast.makeText(context, "Нажал", Toast.LENGTH_SHORT).show()
     }
 }
