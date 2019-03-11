@@ -17,13 +17,18 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
     </style>
 
-    <style name="Theme.Toolbar" parent="android:Theme.Material" tools:targetApi="lollipop">
-    </style>
+    <style name="Theme.Toolbar" parent="android:Theme.Material" tools:targetApi="lollipop"></style>
 
     <style name="textDish">
-        <item name="android:textSize"> 20sp </item>
-        <item name="android:textColor"> #000000 </item>
-        <item name="android:background"> #CCFFFFFF </item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:background">#CCFFFFFF</item>
+    </style>
+
+    <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
 </resources>
