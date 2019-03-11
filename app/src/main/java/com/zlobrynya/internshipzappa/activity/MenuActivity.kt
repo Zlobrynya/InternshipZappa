@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
 import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
+import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
 import com.zlobrynya.internshipzappa.fragment.MenuFragment
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
@@ -25,13 +26,15 @@ import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 class MenuActivity: AppCompatActivity() {
 
     private val menuFragment: Fragment = MenuFragment()
+    private val kontaktiFragment = KontaktiFragment()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var selectedFragment: Fragment? = null
         when (item.itemId) {
             // Профиль
             R.id.navigation_profile -> {
-                toolbar.title = "Профиль"
+                toolbar.title = "Контакты"
+                selectedFragment = kontaktiFragment
             }
             // Меню
             R.id.navigation_menu -> {

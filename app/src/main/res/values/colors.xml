@@ -7,6 +7,7 @@
     <color name="color_scrollbar">#AAFF1C2A</color>
     <color name="text_tab_bar_select">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="grey">#99FFFFFF</color>
     <color name="old_lace">#FDF5E6</color>
     <color name="text_color">#000000</color>
     <color name="text_tab_bar_not_select">#808080</color>

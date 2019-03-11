@@ -44,4 +44,12 @@
     <!-- доп строки адаптер топингов/рекоменд -->
     <string name="max_order">15</string>
     <string name="topping_delete">Топинг убран из заказа</string>
+
+    <!-- строки фрагмента с контактной информацией -->
+    <string name="hAdress">Адресс</string>
+    <string name="adress">Первомайский пр-т, 2</string>
+    <string name="hContacts">Контакты</string>
+    <string name="phone">тел: +7 (8142) 63-23-89</string>
+    <string name="instagram">Instagram: narogah.ptz</string>
+    <string name="vk">VK: https://vk.com/narogah_ptz</string>
 </resources>
