@@ -28,16 +28,12 @@ class BookingActivity : AppCompatActivity() {
             R.id.navigation_menu -> {
                 //Какой то код
             }
-            // Профиль
-            R.id.navigation_profile -> {
-                //Какой то код
-            }
             // Бронирование
             R.id.navigation_booking -> {
                 selectedFragment = bookingFragment
             }
-            // Корзина
-            R.id.navigation_basket -> {
+            // Контакты
+            R.id.navigation_contact -> {
                 //Какой то код
             }
         }

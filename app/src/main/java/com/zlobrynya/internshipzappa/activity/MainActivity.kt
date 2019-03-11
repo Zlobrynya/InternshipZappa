@@ -7,14 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import android.view.Menu
-import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
-import com.nostra13.universalimageloader.core.DisplayImageOptions
-import com.nostra13.universalimageloader.core.ImageLoader
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
-import com.nostra13.universalimageloader.core.assist.ImageScaleType
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.GetDataServer
 import com.zlobrynya.internshipzappa.tools.OurException
@@ -23,7 +15,6 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {

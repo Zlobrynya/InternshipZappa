@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -8,17 +9,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.TableSelectActivity
 import com.zlobrynya.internshipzappa.adapter.AdapterBookingButtons
 import com.zlobrynya.internshipzappa.adapter.AdapterDays
 import kotlinx.android.synthetic.main.fragment_booking.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
+/**
+ * Число дней, добавляемых к дате в календаре
+ */
+const val DAY_OFFSET: Int = 1
 
 /**
  * Фрагмент брони(выбор даты и времени)
  */
-class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingButtons.OnDurationListener {
+class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingButtons.OnDurationListener,
+    View.OnClickListener {
+
+    /**
+     * Реализация onClick
+     * @param v Нажатый элемент
+     */
+    override fun onClick(v: View) {
+        // Кнопка выбрать стол
+        when (v.id) {
+            R.id.book_button -> {
+                val intent = Intent(activity, TableSelectActivity::class.java)
+                startActivity(intent)
+            }
+        }
+    }
 
     /**
      * Список дней для отображения
@@ -30,26 +51,15 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private val booking: ArrayList<String> = ArrayList()
 
-    /**
-     * Число дней, добавляемых к дате в календаре
-     */
-    val DAY_OFFSET: Int = 1
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_booking, container, false)
-
-        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        val layoutManager2 = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-
-        view.days_recycler.layoutManager = layoutManager
-        view.book_duration_recycler.layoutManager = layoutManager2
+        var view = inflater.inflate(R.layout.fragment_booking, container, false)
 
         initCalendar()
-        initBookingDurationButtons()
+        initBookingDurationList()
+        view = initCalendarRecycler(view)
+        view = initDurationRecycler(view)
 
-        view.days_recycler.adapter = AdapterDays(schedule, this)
-        view.book_duration_recycler.adapter = AdapterBookingButtons(booking, this)
+        view.book_button.setOnClickListener(this) // Установка обработчика для кнопки выбрать столк
 
         return view
     }
@@ -70,12 +80,32 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
     /**
      * Набивает данными список с вариантами продоллжительности брони
      */
-    private fun initBookingDurationButtons() {
+    private fun initBookingDurationList() {
         booking.add("2 ч")
         booking.add("2 ч\n30мин")
         booking.add("3 ч")
         booking.add("3 ч\n30мин")
         booking.add("4 ч")
+    }
+
+    /**
+     * Настраивает ресайклер для календаря
+     */
+    private fun initCalendarRecycler(view: View): View {
+        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        view.days_recycler.layoutManager = layoutManager
+        view.days_recycler.adapter = AdapterDays(schedule, this)
+        return view
+    }
+
+    /**
+     * Настраивает ресайклер для вариантов длительности бронирования
+     */
+    private fun initDurationRecycler(view: View): View {
+        val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        view.book_duration_recycler.layoutManager = layoutManager
+        view.book_duration_recycler.adapter = AdapterBookingButtons(booking, this)
+        return view
     }
 
     /**
