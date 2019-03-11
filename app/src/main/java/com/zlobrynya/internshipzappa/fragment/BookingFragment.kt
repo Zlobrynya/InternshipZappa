@@ -51,17 +51,22 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private val booking: ArrayList<String> = ArrayList()
 
+    /**
+     * Вьюшка для фрагмента
+     */
+    private lateinit var bookingView: View
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = inflater.inflate(R.layout.fragment_booking, container, false)
+        bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
 
         initCalendar()
         initBookingDurationList()
-        view = initCalendarRecycler(view)
-        view = initDurationRecycler(view)
+        initCalendarRecycler()
+        initDurationRecycler()
 
-        view.book_button.setOnClickListener(this) // Установка обработчика для кнопки выбрать столк
+        bookingView.book_button.setOnClickListener(this) // Установка обработчика для кнопки выбрать столк
 
-        return view
+        return bookingView
     }
 
     /**
@@ -91,21 +96,19 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
     /**
      * Настраивает ресайклер для календаря
      */
-    private fun initCalendarRecycler(view: View): View {
+    private fun initCalendarRecycler() {
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        view.days_recycler.layoutManager = layoutManager
-        view.days_recycler.adapter = AdapterDays(schedule, this)
-        return view
+        bookingView.days_recycler.layoutManager = layoutManager
+        bookingView.days_recycler.adapter = AdapterDays(schedule, this)
     }
 
     /**
      * Настраивает ресайклер для вариантов длительности бронирования
      */
-    private fun initDurationRecycler(view: View): View {
+    private fun initDurationRecycler() {
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        view.book_duration_recycler.layoutManager = layoutManager
-        view.book_duration_recycler.adapter = AdapterBookingButtons(booking, this)
-        return view
+        bookingView.book_duration_recycler.layoutManager = layoutManager
+        bookingView.book_duration_recycler.adapter = AdapterBookingButtons(booking, this)
     }
 
     /**
