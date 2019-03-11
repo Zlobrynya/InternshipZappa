@@ -54,6 +54,12 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private val calendar: Calendar = Calendar.getInstance()
 
+    /**
+     * Выбранная длительность брони (позиция элемента в ресайклере)
+     */
+    private var selectedDuration: Int = 0
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
 
@@ -78,14 +84,54 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             R.id.book_button -> {
                 if (::bookTimeAndDate.isInitialized) { // Проверим, выбрал ли пользователь время
                     bookingView.book_time_select_label.error = null // Скроем варнинг
-                    val intent = Intent(activity, TableSelectActivity::class.java)
-                    startActivity(intent)
+                    openTableList()
                 } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
             }
             R.id.book_time_select -> {
                 setTime()
             }
         }
+    }
+
+    /**
+     * Открывает список доступных столов
+     */
+    private fun openTableList() {
+        val intent = Intent(activity, TableSelectActivity::class.java)
+        intent.putExtra("book_time_begin", calendar.timeInMillis) // В экстра положим время начала брони
+        when (selectedDuration) { // И время конца
+            // 2 часа
+            0 -> {
+                val date = Date(calendar.timeInMillis + 2 * 60 * 60 * 1000)
+                intent.putExtra("book_time_end", date.time)
+                Log.d("TOPKEK", "${calendar.time}, $date")
+            }
+            // 2 часа 30 минут
+            1 -> {
+                val date = Date(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                intent.putExtra("book_time_end", date.time)
+                Log.d("TOPKEK", "${calendar.time}, $date")
+            }
+            // 3 часа
+            2 -> {
+                val date = Date(calendar.timeInMillis + 3 * 60 * 60 * 1000)
+                intent.putExtra("book_time_end", date.time)
+                Log.d("TOPKEK", "${calendar.time}, $date")
+            }
+            // 3 часа 30 минут
+            3 -> {
+                val date = Date(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                intent.putExtra("book_time_end", date.time)
+                Log.d("TOPKEK", "${calendar.time}, $date")
+            }
+            // 4 часа
+            4 -> {
+                val date = Date(calendar.timeInMillis + 4 * 60 * 60 * 1000)
+                intent.putExtra("book_time_end", date.time)
+                Log.d("TOPKEK", "${calendar.time}, $date")
+            }
+        }
+        startActivity(intent)
     }
 
     /**
@@ -164,7 +210,15 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             calendar.timeInMillis,
             DateUtils.FORMAT_SHOW_TIME
         )
-        bookTimeAndDate = calendar.time // Запишем выбранное время в переменную
+        bookTimeAndDate = calendar.time // Запишем выбранное время
+        Log.d(
+            "TOPKEK",
+            DateUtils.formatDateTime(
+                activity,
+                calendar.timeInMillis,
+                DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+            )
+        )
     }
 
     /**
@@ -172,8 +226,15 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * @param position Позиция элемента
      */
     override fun onDateClick(position: Int) {
-        // Может понадобится
-        Log.d("TOPKEK", schedule[position].toString())
+        calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
+        Log.d(
+            "TOPKEK",
+            DateUtils.formatDateTime(
+                activity,
+                calendar.timeInMillis,
+                DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+            )
+        )
     }
 
     /**
@@ -181,7 +242,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * @param position Позиция элемента
      */
     override fun onDurationClick(position: Int) {
-        // Может понадобится
-        Log.d("TOPKEK", booking[position])
+        selectedDuration = position
     }
 }

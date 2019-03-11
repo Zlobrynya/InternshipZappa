@@ -84,7 +84,7 @@ class AdapterBookingButtons(private val values: ArrayList<String>, onDurationLis
     }
 
     /**
-     * Интерфейс для обработки нажатий
+     * Интерфейс для обработки нажатий вне адаптера
      */
     interface OnDurationListener {
         /**

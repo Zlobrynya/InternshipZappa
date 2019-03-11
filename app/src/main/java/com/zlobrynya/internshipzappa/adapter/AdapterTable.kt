@@ -14,7 +14,10 @@ import kotlinx.android.synthetic.main.item_table.view.*
  * Адаптер для вывода столиков для брони
  * (Возможно изменится после выхода сервера)
  */
-class AdapterTable(private val values: ArrayList<Table>) : RecyclerView.Adapter<AdapterTable.ViewHolder>() {
+class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTableListener) :
+    RecyclerView.Adapter<AdapterTable.ViewHolder>() {
+
+    private val mOnTableListener = onTableListener
 
     /**
      * Устанавливает в ViewHolder нужные данные
@@ -25,7 +28,8 @@ class AdapterTable(private val values: ArrayList<Table>) : RecyclerView.Adapter<
         holder.seatType.text = values[position].seatType
         holder.seatCount.text = values[position].seatCount
         holder.choseButton.setOnClickListener {
-            Log.d("TOPKEK", "Выбран столик с айди $position") //Тут должен быть переход дальше или что-то такое
+            Log.d("TOPKEK", "Выбран столик с айди $position")
+            holder.onTableListener.onTableClick(position, true)
         }
     }
 
@@ -34,7 +38,7 @@ class AdapterTable(private val values: ArrayList<Table>) : RecyclerView.Adapter<
      */
     override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): AdapterTable.ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_table, parent, false)
-        return ViewHolder(itemView)
+        return ViewHolder(itemView, mOnTableListener)
     }
 
     /**
@@ -47,9 +51,33 @@ class AdapterTable(private val values: ArrayList<Table>) : RecyclerView.Adapter<
     /**
      * ViewHolder для информации о столике
      */
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View, onTableListener: OnTableListener) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
+
+        override fun onClick(v: View?) {
+            onTableListener.onTableClick(adapterPosition, false)
+        }
+
         val seatType: TextView = itemView.seat_type
         val seatCount: TextView = itemView.seat_count
         val choseButton: Button = itemView.chose_button
+        val onTableListener: OnTableListener
+
+        init {
+            itemView.setOnClickListener(this)
+            this.onTableListener = onTableListener
+        }
+    }
+
+    /**
+     * Интерфейс для обработки нажатий вне адаптера
+     */
+    interface OnTableListener {
+        /**
+         * Абстрактная функция для обработки нажатий
+         * @param position Позиция нажатого элемента
+         * @param isButtonClick Произошло ли нажатие на кнопку "выбрать"
+         */
+        fun onTableClick(position: Int, isButtonClick: Boolean)
     }
 }

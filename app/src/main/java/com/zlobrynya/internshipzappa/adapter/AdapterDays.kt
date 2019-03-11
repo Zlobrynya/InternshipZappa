@@ -105,7 +105,7 @@ class AdapterDays(private val values: ArrayList<Date>, onDateListener: OnDateLis
     }
 
     /**
-     * Интерфейс для обработки нажатий
+     * Интерфейс для обработки нажатий вне адаптера
      */
     interface OnDateListener {
         /**
