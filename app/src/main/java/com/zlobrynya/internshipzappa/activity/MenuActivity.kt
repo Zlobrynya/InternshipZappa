@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
 import com.zlobrynya.internshipzappa.fragment.MenuFragment
+import com.zlobrynya.internshipzappa.fragment.ProfileFragment
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 
@@ -26,25 +27,33 @@ import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 class MenuActivity: AppCompatActivity() {
 
     private val menuFragment: Fragment = MenuFragment()
+
     private val kontaktiFragment = KontaktiFragment()
+
+    //private val profileFragment: Fragment = ProfileFragment()
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var selectedFragment: Fragment? = null
         when (item.itemId) {
+
             // Профиль
-            R.id.navigation_profile -> {
+            R.id.navigation_contacts -> {
                 toolbar.title = "Контакты"
                 selectedFragment = kontaktiFragment
             }
+
             // Меню
             R.id.navigation_menu -> {
-                toolbar.title = "Меню"
+                supportActionBar!!.title = "Меню"
                 selectedFragment = menuFragment
             }
+
             // Бронирование
             R.id.navigation_booking -> {
-                toolbar.title = "Бронирование"
+                supportActionBar!!.title = "Бронь"
             }
+
         }
         // Загружаем фрагмент
         if (selectedFragment != null) {
