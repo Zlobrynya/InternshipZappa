@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.fragment
+package com.zlobrynya.internshipzappa.fragment.menu
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerMenu
-import com.zlobrynya.internshipzappa.adapter.AdapterRecyclerViewTopping
+import com.zlobrynya.internshipzappa.adapter.menu.AdapterRecyclerMenu
+import com.zlobrynya.internshipzappa.adapter.menu.AdapterRecyclerViewTopping
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import kotlinx.android.synthetic.main.fragment_category_menu.*
 
@@ -32,7 +32,8 @@ class CategoryFragment: Fragment() {
         val category = arguments?.getString(getString(R.string.key_category))
         val listDish = menuDb.getCategoryDish(category!!)
         when (category){
-            getString(R.string.category_topping) -> viewAdapter = AdapterRecyclerViewTopping(listDish, v.context!!)
+            getString(R.string.category_topping) -> viewAdapter =
+                AdapterRecyclerViewTopping(listDish, v.context!!)
             else -> viewAdapter = AdapterRecyclerMenu(listDish, v.context!!)
         }
         menuDb.closeDataBase()

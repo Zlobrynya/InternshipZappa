@@ -1,15 +1,15 @@
-package com.zlobrynya.internshipzappa.activity
+package com.zlobrynya.internshipzappa.activity.booking
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.adapter.AdapterTable
+import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
 import kotlinx.android.synthetic.main.activity_table_select.*
 import android.support.v7.widget.DividerItemDecoration
 import android.util.Log
-import com.zlobrynya.internshipzappa.adapter.Table
+import com.zlobrynya.internshipzappa.adapter.booking.Table
 import java.text.SimpleDateFormat
 import java.util.*
 

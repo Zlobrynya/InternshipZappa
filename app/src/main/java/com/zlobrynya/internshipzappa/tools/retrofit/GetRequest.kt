@@ -1,15 +1,12 @@
 package com.zlobrynya.internshipzappa.tools.retrofit
 
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CheckDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import io.reactivex.Observable
-import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Url
 
 
 interface GetRequest {

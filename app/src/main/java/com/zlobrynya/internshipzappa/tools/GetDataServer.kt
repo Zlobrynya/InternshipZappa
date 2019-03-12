@@ -7,10 +7,10 @@ import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CheckDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

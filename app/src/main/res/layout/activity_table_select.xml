@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/color_app"
     android:orientation="vertical"
-    tools:context=".activity.TableSelectActivity">
+    tools:context=".activity.booking.TableSelectActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.fragment
+package com.zlobrynya.internshipzappa.fragment.menu
 
 import android.os.Build
 import android.os.Bundle
@@ -9,9 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.adapter.AdapterTab
+import com.zlobrynya.internshipzappa.adapter.menu.AdapterTab
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
 import kotlinx.android.synthetic.main.fragment_menu.*
 
 /**
@@ -40,7 +40,8 @@ class MenuFragment : Fragment() {
     //устанавливаем в табы категориии
     private fun setCategories(categories: List<CatDTO>){
         Log.i("cat","$categories")
-        viewPagerMenu.adapter = AdapterTab(childFragmentManager, categories, categories.size)
+        viewPagerMenu.adapter =
+            AdapterTab(childFragmentManager, categories, categories.size)
         viewPagerMenu.offscreenPageLimit = 7
         sliding_tabs.setupWithViewPager(viewPagerMenu)
 

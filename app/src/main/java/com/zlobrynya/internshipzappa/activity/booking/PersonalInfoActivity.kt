@@ -1,17 +1,13 @@
-package com.zlobrynya.internshipzappa.activity
+package com.zlobrynya.internshipzappa.activity.booking
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_personal_info.*
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat.getSystemService
 import android.view.inputmethod.InputMethodManager
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
-import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 
 class PersonalInfoActivity : AppCompatActivity() {
 
@@ -44,7 +40,7 @@ class PersonalInfoActivity : AppCompatActivity() {
             } else {
                 phone_number_input_layout.isErrorEnabled = false
                 register_email_input_layout.isErrorEnabled = false
-                doLogin()
+                doLogin(it.context)
             }
         }
     }
@@ -90,11 +86,11 @@ class PersonalInfoActivity : AppCompatActivity() {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    private fun doLogin() {
+    private fun doLogin(context: Context) {
         Toast.makeText(applicationContext, "OK! I'm performing login.", Toast.LENGTH_SHORT).show()
-        //val intent = Intent(context, ConfirmPersonalInfoActivity::class.java)
+        val intent = Intent(context, BookingEnd::class.java)
         //val username = username_input_layout.editText!!.text.toString()
         //intent.putExtra("username", username)
-        //context.startActivity(intent)
+        context.startActivity(intent)
     }
 }

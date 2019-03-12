@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.activity
+package com.zlobrynya.internshipzappa.activity.menu
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -6,31 +6,17 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
-import com.nostra13.universalimageloader.core.ImageLoader
-import com.nostra13.universalimageloader.core.assist.FailReason
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
-import com.zlobrynya.internshipzappa.adapter.AdapterRecommendDish
+import com.zlobrynya.internshipzappa.adapter.menu.AdapterRecommendDish
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import android.view.MenuItem
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
-import com.nostra13.universalimageloader.core.DisplayImageOptions
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
-import com.nostra13.universalimageloader.core.assist.ImageScaleType
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader
-import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
-import java.lang.Exception
-import java.security.AccessController.getContext
 import java.util.*
 
 
@@ -66,7 +52,8 @@ class FullDescriptionScreen : AppCompatActivity() {
 
         val array = listRecDish(dish.recommended)
         if (!array.isEmpty())
-            recyclerView.adapter = AdapterRecommendDish(listRecDish(dish.recommended))
+            recyclerView.adapter =
+                AdapterRecommendDish(listRecDish(dish.recommended))
     }
 
     @SuppressLint("SetTextI18n")

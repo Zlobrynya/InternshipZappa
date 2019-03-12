@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 
 
 /*
@@ -97,7 +97,7 @@ class MenuDB(val context: Context) {
     }
 
     //получаем описание блюда
-    fun getDescriptionDish(index: Int): DishDTO{
+    fun getDescriptionDish(index: Int): DishDTO {
         val query = "SELECT * FROM " + NAME_TABLE + " WHERE " + DISH_ID + "=" + index
         val cursor = sqLiteDatabase!!.rawQuery(query, null)
         var dish = DishDTO()

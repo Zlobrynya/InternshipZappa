@@ -18,24 +18,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.PersonalInfoActivity">
+        <activity android:name=".activity.booking.PersonalInfoActivity">
         </activity>
-        <activity android:name=".activity.RegisterActivity">
+        <activity android:name=".activity.profile.RegisterActivity">
         </activity>
-        <activity android:name=".activity.BookingEnd">
+        <activity android:name=".activity.booking.BookingEnd">
         </activity>
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.profile.LoginActivity"
             android:screenOrientation="locked">
         </activity>
         <activity
-            android:name=".activity.TableSelectActivity"
+            android:name=".activity.booking.TableSelectActivity"
             android:theme="@style/AppTheme.NoBar"></activity>
+
         <activity
-            android:name=".activity.BookingActivity"
-            android:theme="@style/AppTheme.NoBar" />
-        <activity
-            android:name=".activity.FullDescriptionScreen"
+            android:name=".activity.menu.FullDescriptionScreen"
             android:screenOrientation="locked"
             android:theme="@style/AppTheme.NoBar" />
         <activity

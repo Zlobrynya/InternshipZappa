@@ -8,15 +8,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.zlobrynya.internshipzappa.activity.TableSelectActivity
-import com.zlobrynya.internshipzappa.adapter.AdapterBookingButtons
-import com.zlobrynya.internshipzappa.adapter.AdapterDays
+import com.zlobrynya.internshipzappa.activity.booking.TableSelectActivity
+import com.zlobrynya.internshipzappa.adapter.booking.AdapterBookingButtons
+import com.zlobrynya.internshipzappa.adapter.booking.AdapterDays
 import kotlinx.android.synthetic.main.fragment_booking.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import android.app.TimePickerDialog
 import android.text.format.DateUtils
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
@@ -58,7 +64,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * Выбранная длительность брони (позиция элемента в ресайклере)
      */
     private var selectedDuration: Int = 0
-
+    val newBooking = bookingDataDTO()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
@@ -68,9 +74,22 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         initCalendarRecycler()
         initDurationRecycler()
 
+        //retrofit
+
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://na-rogah-api.herokuapp.com/api/v1/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client.build())
+            .build()
+
         bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столк
         bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
-
 
         return bookingView
     }
@@ -84,6 +103,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             R.id.book_button -> {
                 if (::bookTimeAndDate.isInitialized) { // Проверим, выбрал ли пользователь время
                     bookingView.book_time_select_label.error = null // Скроем варнинг
+
                     openTableList()
                 } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
             }
@@ -98,6 +118,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private fun openTableList() {
         val intent = Intent(activity, TableSelectActivity::class.java)
+        newBooking.date = calendar.timeInMillis.toString()
+        Log.i("date", calendar.timeInMillis.toString())
         intent.putExtra("book_time_begin", calendar.timeInMillis) // В экстра положим время начала брони
         when (selectedDuration) { // И время конца
             // 2 часа
@@ -173,7 +195,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
     private fun initDurationRecycler() {
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         bookingView.book_duration_recycler.layoutManager = layoutManager
-        bookingView.book_duration_recycler.adapter = AdapterBookingButtons(booking, this)
+        bookingView.book_duration_recycler.adapter =
+            AdapterBookingButtons(booking, this)
     }
 
     /**
@@ -226,6 +249,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * @param position Позиция элемента
      */
     override fun onDateClick(position: Int) {
+
+
         calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
         Log.d(
             "TOPKEK",

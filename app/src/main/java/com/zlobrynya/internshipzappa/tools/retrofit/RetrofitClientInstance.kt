@@ -1,20 +1,19 @@
 package com.zlobrynya.internshipzappa.tools.retrofit
 
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatList
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CheckDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import io.reactivex.Observable
-import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Url
 
 class RetrofitClientInstance {
 
     private val BASE_URL = "https://na-rogah-api.herokuapp.com/api/v1/"
     private var getRequest: GetRequest? = null
+    private var postRequest: PostRequest? = null
 
     init {
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
@@ -22,6 +21,7 @@ class RetrofitClientInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         getRequest = retrofit.create(GetRequest::class.java)
+        postRequest = retrofit.create(PostRequest::class.java)
     }
 
     fun getAllCategories() : Observable<Response<CatList>> = getRequest!!.getAllCategories()

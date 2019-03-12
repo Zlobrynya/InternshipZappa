@@ -1,14 +1,15 @@
-package com.zlobrynya.internshipzappa.adapter
+package com.zlobrynya.internshipzappa.adapter.booking
 
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import com.zlobrynya.internshipzappa.R
 import kotlinx.android.synthetic.main.item_table.view.*
+import com.zlobrynya.internshipzappa.activity.booking.PersonalInfoActivity
+
 
 /**
  * Адаптер для вывода столиков для брони
@@ -24,20 +25,22 @@ class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTabl
      * @param holder Экземпляр ViewHolder
      * @param position Позиция элемента
      */
-    override fun onBindViewHolder(holder: AdapterTable.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.seatType.text = values[position].seatType
         holder.seatCount.text = values[position].seatCount
         holder.choseButton.setOnClickListener {
-            Log.d("TOPKEK", "Выбран столик с айди $position")
+            //Log.d("TOPKEK", "Выбран столик с айди $position")
             holder.onTableListener.onTableClick(position, true)
+            val intent = Intent(it.context, PersonalInfoActivity::class.java)
+            it.context.startActivity(intent)
         }
     }
 
     /**
      * Создает нужный ViewHolder
      */
-    override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): AdapterTable.ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_table, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): ViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(com.zlobrynya.internshipzappa.R.layout.item_table, parent, false)
         return ViewHolder(itemView, mOnTableListener)
     }
 

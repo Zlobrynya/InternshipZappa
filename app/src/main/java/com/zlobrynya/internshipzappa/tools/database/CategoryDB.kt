@@ -2,7 +2,7 @@ package com.zlobrynya.internshipzappa.tools.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
 
 class CategoryDB(context: Context) {
     private var database: Database? = null

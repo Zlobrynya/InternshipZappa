@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.adapter
+package com.zlobrynya.internshipzappa.adapter.menu
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import android.view.LayoutInflater
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -16,12 +16,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.zlobrynya.internshipzappa.activity.FullDescriptionScreen
+import com.zlobrynya.internshipzappa.activity.menu.FullDescriptionScreen
 import kotlinx.android.synthetic.main.item_menu.view.*
-import com.nostra13.universalimageloader.core.assist.FailReason
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
-import kotlinx.android.synthetic.main.item_menu.view.*
-import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 
 /*
 * Адаптер для RecyclerMenu отображение каточек блюда активити MenuActivity

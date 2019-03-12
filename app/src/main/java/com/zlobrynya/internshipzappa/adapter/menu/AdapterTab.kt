@@ -1,11 +1,11 @@
-package com.zlobrynya.internshipzappa.adapter
+package com.zlobrynya.internshipzappa.adapter.menu
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.util.Log
-import com.zlobrynya.internshipzappa.fragment.CategoryFragment
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
+import com.zlobrynya.internshipzappa.fragment.menu.CategoryFragment
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
 
 /*
  * Адаптер для TabLayout

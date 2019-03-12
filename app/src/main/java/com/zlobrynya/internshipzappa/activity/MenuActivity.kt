@@ -1,28 +1,14 @@
 package com.zlobrynya.internshipzappa.activity
 
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.adapter.AdapterTab
 import kotlinx.android.synthetic.main.activity_menu.*
-import android.util.Log
-import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache
-import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator
-import com.nostra13.universalimageloader.core.DisplayImageOptions
-import com.nostra13.universalimageloader.core.ImageLoader
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration
-import com.nostra13.universalimageloader.core.assist.ImageScaleType
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
-import com.zlobrynya.internshipzappa.fragment.MenuFragment
-import com.zlobrynya.internshipzappa.fragment.ProfileFragment
-import com.zlobrynya.internshipzappa.tools.database.CategoryDB
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
-import android.app.PendingIntent.getActivity
+import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
 import com.zlobrynya.internshipzappa.fragment.BookingFragment
 
 

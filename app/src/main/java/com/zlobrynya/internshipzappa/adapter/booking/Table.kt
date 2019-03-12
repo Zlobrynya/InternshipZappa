@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.adapter
+package com.zlobrynya.internshipzappa.adapter.booking
 
 /**
  * Класс данных для адаптера столиков

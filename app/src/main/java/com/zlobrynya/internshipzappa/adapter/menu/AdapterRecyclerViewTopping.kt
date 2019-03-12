@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.adapter
+package com.zlobrynya.internshipzappa.adapter.menu
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import android.view.LayoutInflater
-import android.widget.Toast
-import com.zlobrynya.internshipzappa.tools.retrofit.dto.DishDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 import kotlinx.android.synthetic.main.item_topping_menu.view.*
 
 

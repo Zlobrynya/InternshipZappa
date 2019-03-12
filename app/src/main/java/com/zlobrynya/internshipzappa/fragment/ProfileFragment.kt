@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.LoginActivity
+import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 
 import kotlinx.android.synthetic.main.fragment_profile.*
 

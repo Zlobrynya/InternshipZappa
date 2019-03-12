@@ -1,11 +1,11 @@
-package com.zlobrynya.internshipzappa.activity
+package com.zlobrynya.internshipzappa.activity.booking
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.MenuActivity
 import kotlinx.android.synthetic.main.activity_end_booking.*
 
 
