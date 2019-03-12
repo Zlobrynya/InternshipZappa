@@ -23,6 +23,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
 import kotlin.collections.ArrayList
 
 
@@ -127,7 +128,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Заполняет данными список столиков
      */
     private fun initTableList() {
-        for (i in 0 until responseBody!!.data.size + 1) {
+        for (i in 0 until responseBody!!.data.size) {
             val tmp = responseBody!!.data[i]
             val table = Table(tmp.chair_count, tmp.position, tmp.chair_type, tmp.table_id)
             tableList.add(table)
@@ -138,6 +139,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Настраивает ресайклер вью
      */
     private fun initRecycler() {
+        Log.d("TOPKEK", "Число столиков ${tableList.size}")
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         table_recycler.layoutManager = layoutManager
         table_recycler.addItemDecoration(
