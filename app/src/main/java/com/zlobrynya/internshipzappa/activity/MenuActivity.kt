@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -43,6 +44,8 @@ class MenuActivity: AppCompatActivity() {
             // Профиль
             R.id.navigation_contacts -> {
                 supportActionBar!!.title = "Контакты"
+                val i = Intent(this, PersonalInfoActivity::class.java)
+                startActivity(i)
             }
         }
         // Загружаем фрагмент
