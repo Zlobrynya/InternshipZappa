@@ -12,6 +12,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.util.Log
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
 import okhttp3.OkHttpClient
@@ -103,6 +104,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
                     Log.i("check1", "${response.code()}")
                     responseBody = response.body()
                     if (responseBody != null) {
+                        Log.d("TOPKEK", responseBody!!.data.size.toString())
                         initTableList()
                         initRecycler()
                     }
@@ -128,6 +130,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
         Log.d("TOPKEK", "initTableList")
         for (i in 0 until responseBody!!.data.size) { // TODO падает скорее всего здесь
             val tmp = responseBody!!.data[i]
+            if (tmp.position == null) tmp.position = "kek"
             val table = Table(tmp.chair_count, tmp.position, tmp.chair_type, tmp.table_id)
             tableList.add(table)
             Log.d("TOPKEK", "раз два")
@@ -154,6 +157,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
     override fun onTableClick(position: Int, isButtonClick: Boolean) {
         if (isButtonClick) { //Открываем новую активити
             val intent = Intent(this, PersonalInfoActivity::class.java)
+            intent.putExtra("table_id", tableList[position].seatId)
             startActivity(intent)
         }
     }

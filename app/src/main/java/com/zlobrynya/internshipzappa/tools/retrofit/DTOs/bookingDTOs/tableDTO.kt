@@ -2,7 +2,7 @@ package com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs
 
 import com.google.gson.annotations.SerializedName
 
-data class tableDTO (
+data class tableDTO(
     @SerializedName("chair_count") var chair_count: Int = 0,
     @SerializedName("chair_type") var chair_type: String = "",
     @SerializedName("position") var position: String = "",
