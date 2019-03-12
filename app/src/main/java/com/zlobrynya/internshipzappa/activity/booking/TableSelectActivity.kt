@@ -127,13 +127,10 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Заполняет данными список столиков
      */
     private fun initTableList() {
-        Log.d("TOPKEK", "initTableList")
-        for (i in 0 until responseBody!!.data.size) { // TODO падает скорее всего здесь
+        for (i in 0 until responseBody!!.data.size + 1) {
             val tmp = responseBody!!.data[i]
-            if (tmp.position == null) tmp.position = "kek"
             val table = Table(tmp.chair_count, tmp.position, tmp.chair_type, tmp.table_id)
             tableList.add(table)
-            Log.d("TOPKEK", "раз два")
         }
     }
 
@@ -158,6 +155,9 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
         if (isButtonClick) { //Открываем новую активити
             val intent = Intent(this, PersonalInfoActivity::class.java)
             intent.putExtra("table_id", tableList[position].seatId)
+            intent.putExtra("book_date_begin", newBooking.date)
+            intent.putExtra("book_time_begin", newBooking.time_from)
+            intent.putExtra("book_time_end", newBooking.time_to)
             startActivity(intent)
         }
     }

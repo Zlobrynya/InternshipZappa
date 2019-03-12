@@ -27,7 +27,8 @@ class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTabl
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.seatType.text = values[position].seatType
-        holder.seatCount.text = "Места: ${values[position].seatCount}, ${values[position].seatPosition}"
+        if (values[position].seatPosition == "") holder.seatCount.text = "Места: ${values[position].seatCount}"
+        else holder.seatCount.text = "Места: ${values[position].seatCount}, ${values[position].seatPosition}"
         holder.choseButton.setOnClickListener {
             holder.onTableListener.onTableClick(position, true)
         }
