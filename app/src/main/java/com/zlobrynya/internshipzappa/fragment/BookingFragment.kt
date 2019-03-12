@@ -18,11 +18,17 @@ import android.app.TimePickerDialog
 import android.text.format.DateUtils
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
+import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.Serializable
 import java.text.SimpleDateFormat
 
 
@@ -76,29 +82,14 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         initCalendarRecycler()
         initDurationRecycler()
 
-        networkPost()
+        //retrofit
+
+
 
         bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
         bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
 
         return bookingView
-    }
-
-    /**
-     * Реторфит
-     */
-    private fun networkPost() {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://na-rogah-api.herokuapp.com/api/v1/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client.build())
-            .build()
     }
 
     /**
@@ -173,6 +164,35 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
                 Log.d("TOPKEK", newBooking.time_to)
             }
         }
+
+        //POST для получения списка свободных столов
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://na-rogah-api.herokuapp.com/api/v1/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client.build())
+            .build()
+        val apiInterface: PostRequest = retrofit.create(PostRequest::class.java)
+        val requestCall = apiInterface.postBookingData(newBooking)
+        requestCall.enqueue(object : Callback<tableList> {
+            override fun onFailure(call: Call<tableList>, t: Throwable) {}
+
+            override fun onResponse(call: Call<tableList>, response: Response<tableList>) {
+                if (response.isSuccessful) {
+                    Log.i("check1", "${response.code()}")
+                    val body = response.body()
+                    val data = ArrayList(body?.data)
+                    intent.putExtra("tables", data)
+                } else {
+                    Log.i("check2", "${response.code()}")
+                }
+            }
+        })
+
         startActivity(intent)
     }
 
