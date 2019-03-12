@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -22,6 +23,7 @@ import com.zlobrynya.internshipzappa.fragment.MenuFragment
 import com.zlobrynya.internshipzappa.fragment.ProfileFragment
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
+import android.app.PendingIntent.getActivity
 
 
 class MenuActivity: AppCompatActivity() {
@@ -52,6 +54,8 @@ class MenuActivity: AppCompatActivity() {
             // Бронирование
             R.id.navigation_booking -> {
                 supportActionBar!!.title = "Бронь"
+                val intent = Intent(this, BookingEnd::class.java)
+                startActivity(intent)
             }
 
         }

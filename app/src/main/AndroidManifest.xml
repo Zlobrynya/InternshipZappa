@@ -20,6 +20,8 @@
             android:theme="@style/AppTheme">
         <activity android:name=".activity.RegisterActivity">
         </activity>
+        <activity android:name=".activity.BookingEnd">
+        </activity>
         <activity
                 android:name=".activity.LoginActivity"
                 android:screenOrientation="locked">

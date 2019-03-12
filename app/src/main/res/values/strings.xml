@@ -66,4 +66,15 @@
     <string name="hint_username">Имя</string>
     <string name="hint_phone_number">Телефон</string>
 
+    <!-- конец бронирования -->
+    <string name="app_in_test">Приложение работает в тестовом режиме, приносим свои извинения за причинённое неудобство</string>
+    <string name="otclonena">%1$s, заявка на бронирование отклонена: выбранный вами стол уже забронирован.</string>
+    <string name="izmeni">Измените, пожалуйста, параметры запроса.</string>
+    <string name="prinyal">%1$s, заявка на бронирование принята рестораном.</string>
+    <string name="po_nomeru">По указанному номеру(+7 8142 63-23-89) с вами свяжется администратор и уточнит детали.</string>
+    <string name="perezvon">Если в течение 1 часа, вам не перезвонят, свяжитесь с нами по телефону.</string>
+    <string name="otmena">Отмена бронирования возможна только по звонку в ресторан.</string>
+    <string name="phone_booking">Телефон для связи: +7 (8142) 63-23-89</string>
+    <string name="back">Вернуться</string>
+
 </resources>
