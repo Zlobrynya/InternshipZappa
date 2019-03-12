@@ -24,6 +24,7 @@ import com.zlobrynya.internshipzappa.fragment.ProfileFragment
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.retrofit.dto.CatDTO
 import android.app.PendingIntent.getActivity
+import com.zlobrynya.internshipzappa.fragment.BookingFragment
 
 
 class MenuActivity: AppCompatActivity() {
@@ -32,7 +33,7 @@ class MenuActivity: AppCompatActivity() {
 
     private val kontaktiFragment = KontaktiFragment()
 
-    //private val profileFragment: Fragment = ProfileFragment()
+    private val bookingFragment: Fragment = BookingFragment()
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -53,8 +54,9 @@ class MenuActivity: AppCompatActivity() {
 
             // Бронирование
             R.id.navigation_booking -> {
-                /*supportActionBar!!.title = "Бронь"
-                val intent = Intent(this, BookingEnd::class.java)
+                supportActionBar!!.title = "Бронь"
+                selectedFragment = bookingFragment
+                /*val intent = Intent(this, BookingEnd::class.java)
                 startActivity(intent)*/
             }
 
