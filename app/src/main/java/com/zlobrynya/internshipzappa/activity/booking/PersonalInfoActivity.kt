@@ -5,30 +5,46 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_personal_info.*
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.respDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
+import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 
 class PersonalInfoActivity : AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_personal_info)
         supportActionBar!!.title = "Бронирование"
-
-        //val bundle = intent.extras
-
-        //selected_table.text = bundle.getString("table")
-        //selected_date.text = bundle.getString("date")
-        //selected_time.text = bundle.getString("time")
-
+        val bookDateBegin = intent.getStringExtra("book_date_begin")
+        val bookTimeBegin = intent.getStringExtra("book_time_begin")
+        val bookTimeEnd = intent.getStringExtra("book_time_end")
+        val bookTableId = intent.getIntExtra("table_id", 1).toString().toInt()
+        val newBooking = bookingUserDTO()
+        newBooking.date = bookDateBegin
+        newBooking.time_from = bookTimeBegin
+        newBooking.time_to = bookTimeEnd
+        newBooking.table_id = bookTableId
         btnContinue.setOnClickListener {
             hideKeyboard()
 
             val icon = resources.getDrawable(R.drawable.error)
 
             icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
-
+            val name = username_input_layout.editText!!.text.toString()
             val phone = phone_number_input_layout.editText!!.text.toString()
             val email = register_email_input_layout.editText!!.text.toString()
             if (!validatePhone(phone)) {
@@ -40,7 +56,10 @@ class PersonalInfoActivity : AppCompatActivity() {
             } else {
                 phone_number_input_layout.isErrorEnabled = false
                 register_email_input_layout.isErrorEnabled = false
-                doLogin(it.context)
+                newBooking.name = name
+                newBooking.email = email
+                newBooking.phone = phone
+                networkPost(newBooking, it.context)
             }
         }
     }
@@ -53,6 +72,42 @@ class PersonalInfoActivity : AppCompatActivity() {
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
+    }
+    private fun networkPost(newBooking: bookingUserDTO, context: Context){
+        var code1: Int = 0
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://na-rogah-api.herokuapp.com/api/v1/")
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client.build())
+            .build()
+        val apiInterface: PostRequest = retrofit.create(PostRequest::class.java)
+        val requestCall = apiInterface.postReserve(newBooking)
+        requestCall.enqueue(object : Callback<respDTO> {
+            override fun onFailure(call: Call<respDTO>, t: Throwable) {}
+
+            override fun onResponse(call: Call<respDTO>, response: Response<respDTO>) {
+                if (response.isSuccessful) {
+                    Log.i("check1", "${response.code()}")
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        val code = responseBody.code
+                        val intent = Intent(context, BookingEnd::class.java)
+                        intent.putExtra("code", code)
+                        intent.putExtra("name", newBooking.name)
+                        intent.putExtra("phone", newBooking.phone)
+                        context.startActivity(intent)
+                    }
+                } else {
+                    Log.i("check2", "${response.code()}")
+                }
+            }
+        })
+        Log.i("check2", code1.toString())
     }
 
     /*private fun validatePhone(phone: String): Boolean {
@@ -84,13 +139,5 @@ class PersonalInfoActivity : AppCompatActivity() {
 
     private fun validateEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    private fun doLogin(context: Context) {
-        Toast.makeText(applicationContext, "OK! I'm performing login.", Toast.LENGTH_SHORT).show()
-        val intent = Intent(context, BookingEnd::class.java)
-        //val username = username_input_layout.editText!!.text.toString()
-        //intent.putExtra("username", username)
-        context.startActivity(intent)
     }
 }

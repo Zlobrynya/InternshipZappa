@@ -11,20 +11,22 @@ import kotlinx.android.synthetic.main.activity_end_booking.*
 
 class BookingEnd: AppCompatActivity() {
 
-    val otvet: Boolean = false
-    val na = "Илья"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_end_booking)
 
-        when(otvet){
-            true -> {
+        val code= intent.getIntExtra("code", 400)
+        val na = intent.getStringExtra("name")
+        val phone = intent.getStringExtra("phone")
+        when(code){
+            200 -> {
                 var text = getString(R.string.prinyal, na)
                 otmena.setText(text)
                 izmena.setText(R.string.po_nomeru)
             }
-            false -> {
+            else -> {
                 var text = getString(R.string.otclonena, na)
                 otmena.setText(text)
                 izmena.setText(R.string.izmeni)
