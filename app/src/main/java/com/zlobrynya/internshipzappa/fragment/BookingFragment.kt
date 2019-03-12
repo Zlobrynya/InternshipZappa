@@ -72,8 +72,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private var selectedDuration: Int = 0
 
-    private val newBooking = bookingDataDTO()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
 
@@ -83,7 +81,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         initDurationRecycler()
 
         //retrofit
-
 
 
         bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
@@ -119,79 +116,46 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
 
         val intent = Intent(activity, TableSelectActivity::class.java)
-        newBooking.date = dateFormat.format(calendar.timeInMillis) // Заполняем дату брони
-        newBooking.time_from = timeFormat.format(calendar.timeInMillis) // Заполняем время начала брони
+        intent.putExtra("book_date_begin", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
+        intent.putExtra("book_time_begin", timeFormat.format(calendar.timeInMillis))// Заполняем время начала брони
 
         when (selectedDuration) { // И время конца
             // 2 часа
             0 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000)
+                )
             }
             // 2 часа 30 минут
             1 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                )
             }
             // 3 часа
             2 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000)
+                )
             }
             // 3 часа 30 минут
             3 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                )
             }
             // 4 часа
             4 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000)
+                )
             }
         }
-
-        //POST для получения списка свободных столов
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://na-rogah-api.herokuapp.com/api/v1/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client.build())
-            .build()
-        val apiInterface: PostRequest = retrofit.create(PostRequest::class.java)
-        val requestCall = apiInterface.postBookingData(newBooking)
-        requestCall.enqueue(object : Callback<tableList> {
-            override fun onFailure(call: Call<tableList>, t: Throwable) {}
-
-            override fun onResponse(call: Call<tableList>, response: Response<tableList>) {
-                if (response.isSuccessful) {
-                    Log.i("check1", "${response.code()}")
-                    val body = response.body()
-                    val data = ArrayList(body?.data)
-                    intent.putExtra("tables", data)
-                } else {
-                    Log.i("check2", "${response.code()}")
-                }
-            }
-        })
 
         startActivity(intent)
     }
