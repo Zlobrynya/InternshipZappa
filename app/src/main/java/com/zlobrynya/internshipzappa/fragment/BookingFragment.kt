@@ -23,6 +23,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
 
 
 /**
@@ -88,7 +89,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             .client(client.build())
             .build()
 
-        bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столк
+        bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
         bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
 
         return bookingView
@@ -117,40 +118,53 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * Открывает список доступных столов
      */
     private fun openTableList() {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd") // Форматирование для даты
+        val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
+
         val intent = Intent(activity, TableSelectActivity::class.java)
-        newBooking.date = calendar.timeInMillis.toString()
-        Log.i("date", calendar.timeInMillis.toString())
-        intent.putExtra("book_time_begin", calendar.timeInMillis) // В экстра положим время начала брони
+        newBooking.date = dateFormat.format(calendar.timeInMillis) // Заполняем дату брони
+        newBooking.time_from = timeFormat.format(calendar.timeInMillis) // Заполняем время начала брони
+
         when (selectedDuration) { // И время конца
             // 2 часа
             0 -> {
-                val date = Date(calendar.timeInMillis + 2 * 60 * 60 * 1000)
-                intent.putExtra("book_time_end", date.time)
-                Log.d("TOPKEK", "${calendar.time}, $date")
+                newBooking.time_to =
+                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000) // Заполняем время конца брони
+                Log.d("TOPKEK", newBooking.date)
+                Log.d("TOPKEK", newBooking.time_from)
+                Log.d("TOPKEK", newBooking.time_to)
             }
             // 2 часа 30 минут
             1 -> {
-                val date = Date(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)
-                intent.putExtra("book_time_end", date.time)
-                Log.d("TOPKEK", "${calendar.time}, $date")
+                newBooking.time_to =
+                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000) // Заполняем время конца брони
+                Log.d("TOPKEK", newBooking.date)
+                Log.d("TOPKEK", newBooking.time_from)
+                Log.d("TOPKEK", newBooking.time_to)
             }
             // 3 часа
             2 -> {
-                val date = Date(calendar.timeInMillis + 3 * 60 * 60 * 1000)
-                intent.putExtra("book_time_end", date.time)
-                Log.d("TOPKEK", "${calendar.time}, $date")
+                newBooking.time_to =
+                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000) // Заполняем время конца брони
+                Log.d("TOPKEK", newBooking.date)
+                Log.d("TOPKEK", newBooking.time_from)
+                Log.d("TOPKEK", newBooking.time_to)
             }
             // 3 часа 30 минут
             3 -> {
-                val date = Date(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)
-                intent.putExtra("book_time_end", date.time)
-                Log.d("TOPKEK", "${calendar.time}, $date")
+                newBooking.time_to =
+                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000) // Заполняем время конца брони
+                Log.d("TOPKEK", newBooking.date)
+                Log.d("TOPKEK", newBooking.time_from)
+                Log.d("TOPKEK", newBooking.time_to)
             }
             // 4 часа
             4 -> {
-                val date = Date(calendar.timeInMillis + 4 * 60 * 60 * 1000)
-                intent.putExtra("book_time_end", date.time)
-                Log.d("TOPKEK", "${calendar.time}, $date")
+                newBooking.time_to =
+                    timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000) // Заполняем время конца брони
+                Log.d("TOPKEK", newBooking.date)
+                Log.d("TOPKEK", newBooking.time_from)
+                Log.d("TOPKEK", newBooking.time_to)
             }
         }
         startActivity(intent)
