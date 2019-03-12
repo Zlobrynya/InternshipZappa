@@ -53,9 +53,9 @@ class MenuActivity: AppCompatActivity() {
 
             // Бронирование
             R.id.navigation_booking -> {
-                supportActionBar!!.title = "Бронь"
+                /*supportActionBar!!.title = "Бронь"
                 val intent = Intent(this, BookingEnd::class.java)
-                startActivity(intent)
+                startActivity(intent)*/
             }
 
         }
