@@ -29,10 +29,7 @@ class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTabl
         holder.seatType.text = values[position].seatType
         holder.seatCount.text = "${values[position].seatCount}, ${values[position].seatPosition}"
         holder.choseButton.setOnClickListener {
-            //Log.d("TOPKEK", "Выбран столик с айди $position")
             holder.onTableListener.onTableClick(position, true)
-            val intent = Intent(it.context, PersonalInfoActivity::class.java)
-            it.context.startActivity(intent)
         }
     }
 
@@ -40,7 +37,8 @@ class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTabl
      * Создает нужный ViewHolder
      */
     override fun onCreateViewHolder(parent: ViewGroup, ViewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(com.zlobrynya.internshipzappa.R.layout.item_table, parent, false)
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(com.zlobrynya.internshipzappa.R.layout.item_table, parent, false)
         return ViewHolder(itemView, mOnTableListener)
     }
 

@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity.booking
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -124,10 +125,12 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Заполняет данными список столиков
      */
     private fun initTableList() {
-        for (i in 0..responseBody!!.data.size) { // TODO падает скорее всего здесь
+        Log.d("TOPKEK", "initTableList")
+        for (i in 0 until responseBody!!.data.size) { // TODO падает скорее всего здесь
             val tmp = responseBody!!.data[i]
             val table = Table(tmp.chair_count, tmp.position, tmp.chair_type, tmp.table_id)
             tableList.add(table)
+            Log.d("TOPKEK", "раз два")
         }
     }
 
@@ -149,8 +152,9 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * @param isButtonClick Произошло ли нажатие на кнопку "выбрать"
      */
     override fun onTableClick(position: Int, isButtonClick: Boolean) {
-        if (isButtonClick) {
-            // Возможно понадобится
+        if (isButtonClick) { //Открываем новую активити
+            val intent = Intent(this, PersonalInfoActivity::class.java)
+            startActivity(intent)
         }
     }
 }
