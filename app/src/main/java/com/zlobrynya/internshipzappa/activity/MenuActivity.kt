@@ -1,6 +1,5 @@
 package com.zlobrynya.internshipzappa.activity
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -59,7 +58,6 @@ class MenuActivity: AppCompatActivity() {
                 /*val intent = Intent(this, BookingEnd::class.java)
                 startActivity(intent)*/
             }
-
         }
         // Загружаем фрагмент
         if (selectedFragment != null) {
