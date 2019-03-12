@@ -7,15 +7,14 @@
         android:layout_height="match_parent"
         android:background="@color/back_launch">
 
-    <ImageView
-            android:layout_width="208dp"
-            android:layout_height="220dp"
-            android:id="@+id/launch"
-            android:src="@drawable/profile_logo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:scaleType="fitCenter"/>
 
+    <ImageView
+        android:id="@+id/launch"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
