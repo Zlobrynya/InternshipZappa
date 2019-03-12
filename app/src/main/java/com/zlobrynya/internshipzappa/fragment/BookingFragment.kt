@@ -65,7 +65,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * Выбранная длительность брони (позиция элемента в ресайклере)
      */
     private var selectedDuration: Int = 0
-    val newBooking = bookingDataDTO()
+
+    private val newBooking = bookingDataDTO()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
@@ -75,8 +76,18 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         initCalendarRecycler()
         initDurationRecycler()
 
-        //retrofit
+        networkPost()
 
+        bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
+        bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
+
+        return bookingView
+    }
+
+    /**
+     * Реторфит
+     */
+    private fun networkPost() {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
@@ -88,11 +99,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             .addConverterFactory(GsonConverterFactory.create())
             .client(client.build())
             .build()
-
-        bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
-        bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
-
-        return bookingView
     }
 
     /**
@@ -174,6 +180,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * Набивает данными список с датами
      */
     private fun initCalendar() {
+        schedule.clear()
         val calendar: Calendar = Calendar.getInstance()
         schedule.add(calendar.time) // Вне цикла добавим один элемент (т.е. текущий день) в список
         for (i in 0..5) {
@@ -187,6 +194,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * Набивает данными список с вариантами продоллжительности брони
      */
     private fun initBookingDurationList() {
+        booking.clear()
         booking.add("2 ч")
         booking.add("2 ч\n30мин")
         booking.add("3 ч")

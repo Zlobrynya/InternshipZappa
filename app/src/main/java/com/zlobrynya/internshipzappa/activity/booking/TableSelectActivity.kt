@@ -8,9 +8,7 @@ import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
 import kotlinx.android.synthetic.main.activity_table_select.*
 import android.support.v7.widget.DividerItemDecoration
-import android.util.Log
 import com.zlobrynya.internshipzappa.adapter.booking.Table
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -27,16 +25,6 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
     }
 
     /**
-     * Время начала брони (из экстра)
-     */
-    private var bookTimeBegin: Long = -1
-
-    /**
-     * Время конца брони (из экстра)
-     */
-    private var bookTimeEnd: Long = -1
-
-    /**
      * Список столиков
      */
     private val tableList: ArrayList<Table> = ArrayList()
@@ -44,10 +32,6 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_table_select)
-
-        // Заберем данные из экстра
-        bookTimeBegin = intent.getLongExtra("book_time_begin", -1)
-        bookTimeEnd = intent.getLongExtra("book_time_end", -1)
 
         initToolBar()
         initTableList()
@@ -93,13 +77,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      */
     override fun onTableClick(position: Int, isButtonClick: Boolean) {
         if (isButtonClick) {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
-            // Форматирование данных для сервера
-            Log.d("TOPKEK", dateFormat.format(bookTimeBegin))
-
-            val timeFormat = SimpleDateFormat("HH:mm:ss")
-            Log.d("TOPKEK", timeFormat.format(bookTimeBegin))
-            Log.d("TOPKEK", timeFormat.format(bookTimeEnd))
+            // Возможно понадобится
         }
     }
 }
