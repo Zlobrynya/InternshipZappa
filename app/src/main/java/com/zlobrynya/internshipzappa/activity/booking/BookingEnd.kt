@@ -22,13 +22,12 @@ class BookingEnd: AppCompatActivity() {
         val phone = intent.getStringExtra("phone")
         when(code){
             200 -> {
-                var text = getString(R.string.prinyal, na)
-                otmena.setText(text)
-                izmena.setText(R.string.po_nomeru)
+                otmena.text = getString(R.string.prinyal, na)
+                izmena.text = getString(R.string.po_nomeru, phone)
             }
             else -> {
                 var text = getString(R.string.otclonena, na)
-                otmena.setText(text)
+                otmena.text = text
                 izmena.setText(R.string.izmeni)
                 booking_end_phone.visibility = View.GONE
                 booking_end_otmena.visibility = View.GONE
@@ -40,5 +39,11 @@ class BookingEnd: AppCompatActivity() {
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
     }
 }

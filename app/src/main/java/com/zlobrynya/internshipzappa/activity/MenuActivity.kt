@@ -1,11 +1,13 @@
 package com.zlobrynya.internshipzappa.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
 import kotlinx.android.synthetic.main.activity_menu.*
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
@@ -41,8 +43,8 @@ class MenuActivity: AppCompatActivity() {
             R.id.navigation_booking -> {
                 supportActionBar!!.title = "Бронь"
                 selectedFragment = bookingFragment
-                /*val intent = Intent(this, BookingEnd::class.java)
-                startActivity(intent)*/
+                //val intent = Intent(this, BookingEnd::class.java)
+                //startActivity(intent)
             }
         }
         // Загружаем фрагмент
