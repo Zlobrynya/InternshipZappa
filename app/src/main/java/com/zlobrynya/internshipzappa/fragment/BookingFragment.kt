@@ -136,6 +136,9 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         when (selectedDuration) { // И время конца
             // 2 часа
             0 -> {
+                if(timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000)) {
+                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000))
+                }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
                     timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000)
@@ -143,6 +146,9 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             }
             // 2 часа 30 минут
             1 -> {
+                if(timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)) {
+                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000))
+                }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
                     timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)
@@ -150,6 +156,9 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             }
             // 3 часа
             2 -> {
+                if(timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000)) {
+                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000))
+                }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
                     timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000)
@@ -157,6 +166,9 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             }
             // 3 часа 30 минут
             3 -> {
+                if(timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)) {
+                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000))
+                }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
                     timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)
@@ -164,6 +176,9 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             }
             // 4 часа
             4 -> {
+                if(timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000)) {
+                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000))
+                }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
                     timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000)
