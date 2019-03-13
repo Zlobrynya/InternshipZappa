@@ -5,6 +5,7 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_personal_info.*
 import android.content.Context
 import android.content.Intent
+import android.support.v4.content.ContextCompat.getSystemService
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -22,6 +23,10 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+
+
+
 class PersonalInfoActivity : AppCompatActivity() {
 
 
@@ -38,24 +43,44 @@ class PersonalInfoActivity : AppCompatActivity() {
         newBooking.time_from = bookTimeBegin
         newBooking.time_to = bookTimeEnd
         newBooking.table_id = bookTableId
+
         btnContinue.setOnClickListener {
             hideKeyboard()
 
             val icon = resources.getDrawable(R.drawable.error)
 
             icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+
             val name = username_input_layout.editText!!.text.toString()
             val phone = phone_number_input_layout.editText!!.text.toString()
             val email = register_email_input_layout.editText!!.text.toString()
-            if (!validatePhone(phone)) {
+
+            val validateName = validateName(name)
+            val validatePhone = validatePhone(phone)
+            val validateEmail = validateEmail(email)
+
+            if (!validateName) {
+                username_input_layout.error = getString(R.string.error_name)
+                username.setCompoundDrawables(null, null, icon, null)
+            } else {
+                username_input_layout.isErrorEnabled = false
+                username.setCompoundDrawables(null, null, null, null)
+            }
+            if (!validatePhone) {
                 phone_number_input_layout.error = getString(R.string.error_phone)
                 phone_number.setCompoundDrawables(null, null, icon, null)
-            } else if (!validateEmail(email)) {
+            } else {
+                phone_number_input_layout.isErrorEnabled = false
+                phone_number.setCompoundDrawables(null, null, null, null)
+            }
+            if (!validateEmail) {
                 register_email_input_layout.error = getString(R.string.error_email)
                 register_email.setCompoundDrawables(null, null, icon, null)
             } else {
-                phone_number_input_layout.isErrorEnabled = false
                 register_email_input_layout.isErrorEnabled = false
+                register_email.setCompoundDrawables(null, null, null, null)
+            }
+            if (validateName && validateEmail && validatePhone) {
                 newBooking.name = name
                 newBooking.email = email
                 newBooking.phone = phone
@@ -65,10 +90,10 @@ class PersonalInfoActivity : AppCompatActivity() {
     }
 
     private fun hideKeyboard() {
-        val view = currentFocus
+        val view = getCurrentFocus()
         if (view != null) {
             (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                view.windowToken,
+                view!!.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
@@ -133,11 +158,18 @@ class PersonalInfoActivity : AppCompatActivity() {
         return matcher!!.matches()
     }*/
 
+    private fun validateName(name: String) : Boolean {
+        val nameLength = 3
+        return name.length >= nameLength
+    }
+
     private fun validatePhone(phone: String): Boolean {
-        return android.util.Patterns.PHONE.matcher(phone).matches()
+        val phoneLength = 18
+        return android.util.Patterns.PHONE.matcher(phone).matches() && phone.length == phoneLength
     }
 
     private fun validateEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }
+
