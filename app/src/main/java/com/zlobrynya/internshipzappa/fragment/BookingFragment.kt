@@ -132,7 +132,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         val intent = Intent(activity, TableSelectActivity::class.java)
         intent.putExtra("book_date_begin", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
         intent.putExtra("book_time_begin", timeFormat.format(calendar.timeInMillis))// Заполняем время начала брони
-
+        intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
         when (selectedDuration) { // И время конца
             // 2 часа
             0 -> {
