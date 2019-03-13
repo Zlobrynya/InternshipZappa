@@ -6,6 +6,7 @@ import kotlinx.android.synthetic.main.activity_personal_info.*
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat.getSystemService
+import android.text.Editable
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -43,6 +44,14 @@ class PersonalInfoActivity : AppCompatActivity() {
         newBooking.time_from = bookTimeBegin
         newBooking.time_to = bookTimeEnd
         newBooking.table_id = bookTableId
+        
+       /* val sharedPreferences = this.getSharedPreferences(this.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
+        val savedName = this.getString(R.string.key_user_name)
+        val savedPhone = this.getString(R.string.key_user_phone)
+        val savedEmail = this.getString(R.string.key_user_email)
+        if(sharedPreferences.getString(savedName, "") != "") username_input_layout.editText!!.text = sharedPreferences.getString(savedName, "")
+        if(sharedPreferences.getString(savedPhone, "") != "") phone_number_input_layout.editText!!.setText(sharedPreferences.getString(savedPhone, ""))
+        if(sharedPreferences.getString(savedEmail, "") != "") register_email_input_layout.editText!!.setText(sharedPreferences.getString(savedEmail, ""))*/
 
         btnContinue.setOnClickListener {
             hideKeyboard()
@@ -121,6 +130,17 @@ class PersonalInfoActivity : AppCompatActivity() {
                     val responseBody = response.body()
                     if (responseBody != null) {
                         val code = responseBody.code
+                        /*if(code == 200){
+                            val sharedPreferences = context.getSharedPreferences(context.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
+                            val savedName = context.getString(R.string.key_user_name)
+                            val savedPhone = context.getString(R.string.key_user_phone)
+                            val savedEmail = context.getString(R.string.key_user_email)
+                            val editor = sharedPreferences.edit()
+                            editor.putString(savedName,newBooking.name)
+                            editor.putString(savedPhone,newBooking.phone)
+                            editor.putString(savedEmail,newBooking.email)
+                            editor.apply()
+                        }*/
                         val intent = Intent(context, BookingEnd::class.java)
                         intent.putExtra("code", code)
                         intent.putExtra("name", newBooking.name)
