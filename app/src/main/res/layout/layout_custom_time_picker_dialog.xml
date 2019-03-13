@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/color_app">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <NumberPicker
+        android:id="@+id/numberPickerHours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:descendantFocusability="blocksDescendants"
+        android:theme="@style/AppTheme.Picker"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+    <NumberPicker
+        android:id="@+id/numberPickerMinutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:descendantFocusability="blocksDescendants"
+        android:theme="@style/AppTheme.Picker"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
+
+    <TextView
+        android:id="@+id/textViewCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:padding="16dp"
+        android:text="Отмена"
+        android:textAllCaps="true"
+        android:textColor="@color/color_accent"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textViewOk"
+        app:layout_constraintTop_toBottomOf="@+id/numberPickerHours" />
+
+    <TextView
+        android:id="@+id/textViewOk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="14dp"
+        android:text="Ок"
+        android:textAllCaps="true"
+        android:textColor="@color/color_accent"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Выберите время:"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text=":"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/numberPickerHours"
+        app:layout_constraintLeft_toRightOf="@id/numberPickerHours"
+        app:layout_constraintRight_toLeftOf="@id/numberPickerMinutes"
+        app:layout_constraintTop_toTopOf="@id/numberPickerHours" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/black_alpha_40"
+        app:layout_constraintBottom_toBottomOf="@id/numberPickerHours"
+        app:layout_constraintLeft_toRightOf="@id/numberPickerHours"
+        app:layout_constraintRight_toLeftOf="@id/numberPickerMinutes"
+        app:layout_constraintTop_toTopOf="@id/numberPickerHours">
+
+    </View>
+
+</android.support.constraint.ConstraintLayout>

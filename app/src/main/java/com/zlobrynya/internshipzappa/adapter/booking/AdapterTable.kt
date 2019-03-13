@@ -1,6 +1,5 @@
 package com.zlobrynya.internshipzappa.adapter.booking
 
-import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import kotlinx.android.synthetic.main.item_table.view.*
-import com.zlobrynya.internshipzappa.activity.booking.PersonalInfoActivity
 
 
 /**

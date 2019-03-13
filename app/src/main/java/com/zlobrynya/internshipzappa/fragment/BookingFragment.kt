@@ -14,21 +14,11 @@ import com.zlobrynya.internshipzappa.adapter.booking.AdapterDays
 import kotlinx.android.synthetic.main.fragment_booking.view.*
 import java.util.*
 import kotlin.collections.ArrayList
-import android.app.TimePickerDialog
 import android.text.format.DateUtils
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
-import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-import java.io.Serializable
+import com.zlobrynya.internshipzappa.util.CustomTimePickerDialog
+import com.zlobrynya.internshipzappa.util.PositiveClickListener
+import kotlinx.android.synthetic.main.fragment_booking.*
 import java.text.SimpleDateFormat
 
 
@@ -40,7 +30,13 @@ const val DAY_OFFSET: Int = 1
 /**
  * Фрагмент брони(выбор даты и времени)
  */
-class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingButtons.OnDurationListener {
+class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingButtons.OnDurationListener,
+    PositiveClickListener {
+
+    /**
+     * Кастомный таймпикер
+     */
+    private val timePickerDialog = CustomTimePickerDialog()
 
     /**
      * Список дней для отображения
@@ -80,9 +76,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         initCalendarRecycler()
         initDurationRecycler()
 
-        //retrofit
-
-
+        timePickerDialog.setOnPositiveClickListener(this) // Установка обработчика для позитивной кнопки таймпикера
         bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
         bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
 
@@ -102,10 +96,30 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
                     openTableList()
                 } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
             }
+            // Поле "Выберите время"
             R.id.book_time_select -> {
-                setTime()
+                showTimePickerDialog()
             }
         }
+    }
+
+    /**
+     * Открывает таймпикер
+     */
+    private fun showTimePickerDialog() {
+        timePickerDialog.show(fragmentManager, null)
+    }
+
+    /**
+     * Обработчик нажатий на позитивную кнопку в таймпикере
+     * @param hours Часы, выбранные в таймпикере
+     * @param minutes Минуты, выбранные в таймпикере
+     */
+    override fun onClick(hours: String, minutes: String) {
+        book_time_select.text = "$hours:$minutes"
+        calendar.set(Calendar.HOUR_OF_DAY, hours.toInt())
+        calendar.set(Calendar.MINUTE, minutes.toInt())
+        setInitialDateTime()
     }
 
     /**
@@ -204,31 +218,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         bookingView.book_duration_recycler.adapter =
             AdapterBookingButtons(booking, this)
     }
-
-    /**
-     * Собирает и открывает диалоговое окно с выбором времени
-     */
-    private fun setTime() {
-        val dialog = TimePickerDialog(
-            activity,
-            R.style.TimePickerTheme, // Кастомный стиль
-            timeSetListener, // Обработчик
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            true // 24-часовой формат
-        )
-        dialog.show()
-    }
-
-    /**
-     * Обработчик на выбор времени в таймпикере
-     */
-    private val timeSetListener: TimePickerDialog.OnTimeSetListener =
-        TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            calendar.set(Calendar.MINUTE, minute)
-            setInitialDateTime()
-        }
 
     /**
      * Выводит выбранное время в текстовое поле
