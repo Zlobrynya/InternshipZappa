@@ -38,13 +38,14 @@ class PersonalInfoActivity : AppCompatActivity() {
         val bookDateBegin = intent.getStringExtra("book_date_begin")
         val bookTimeBegin = intent.getStringExtra("book_time_begin")
         val bookTimeEnd = intent.getStringExtra("book_time_end")
+        val bookDateEnd = intent.getStringExtra("book_date_end")
         val bookTableId = intent.getIntExtra("table_id", 1).toString().toInt()
         val newBooking = bookingUserDTO()
         newBooking.date = bookDateBegin
         newBooking.time_from = bookTimeBegin
         newBooking.time_to = bookTimeEnd
         newBooking.table_id = bookTableId
-        
+        newBooking.date_to = bookDateEnd
        /* val sharedPreferences = this.getSharedPreferences(this.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
         val savedName = this.getString(R.string.key_user_name)
         val savedPhone = this.getString(R.string.key_user_phone)
@@ -154,29 +155,6 @@ class PersonalInfoActivity : AppCompatActivity() {
         })
         Log.i("check2", code1.toString())
     }
-
-    /*private fun validatePhone(phone: String): Boolean {
-        boolean check = false
-        if(!Pattern.matches("[a-zA-Z]+", phone)) {
-            if(phone.length() < 6 || phone.length() > 13) {
-                check = false
-            } else {
-                check = true
-            }
-        } else {
-            check = false
-        }
-        return check
-    }
-
-    private val EMAIL_PATTERN = "^[a-zA-Z0-9#_~!$&'()*+,;=:.\"(),:;<>@\\[\\]\\\\]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*$"
-    private val pattern = Pattern.compile(EMAIL_PATTERN)
-    private var matcher: Matcher? = null
-
-    fun validateEmail(email: String): Boolean {
-        matcher = pattern.matcher(email)
-        return matcher!!.matches()
-    }*/
 
     private fun validateName(name: String) : Boolean {
         val nameLength = 3

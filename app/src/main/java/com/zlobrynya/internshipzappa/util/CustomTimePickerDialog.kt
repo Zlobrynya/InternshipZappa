@@ -20,7 +20,7 @@ class CustomTimePickerDialog : DialogFragment() {
     private val minutesMaxValue = 2
 
     private val hoursMinValue = 1
-    private val hoursMaxValue = 12
+    private val hoursMaxValue = 24
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -36,7 +36,7 @@ class CustomTimePickerDialog : DialogFragment() {
         alertView.numberPickerHours.minValue = hoursMinValue
         alertView.numberPickerHours.maxValue = hoursMaxValue
         alertView.numberPickerHours.displayedValues =
-            arrayOf("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11")
+            arrayOf("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23")
 
         alertView.numberPickerMinutes.minValue = minutesMinValue
         alertView.numberPickerMinutes.maxValue = minutesMaxValue

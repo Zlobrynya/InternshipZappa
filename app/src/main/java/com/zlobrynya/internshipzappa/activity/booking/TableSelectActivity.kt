@@ -70,11 +70,14 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      */
     private fun initRequest() {
         val bookDateBegin = intent.getStringExtra("book_date_begin")
+        //поменять на реальную дату окончания
+        val bookDateEnd = intent.getStringExtra("book_date_end")
         val bookTimeBegin = intent.getStringExtra("book_time_begin")
         val bookTimeEnd = intent.getStringExtra("book_time_end")
         newBooking.date = bookDateBegin
         newBooking.time_from = bookTimeBegin
         newBooking.time_to = bookTimeEnd
+        newBooking.date_to = bookDateEnd
         Log.d("TOPKEK", bookDateBegin)
         Log.d("TOPKEK", bookTimeBegin)
         Log.d("TOPKEK", bookTimeEnd)
@@ -164,6 +167,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
             val intent = Intent(this, PersonalInfoActivity::class.java)
             intent.putExtra("table_id", tableList[position].seatId)
             intent.putExtra("book_date_begin", newBooking.date)
+            intent.putExtra("book_date_end", newBooking.date_to)
             intent.putExtra("book_time_begin", newBooking.time_from)
             intent.putExtra("book_time_end", newBooking.time_to)
             startActivity(intent)
