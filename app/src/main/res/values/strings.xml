@@ -39,6 +39,10 @@
     <string name="key_category">category</string>
     <string name="key_shared_log">logK</string>
     <string name="key_shared_name">endpoint</string>
+    <string name="key_shared_users">users</string>
+    <string name="key_user_name">users</string>
+    <string name="key_user_phone">phone</string>
+    <string name="key_user_email">email</string>
 
     <!-- доп строки адаптер топингов/рекоменд -->
     <string name="max_order">15</string>
@@ -86,4 +90,5 @@
     <string name="time">Время</string>
     <string name="error_phone">Введите корректный номер телефона</string>
     <string name="error_email">Введите корректный E-mail</string>
+    <string name="error_name">Введите корректное имя</string>
 </resources>

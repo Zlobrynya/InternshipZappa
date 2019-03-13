@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-feature android:name="android.hardware.telephony" />
 
@@ -18,19 +18,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.booking.PersonalInfoActivity">
-        </activity>
-        <activity android:name=".activity.profile.RegisterActivity">
-        </activity>
-        <activity android:name=".activity.booking.BookingEnd">
-        </activity>
+        <activity android:name=".activity.booking.PersonalInfoActivity" />
+        <activity android:name=".activity.profile.RegisterActivity" />
+        <activity android:name=".activity.booking.BookingEnd" />
         <activity
             android:name=".activity.profile.LoginActivity"
-            android:screenOrientation="locked">
-        </activity>
+            android:screenOrientation="locked" />
         <activity
             android:name=".activity.booking.TableSelectActivity"
-            android:theme="@style/AppTheme.NoBar"></activity>
+            android:theme="@style/AppTheme.NoBar" />
 
         <activity
             android:name=".activity.menu.FullDescriptionScreen"
@@ -47,8 +43,8 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".activity.MenuActivity"
-                android:screenOrientation="locked"/>
+            android:name=".activity.MenuActivity"
+            android:screenOrientation="locked" />
     </application>
 
 </manifest>

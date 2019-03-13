@@ -14,15 +14,11 @@ import com.zlobrynya.internshipzappa.adapter.booking.AdapterDays
 import kotlinx.android.synthetic.main.fragment_booking.view.*
 import java.util.*
 import kotlin.collections.ArrayList
-import android.app.TimePickerDialog
 import android.text.format.DateUtils
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import com.zlobrynya.internshipzappa.util.CustomTimePickerDialog
+import com.zlobrynya.internshipzappa.util.PositiveClickListener
+import kotlinx.android.synthetic.main.fragment_booking.*
 import java.text.SimpleDateFormat
 
 
@@ -34,7 +30,13 @@ const val DAY_OFFSET: Int = 1
 /**
  * Фрагмент брони(выбор даты и времени)
  */
-class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingButtons.OnDurationListener {
+class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingButtons.OnDurationListener,
+    PositiveClickListener {
+
+    /**
+     * Кастомный таймпикер
+     */
+    private val timePickerDialog = CustomTimePickerDialog()
 
     /**
      * Список дней для отображения
@@ -66,8 +68,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private var selectedDuration: Int = 0
 
-    private val newBooking = bookingDataDTO()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
 
@@ -76,29 +76,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         initCalendarRecycler()
         initDurationRecycler()
 
-        networkPost()
-
+        timePickerDialog.setOnPositiveClickListener(this) // Установка обработчика для позитивной кнопки таймпикера
         bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
         bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
 
         return bookingView
-    }
-
-    /**
-     * Реторфит
-     */
-    private fun networkPost() {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://na-rogah-api.herokuapp.com/api/v1/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client.build())
-            .build()
     }
 
     /**
@@ -114,10 +96,30 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
                     openTableList()
                 } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
             }
+            // Поле "Выберите время"
             R.id.book_time_select -> {
-                setTime()
+                showTimePickerDialog()
             }
         }
+    }
+
+    /**
+     * Открывает таймпикер
+     */
+    private fun showTimePickerDialog() {
+        timePickerDialog.show(fragmentManager, null)
+    }
+
+    /**
+     * Обработчик нажатий на позитивную кнопку в таймпикере
+     * @param hours Часы, выбранные в таймпикере
+     * @param minutes Минуты, выбранные в таймпикере
+     */
+    override fun onClick(hours: String, minutes: String) {
+        book_time_select.text = "$hours:$minutes"
+        calendar.set(Calendar.HOUR_OF_DAY, hours.toInt())
+        calendar.set(Calendar.MINUTE, minutes.toInt())
+        setInitialDateTime()
     }
 
     /**
@@ -128,51 +130,47 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
 
         val intent = Intent(activity, TableSelectActivity::class.java)
-        newBooking.date = dateFormat.format(calendar.timeInMillis) // Заполняем дату брони
-        newBooking.time_from = timeFormat.format(calendar.timeInMillis) // Заполняем время начала брони
+        intent.putExtra("book_date_begin", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
+        intent.putExtra("book_time_begin", timeFormat.format(calendar.timeInMillis))// Заполняем время начала брони
 
         when (selectedDuration) { // И время конца
             // 2 часа
             0 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000)
+                )
             }
             // 2 часа 30 минут
             1 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                )
             }
             // 3 часа
             2 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000)
+                )
             }
             // 3 часа 30 минут
             3 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                )
             }
             // 4 часа
             4 -> {
-                newBooking.time_to =
-                    timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000) // Заполняем время конца брони
-                Log.d("TOPKEK", newBooking.date)
-                Log.d("TOPKEK", newBooking.time_from)
-                Log.d("TOPKEK", newBooking.time_to)
+                intent.putExtra( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000)
+                )
             }
         }
+
         startActivity(intent)
     }
 
@@ -220,31 +218,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         bookingView.book_duration_recycler.adapter =
             AdapterBookingButtons(booking, this)
     }
-
-    /**
-     * Собирает и открывает диалоговое окно с выбором времени
-     */
-    private fun setTime() {
-        val dialog = TimePickerDialog(
-            activity,
-            R.style.TimePickerTheme, // Кастомный стиль
-            timeSetListener, // Обработчик
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE),
-            true // 24-часовой формат
-        )
-        dialog.show()
-    }
-
-    /**
-     * Обработчик на выбор времени в таймпикере
-     */
-    private val timeSetListener: TimePickerDialog.OnTimeSetListener =
-        TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-            calendar.set(Calendar.MINUTE, minute)
-            setInitialDateTime()
-        }
 
     /**
      * Выводит выбранное время в текстовое поле
