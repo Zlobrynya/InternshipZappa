@@ -104,9 +104,17 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
                     Log.i("check1", "${response.code()}")
                     responseBody = response.body()
                     if (responseBody != null) {
-                        Log.d("TOPKEK", responseBody!!.data.size.toString())
-                        initTableList()
-                        initRecycler()
+                        if (responseBody!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
+                            table_recycler.visibility = View.GONE
+                            no_tables_available.visibility = View.VISIBLE
+                        } else {
+                            Log.d("TOPKEK", responseBody!!.data.size.toString())
+                            initTableList()
+                            initRecycler()
+                        }
+                    } else { // Если свободных столиков нету, то выведем сообщение об этом
+                        table_recycler.visibility = View.GONE
+                        no_tables_available.visibility = View.VISIBLE
                     }
                 } else {
                     Log.i("check2", "${response.code()}")
