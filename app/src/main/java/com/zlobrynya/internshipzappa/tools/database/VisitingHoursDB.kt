@@ -35,11 +35,6 @@ class VisitingHoursDB(context: Context) {
             sqLiteDatabase!!.close()
     }
 
-    fun deleteDB(){
-        closeDataBase()
-        database!!.deleteBD()
-    }
-
     //очищает таблицу
     fun clearTableDB(){
         sqLiteDatabase!!.execSQL("delete from "+ NAME_TABLE);
