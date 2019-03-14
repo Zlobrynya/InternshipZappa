@@ -2,6 +2,8 @@ package com.zlobrynya.internshipzappa.tools.retrofit
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import io.reactivex.Observable
 import retrofit2.Response
@@ -29,6 +31,8 @@ class RetrofitClientInstance {
     fun getAllDishes(url: String) : Observable<Response<DishList>> = getRequest!!.getAllDishes(url)
 
     fun getLogServer() : Observable<Response<CheckDTO>> = getRequest!!.getLogServer()
+
+    fun postBookingDate(book: bookingDataDTO) : Observable<Response<tableList>> = postRequest!!.postBookingData(book)
 
     //fun getDishCount() : Observable<Response<ResponseBody>> = getRequest!!.getDishCount()
 

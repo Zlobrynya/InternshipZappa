@@ -11,10 +11,19 @@ import kotlinx.android.synthetic.main.activity_table_select.*
 import android.support.v7.widget.DividerItemDecoration
 import android.util.Log
 import com.zlobrynya.internshipzappa.adapter.booking.Table
+import com.zlobrynya.internshipzappa.tools.OurException
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
+import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -23,6 +32,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -60,7 +70,9 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
 
         initRequest()
         initToolBar()
-        networkPost()
+        networkRxjavaPost()
+
+        //networkPost()
         //initTableList()
         //initRecycler()
     }
@@ -99,7 +111,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
             .build()
         val apiInterface: PostRequest = retrofit.create(PostRequest::class.java)
         val requestCall = apiInterface.postBookingData(newBooking)
-        requestCall.enqueue(object : Callback<tableList> {
+        /*requestCall.enqueue(object : Callback<tableList> {
             override fun onFailure(call: Call<tableList>, t: Throwable) {}
 
             override fun onResponse(call: Call<tableList>, response: Response<tableList>) {
@@ -123,6 +135,55 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
                     Log.i("check2", "${response.code()}")
                 }
             }
+        })*/
+    }
+
+    private fun networkRxjavaPost(): Observable<Boolean>{
+        Log.d("1", "зашёл")
+        return Observable.create(object : ObservableOnSubscribe<Boolean>{
+            override fun subscribe(emitter: ObservableEmitter<Boolean>) {
+                Log.d("rxjava", "зашёл")
+                RetrofitClientInstance.getInstance()
+                    .postBookingDate(newBooking)
+                    .subscribeOn(Schedulers.io())
+                    ?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribe(object : Observer<Response<tableList>> {
+
+                        override fun onComplete() {}
+
+                        override fun onSubscribe(d: Disposable) {}
+
+                        override fun onNext(t: Response<tableList>) {
+                            if (t.isSuccessful) {
+                                responseBody = t.body()
+                                Log.i("check1", "${t.code()}")
+                                if (t.body() != null) {
+                                    if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
+                                        table_recycler.visibility = View.GONE
+                                        no_tables_available.visibility = View.VISIBLE
+                                    } else {
+                                        Log.d("TOPKEK", t.body()!!.data.size.toString())
+                                        initTableList(t as tableList)
+                                        initRecycler()
+                                    }
+                                } else { // Если свободных столиков нету, то выведем сообщение об этом
+                                    table_recycler.visibility = View.GONE
+                                    no_tables_available.visibility = View.VISIBLE
+                                }
+                            } else {
+                                Log.i("check2", "${t.code()}")
+                            }
+                        }
+
+                        override fun onError(e: Throwable) {
+                            Log.i("check","that's not fineIn")
+                            println(e.toString())
+                            emitter.onError(OurException())
+                        }
+
+                    })
+            }
+
         })
     }
 
@@ -137,9 +198,9 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
     /**
      * Заполняет данными список столиков
      */
-    private fun initTableList() {
-        for (i in 0 until responseBody!!.data.size) {
-            val tmp = responseBody!!.data[i]
+    private fun initTableList(t: tableList) {
+        for (i in 0 until t!!.data.size) {
+            val tmp = t!!.data[i]
             val table = Table(tmp.chair_count, tmp.position, tmp.chair_type, tmp.table_id)
             tableList.add(table)
         }
