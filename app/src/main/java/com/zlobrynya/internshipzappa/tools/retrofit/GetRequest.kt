@@ -2,6 +2,8 @@ package com.zlobrynya.internshipzappa.tools.retrofit
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import io.reactivex.Observable
 import retrofit2.Response
@@ -20,7 +22,7 @@ interface GetRequest {
     @GET("check_update")
     fun getLogServer() : Observable<Response<CheckDTO>>
 
-    /*@GET("/get_dish_count")
-    fun getDishCount() : Observable<Response<ResponseBody>>*/
+    @GET("timetable")
+    fun getTimeTable() : Observable<Response<visitingHoursList>>
 
 }

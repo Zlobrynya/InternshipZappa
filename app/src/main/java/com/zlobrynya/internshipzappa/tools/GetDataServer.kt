@@ -6,10 +6,12 @@ import android.util.Log
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
+import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -28,8 +30,9 @@ import io.reactivex.observers.DisposableObserver
 class GetDataServer(val context: Context) {
     private var menuDb: MenuDB
     private var categoryDB: CategoryDB
-
+    private var hoursDB: VisitingHoursDB
     init {
+        hoursDB = VisitingHoursDB(context)
         menuDb = MenuDB(context)
         categoryDB = CategoryDB(context)
     }
@@ -52,6 +55,7 @@ class GetDataServer(val context: Context) {
                                 //
                                 Log.i("check",t.body()!!.date)
                                 checkPass(t.body()!!.date, emitter, t.body()!!.count)
+                                getTimeTable(emitter)
                             } else {
                                 //посылаем Error с кодом ошибки сервера
                                 Log.e("err", t.code().toString())
@@ -175,6 +179,45 @@ class GetDataServer(val context: Context) {
 
                 }
 
+                override fun onError(e: Throwable) {
+                    println(e.toString())
+                    closeBD()
+                    emitter.onError(OurException())
+                }
+            })
+    }
+
+    private fun getTimeTable(emitter: ObservableEmitter<Boolean>) {
+        RetrofitClientInstance.getInstance()
+            .getTimeTable()
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<visitingHoursList>> {
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<visitingHoursList>) {
+                    if (t.code() == 200) {
+                        val body = t.body()
+                        val hours = body?.data
+                        hoursDB.addAllData(hours!!)
+                        Log.i("fuck", hoursDB.getCountRow().toString())
+                        Log.i("fuck", hoursDB.getVisitingHours()[0].week_day)
+                        Log.i("fuck", hoursDB.getVisitingHours()[1].week_day)
+                        Log.i("fuck", hoursDB.getVisitingHours()[2].week_day)
+                        Log.i("fuck", hoursDB.getVisitingHours()[3].week_day)
+                        Log.i("fuck", hoursDB.getVisitingHours()[4].week_day)
+                        Log.i("fuck", hoursDB.getVisitingHours()[5].week_day)
+                        Log.i("fuck", hoursDB.getVisitingHours()[6].week_day)
+                        Log.i("fuck", hoursDB.getVisitingHours()[7].week_day)
+                    } else {
+                        //посылаем Error с кодом ошибки сервера
+                        closeBD()
+                        emitter.onError(OurException(t.code()))
+                    }
+
+                }
                 override fun onError(e: Throwable) {
                     println(e.toString())
                     closeBD()
