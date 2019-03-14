@@ -35,6 +35,8 @@
     <string name="category_drinks">Напитки</string>
 
     <!-- название парметров (ключи) -->
+    <string name="key_time">timeK</string>
+    <string name="key_shared_time">time</string>
     <string name="key_id">id</string>
     <string name="key_category">category</string>
     <string name="key_shared_log">logK</string>
