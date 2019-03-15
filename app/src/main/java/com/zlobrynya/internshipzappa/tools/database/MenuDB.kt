@@ -90,7 +90,7 @@ class MenuDB(val context: Context) {
             dish.photo = "null"
 
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.item_id + ",\"" +
-                dish.name + "\"," + dish.price + ",\"" + dish.photo + "\",\"" +
+                dish.name +  "\"," + dish.price + ",\"" + dish.photo + "\",\"" +
                 dish.desc_long + "\",\"" + dish.desc_short + "\",\"" + dish.weight + "\",\"" +
                 dish.class_name + "\",\"" + dish.recommended + "\",\"" + dish.delivery + "\");"
         sqLiteDatabase!!.execSQL(query)

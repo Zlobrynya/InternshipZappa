@@ -22,7 +22,9 @@ import io.reactivex.ObservableEmitter
 import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -139,7 +141,6 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
     }
 
     private fun networkRxjavaPost(): Observable<Boolean>{
-        Log.d("1", "зашёл")
         return Observable.create(object : ObservableOnSubscribe<Boolean>{
             override fun subscribe(emitter: ObservableEmitter<Boolean>) {
                 Log.d("rxjava", "зашёл")
@@ -163,7 +164,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
                                         no_tables_available.visibility = View.VISIBLE
                                     } else {
                                         Log.d("TOPKEK", t.body()!!.data.size.toString())
-                                        initTableList(t as tableList)
+                                        initTableList()
                                         initRecycler()
                                     }
                                 } else { // Если свободных столиков нету, то выведем сообщение об этом
@@ -187,6 +188,68 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
         })
     }
 
+    private fun post(tables: List<tableDTO>, emitter: ObservableEmitter<Boolean>){
+        val countCat = tables.size-1
+        var countComplite = 0
+        val composite = CompositeDisposable()
+
+        tables.forEach {
+            Log.d("post", "зашёл")
+            val tableId = it.table_id
+            composite.add(
+                RetrofitClientInstance.getInstance()
+                    .postBookingDate(newBooking)
+                    .subscribeOn(Schedulers.io())
+                    ?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribeWith(object: DisposableObserver<Response<tableList>>(){
+                        override fun onComplete() {}
+
+                        override fun onNext(t: Response<tableList>) {
+                            if (t.code() == 200) {
+                                Log.d("onNext", "зашёл")
+                                responseBody = t.body()
+                                val tables = responseBody?.data
+                                tables?.forEach {
+                                    if (t.body() != null) {
+                                        if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
+                                            table_recycler.visibility = View.GONE
+                                            no_tables_available.visibility = View.VISIBLE
+                                        } else {
+                                            Log.d("TOPKEK", t.body()!!.data.size.toString())
+                                            initTableList()
+                                            initRecycler()
+                                        }
+                                        it.table_id = tableId
+                                    } else { // Если свободных столиков нету, то выведем сообщение об этом
+                                        table_recycler.visibility = View.GONE
+                                        no_tables_available.visibility = View.VISIBLE
+                                    }
+                                }
+
+                                if (countComplite < 0){
+                                    composite.clear()
+                                }else if (countComplite == countCat){
+                                    //посылаем сообщение что мы тут закончили
+                                    emitter.onNext(true)
+                                }
+                                else countComplite++;
+                            } else {
+                                Log.i("check2", "${t.code()}")
+                                countComplite = -5
+                                composite.clear()
+                                emitter.onError(OurException(t.code()))
+                            }
+                        }
+
+                        override fun onError(e: Throwable) {
+
+                        }
+
+                    })!!
+            )
+        }
+    }
+
     /**
      * Настраивает тулбар
      */
@@ -198,9 +261,9 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
     /**
      * Заполняет данными список столиков
      */
-    private fun initTableList(t: tableList) {
-        for (i in 0 until t!!.data.size) {
-            val tmp = t!!.data[i]
+    private fun initTableList() {
+        for (i in 0 until responseBody!!.data.size) {
+            val tmp = responseBody!!.data[i]
             val table = Table(tmp.chair_count, tmp.position, tmp.chair_type, tmp.table_id)
             tableList.add(table)
         }
