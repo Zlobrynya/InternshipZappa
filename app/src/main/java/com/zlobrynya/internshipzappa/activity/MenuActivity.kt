@@ -12,6 +12,9 @@ import kotlinx.android.synthetic.main.activity_menu.*
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
 import com.zlobrynya.internshipzappa.fragment.BookingFragment
+import android.widget.Toast
+
+
 
 
 class MenuActivity: AppCompatActivity() {
@@ -69,6 +72,12 @@ class MenuActivity: AppCompatActivity() {
         if (savedInstanceState == null) {
             navigation.selectedItemId = R.id.navigation_menu
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        System.gc()
+        System.exit(0)
     }
 }
 

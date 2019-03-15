@@ -16,6 +16,7 @@ class BookingEnd: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_end_booking)
+        supportActionBar!!.title = "Бронирование"
 
         val code= intent.getIntExtra("code", 400)
         val na = intent.getStringExtra("name")
@@ -37,14 +38,18 @@ class BookingEnd: AppCompatActivity() {
         }
 
         btn_back.setOnClickListener {
+            onBackPressed()
+            /*
             val intent = Intent(this, MenuActivity::class.java)
-            startActivity(intent)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)*/
         }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         val intent = Intent(this, MenuActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
 }
