@@ -179,14 +179,6 @@ class GetDataServer(val context: Context) {
                         val body = t.body()
                         val hours = body?.data
                         hoursDB.addAllData(hours!!)
-                        Log.i("fuck", hoursDB.getCountRow().toString())
-                        Log.i("fuck", hoursDB.getVisitingHours()[0].week_day)
-                        Log.i("fuck", hoursDB.getVisitingHours()[1].week_day)
-                        Log.i("fuck", hoursDB.getVisitingHours()[2].week_day)
-                        Log.i("fuck", hoursDB.getVisitingHours()[3].week_day)
-                        Log.i("fuck", hoursDB.getVisitingHours()[4].week_day)
-                        Log.i("fuck", hoursDB.getVisitingHours()[5].week_day)
-                        Log.i("fuck", hoursDB.getVisitingHours()[6].week_day)
                     } else {
                         //посылаем Error с кодом ошибки сервера
                         closeBD()
@@ -206,7 +198,7 @@ class GetDataServer(val context: Context) {
     private fun getCategoriesMenu(categories: List<CatDTO>, emitter: ObservableEmitter<Boolean>) {
         //Log.i("CategoriesMenu","getCategoriesMenu")
         val countCat = categories.size-1
-        var countComplite = 0;
+        var countComplite = 0
         val composite = CompositeDisposable()
 
         categories.forEach {
@@ -225,14 +217,25 @@ class GetDataServer(val context: Context) {
                                 dishes?.forEach {
                                     //экранирование ковычек
                                     try {
+                                        Log.i("wtf1",it.name)
+                                        if (it.class_name == null){it.class_name = "null"}
+                                        if (it.desc_long == null){it.desc_long = "null"}
+                                        if (it.desc_short == null){it.desc_short = "null"}
+                                        if (it.recommended == null){it.recommended = "null"}
+                                        if (it.photo == null){it.photo = "null"}
+                                        if (it.delivery == null){it.delivery = "null"}
+                                        if (it.weight == null){it.delivery = "null"}
+
                                         it.desc_short = it.desc_short.replace('\"', '\'')
                                         it.desc_long = it.desc_long.replace('\"', '\'')
                                         it.name = it.name.replace('\"', '\'')
+                                        Log.i("wtf2",it.name)
                                         it.photo = it.photo.replace('\"', '\'')
                                         it.recommended = it.recommended.replace('\"', '\'')
                                     }catch (e: IllegalArgumentException){
                                         Log.i("error",e.message)
                                     }
+
                                     it.class_name = nameCategory
                                 }
                                 menuDb.addAllData(dishes!!)
