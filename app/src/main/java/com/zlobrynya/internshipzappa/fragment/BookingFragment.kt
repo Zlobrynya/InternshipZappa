@@ -107,6 +107,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
     private var selectedDuration: Int = 0
 
     /**
+     * Выбранная дата
+     */
+    private var selectedDate: Int = 0
+
+    /**
      * Объект базы данных для получения графика
      */
     private lateinit var dataBase: VisitingHoursDB
@@ -114,12 +119,17 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
     /**
      * График работы ресторана
      */
-    lateinit var timeTable: ArrayList<visitingHoursDTO>
+    private lateinit var timeTable: ArrayList<visitingHoursDTO>
 
     /**
      * Индикатор того, что ресторан закрывается ночью следующего дня
      */
     private var overlap: Boolean = false
+
+    /**
+     * Доступна ли бронь на сегодня
+     */
+    private var isTodayAvailable: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
@@ -142,6 +152,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
 
     /**
      * Обновляет переменные timeOpen и timeClose в соответствии с выбранной датой
+     * Обновляет параметр overlap
      */
     private fun updateSchedule() {
         val dayOfWeekFormat = SimpleDateFormat("E") // Шаблон для вывода дня недели
@@ -155,14 +166,23 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
                 var scanner = Scanner(timeOpen)
                 var timeScanner = Scanner(scanner.next())
                 timeScanner.useDelimiter(":")
-                val intOpen = timeScanner.nextInt()
+                val hoursOpen = timeScanner.nextInt()
 
                 scanner = Scanner(timeClose)
                 timeScanner = Scanner(scanner.next())
                 timeScanner.useDelimiter(":")
-                val intClose = timeScanner.nextInt()
+                val hoursClose = timeScanner.nextInt()
 
-                overlap = intClose < intOpen
+                overlap = hoursClose < hoursOpen
+
+                if (isTodayAvailable && selectedDate == 0) {
+                    val localCalendar = Calendar.getInstance()
+                    val currentHour = localCalendar.get(Calendar.HOUR_OF_DAY) + 4
+                    if (currentHour > hoursOpen) {
+                        Log.d("TOPKEK", "Необходимо ограничить время начала брони")
+                        timeOpen = "$currentHour:00:00"
+                    }
+                }
                 break
             }
         }
@@ -221,14 +241,16 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private fun checkAvailableTime() {
         val localCalendar = Calendar.getInstance()
-        if (overlap) calendar.add(Calendar.DATE, 1) // При необходимости на 1 увеличим день окончания работы ресторана
         localCalendar.time = calendar.time
+
+        // При необходимости на 1 увеличим день окончания работы ресторана
+        if (overlap) localCalendar.add(Calendar.DATE, 1)
+
         val format = SimpleDateFormat("HH:mm:ss")
         val hourOfClose = format.parse(timeClose).hours
         val minutesOfClose = format.parse(timeClose).minutes
         localCalendar.set(Calendar.HOUR_OF_DAY, hourOfClose)
         localCalendar.set(Calendar.MINUTE, minutesOfClose)
-
 
         Log.d("TOPKEK", "Закрытие в ${localCalendar.time}")
         Log.d("TOPKEK", "Выбранное время $bookTimeAndDate")
@@ -257,10 +279,15 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
             difference == TWO_HOURS -> { // Осталось 2 часа
                 Log.d("TOPKEK", "2 часа доступно")
                 updateDurationVisibility(1)
+
             }
             else -> { // Осталось меньше двух часов (забронировать вообще нельзя)
                 Log.d("TOPKEK", "Меньше двух часов")
-                Toast.makeText(context, "Невозможно забронировать столик на выбранное время", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    context,
+                    "От начала вашей брони до закрытия ресторана менее двух часов",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
@@ -272,6 +299,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * @param count Количество доступных вариантов брони
      */
     private fun updateDurationVisibility(count: Int) {
+        selectedDuration = 0
+        bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick()
         val globalCount = 5 // Всего вариантов длительности брони
         for (i in 0 until count) { // Сделаем видимыми доступные варианты
             bookingView.book_duration_recycler.findViewHolderForAdapterPosition(i)!!.itemView.visibility = View.VISIBLE
@@ -290,7 +319,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
 
         val intent = Intent(activity, TableSelectActivity::class.java)
-        intent.putExtra("book_date_begin", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
+        intent.putExtra("book_date_begin", dateFormat.format(bookTimeAndDate!!.time)) // Заполняем дату брони
         intent.putExtra("book_time_begin", timeFormat.format(calendar.timeInMillis))// Заполняем время начала брони
         intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
         when (selectedDuration) { // И время конца
@@ -363,7 +392,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         schedule.clear()
         val localCalendar: Calendar = Calendar.getInstance() // Локальная переменная с календарем для заполнения списков
 
-        if (checkToday()) {
+        checkToday()
+        if (isTodayAvailable) {
             schedule.add(localCalendar.time) // Вне цикла добавим один элемент (т.е. текущий день) в список
             for (i in 0..5) {
                 // В цикле добавим еще нужное число дней, увеличивая дату на 1 день (DAY_OFFSET)
@@ -385,7 +415,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * @return true, если до закрытия ресторана 5+ часов, иначе - false
      * 5 часов потому что отсечка 2 часа до закрытия ресторана + 3 часа отсечка до ближайшей брони
      */
-    private fun checkToday(): Boolean {
+    private fun checkToday() {
         updateSchedule()
         val calendar: Calendar = Calendar.getInstance()
         val timeNow = calendar.timeInMillis
@@ -403,7 +433,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         Log.d("TOPKEK", "Закрытие ресторана в ${calendar.time}")
 
         val timeClose = calendar.timeInMillis
-        return timeClose - timeNow > 1000 * 60 * 60 * (2 + 3)
+        isTodayAvailable = timeClose - timeNow > 1000 * 60 * 60 * (2 + 3)
+        Log.d("TOPKEK", isTodayAvailable.toString())
     }
 
     /**
@@ -462,18 +493,20 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * @param position Позиция элемента
      */
     override fun onDateClick(position: Int) {
-
-        calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
-        Log.d(
-            "TOPKEK",
-            DateUtils.formatDateTime(
-                activity,
-                calendar.timeInMillis,
-                DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+        if (selectedDate != position) {
+            selectedDate = position // Обновим выбранную дату
+            calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
+            Log.d(
+                "TOPKEK",
+                DateUtils.formatDateTime(
+                    activity,
+                    calendar.timeInMillis,
+                    DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+                )
             )
-        )
-        updateSchedule() // Обновим расписание
-        book_time_select.text = "Время" // Обновим значение во вьюшке
+            updateSchedule() // Обновим расписание
+            book_time_select.text = "Время" // Обновим значение во вьюшке
+        }
     }
 
     /**

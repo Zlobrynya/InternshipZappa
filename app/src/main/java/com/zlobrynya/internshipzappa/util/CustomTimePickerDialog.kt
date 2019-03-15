@@ -119,8 +119,13 @@ class CustomTimePickerDialog : DialogFragment(), NumberPicker.OnValueChangeListe
         alertView.numberPickerHours.maxValue = timeClose
         alertView.numberPickerHours.displayedValues = availableSchedule
 
-        alertView.numberPickerMinutes.minValue = minutesMinValue
-        alertView.numberPickerMinutes.maxValue = minutesMaxValue
+        if (availableSchedule.size == 1) {
+            alertView.numberPickerMinutes.minValue = minutesMinValue
+            alertView.numberPickerMinutes.maxValue = minutesMinValue
+        } else {
+            alertView.numberPickerMinutes.minValue = minutesMinValue
+            alertView.numberPickerMinutes.maxValue = minutesMaxValue
+        }
         alertView.numberPickerMinutes.displayedValues = arrayOf("00", "30")
     }
 
