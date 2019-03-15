@@ -140,52 +140,45 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
         })*/
     }
 
-    private fun networkRxjavaPost(): Observable<Boolean>{
-        return Observable.create(object : ObservableOnSubscribe<Boolean>{
-            override fun subscribe(emitter: ObservableEmitter<Boolean>) {
-                Log.d("rxjava", "зашёл")
-                RetrofitClientInstance.getInstance()
-                    .postBookingDate(newBooking)
-                    .subscribeOn(Schedulers.io())
-                    ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe(object : Observer<Response<tableList>> {
+    private fun networkRxjavaPost(){
+        RetrofitClientInstance.getInstance()
+            .postBookingDate(newBooking)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<tableList>> {
 
-                        override fun onComplete() {}
+                override fun onComplete() {}
 
-                        override fun onSubscribe(d: Disposable) {}
+                override fun onSubscribe(d: Disposable) {}
 
-                        override fun onNext(t: Response<tableList>) {
-                            if (t.isSuccessful) {
-                                responseBody = t.body()
-                                Log.i("check1", "${t.code()}")
-                                if (t.body() != null) {
-                                    if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
-                                        table_recycler.visibility = View.GONE
-                                        no_tables_available.visibility = View.VISIBLE
-                                    } else {
-                                        Log.d("TOPKEK", t.body()!!.data.size.toString())
-                                        initTableList()
-                                        initRecycler()
-                                    }
-                                } else { // Если свободных столиков нету, то выведем сообщение об этом
-                                    table_recycler.visibility = View.GONE
-                                    no_tables_available.visibility = View.VISIBLE
-                                }
+                override fun onNext(t: Response<tableList>) {
+                    Log.d("onNext", "зашёл")
+                    if (t.isSuccessful) {
+                        responseBody = t.body()
+                        Log.i("check1", "${t.code()}")
+                        if (t.body() != null) {
+                            if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
+                                table_recycler.visibility = View.GONE
+                                no_tables_available.visibility = View.VISIBLE
                             } else {
-                                Log.i("check2", "${t.code()}")
+                                Log.d("TOPKEK", t.body()!!.data.size.toString())
+                                initTableList()
+                                initRecycler()
                             }
+                        } else { // Если свободных столиков нету, то выведем сообщение об этом
+                            table_recycler.visibility = View.GONE
+                            no_tables_available.visibility = View.VISIBLE
                         }
+                    } else {
+                        Log.i("check2", "${t.code()}")
+                    }
+                }
 
-                        override fun onError(e: Throwable) {
-                            Log.i("check","that's not fineIn")
-                            println(e.toString())
-                            emitter.onError(OurException())
-                        }
+                override fun onError(e: Throwable) {
+                    Log.i("check","that's not fineIn")
+                }
 
-                    })
-            }
-
-        })
+            })
     }
 
     private fun post(tables: List<tableDTO>, emitter: ObservableEmitter<Boolean>){
