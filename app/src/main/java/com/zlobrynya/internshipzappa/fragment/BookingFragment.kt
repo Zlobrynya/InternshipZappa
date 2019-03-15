@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_booking.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import android.text.format.DateUtils
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
@@ -28,6 +29,31 @@ import java.text.SimpleDateFormat
  * Число дней, добавляемых к дате в календаре
  */
 const val DAY_OFFSET: Int = 1
+
+/**
+ * 2 часа в миллисекундах
+ */
+const val TWO_HOURS: Long = 2 * 60 * 60 * 1000
+
+/**
+ * 2 с половиной часа в миллисекундах
+ */
+const val TWO_AND_HALF_HOURS: Long = 2 * 60 * 60 * 1000 + 30 * 60 * 1000
+
+/**
+ * 3 часа в миллисекундах
+ */
+const val THREE_HOURS: Long = 3 * 60 * 60 * 1000
+
+/**
+ * 3 с половиной часа в миллисекундах
+ */
+const val THREE_AND_HALF_HOURS: Long = 3 * 60 * 60 * 1000 + 30 * 60 * 1000
+
+/**
+ * 4 часа в миллисекундах
+ */
+const val FOUR_HOURS: Long = 4 * 60 * 60 * 1000
 
 /**
  * Фрагмент брони(выбор даты и времени)
@@ -81,6 +107,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
     private var selectedDuration: Int = 0
 
     /**
+     * Выбранная дата
+     */
+    private var selectedDate: Int = 0
+
+    /**
      * Объект базы данных для получения графика
      */
     private lateinit var dataBase: VisitingHoursDB
@@ -88,7 +119,17 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
     /**
      * График работы ресторана
      */
-    lateinit var timeTable: ArrayList<visitingHoursDTO>
+    private lateinit var timeTable: ArrayList<visitingHoursDTO>
+
+    /**
+     * Индикатор того, что ресторан закрывается ночью следующего дня
+     */
+    private var overlap: Boolean = false
+
+    /**
+     * Доступна ли бронь на сегодня
+     */
+    private var isTodayAvailable: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
@@ -111,15 +152,37 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
 
     /**
      * Обновляет переменные timeOpen и timeClose в соответствии с выбранной датой
+     * Обновляет параметр overlap
      */
     private fun updateSchedule() {
         val dayOfWeekFormat = SimpleDateFormat("E") // Шаблон для вывода дня недели
         val dayOfWeek = dayOfWeekFormat.format(calendar.time)
         for (i in 0 until timeTable.size) {
             if (timeTable[i].week_day.toLowerCase() == dayOfWeek.toLowerCase()) {
-                Log.d("TOPKEK", "Сейчас $dayOfWeek")
+                Log.d("TOPKEK", "Выбранный день недели $dayOfWeek")
                 timeOpen = timeTable[i].time_from
                 timeClose = timeTable[i].time_to
+
+                var scanner = Scanner(timeOpen)
+                var timeScanner = Scanner(scanner.next())
+                timeScanner.useDelimiter(":")
+                val hoursOpen = timeScanner.nextInt()
+
+                scanner = Scanner(timeClose)
+                timeScanner = Scanner(scanner.next())
+                timeScanner.useDelimiter(":")
+                val hoursClose = timeScanner.nextInt()
+
+                overlap = hoursClose < hoursOpen
+
+                if (isTodayAvailable && selectedDate == 0) {
+                    val localCalendar = Calendar.getInstance()
+                    val currentHour = localCalendar.get(Calendar.HOUR_OF_DAY) + 4
+                    if (currentHour > hoursOpen) {
+                        Log.d("TOPKEK", "Необходимо ограничить время начала брони")
+                        timeOpen = "$currentHour:00:00"
+                    }
+                }
                 break
             }
         }
@@ -168,6 +231,84 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         calendar.set(Calendar.HOUR_OF_DAY, hours.toInt())
         calendar.set(Calendar.MINUTE, minutes.toInt())
         setInitialDateTime()
+        checkAvailableTime()
+        bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick() // Сбросим выбранное время на 2 часа
+    }
+
+    /**
+     * Проверяет доступное время брони
+     * TODO допилить
+     */
+    private fun checkAvailableTime() {
+        val localCalendar = Calendar.getInstance()
+        localCalendar.time = calendar.time
+
+        // При необходимости на 1 увеличим день окончания работы ресторана
+        if (overlap) localCalendar.add(Calendar.DATE, 1)
+
+        val format = SimpleDateFormat("HH:mm:ss")
+        val hourOfClose = format.parse(timeClose).hours
+        val minutesOfClose = format.parse(timeClose).minutes
+        localCalendar.set(Calendar.HOUR_OF_DAY, hourOfClose)
+        localCalendar.set(Calendar.MINUTE, minutesOfClose)
+
+        Log.d("TOPKEK", "Закрытие в ${localCalendar.time}")
+        Log.d("TOPKEK", "Выбранное время $bookTimeAndDate")
+        val timeClose: Long = localCalendar.timeInMillis
+        val timeSelected = bookTimeAndDate!!.time
+        val difference: Long = timeClose - timeSelected
+        //Log.d("TOPKEK", "Разница в миллисекундах $difference")
+
+        when { // Посмотрим разницу между выбранным временем и временем закрытия ресторана
+            difference >= FOUR_HOURS -> { // Осталось больше 4 часов
+                Log.d("TOPKEK", "Осталось 4+ часа")
+                updateDurationVisibility(5)
+            }
+            difference == THREE_AND_HALF_HOURS -> { // Осталось 3.5 часа
+                Log.d("TOPKEK", "3 с половиной часа доступно")
+                updateDurationVisibility(4)
+            }
+            difference == THREE_HOURS -> { // Осталось 3 часа
+                Log.d("TOPKEK", "3 часа доступно")
+                updateDurationVisibility(3)
+            }
+            difference == TWO_AND_HALF_HOURS -> { // Осталось 2.5 часа
+                Log.d("TOPKEK", "2 с половиной часа доступно")
+                updateDurationVisibility(2)
+            }
+            difference == TWO_HOURS -> { // Осталось 2 часа
+                Log.d("TOPKEK", "2 часа доступно")
+                updateDurationVisibility(1)
+
+            }
+            else -> { // Осталось меньше двух часов (забронировать вообще нельзя)
+                Log.d("TOPKEK", "Меньше двух часов")
+                Toast.makeText(
+                    context,
+                    "От начала вашей брони до закрытия ресторана менее двух часов",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
+
+    }
+
+    /**
+     * Обновляет видимость доступных вариантов выбора длительности брони
+     * @param count Количество доступных вариантов брони
+     */
+    private fun updateDurationVisibility(count: Int) {
+        selectedDuration = 0
+        bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick()
+        val globalCount = 5 // Всего вариантов длительности брони
+        for (i in 0 until count) { // Сделаем видимыми доступные варианты
+            bookingView.book_duration_recycler.findViewHolderForAdapterPosition(i)!!.itemView.visibility = View.VISIBLE
+        }
+        for (i in count until globalCount) { // Скроем остальные
+            bookingView.book_duration_recycler.findViewHolderForAdapterPosition(i)!!.itemView.visibility =
+                View.INVISIBLE
+        }
     }
 
     /**
@@ -178,64 +319,64 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
 
         val intent = Intent(activity, TableSelectActivity::class.java)
-        intent.putExtra("book_date_begin", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
+        intent.putExtra("book_date_begin", dateFormat.format(bookTimeAndDate!!.time)) // Заполняем дату брони
         intent.putExtra("book_time_begin", timeFormat.format(calendar.timeInMillis))// Заполняем время начала брони
         intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
         when (selectedDuration) { // И время конца
             // 2 часа
             0 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000)) {
-                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000))
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + TWO_HOURS)) {
+                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + TWO_HOURS))
                 }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000)
+                    timeFormat.format(calendar.timeInMillis + TWO_HOURS)
                 )
             }
             // 2 часа 30 минут
             1 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)) {
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)) {
                     intent.putExtra(
                         "book_date_end",
-                        dateFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                        dateFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
                     )
                 }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + 2 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                    timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
                 )
             }
             // 3 часа
             2 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000)) {
-                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000))
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + THREE_HOURS)) {
+                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + THREE_HOURS))
                 }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000)
+                    timeFormat.format(calendar.timeInMillis + THREE_HOURS)
                 )
             }
             // 3 часа 30 минут
             3 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)) {
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)) {
                     intent.putExtra(
                         "book_date_end",
-                        dateFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                        dateFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
                     )
                 }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + 3 * 60 * 60 * 1000 + 30 * 60 * 1000)
+                    timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
                 )
             }
             // 4 часа
             4 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000)) {
-                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000))
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + FOUR_HOURS)) {
+                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + FOUR_HOURS))
                 }
                 intent.putExtra( // Заполняем время конца брони
                     "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + 4 * 60 * 60 * 1000)
+                    timeFormat.format(calendar.timeInMillis + FOUR_HOURS)
                 )
             }
         }
@@ -251,7 +392,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         schedule.clear()
         val localCalendar: Calendar = Calendar.getInstance() // Локальная переменная с календарем для заполнения списков
 
-        if (checkToday()) {
+        checkToday()
+        if (isTodayAvailable) {
             schedule.add(localCalendar.time) // Вне цикла добавим один элемент (т.е. текущий день) в список
             for (i in 0..5) {
                 // В цикле добавим еще нужное число дней, увеличивая дату на 1 день (DAY_OFFSET)
@@ -273,12 +415,26 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * @return true, если до закрытия ресторана 5+ часов, иначе - false
      * 5 часов потому что отсечка 2 часа до закрытия ресторана + 3 часа отсечка до ближайшей брони
      */
-    private fun checkToday(): Boolean {
+    private fun checkToday() {
         updateSchedule()
         val calendar: Calendar = Calendar.getInstance()
         val timeNow = calendar.timeInMillis
-        val timeClose: Long = SimpleDateFormat("HH:mm:ss").parse(timeClose).time
-        return timeClose - timeNow > 1000 * 60 * 60 * (2 + 3)
+        Log.d("TOPKEK", "Текущее время ${calendar.time}")
+
+        val hourOfClose: Int = SimpleDateFormat("HH:mm:ss").parse(timeClose).hours
+
+        if (hourOfClose < calendar.get(Calendar.HOUR_OF_DAY)) {
+            // Если время закрытия меньше времени открытия, значит ресторан закрывается ночью следующего дня
+            calendar.add(Calendar.DATE, 1)
+        }
+        val minutesOfClose: Int = SimpleDateFormat("HH:mm:ss").parse(timeClose).minutes
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfClose)
+        calendar.set(Calendar.MINUTE, minutesOfClose)
+        Log.d("TOPKEK", "Закрытие ресторана в ${calendar.time}")
+
+        val timeClose = calendar.timeInMillis
+        isTodayAvailable = timeClose - timeNow > 1000 * 60 * 60 * (2 + 3)
+        Log.d("TOPKEK", isTodayAvailable.toString())
     }
 
     /**
@@ -337,18 +493,20 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      * @param position Позиция элемента
      */
     override fun onDateClick(position: Int) {
-
-        calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
-        Log.d(
-            "TOPKEK",
-            DateUtils.formatDateTime(
-                activity,
-                calendar.timeInMillis,
-                DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+        if (selectedDate != position) {
+            selectedDate = position // Обновим выбранную дату
+            calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
+            Log.d(
+                "TOPKEK",
+                DateUtils.formatDateTime(
+                    activity,
+                    calendar.timeInMillis,
+                    DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+                )
             )
-        )
-        updateSchedule() // Обновим расписание
-        book_time_select.text = "Время" // Обновим значение во вьюшке
+            updateSchedule() // Обновим расписание
+            book_time_select.text = "Время" // Обновим значение во вьюшке
+        }
     }
 
     /**

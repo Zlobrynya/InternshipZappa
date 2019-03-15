@@ -217,19 +217,17 @@ class GetDataServer(val context: Context) {
                                 dishes?.forEach {
                                     //экранирование ковычек
                                     try {
-                                        Log.i("wtf1",it.name)
-                                        if (it.class_name == null){it.class_name = "null"}
-                                        if (it.desc_long == null){it.desc_long = "null"}
-                                        if (it.desc_short == null){it.desc_short = "null"}
-                                        if (it.recommended == null){it.recommended = "null"}
-                                        if (it.photo == null){it.photo = "null"}
-                                        if (it.delivery == null){it.delivery = "null"}
-                                        if (it.weight == null){it.delivery = "null"}
+                                        if (it.class_name == null){it.class_name = ""}
+                                        if (it.desc_long == null){it.desc_long = ""}
+                                        if (it.desc_short == null){it.desc_short = ""}
+                                        if (it.recommended == null){it.recommended = ""}
+                                        if (it.photo == null){it.photo = ""}
+                                        if (it.delivery == null){it.delivery = ""}
+                                        if (it.weight == null){it.delivery = ""}
 
                                         it.desc_short = it.desc_short.replace('\"', '\'')
                                         it.desc_long = it.desc_long.replace('\"', '\'')
                                         it.name = it.name.replace('\"', '\'')
-                                        Log.i("wtf2",it.name)
                                         it.photo = it.photo.replace('\"', '\'')
                                         it.recommended = it.recommended.replace('\"', '\'')
                                     }catch (e: IllegalArgumentException){
