@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.util.Log
 import android.view.View
+import android.widget.NumberPicker
 import com.zlobrynya.internshipzappa.R
 import kotlinx.android.synthetic.main.layout_custom_time_picker_dialog.view.*
 import java.util.*
@@ -13,7 +14,7 @@ import java.util.*
 /**
  * Кастомный таймпикер
  */
-class CustomTimePickerDialog : DialogFragment() {
+class CustomTimePickerDialog : DialogFragment(), NumberPicker.OnValueChangeListener {
 
     /**
      * Час открытия ресторана
@@ -73,6 +74,7 @@ class CustomTimePickerDialog : DialogFragment() {
         initNumberPickers(alertView)
         setClickListeners(alertView)
         builderAlertDialog.setView(alertView)
+        alertView.numberPickerHours.setOnValueChangedListener(this)
         return builderAlertDialog.create()
     }
 
@@ -83,20 +85,20 @@ class CustomTimePickerDialog : DialogFragment() {
     private fun parseTime() {
         val open = arguments!!.getString("time_open") // Заберем из аргументов строки
         val close = arguments!!.getString("time_close")
-        Log.d("TOPKEK", open)
-        Log.d("TOPKEK", close)
+        //Log.d("TOPKEK", "Время открытия ресторана $open")
+        //Log.d("TOPKEK", "Время закрытия ресторана $close")
 
         var scanner = Scanner(open) // Используем сканнер
         var timeScanner = Scanner(scanner.next())
         timeScanner.useDelimiter(":") // В качестве разделителя будет двоеточие
         timeOpen = timeScanner.nextInt() // Берем первое число до разделителя
-        Log.d("TOPKEK", timeOpen.toString())
+        //Log.d("TOPKEK", "Час открытия ресторана $timeOpen")
 
         scanner = Scanner(close) // То же самое для второй строки
         timeScanner = Scanner(scanner.next())
         timeScanner.useDelimiter(":")
         timeClose = timeScanner.nextInt()
-        Log.d("TOPKEK", timeClose.toString())
+        //Log.d("TOPKEK", "Час закрытия ресторана ${timeClose}")
 
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, timeClose)
@@ -110,9 +112,8 @@ class CustomTimePickerDialog : DialogFragment() {
 
     private fun initNumberPickers(alertView: View) {
 
-
         val availableSchedule = Arrays.copyOfRange(scheduleArray, timeOpen, timeClose + 1)
-        Log.d("TOPKEK", Arrays.toString(availableSchedule))
+        //Log.d("TOPKEK", "Доступные часы для брони ${Arrays.toString(availableSchedule)}")
 
         alertView.numberPickerHours.minValue = timeOpen
         alertView.numberPickerHours.maxValue = timeClose
@@ -132,7 +133,7 @@ class CustomTimePickerDialog : DialogFragment() {
             positiveClickListener?.let { it ->
                 val minutesIndex = alertView.numberPickerMinutes.value - 1
                 val hoursIndex = alertView.numberPickerHours.value
-                Log.d("TOPKEK", hoursIndex.toString())
+                //Log.d("TOPKEK", "Выбранный час брони $hoursIndex")
 
                 val minutes = alertView.numberPickerMinutes.displayedValues[minutesIndex]
                 val hours = scheduleArray[hoursIndex]
@@ -144,6 +145,17 @@ class CustomTimePickerDialog : DialogFragment() {
 
     fun setOnPositiveClickListener(listener: PositiveClickListener) {
         this.positiveClickListener = listener
+    }
+
+    /**
+     * Обработчик изменений в намбер пикере
+     * @param oldVal Старое значение
+     * @param newVal Новое значение
+     */
+    override fun onValueChange(picker: NumberPicker?, oldVal: Int, newVal: Int) {
+        //Log.d("KEKLOL", "Было $oldVal Стало $newVal")
+        if (newVal == timeClose) alertView.numberPickerMinutes.maxValue = minutesMinValue
+        else alertView.numberPickerMinutes.maxValue = minutesMaxValue
     }
 
 }
