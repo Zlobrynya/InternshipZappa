@@ -98,47 +98,8 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
     }
 
     /**
-     * Отправляет POST запрос на сервер и получает в ответе список доступных столиков
+     * Отправляет POST запрос на сервер и получает в ответе список доступных столиков(RxJava2)
      */
-    private fun networkPost() {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://na-rogah-api.herokuapp.com/api/v1/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client.build())
-            .build()
-        val apiInterface: PostRequest = retrofit.create(PostRequest::class.java)
-        val requestCall = apiInterface.postBookingData(newBooking)
-        /*requestCall.enqueue(object : Callback<tableList> {
-            override fun onFailure(call: Call<tableList>, t: Throwable) {}
-
-            override fun onResponse(call: Call<tableList>, response: Response<tableList>) {
-                if (response.isSuccessful) {
-                    Log.i("check1", "${response.code()}")
-                    responseBody = response.body()
-                    if (responseBody != null) {
-                        if (responseBody!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
-                            table_recycler.visibility = View.GONE
-                            no_tables_available.visibility = View.VISIBLE
-                        } else {
-                            Log.d("TOPKEK", responseBody!!.data.size.toString())
-                            initTableList()
-                            initRecycler()
-                        }
-                    } else { // Если свободных столиков нету, то выведем сообщение об этом
-                        table_recycler.visibility = View.GONE
-                        no_tables_available.visibility = View.VISIBLE
-                    }
-                } else {
-                    Log.i("check2", "${response.code()}")
-                }
-            }
-        })*/
-    }
 
     private fun networkRxjavaPost(){
         RetrofitClientInstance.getInstance()
@@ -152,7 +113,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<tableList>) {
-                    Log.d("onNext", "зашёл")
+                    Log.d("onNextTA", "зашёл")
                     if (t.isSuccessful) {
                         responseBody = t.body()
                         Log.i("check1", "${t.code()}")
@@ -179,68 +140,6 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
                 }
 
             })
-    }
-
-    private fun post(tables: List<tableDTO>, emitter: ObservableEmitter<Boolean>){
-        val countCat = tables.size-1
-        var countComplite = 0
-        val composite = CompositeDisposable()
-
-        tables.forEach {
-            Log.d("post", "зашёл")
-            val tableId = it.table_id
-            composite.add(
-                RetrofitClientInstance.getInstance()
-                    .postBookingDate(newBooking)
-                    .subscribeOn(Schedulers.io())
-                    ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribeWith(object: DisposableObserver<Response<tableList>>(){
-                        override fun onComplete() {}
-
-                        override fun onNext(t: Response<tableList>) {
-                            if (t.code() == 200) {
-                                Log.d("onNext", "зашёл")
-                                responseBody = t.body()
-                                val tables = responseBody?.data
-                                tables?.forEach {
-                                    if (t.body() != null) {
-                                        if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
-                                            table_recycler.visibility = View.GONE
-                                            no_tables_available.visibility = View.VISIBLE
-                                        } else {
-                                            Log.d("TOPKEK", t.body()!!.data.size.toString())
-                                            initTableList()
-                                            initRecycler()
-                                        }
-                                        it.table_id = tableId
-                                    } else { // Если свободных столиков нету, то выведем сообщение об этом
-                                        table_recycler.visibility = View.GONE
-                                        no_tables_available.visibility = View.VISIBLE
-                                    }
-                                }
-
-                                if (countComplite < 0){
-                                    composite.clear()
-                                }else if (countComplite == countCat){
-                                    //посылаем сообщение что мы тут закончили
-                                    emitter.onNext(true)
-                                }
-                                else countComplite++;
-                            } else {
-                                Log.i("check2", "${t.code()}")
-                                countComplite = -5
-                                composite.clear()
-                                emitter.onError(OurException(t.code()))
-                            }
-                        }
-
-                        override fun onError(e: Throwable) {
-
-                        }
-
-                    })!!
-            )
-        }
     }
 
     /**

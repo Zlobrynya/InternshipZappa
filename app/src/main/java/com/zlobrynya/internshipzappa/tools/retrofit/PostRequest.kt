@@ -20,5 +20,5 @@ interface PostRequest {
     //запрос на бронирование
     @Headers("Content-Type: application/json")
     @POST("reserve_place")
-    fun postReserve(@Body reserve: bookingUserDTO): Call<respDTO>
+    fun postReserve(@Body reserve: bookingUserDTO): Observable<Response<respDTO>>
 }

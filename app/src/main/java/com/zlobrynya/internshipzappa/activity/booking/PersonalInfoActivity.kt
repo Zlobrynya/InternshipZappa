@@ -5,24 +5,17 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_personal_info.*
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat.getSystemService
-import android.text.Editable
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.respDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
-import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
+import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 
@@ -35,12 +28,14 @@ class PersonalInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_personal_info)
         supportActionBar!!.title = "Бронирование"
+
         val bookDateBegin = intent.getStringExtra("book_date_begin")
         val bookTimeBegin = intent.getStringExtra("book_time_begin")
         val bookTimeEnd = intent.getStringExtra("book_time_end")
         val bookDateEnd = intent.getStringExtra("book_date_end")
         val bookTableId = intent.getIntExtra("table_id", 1).toString().toInt()
         val newBooking = bookingUserDTO()
+
         newBooking.date = bookDateBegin
         newBooking.time_from = bookTimeBegin
         newBooking.time_to = bookTimeEnd
@@ -94,7 +89,7 @@ class PersonalInfoActivity : AppCompatActivity() {
                 newBooking.name = name
                 newBooking.email = email
                 newBooking.phone = phone
-                networkPost(newBooking, it.context)
+                networkRxjavaPost(newBooking, it.context)
             }
         }
     }
@@ -108,52 +103,51 @@ class PersonalInfoActivity : AppCompatActivity() {
             )
         }
     }
-    private fun networkPost(newBooking: bookingUserDTO, context: Context){
-        var code1: Int = 0
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://na-rogah-api.herokuapp.com/api/v1/")
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client.build())
-            .build()
-        val apiInterface: PostRequest = retrofit.create(PostRequest::class.java)
-        val requestCall = apiInterface.postReserve(newBooking)
-        requestCall.enqueue(object : Callback<respDTO> {
-            override fun onFailure(call: Call<respDTO>, t: Throwable) {}
 
-            override fun onResponse(call: Call<respDTO>, response: Response<respDTO>) {
-                if (response.isSuccessful) {
-                    Log.i("check1", "${response.code()}")
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        val code = responseBody.code
-                        /*if(code == 200){
-                            val sharedPreferences = context.getSharedPreferences(context.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
-                            val savedName = context.getString(R.string.key_user_name)
-                            val savedPhone = context.getString(R.string.key_user_phone)
-                            val savedEmail = context.getString(R.string.key_user_email)
-                            val editor = sharedPreferences.edit()
-                            editor.putString(savedName,newBooking.name)
-                            editor.putString(savedPhone,newBooking.phone)
-                            editor.putString(savedEmail,newBooking.email)
-                            editor.apply()
-                        }*/
-                        val intent = Intent(context, BookingEnd::class.java)
-                        intent.putExtra("code", code)
-                        intent.putExtra("name", newBooking.name)
-                        intent.putExtra("phone", newBooking.phone)
-                        context.startActivity(intent)
+    //Пост запрос на размещение личной информации(RxJava2)
+    private fun networkRxjavaPost(newBooking: bookingUserDTO, context: Context){
+        RetrofitClientInstance.getInstance()
+            .postReserve(newBooking)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<respDTO>> {
+
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<respDTO>) {
+                    Log.d("onNextPA", "зашёл")
+                    if (t.isSuccessful) {
+                        Log.i("check1", "${t.code()}")
+                        if (t.body() != null) {
+                            /*if(code == 200){
+                                val sharedPreferences = context.getSharedPreferences(context.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
+                                val savedName = context.getString(R.string.key_user_name)
+                                val savedPhone = context.getString(R.string.key_user_phone)
+                                val savedEmail = context.getString(R.string.key_user_email)
+                                val editor = sharedPreferences.edit()
+                                editor.putString(savedName,newBooking.name)
+                                editor.putString(savedPhone,newBooking.phone)
+                                editor.putString(savedEmail,newBooking.email)
+                                editor.apply()
+                            }*/
+                            val intent = Intent(context, BookingEnd::class.java)
+                            intent.putExtra("code", t.code())
+                            intent.putExtra("name", newBooking.name)
+                            intent.putExtra("phone", newBooking.phone)
+                            context.startActivity(intent)
+                        }
+                    } else {
+                        Log.i("check2", "${t.code()}")
                     }
-                } else {
-                    Log.i("check2", "${response.code()}")
                 }
-            }
-        })
-        Log.i("check2", code1.toString())
+
+                override fun onError(e: Throwable) {
+                    Log.i("check","that's not fineIn")
+                }
+
+            })
     }
 
     private fun validateName(name: String) : Boolean {
