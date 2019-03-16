@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.adapter.booking
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -7,18 +8,25 @@ import android.view.View
 import java.util.*
 import android.widget.TextView
 import com.zlobrynya.internshipzappa.R
+import kotlinx.android.synthetic.main.item_booking_duration.view.*
 
 
 /**
  * Адаптер для RecyclerView, отображающий календарные дни для брони
  */
-class AdapterBookingDuration(private val values: ArrayList<BookDuration>, onDurationListener: OnDurationListener) :
+class AdapterBookingDuration(
+    private val values: ArrayList<BookDuration>,
+    onDurationListener: OnDurationListener,
+    context: Context?
+) :
     RecyclerView.Adapter<AdapterBookingDuration.ViewHolder>() {
 
     /**
      * Номер выбранного элемента в выборе даты
      */
     var focusedElement: Int = 0
+
+    private val mContext = context
 
     private val mOnDurationListener: OnDurationListener = onDurationListener
 
@@ -29,8 +37,17 @@ class AdapterBookingDuration(private val values: ArrayList<BookDuration>, onDura
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // По необходимости меняем цветовую обводку у квадратика с датой
-        if (position == focusedElement) holder.itemView.setBackgroundResource(R.drawable.item_day_selected_shape)
-        else holder.itemView.setBackgroundResource(R.drawable.item_day_shape)
+        if (position == focusedElement) {
+            holder.itemView.setBackgroundResource(R.drawable.item_day_selected_shape)
+            if (mContext != null) {
+                holder.itemView.duration_text_view.setTextColor(mContext.resources.getColor(R.color.white))
+            }
+        } else {
+            holder.itemView.setBackgroundResource(R.drawable.item_day_shape)
+            if (mContext != null) {
+                holder.itemView.duration_text_view.setTextColor(mContext.resources.getColor(R.color.text_tab_bar_not_select))
+            }
+        }
 
         holder.duration.text = values[position].time
 
