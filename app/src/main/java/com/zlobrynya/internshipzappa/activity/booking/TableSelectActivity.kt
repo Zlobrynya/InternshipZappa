@@ -186,6 +186,9 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
             intent.putExtra("book_date_end", newBooking.date_to)
             intent.putExtra("book_time_begin", newBooking.time_from)
             intent.putExtra("book_time_end", newBooking.time_to)
+            intent.putExtra("seat_count", tableList[position].seatCount)
+            intent.putExtra("seat_position", tableList[position].seatPosition)
+            intent.putExtra("seat_type", tableList[position].seatType)
             startActivity(intent)
         }
     }
