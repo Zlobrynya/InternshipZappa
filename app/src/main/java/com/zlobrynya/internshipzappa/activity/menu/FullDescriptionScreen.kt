@@ -107,6 +107,8 @@ class FullDescriptionScreen : AppCompatActivity() {
             }
             if (list.size == 0)
                 textView7.visibility = View.GONE
+        } else{
+            textView7.visibility = View.GONE
         }
         return list
     }
