@@ -11,30 +11,14 @@ import kotlinx.android.synthetic.main.activity_table_select.*
 import android.support.v7.widget.DividerItemDecoration
 import android.util.Log
 import com.zlobrynya.internshipzappa.adapter.booking.Table
-import com.zlobrynya.internshipzappa.tools.OurException
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
-import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -101,7 +85,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Отправляет POST запрос на сервер и получает в ответе список доступных столиков(RxJava2)
      */
 
-    private fun networkRxjavaPost(){
+    private fun networkRxjavaPost() {
         RetrofitClientInstance.getInstance()
             .postBookingDate(newBooking)
             .subscribeOn(Schedulers.io())
@@ -136,7 +120,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check","that's not fineIn")
+                    Log.i("check", "that's not fineIn")
                 }
 
             })

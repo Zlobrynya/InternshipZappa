@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.adapter.booking
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import android.view.LayoutInflater
@@ -7,19 +8,22 @@ import android.view.View
 import java.util.*
 import android.widget.TextView
 import com.zlobrynya.internshipzappa.R
+import kotlinx.android.synthetic.main.item_day.view.*
 import java.text.SimpleDateFormat
 
 
 /**
  * Адаптер для RecyclerView, отображающий календарные дни для брони
  */
-class AdapterDays(private val values: ArrayList<Date>, onDateListener: OnDateListener) :
+class AdapterDays(private val values: ArrayList<Date>, onDateListener: OnDateListener, context: Context?) :
     RecyclerView.Adapter<AdapterDays.ViewHolder>() {
 
     /**
      * Номер выбранного элемента в выборе даты
      */
     var focusedElement: Int = 0
+
+    private val mContext = context
 
     private val mOnDateListener: OnDateListener = onDateListener
 
@@ -29,13 +33,25 @@ class AdapterDays(private val values: ArrayList<Date>, onDateListener: OnDateLis
      * @param position Позиция элемента
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // По необходимости меняем цветовую обводку у квадратика с датой
-        if (position == focusedElement) holder.itemView.setBackgroundResource(R.drawable.item_day_selected_shape)
-        else holder.itemView.setBackgroundResource(R.drawable.item_day_shape)
 
         holder.dayNumber.text = getDayNumber(values[position])
         holder.dayOfWeek.text = getDayOfWeek(values[position])
 
+        // По необходимости меняем цветовую обводку у квадратика с датой
+        if (position == focusedElement) {
+            holder.itemView.setBackgroundResource(R.drawable.item_day_selected_shape)
+            if (mContext != null) {
+                holder.itemView.day.setTextColor(mContext.resources.getColor(R.color.white))
+                holder.itemView.day_of_the_week.setTextColor(mContext.resources.getColor(R.color.white))
+            }
+
+        } else {
+            holder.itemView.setBackgroundResource(R.drawable.item_day_shape)
+            if (mContext != null) {
+                holder.itemView.day.setTextColor(mContext.resources.getColor(R.color.text_tab_bar_not_select))
+                holder.itemView.day_of_the_week.setTextColor(mContext.resources.getColor(R.color.text_tab_bar_not_select))
+            }
+        }
     }
 
     /**

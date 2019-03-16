@@ -460,7 +460,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     private fun initCalendarRecycler() {
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         bookingView.days_recycler.layoutManager = layoutManager
-        bookingView.days_recycler.adapter = AdapterDays(schedule, this)
+        bookingView.days_recycler.adapter = AdapterDays(schedule, this, context)
     }
 
     /**
@@ -470,7 +470,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         bookingView.book_duration_recycler.layoutManager = layoutManager
         bookingView.book_duration_recycler.adapter =
-            AdapterBookingDuration(booking, this)
+            AdapterBookingDuration(booking, this, context)
     }
 
     /**
