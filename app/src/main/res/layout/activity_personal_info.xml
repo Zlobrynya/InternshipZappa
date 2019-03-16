@@ -75,8 +75,8 @@
             android:inputType="number"
             android:textColor="@color/white"
             android:backgroundTint="@color/color_hint"
-            app:mask="+7 (***) ***-**-**"
-            app:notMaskedSymbol="*"/>
+            app:mask="+7 (###) ###-##-##"
+            app:notMaskedSymbol="#"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -180,7 +180,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="Сегодня, 7 марта"
+        android:text="7 марта"
         android:textColor="@color/color_hint"
         android:textSize="16sp"
         android:layout_marginStart="12dp"
@@ -233,7 +233,7 @@
         android:layout_height="42dp"
         android:text="@string/btn_continue"
         android:textColor="@color/white"
-        android:background="@color/btn_login_register"
+        android:background="@color/btn_continue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

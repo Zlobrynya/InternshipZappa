@@ -83,6 +83,9 @@
     <string name="otmena">Отмена бронирования возможна только по звонку в ресторан.</string>
     <string name="phone_booking">Телефон для связи: +7 (8142) 63-23-89</string>
     <string name="back">Вернуться</string>
+    <string name="table2">Места: %1$s, %2$s</string>
+    <string name="table3">Места: %1$s, %2$s, %3$s</string>
+    <string name="period">%1$s - %2$s</string>
 
     <string name="btn_continue">Продолжить</string>
     <string name="personal_info">Укажите ваши данные</string>

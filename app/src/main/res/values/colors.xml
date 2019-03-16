@@ -17,4 +17,5 @@
     <color name="text_end_booking">#B2FFFFFF</color>
     <color name="color_hint">#66FFFFFF</color>
     <color name="btn_login_register">#777777</color>
+    <color name="btn_continue">#FF0000</color>
 </resources>
