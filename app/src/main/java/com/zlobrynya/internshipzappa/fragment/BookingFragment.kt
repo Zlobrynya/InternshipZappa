@@ -137,7 +137,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
 
         dataBase = VisitingHoursDB(context!!) // Инициализация БД
         timeTable = dataBase.getVisitingHours() // Получение графика работы ресторана
-        dataBase.clearTableDB()
+        dataBase.closeDataBase()
 
         initCalendar()
         updateSchedule()
