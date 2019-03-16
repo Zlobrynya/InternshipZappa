@@ -64,7 +64,11 @@ class FullDescriptionScreen : AppCompatActivity() {
         if (dish.weight == ""){
             dishVes.visibility = View.GONE
         } else{
-            dishVes.text = dish.weight + getString(R.string.gr)
+            if(dish.class_name == "Напитки"){
+                dishVes.text = dish.weight + getString(R.string.ml)
+            }else {
+                dishVes.text = dish.weight + getString(R.string.gr)
+            }
         }
 
         dishName.text = dish.name
@@ -107,7 +111,7 @@ class FullDescriptionScreen : AppCompatActivity() {
             }
             if (list.size == 0)
                 textView7.visibility = View.GONE
-        } else{
+        }else{
             textView7.visibility = View.GONE
         }
         return list

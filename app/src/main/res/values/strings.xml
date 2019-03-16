@@ -30,6 +30,7 @@
     <!--доп строки общие-->
     <string name="rub">\u0020₽</string>
     <string name="gr">\u0020г</string>
+    <string name="ml">\u0020мл</string>
     <string name="zero_num">0</string>
     <string name="category_topping">Топинги</string>
     <string name="category_drinks">Напитки</string>
