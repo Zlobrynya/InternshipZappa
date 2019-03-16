@@ -12,8 +12,8 @@ import com.zlobrynya.internshipzappa.R
 /**
  * Адаптер для RecyclerView, отображающий календарные дни для брони
  */
-class AdapterBookingButtons(private val values: ArrayList<String>, onDurationListener: OnDurationListener) :
-    RecyclerView.Adapter<AdapterBookingButtons.ViewHolder>() {
+class AdapterBookingDuration(private val values: ArrayList<BookDuration>, onDurationListener: OnDurationListener) :
+    RecyclerView.Adapter<AdapterBookingDuration.ViewHolder>() {
 
     /**
      * Номер выбранного элемента в выборе даты
@@ -32,7 +32,11 @@ class AdapterBookingButtons(private val values: ArrayList<String>, onDurationLis
         if (position == focusedElement) holder.itemView.setBackgroundResource(R.drawable.item_day_selected_shape)
         else holder.itemView.setBackgroundResource(R.drawable.item_day_shape)
 
-        holder.duration.text = values[position]
+        holder.duration.text = values[position].time
+
+        // Скрываем варианты длительности брони по необходимости
+        if (!values[position].isVisible) holder.itemView.visibility = View.INVISIBLE
+        else holder.itemView.visibility = View.VISIBLE
 
     }
 

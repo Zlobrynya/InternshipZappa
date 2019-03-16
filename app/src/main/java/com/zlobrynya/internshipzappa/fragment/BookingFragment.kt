@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.activity.booking.TableSelectActivity
-import com.zlobrynya.internshipzappa.adapter.booking.AdapterBookingButtons
+import com.zlobrynya.internshipzappa.adapter.booking.AdapterBookingDuration
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterDays
 import kotlinx.android.synthetic.main.fragment_booking.view.*
 import java.util.*
@@ -17,6 +17,7 @@ import kotlin.collections.ArrayList
 import android.text.format.DateUtils
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.adapter.booking.BookDuration
 import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
 import com.zlobrynya.internshipzappa.util.CustomTimePickerDialog
@@ -58,7 +59,7 @@ const val FOUR_HOURS: Long = 4 * 60 * 60 * 1000
 /**
  * Фрагмент брони(выбор даты и времени)
  */
-class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingButtons.OnDurationListener,
+class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDuration.OnDurationListener,
     PositiveClickListener {
 
     /**
@@ -74,7 +75,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
     /**
      * Список с вариантами продоллжительности брони
      */
-    private val booking: ArrayList<String> = ArrayList()
+    private val booking: ArrayList<BookDuration> = ArrayList()
 
     /**
      * Вьюшка для фрагмента
@@ -136,12 +137,14 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
 
         dataBase = VisitingHoursDB(context!!) // Инициализация БД
         timeTable = dataBase.getVisitingHours() // Получение графика работы ресторана
+        dataBase.clearTableDB()
 
         initCalendar()
         updateSchedule()
         initBookingDurationList()
         initCalendarRecycler()
         initDurationRecycler()
+        selectedDate = 0
 
         timePickerDialog.setOnPositiveClickListener(this) // Установка обработчика для позитивной кнопки таймпикера
         bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
@@ -232,7 +235,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         calendar.set(Calendar.MINUTE, minutes.toInt())
         setInitialDateTime()
         checkAvailableTime()
-        bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick() // Сбросим выбранное время на 2 часа
     }
 
     /**
@@ -280,6 +282,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
                 Log.d("TOPKEK", "2 часа доступно")
                 updateDurationVisibility(1)
 
+
             }
             else -> { // Осталось меньше двух часов (забронировать вообще нельзя)
                 Log.d("TOPKEK", "Меньше двух часов")
@@ -287,8 +290,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
                     context,
                     "От начала вашей брони до закрытия ресторана менее двух часов",
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
             }
         }
 
@@ -300,15 +302,18 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private fun updateDurationVisibility(count: Int) {
         selectedDuration = 0
-        bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick()
-        val globalCount = 5 // Всего вариантов длительности брони
+        bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick() // Сбросим выбор на 2 часа
+        val globalCount = booking.size // Всего вариантов длительности брони
         for (i in 0 until count) { // Сделаем видимыми доступные варианты
-            bookingView.book_duration_recycler.findViewHolderForAdapterPosition(i)!!.itemView.visibility = View.VISIBLE
+            booking[i].isVisible = true
         }
         for (i in count until globalCount) { // Скроем остальные
-            bookingView.book_duration_recycler.findViewHolderForAdapterPosition(i)!!.itemView.visibility =
-                View.INVISIBLE
+            booking[i].isVisible = false
         }
+        bookingView.book_duration_recycler.adapter!!.notifyItemRangeChanged(
+            0,
+            booking.size
+        ) // Уведомим адаптер об изменении элементоы
     }
 
     /**
@@ -442,11 +447,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
      */
     private fun initBookingDurationList() {
         booking.clear()
-        booking.add("2 ч")
-        booking.add("2 ч\n30мин")
-        booking.add("3 ч")
-        booking.add("3 ч\n30мин")
-        booking.add("4 ч")
+        booking.add(BookDuration("2 ч", true))
+        booking.add(BookDuration("2 ч\n30мин", true))
+        booking.add(BookDuration("3 ч", true))
+        booking.add(BookDuration("3 ч\n30мин", true))
+        booking.add(BookDuration("4 ч", true))
     }
 
     /**
@@ -465,7 +470,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingBu
         val layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         bookingView.book_duration_recycler.layoutManager = layoutManager
         bookingView.book_duration_recycler.adapter =
-            AdapterBookingButtons(booking, this)
+            AdapterBookingDuration(booking, this)
     }
 
     /**
