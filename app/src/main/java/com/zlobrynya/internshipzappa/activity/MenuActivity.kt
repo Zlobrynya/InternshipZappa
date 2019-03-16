@@ -76,8 +76,6 @@ class MenuActivity: AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        System.gc()
-        System.exit(0)
     }
 }
 

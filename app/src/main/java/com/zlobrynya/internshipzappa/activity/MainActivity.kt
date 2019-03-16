@@ -152,7 +152,6 @@ class MainActivity : AppCompatActivity() {
 
     fun startMenu() {
         val intent = Intent(this, MenuActivity::class.java)
-        intent.flags = FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()
     }
