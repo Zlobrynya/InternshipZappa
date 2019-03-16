@@ -1,3 +1,7 @@
+
+import android.os.Bundle
+import java.io.Serializable
+
 /*
 package com.zlobrynya.internshipzappa.activity
 
@@ -10,6 +14,7 @@ import com.zlobrynya.internshipzappa.fragment.BookingFragment
 import kotlinx.android.synthetic.main.activity_booking.*
 
 */
+
 /**
  * Активити для бронирования с нижней навигационной панелью по фрагментам
  *//*

@@ -2,13 +2,11 @@ package com.zlobrynya.internshipzappa.activity
 
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import com.bumptech.glide.Glide
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.GetDataServer
 import com.zlobrynya.internshipzappa.tools.OurException
@@ -17,7 +15,6 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,9 +27,6 @@ class MainActivity : AppCompatActivity() {
         Log.i("check", "it's fine")
         menuDb = MenuDB(this)
 
-        Glide.with(this)
-            .load(R.drawable.launch_screan)
-            .into(launch)
     }
 
     override fun onStart() {
@@ -152,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
     fun startMenu() {
         val intent = Intent(this, MenuActivity::class.java)
-        intent.flags = FLAG_ACTIVITY_CLEAR_TOP
+        intent.setFlags(FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
         finish()
     }
