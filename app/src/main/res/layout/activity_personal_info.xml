@@ -231,13 +231,13 @@
         android:id="@+id/btnContinue"
         android:layout_width="328dp"
         android:layout_height="42dp"
+        android:background="@drawable/table_shape"
         android:text="@string/btn_continue"
         android:textColor="@color/white"
-        android:background="@color/btn_continue"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"/>
+        app:layout_constraintVertical_bias="0.98" />
 
 </android.support.constraint.ConstraintLayout>

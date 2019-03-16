@@ -105,7 +105,7 @@
         android:layout_marginTop="19dp"
         android:layout_marginEnd="14dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/btn_booking_end"
+        android:background="@drawable/table_shape"
         android:text="@string/back"
         android:textColor="@color/white"
         android:textSize="14sp"
