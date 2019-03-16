@@ -186,6 +186,7 @@ class PersonalInfoActivity : AppCompatActivity() {
                             intent.putExtra("code", t.code())
                             intent.putExtra("name", newBooking.name)
                             intent.putExtra("phone", newBooking.phone)
+                            finish()
                             context.startActivity(intent)
                         }
                     } else {
@@ -194,6 +195,7 @@ class PersonalInfoActivity : AppCompatActivity() {
                         intent.putExtra("code", t.code())
                         intent.putExtra("name", newBooking.name)
                         intent.putExtra("phone", newBooking.phone)
+                        finish()
                         context.startActivity(intent)
                     }
                 }
@@ -229,6 +231,11 @@ class PersonalInfoActivity : AppCompatActivity() {
         val newstrb = newstra.replace(")", "")
         val newstrc = newstrb.replace("-", "")
         return newstrc.replace("+7", "")
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }
 

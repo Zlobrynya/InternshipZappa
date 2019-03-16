@@ -189,6 +189,7 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
             intent.putExtra("seat_count", tableList[position].seatCount)
             intent.putExtra("seat_position", tableList[position].seatPosition)
             intent.putExtra("seat_type", tableList[position].seatType)
+            this.finish()
             startActivity(intent)
         }
     }

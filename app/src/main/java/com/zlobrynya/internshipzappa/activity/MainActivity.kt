@@ -1,7 +1,6 @@
 package com.zlobrynya.internshipzappa.activity
 
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
