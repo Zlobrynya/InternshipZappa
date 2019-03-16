@@ -59,6 +59,16 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
+            if (dishDTO.weight.contains("null")){
+                vesDish.visibility = View.GONE
+            } else{
+                if(dishDTO.class_name == "Напитки"){
+                    vesDish.text = dishDTO.weight + context.getString(R.string.ml)
+                }else {
+                    vesDish.text = dishDTO.weight + context.getString(R.string.gr)
+                }
+            }
+
             //Glide
             Glide.with(this)
                 .asBitmap()

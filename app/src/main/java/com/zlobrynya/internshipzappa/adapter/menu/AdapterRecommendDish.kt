@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import android.graphics.*
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.provider.Settings.System.getString
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -49,7 +50,11 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             if (dishDTO.weight.contains("null")){
                 topingVes.visibility = View.GONE
             } else{
-                topingVes.text = dishDTO.weight + context.getString(R.string.gr)
+                if(dishDTO.class_name == "Напитки"){
+                    topingVes.text = dishDTO.weight + context.getString(R.string.ml)
+                }else {
+                    topingVes.text = dishDTO.weight + context.getString(R.string.gr)
+                }
             }
 
             topingName.text = dishDTO.name
