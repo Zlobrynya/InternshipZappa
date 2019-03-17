@@ -32,6 +32,7 @@
         <activity
             android:name=".activity.booking.TableSelectActivity"
             android:theme="@style/AppTheme.NoBar" />
+
         <activity
             android:name=".activity.menu.FullDescriptionScreen"
             android:screenOrientation="locked"
