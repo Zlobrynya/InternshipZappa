@@ -173,9 +173,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
 
         localCalendar.set(Calendar.HOUR_OF_DAY, format.parse(timeOpen).hours)
         localCalendar.set(Calendar.MINUTE, format.parse(timeOpen).minutes)
+        localCalendar.set(Calendar.SECOND, 0)
         val begin = localCalendar.timeInMillis
         calendar.set(Calendar.HOUR_OF_DAY, format.parse(timeOpen).hours)
         calendar.set(Calendar.MINUTE, format.parse(timeOpen).minutes)
+        calendar.set(Calendar.SECOND, 0)
         bookTimeAndDate = calendar.time
         //setInitialDateTime()
         Log.d("JOPA", "$bookTimeAndDate")
@@ -303,6 +305,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         book_time_select.text = "$hours:$minutes"
         calendar.set(Calendar.HOUR_OF_DAY, hours.toInt())
         calendar.set(Calendar.MINUTE, minutes.toInt())
+        calendar.set(Calendar.SECOND, 0)
         setInitialDateTime()
         checkAvailableTime()
     }
@@ -322,6 +325,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         val minutesOfClose = format.parse(timeClose).minutes
         localCalendar.set(Calendar.HOUR_OF_DAY, hourOfClose)
         localCalendar.set(Calendar.MINUTE, minutesOfClose)
+        localCalendar.set(Calendar.SECOND, 0)
 
         Log.d("TOPKEK", "Закрытие в ${localCalendar.time}")
         Log.d("TOPKEK", "Выбранное время $bookTimeAndDate")
@@ -467,6 +471,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         this.calendar = Calendar.getInstance() // Обновим глобальную переменную с календарем
         schedule.clear()
         val localCalendar: Calendar = Calendar.getInstance() // Локальная переменная с календарем для заполнения списков
+        localCalendar.set(Calendar.SECOND, 0)
 
         checkToday()
         if (isTodayAvailable) {
@@ -494,6 +499,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     private fun checkToday() {
         updateSchedule()
         val calendar: Calendar = Calendar.getInstance()
+        calendar.set(Calendar.SECOND, 0)
         val timeNow = calendar.timeInMillis
         Log.d("TOPKEK", "Текущее время ${calendar.time}")
 
@@ -506,6 +512,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         val minutesOfClose: Int = SimpleDateFormat("HH:mm:ss").parse(timeClose).minutes
         calendar.set(Calendar.HOUR_OF_DAY, hourOfClose)
         calendar.set(Calendar.MINUTE, minutesOfClose)
+        calendar.set(Calendar.SECOND, 0)
         Log.d("TOPKEK", "Закрытие ресторана в ${calendar.time}")
 
         val timeClose = calendar.timeInMillis
@@ -553,6 +560,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
             calendar.timeInMillis,
             DateUtils.FORMAT_SHOW_TIME
         )
+        calendar.set(Calendar.SECOND, 0)
         bookTimeAndDate = calendar.time // Запишем выбранное время
         Log.d(
             "TOPKEK",
@@ -572,6 +580,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         if (selectedDate != position) {
             selectedDate = position // Обновим выбранную дату
             calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
+            calendar.set(Calendar.SECOND, 0)
             Log.d(
                 "TOPKEK",
                 DateUtils.formatDateTime(
