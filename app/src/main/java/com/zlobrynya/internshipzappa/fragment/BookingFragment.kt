@@ -144,6 +144,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         initBookingDurationList()
         initCalendarRecycler()
         initDurationRecycler()
+
         selectedDate = 0
 
         timePickerDialog.setOnPositiveClickListener(this) // Установка обработчика для позитивной кнопки таймпикера
@@ -151,6 +152,71 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
 
         return bookingView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateGui()
+    }
+
+    /**
+     * В текстовом поле меняем время брони на ближайшее и убираем недоступные варианты брони
+     */
+    private fun updateGui() {
+        bookingView.book_time_select.text = timeOpen.substring(0, timeOpen.length - 3)
+
+        Log.d("YOLO", "$overlap")
+        Log.d("YOLO", "Ближайшая доступная бронь $timeOpen")
+        Log.d("YOLO", "Время конца работы $timeClose")
+        val localCalendar = Calendar.getInstance()
+        val format = SimpleDateFormat("HH:mm:ss")
+
+        localCalendar.set(Calendar.HOUR_OF_DAY, format.parse(timeOpen).hours)
+        localCalendar.set(Calendar.MINUTE, format.parse(timeOpen).minutes)
+        val begin = localCalendar.timeInMillis
+
+        if (overlap) localCalendar.add(Calendar.DATE, 1)
+
+        localCalendar.set(Calendar.HOUR_OF_DAY, format.parse(timeClose).hours)
+        localCalendar.set(Calendar.MINUTE, format.parse(timeClose).minutes)
+        val end = localCalendar.timeInMillis
+
+
+        val difference: Long = end - begin
+        Log.d("YOLO", "Разница в миллисекундах $difference")
+
+        when { // Посмотрим разницу между выбранным временем и временем закрытия ресторана
+            difference >= FOUR_HOURS -> { // Осталось больше 4 часов
+                Log.d("TOPKEK", "Осталось 4+ часа")
+                updateDurationVisibility(5, false)
+            }
+            difference == THREE_AND_HALF_HOURS -> { // Осталось 3.5 часа
+                Log.d("TOPKEK", "3 с половиной часа доступно")
+                updateDurationVisibility(4, false)
+            }
+            difference == THREE_HOURS -> { // Осталось 3 часа
+                Log.d("TOPKEK", "3 часа доступно")
+                updateDurationVisibility(3, false)
+            }
+            difference == TWO_AND_HALF_HOURS -> { // Осталось 2.5 часа
+                Log.d("TOPKEK", "2 с половиной часа доступно")
+                updateDurationVisibility(2, false)
+            }
+            difference == TWO_HOURS -> { // Осталось 2 часа
+                Log.d("TOPKEK", "2 часа доступно")
+                updateDurationVisibility(1, false)
+
+
+            }
+            else -> { // Осталось меньше двух часов (забронировать вообще нельзя)
+                Log.d("TOPKEK", "Меньше двух часов")
+                Toast.makeText(
+                    context,
+                    "От начала вашей брони до закрытия ресторана менее двух часов",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     /**
@@ -239,7 +305,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
 
     /**
      * Проверяет доступное время брони
-     * TODO допилить
      */
     private fun checkAvailableTime() {
         val localCalendar = Calendar.getInstance()
@@ -264,23 +329,23 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         when { // Посмотрим разницу между выбранным временем и временем закрытия ресторана
             difference >= FOUR_HOURS -> { // Осталось больше 4 часов
                 Log.d("TOPKEK", "Осталось 4+ часа")
-                updateDurationVisibility(5)
+                updateDurationVisibility(5, true)
             }
             difference == THREE_AND_HALF_HOURS -> { // Осталось 3.5 часа
                 Log.d("TOPKEK", "3 с половиной часа доступно")
-                updateDurationVisibility(4)
+                updateDurationVisibility(4, true)
             }
             difference == THREE_HOURS -> { // Осталось 3 часа
                 Log.d("TOPKEK", "3 часа доступно")
-                updateDurationVisibility(3)
+                updateDurationVisibility(3, true)
             }
             difference == TWO_AND_HALF_HOURS -> { // Осталось 2.5 часа
                 Log.d("TOPKEK", "2 с половиной часа доступно")
-                updateDurationVisibility(2)
+                updateDurationVisibility(2, true)
             }
             difference == TWO_HOURS -> { // Осталось 2 часа
                 Log.d("TOPKEK", "2 часа доступно")
-                updateDurationVisibility(1)
+                updateDurationVisibility(1, true)
 
 
             }
@@ -300,9 +365,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      * Обновляет видимость доступных вариантов выбора длительности брони
      * @param count Количество доступных вариантов брони
      */
-    private fun updateDurationVisibility(count: Int) {
+    private fun updateDurationVisibility(count: Int, click: Boolean) {
         selectedDuration = 0
-        bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick() // Сбросим выбор на 2 часа
+
+        // Сбросим выбор на 2 часа
+        if (click) bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick()
         val globalCount = booking.size // Всего вариантов длительности брони
         for (i in 0 until count) { // Сделаем видимыми доступные варианты
             booking[i].isVisible = true
@@ -510,7 +577,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 )
             )
             updateSchedule() // Обновим расписание
-            book_time_select.text = "Время" // Обновим значение во вьюшке
+            //book_time_select.text = "Время" // Обновим значение во вьюшке
+            updateGui()
         }
     }
 
