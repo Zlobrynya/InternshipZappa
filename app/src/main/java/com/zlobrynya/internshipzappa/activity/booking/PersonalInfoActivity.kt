@@ -9,6 +9,7 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat.getSystemService
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import com.zlobrynya.internshipzappa.R
@@ -97,12 +98,87 @@ class PersonalInfoActivity : AppCompatActivity() {
         var text = getString(com.zlobrynya.internshipzappa.R.string.period, woSecI, woSecO)
         selected_time.setText(text)
 
+        val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
+
+        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+
+        username.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+                val name = username_input_layout.editText!!.text.toString()
+                val validateName = validateName(name)
+
+                if (!validateName) {
+                    username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
+                    username.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    username_input_layout.isErrorEnabled = false
+                    username.setCompoundDrawables(null, null, null, null)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+
+        phone_number.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+                val phone = phone_number_input_layout.editText!!.text.toString()
+                val validatePhone = validatePhone(phone)
+
+                if (!validatePhone) {
+                    phone_number_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                    phone_number.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    phone_number_input_layout.isErrorEnabled = false
+                    phone_number.setCompoundDrawables(null, null, null, null)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+
+        register_email.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+                val email = register_email_input_layout.editText!!.text.toString()
+                val validateEmail = validateEmail(email)
+
+                if (!validateEmail) {
+                    register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
+                    register_email.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    register_email_input_layout.isErrorEnabled = false
+                    register_email.setCompoundDrawables(null, null, null, null)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+
         btnContinue.setOnClickListener {
             hideKeyboard()
-
-            val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
-
-            icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
             val name = username_input_layout.editText!!.text.toString()
             val phone = phone_number_input_layout.editText!!.text.toString()
@@ -112,27 +188,6 @@ class PersonalInfoActivity : AppCompatActivity() {
             val validatePhone = validatePhone(phone)
             val validateEmail = validateEmail(email)
 
-            if (!validateName) {
-                username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
-                username.setCompoundDrawables(null, null, icon, null)
-            } else {
-                username_input_layout.isErrorEnabled = false
-                username.setCompoundDrawables(null, null, null, null)
-            }
-            if (!validatePhone) {
-                phone_number_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_phone)
-                phone_number.setCompoundDrawables(null, null, icon, null)
-            } else {
-                phone_number_input_layout.isErrorEnabled = false
-                phone_number.setCompoundDrawables(null, null, null, null)
-            }
-            if (!validateEmail) {
-                register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
-                register_email.setCompoundDrawables(null, null, icon, null)
-            } else {
-                register_email_input_layout.isErrorEnabled = false
-                register_email.setCompoundDrawables(null, null, null, null)
-            }
             if (validateName && validateEmail && validatePhone) {
                 //btnContinue.setBackgroundColor(resources.getColor(R.color.btn_continue))
                 newBooking.name = name
@@ -208,7 +263,7 @@ class PersonalInfoActivity : AppCompatActivity() {
     }
 
     private fun validateName(name: String) : Boolean {
-        val nameLength = 3
+        val nameLength = 2
         return name.matches("[A-ZА-Я][a-zA-Zа-яА-Я]*".toRegex()) && name.length >= nameLength
     }
 

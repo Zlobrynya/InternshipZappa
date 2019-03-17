@@ -52,8 +52,8 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishDTO) = with(itemView){
             //В класс помощник записываем данные
-            nameDish?.text = dishDTO.name
-            shortDescDish?.text = dishDTO.desc_short
+            nameDish?.text = dishDTO.name.replace("\'", "\"")
+            shortDescDish?.text = dishDTO.desc_short.replace("\'", "\"")
             idDish = dishDTO.item_id
             Log.i("delivery", dishDTO.delivery)
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
