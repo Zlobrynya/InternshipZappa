@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.zlobrynya.internshipzappa.adapter.menu.AdapterRecommendDish
 import com.zlobrynya.internshipzappa.R
@@ -64,19 +65,20 @@ class FullDescriptionScreen : AppCompatActivity() {
         if (dish.weight == ""){
             dishVes.visibility = View.GONE
         } else{
-            if(dish.class_name == "Напитки"){
+            Log.i("class", dish.class_name)
+            if(dish.class_name == "НАПИТКИ"){
                 dishVes.text = dish.weight + getString(R.string.ml)
             }else {
                 dishVes.text = dish.weight + getString(R.string.gr)
             }
         }
 
-        dishName.text = dish.name
+        dishName.text = dish.name.replace("\'", "\"")
 
         if (dish.desc_long.isEmpty()){
             dishOpisanie.visibility = View.GONE
         } else{
-            dishOpisanie.text = dish.desc_long
+            dishOpisanie.text = dish.desc_long.replace("\'", "\"")
         }
 
         //Glide

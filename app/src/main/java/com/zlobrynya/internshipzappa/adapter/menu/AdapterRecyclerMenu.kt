@@ -52,8 +52,8 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishDTO) = with(itemView){
             //В класс помощник записываем данные
-            nameDish?.text = dishDTO.name
-            shortDescDish?.text = dishDTO.desc_short
+            nameDish?.text = dishDTO.name.replace("\'", "\"")
+            shortDescDish?.text = dishDTO.desc_short.replace("\'", "\"")
             idDish = dishDTO.item_id
             Log.i("delivery", dishDTO.delivery)
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
@@ -62,7 +62,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             if (dishDTO.weight.contains("null")){
                 vesDish.visibility = View.GONE
             } else{
-                if(dishDTO.class_name == "Напитки"){
+                if(dishDTO.class_name == "НАПИТКИ"){
                     vesDish.text = dishDTO.weight + context.getString(R.string.ml)
                 }else {
                     vesDish.text = dishDTO.weight + context.getString(R.string.gr)
