@@ -75,6 +75,7 @@
             android:inputType="number"
             android:textColor="@color/white"
             android:backgroundTint="@color/color_hint"
+            android:maxLength="11"
             />
     </android.support.design.widget.TextInputLayout>
 
