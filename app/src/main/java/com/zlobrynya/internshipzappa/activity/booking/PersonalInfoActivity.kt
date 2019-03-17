@@ -184,11 +184,17 @@ class PersonalInfoActivity : AppCompatActivity() {
             val phone = phone_number_input_layout.editText!!.text.toString()
             val email = register_email_input_layout.editText!!.text.toString()
 
-            //btnContinue.setBackgroundColor(resources.getColor(R.color.btn_continue))
-            newBooking.name = name
-            newBooking.email = email
-            newBooking.phone = phone
-            networkRxjavaPost(newBooking, it.context)
+            val validateName = validateName(name)
+            val validatePhone = validatePhone(phone)
+            val validateEmail = validateEmail(email)
+
+            if (validateName && validateEmail && validatePhone) {
+                //btnContinue.setBackgroundColor(resources.getColor(R.color.btn_continue))
+                newBooking.name = name
+                newBooking.email = email
+                newBooking.phone = phone
+                networkRxjavaPost(newBooking, it.context)
+            }
         }
     }
 
@@ -257,7 +263,7 @@ class PersonalInfoActivity : AppCompatActivity() {
     }
 
     private fun validateName(name: String) : Boolean {
-        val nameLength = 3
+        val nameLength = 2
         return name.matches("[A-ZА-Я][a-zA-Zа-яА-Я]*".toRegex()) && name.length >= nameLength
     }
 
