@@ -9,6 +9,8 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat.getSystemService
 import android.text.Editable
+import android.text.InputFilter
+import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
@@ -38,18 +40,30 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-
-
-
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 class PersonalInfoActivity : AppCompatActivity() {
 
+    private val blockCharacterSet: String  = ".,- "
+
+    private val filter = object: InputFilter {
+        override fun filter(source:CharSequence, start:Int, end:Int, dest: Spanned, dstart:Int, dend:Int): CharSequence? {
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return ""
+            }
+            return null
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.zlobrynya.internshipzappa.R.layout.activity_personal_info)
+
+        //phone_number.filters = arrayOf<InputFilter>(filter)
+
         supportActionBar!!.title = "Бронирование"
         val bookDateBegin = intent.getStringExtra("book_date_begin")
         val bookTimeBegin = intent.getStringExtra("book_time_begin")
@@ -163,7 +177,6 @@ class PersonalInfoActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
-
         })
 
         register_email.addTextChangedListener(object: TextWatcher{

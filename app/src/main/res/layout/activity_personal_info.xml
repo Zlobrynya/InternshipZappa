@@ -71,12 +71,12 @@
             android:id="@+id/phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_phone_number"
-            android:inputType="number"
-            android:textColor="@color/white"
             android:backgroundTint="@color/color_hint"
+            android:digits="0123456789"
+            android:hint="@string/hint_phone_number"
+            android:textColor="@color/white"
             app:mask="+7 (###) ###-##-##"
-            app:notMaskedSymbol="#"/>
+            app:notMaskedSymbol="#" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
