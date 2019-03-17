@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_phone_number"
-            android:inputType="number"
+            android:inputType="numberPassword"
             android:textColor="@color/white"
             android:backgroundTint="@color/color_hint"
             app:mask="+7 (###) ###-##-##"
