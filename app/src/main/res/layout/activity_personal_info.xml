@@ -67,7 +67,7 @@
         app:layout_constraintTop_toBottomOf="@id/username_input_layout"
         app:layout_constraintVertical_bias="0.04">
 
-        <com.github.pinball83.maskededittext.MaskedEditText
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

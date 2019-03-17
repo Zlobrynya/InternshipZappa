@@ -88,7 +88,7 @@ class PersonalInfoActivity : AppCompatActivity() {
         if(sharedPreferences.getString(savedPhone, "") != "") {
             phone_number.setText("")
             val change_phone = replaceStartPhone(sharedPreferences.getString(savedPhone, ""))
-            phone_number.setMaskedText(change_phone)
+            //phone_number.setMaskedText(change_phone)
         }
         if(sharedPreferences.getString(savedEmail, "") != "") register_email_input_layout.editText!!.setText(sharedPreferences.getString(savedEmail, ""))
 
@@ -167,7 +167,6 @@ class PersonalInfoActivity : AppCompatActivity() {
                             phone_number.setCompoundDrawables(null, null, null, null)
                         }
                     }
-
                 }
             }
 
@@ -297,7 +296,8 @@ class PersonalInfoActivity : AppCompatActivity() {
     }
 
     private fun validatePhone(phone: String): Boolean {
-        val phoneLength = 18
+        val phoneLength = 11
+        //8012345678
         return android.util.Patterns.PHONE.matcher(phone).matches() && phone.length == phoneLength
     }
 
