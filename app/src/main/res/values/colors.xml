@@ -18,4 +18,5 @@
     <color name="color_hint">#66FFFFFF</color>
     <color name="btn_login_register">#777777</color>
     <color name="btn_continue">#FF0000</color>
+    <color name="bg_nav_bar">#AFAFAF</color>
 </resources>
