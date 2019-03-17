@@ -109,54 +109,89 @@ class PersonalInfoActivity : AppCompatActivity() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        username.onFocusChangeListener = object: View.OnFocusChangeListener{
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                val name = username_input_layout.editText!!.text.toString()
-                val validateName = validateName(name)
+        username.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                username.onFocusChangeListener = object: View.OnFocusChangeListener{
+                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                        if (!hasFocus) {
+                            val name = username_input_layout.editText!!.text.toString()
+                            val validateName = validateName(name)
 
-                if (!validateName) {
-                    username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
-                    username.setCompoundDrawables(null, null, icon, null)
-                } else {
-                    username_input_layout.isErrorEnabled = false
-                    username.setCompoundDrawables(null, null, null, null)
+                            if (!validateName) {
+                                username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
+                                username.setCompoundDrawables(null, null, icon, null)
+                            } else {
+                                username_input_layout.isErrorEnabled = false
+                                username.setCompoundDrawables(null, null, null, null)
+                            }
+                        }
+                    }
+
                 }
             }
 
-        }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
 
-        phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                val phone = phone_number_input_layout.editText!!.text.toString()
-                val validatePhone = validatePhone(phone)
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
 
-                if (!validatePhone) {
-                    phone_number_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_phone)
-                    phone_number.setCompoundDrawables(null, null, icon, null)
-                } else {
-                    phone_number_input_layout.isErrorEnabled = false
-                    phone_number.setCompoundDrawables(null, null, null, null)
+        })
+
+        phone_number.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
+                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                        val phone = phone_number_input_layout.editText!!.text.toString()
+                        val validatePhone = validatePhone(phone)
+
+                        if (!validatePhone) {
+                            phone_number_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                            phone_number.setCompoundDrawables(null, null, icon, null)
+                        } else {
+                            phone_number_input_layout.isErrorEnabled = false
+                            phone_number.setCompoundDrawables(null, null, null, null)
+                        }
+                    }
+
                 }
             }
 
-        }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
+            }
 
-        register_email.onFocusChangeListener = object : View.OnFocusChangeListener{
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                val email = register_email_input_layout.editText!!.text.toString()
-                val validateEmail = validateEmail(email)
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
 
-                if (!validateEmail) {
-                    register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
-                    register_email.setCompoundDrawables(null, null, icon, null)
-                } else {
-                    register_email_input_layout.isErrorEnabled = false
-                    register_email.setCompoundDrawables(null, null, null, null)
+        })
+
+        register_email.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                register_email.onFocusChangeListener = object : View.OnFocusChangeListener{
+                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                        val email = register_email_input_layout.editText!!.text.toString()
+                        val validateEmail = validateEmail(email)
+
+                        if (!validateEmail) {
+                            register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
+                            register_email.setCompoundDrawables(null, null, icon, null)
+                        } else {
+                            register_email_input_layout.isErrorEnabled = false
+                            register_email.setCompoundDrawables(null, null, null, null)
+                        }
+                    }
+
                 }
             }
 
-        }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
 
         btnContinue.setOnClickListener {
             hideKeyboard()
