@@ -78,12 +78,18 @@ class PersonalInfoActivity : AppCompatActivity() {
         }
         if(sharedPreferences.getString(savedEmail, "") != "") register_email_input_layout.editText!!.setText(sharedPreferences.getString(savedEmail, ""))
 
-        if(seatPosition == "") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table2, seatCount, seatType)
-            selected_table.text = textTable
+        if(seatPosition == "" && seatCount == "4") {
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table4, seatCount, seatType)
+            selected_table.setText(textTable)
+        } else if (seatPosition == "" && seatCount != "4") {
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table68, seatCount, seatType)
+            selected_table.setText(textTable)
+        } else if (seatPosition != "" && seatCount == "4") {
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table43, seatCount, seatPosition, seatType)
+            selected_table.setText(textTable)
         } else {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table3, seatCount, seatPosition, seatType)
-            selected_table.text = textTable
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table683, seatCount, seatPosition, seatType)
+            selected_table.setText(textTable)
         }
 
         val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")

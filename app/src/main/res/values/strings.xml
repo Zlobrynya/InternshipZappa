@@ -79,13 +79,15 @@
     <string name="otclonena">%1$s, заявка на бронирование отклонена: выбранный вами стол уже забронирован.</string>
     <string name="izmeni">Измените, пожалуйста, параметры запроса.</string>
     <string name="prinyal">%1$s, заявка на бронирование принята рестораном.</string>
-    <string name="po_nomeru">По указанному номеру(%1$s) с вами свяжется администратор и уточнит детали.</string>
+    <string name="po_nomeru">По указанному номеру (%1$s) с вами свяжется администратор и уточнит детали.</string>
     <string name="perezvon">Если в течение 1 часа, вам не перезвонят, свяжитесь с нами по телефону.</string>
     <string name="otmena">Отмена бронирования возможна только по звонку в ресторан.</string>
     <string name="phone_booking">Телефон для связи: +7 (8142) 63-23-89</string>
     <string name="back">Вернуться</string>
-    <string name="table2">Места: %1$s, %2$s</string>
-    <string name="table3">Места: %1$s, %2$s, %3$s</string>
+    <string name="table4">%1$s места, %2$s</string>
+    <string name="table68">%1$s мест, %2$s</string>
+    <string name="table43">%1$s места, %2$s, %3$s</string>
+    <string name="table683">%1$s мест, %2$s, %3$s</string>
     <string name="period">%1$s - %2$s</string>
 
     <string name="btn_continue">Продолжить</string>
