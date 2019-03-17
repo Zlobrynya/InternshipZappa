@@ -174,7 +174,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         localCalendar.set(Calendar.HOUR_OF_DAY, format.parse(timeOpen).hours)
         localCalendar.set(Calendar.MINUTE, format.parse(timeOpen).minutes)
         val begin = localCalendar.timeInMillis
-
+        calendar.set(Calendar.HOUR_OF_DAY, format.parse(timeOpen).hours)
+        calendar.set(Calendar.MINUTE, format.parse(timeOpen).minutes)
+        bookTimeAndDate = calendar.time
+        //setInitialDateTime()
+        Log.d("JOPA", "$bookTimeAndDate")
         if (overlap) localCalendar.add(Calendar.DATE, 1)
 
         localCalendar.set(Calendar.HOUR_OF_DAY, format.parse(timeClose).hours)
@@ -256,7 +260,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
             }
         }
 
-        bookTimeAndDate = null // Сбросим выбранное время
+        //bookTimeAndDate = null // Сбросим выбранное время
     }
 
     /**
