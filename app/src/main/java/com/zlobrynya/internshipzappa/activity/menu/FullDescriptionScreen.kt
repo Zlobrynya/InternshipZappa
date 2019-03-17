@@ -64,7 +64,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         if (dish.weight == ""){
             dishVes.visibility = View.GONE
         } else{
-            if(dish.class_name == "Напитки"){
+            if(dish.class_name == "НАПИТКИ"){
                 dishVes.text = dish.weight + getString(R.string.ml)
             }else {
                 dishVes.text = dish.weight + getString(R.string.gr)

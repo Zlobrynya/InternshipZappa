@@ -62,7 +62,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             if (dishDTO.weight.contains("null")){
                 vesDish.visibility = View.GONE
             } else{
-                if(dishDTO.class_name == "Напитки"){
+                if(dishDTO.class_name == "НАПИТКИ"){
                     vesDish.text = dishDTO.weight + context.getString(R.string.ml)
                 }else {
                     vesDish.text = dishDTO.weight + context.getString(R.string.gr)
