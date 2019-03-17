@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat.getSystemService
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
@@ -79,32 +80,31 @@ class PersonalInfoActivity : AppCompatActivity() {
 
         if(seatPosition == "") {
             val textTable = getString(com.zlobrynya.internshipzappa.R.string.table2, seatCount, seatType)
-            selected_table.setText(textTable)
+            selected_table.text = textTable
         } else {
             val textTable = getString(com.zlobrynya.internshipzappa.R.string.table3, seatCount, seatPosition, seatType)
-            selected_table.setText(textTable)
+            selected_table.text = textTable
         }
 
         val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
         val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy")
         val date: Date = inputFormat.parse(bookDateBegin)
         val outputDateStr = outputFormat.format(date)
-        selected_date.setText(outputDateStr)
+        selected_date.text = outputDateStr
 
         val textWoSecI = bookTimeBegin.toString()
         val textWoSecO = bookTimeEnd.toString()
         val woSecI = deleteSecInTime(textWoSecI)
         val woSecO = deleteSecInTime(textWoSecO)
         var text = getString(com.zlobrynya.internshipzappa.R.string.period, woSecI, woSecO)
-        selected_time.setText(text)
+        selected_time.text = text
 
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        username.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
+        username.onFocusChangeListener = object: View.OnFocusChangeListener{
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 val name = username_input_layout.editText!!.text.toString()
                 val validateName = validateName(name)
 
@@ -117,19 +117,10 @@ class PersonalInfoActivity : AppCompatActivity() {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
 
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-        })
-
-        phone_number.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
+        phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 val phone = phone_number_input_layout.editText!!.text.toString()
                 val validatePhone = validatePhone(phone)
 
@@ -142,19 +133,11 @@ class PersonalInfoActivity : AppCompatActivity() {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
 
-            }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-        })
-
-        register_email.addTextChangedListener(object: TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
+        register_email.onFocusChangeListener = object : View.OnFocusChangeListener{
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 val email = register_email_input_layout.editText!!.text.toString()
                 val validateEmail = validateEmail(email)
 
@@ -167,15 +150,7 @@ class PersonalInfoActivity : AppCompatActivity() {
                 }
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-        })
+        }
 
         btnContinue.setOnClickListener {
             hideKeyboard()
@@ -199,10 +174,10 @@ class PersonalInfoActivity : AppCompatActivity() {
     }
 
     private fun hideKeyboard() {
-        val view = getCurrentFocus()
+        val view = currentFocus
         if (view != null) {
             (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                view!!.getWindowToken(),
+                view.windowToken,
                 InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
