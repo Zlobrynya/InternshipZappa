@@ -46,7 +46,7 @@
         android:background="@drawable/time_shape"
         android:gravity="center"
         android:text="Время"
-        android:textColor="@color/text_tab_bar_not_select"
+        android:textColor="@color/white"
         android:textSize="20sp" />
 
     <TextView
