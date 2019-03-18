@@ -16,6 +16,7 @@ import android.provider.Settings.System.getString
 
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 
@@ -66,6 +67,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.no_toping)
                 .error(R.drawable.no_toping)
+                .apply(RequestOptions.overrideOf(130, 50))
                 .into(object:SimpleTarget<Bitmap>(){
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar2.visibility = View.GONE

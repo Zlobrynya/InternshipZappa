@@ -49,7 +49,8 @@
         </activity>
         <activity
             android:name=".activity.MenuActivity"
-            android:screenOrientation="locked" />
+            android:screenOrientation="locked"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

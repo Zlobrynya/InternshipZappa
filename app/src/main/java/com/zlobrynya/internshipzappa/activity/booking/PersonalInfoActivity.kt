@@ -269,7 +269,6 @@ class PersonalInfoActivity : AppCompatActivity() {
                             intent.putExtra("code", t.code())
                             intent.putExtra("name", newBooking.name)
                             intent.putExtra("phone", newBooking.phone)
-                            finish()
                             context.startActivity(intent)
                         }
                     } else {
