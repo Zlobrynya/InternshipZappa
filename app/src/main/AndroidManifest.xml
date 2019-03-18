@@ -19,19 +19,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.Menu2Activity"></activity>
-        <activity android:name=".activity.booking.PersonalInfoActivity">
+        <activity android:name=".activity.booking.PersonalInfoActivity"
+            android:screenOrientation="locked">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zlobrynya.internshipzappa.activity.booking.TableSelectActivity" />
         </activity>
-        <activity android:name=".activity.profile.RegisterActivity" />
-        <activity android:name=".activity.booking.BookingEnd" />
+        <activity android:name=".activity.profile.RegisterActivity"
+            android:screenOrientation="locked"/>
+        <activity android:name=".activity.booking.BookingEnd"
+            android:screenOrientation="locked"/>
         <activity
             android:name=".activity.profile.LoginActivity"
             android:screenOrientation="locked" />
         <activity
             android:name=".activity.booking.TableSelectActivity"
-            android:theme="@style/AppTheme.NoBar" />
+            android:theme="@style/AppTheme.NoBar"
+            android:screenOrientation="locked"
+            />
 
         <activity
             android:name=".activity.menu.FullDescriptionScreen"

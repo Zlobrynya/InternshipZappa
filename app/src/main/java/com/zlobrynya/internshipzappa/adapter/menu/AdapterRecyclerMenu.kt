@@ -73,7 +73,9 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             Glide.with(this)
                 .asBitmap()
                 .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                    //не уверен
+                .skipMemoryCache(true)
                 .placeholder(R.drawable.menu)
                 .error(R.drawable.menu)
                 .into(object: SimpleTarget<Bitmap>(){

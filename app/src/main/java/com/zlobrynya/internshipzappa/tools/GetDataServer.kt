@@ -146,6 +146,7 @@ class GetDataServer(val context: Context) {
                     if (t.code() == 200) {
                         val body = t.body()
                         val categories = body?.categories
+                        Log.i("countof", categories!!.size.toString())
                         categoryDB.addAllData(categories!!)
                         getCategoriesMenu(categories, emitter)
                     } else {
