@@ -65,7 +65,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     /**
      * Кастомный таймпикер
      */
-    private val timePickerDialog = CustomTimePickerDialog()
+    private lateinit var timePickerDialog: CustomTimePickerDialog
 
     /**
      * Список дней для отображения
@@ -147,7 +147,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
 
         selectedDate = 0
 
-        timePickerDialog.setOnPositiveClickListener(this) // Установка обработчика для позитивной кнопки таймпикера
+        //timePickerDialog.setOnPositiveClickListener(this) // Установка обработчика для позитивной кнопки таймпикера
         bookingView.book_button.setOnClickListener(onClickListener) // Установка обработчика для кнопки выбрать столик
         bookingView.book_time_select.setOnClickListener(onClickListener) // Установка обработчика для поля время
 
@@ -289,6 +289,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      * Открывает таймпикер
      */
     private fun showTimePickerDialog() {
+        timePickerDialog = CustomTimePickerDialog()
+        timePickerDialog.setOnPositiveClickListener(this)
         val args = Bundle() // Аргументы для таймпикера
         args.putString("time_open", timeOpen)
         args.putString("time_close", timeClose)
