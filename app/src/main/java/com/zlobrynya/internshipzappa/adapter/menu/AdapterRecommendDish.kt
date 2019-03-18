@@ -64,7 +64,8 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
             Glide.with(context)
                 .asBitmap()
                 .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(true)
                 .placeholder(R.drawable.no_toping)
                 .error(R.drawable.no_toping)
                 .apply(RequestOptions.overrideOf(130, 50))

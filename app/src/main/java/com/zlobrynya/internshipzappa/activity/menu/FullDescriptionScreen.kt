@@ -84,7 +84,7 @@ class FullDescriptionScreen : AppCompatActivity() {
         Glide.with(this@FullDescriptionScreen)
             .asBitmap()
             .load(dish.photo) // Изображение для теста. Исходное значение dish.photo
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            //.diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.menu)
             .error(R.drawable.menu)
             .into(object: SimpleTarget<Bitmap>(){
