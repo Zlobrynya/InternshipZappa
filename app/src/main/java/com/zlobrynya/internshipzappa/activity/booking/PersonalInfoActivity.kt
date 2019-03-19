@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat.getSystemService
+import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
@@ -15,6 +16,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.respDTO
@@ -86,9 +88,8 @@ class PersonalInfoActivity : AppCompatActivity() {
         val savedEmail = this.getString(R.string.key_user_email)
         if(sharedPreferences.getString(savedName, "") != "") username_input_layout.editText!!.setText(sharedPreferences.getString(savedName, ""))
         if(sharedPreferences.getString(savedPhone, "") != "") {
-            phone_number.setText("")
-            val change_phone = replaceStartPhone(sharedPreferences.getString(savedPhone, ""))
-            //phone_number.setMaskedText(change_phone)
+            val change_phone = sharedPreferences.getString(savedPhone, "")
+            phone_number_input_layout.editText!!.setText(change_phone)
         }
         if(sharedPreferences.getString(savedEmail, "") != "") register_email_input_layout.editText!!.setText(sharedPreferences.getString(savedEmail, ""))
 
@@ -153,9 +154,26 @@ class PersonalInfoActivity : AppCompatActivity() {
         })
 
         phone_number.addTextChangedListener(object: TextWatcher{
+
+            private var mFormatting: Boolean = false
+            private var mAfter: Int = 0
+
             override fun afterTextChanged(s: Editable?) {
                 phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                        if (!mFormatting) {
+                            mFormatting = true
+                            if (mAfter != 0) {
+                                val num = s.toString()
+                                val data = PhoneNumberUtils.formatNumber(num, "RU")
+                                if (data != null) {
+                                    s!!.clear()
+                                    s.append(data)
+                                }
+                            }
+                            mFormatting = false
+                        }
+
                         val phone = phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
 
@@ -171,7 +189,7 @@ class PersonalInfoActivity : AppCompatActivity() {
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+                mAfter  = after
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -222,6 +240,8 @@ class PersonalInfoActivity : AppCompatActivity() {
                 newBooking.email = email
                 newBooking.phone = phone
                 networkRxjavaPost(newBooking, it.context)
+            } else {
+                Toast.makeText(this, "Введите корректные данные", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -295,7 +315,7 @@ class PersonalInfoActivity : AppCompatActivity() {
     }
 
     private fun validatePhone(phone: String): Boolean {
-        val phoneLength = 11
+        val phoneLength = 16
         //8012345678
         return android.util.Patterns.PHONE.matcher(phone).matches() && phone.length == phoneLength
     }
@@ -308,13 +328,13 @@ class PersonalInfoActivity : AppCompatActivity() {
         return str.substring(0, str.length - 3)
     }
 
-    private fun replaceStartPhone(str: String?): String {
+    /*private fun replaceStartPhone(str: String?): String {
         val newstr = str!!.replace(" ", "")
         val newstra = newstr.replace("(", "")
         val newstrb = newstra.replace(")", "")
         val newstrc = newstrb.replace("-", "")
         return newstrc.replace("+7", "")
-    }
+    }*/
 
     override fun onBackPressed() {
         super.onBackPressed()
