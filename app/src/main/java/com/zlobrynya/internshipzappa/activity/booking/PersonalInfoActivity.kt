@@ -316,7 +316,6 @@ class PersonalInfoActivity : AppCompatActivity() {
 
     private fun validatePhone(phone: String): Boolean {
         val phoneLength = 16
-        //8012345678
         return android.util.Patterns.PHONE.matcher(phone).matches() && phone.length == phoneLength
     }
 
