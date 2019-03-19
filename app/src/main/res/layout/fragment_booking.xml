@@ -1,85 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_app"
-    android:orientation="vertical">
+    android:background="@color/color_app">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
         android:paddingStart="16dp"
         android:text="Выберите дату:"
         android:textColor="@color/white"
-        android:textSize="24sp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/days_recycler"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="68dp"
         android:orientation="horizontal"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp" />
+        android:paddingEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/book_time_select_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="156dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="Выберите время:"
         android:textColor="@color/white"
-        android:textSize="24sp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/book_time_select"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="196dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/time_shape"
         android:gravity="center"
         android:text="Время"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+        android:textColor="@color/text_tab_bar_not_select"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/duration_text_view"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="265dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="Выберите продолжительность:"
         android:textColor="@color/white"
-        android:textSize="24sp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/book_duration_recycler"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="305dp"
         android:layout_marginEnd="16dp"
         android:orientation="horizontal"
-        android:overScrollMode="never" />
+        android:overScrollMode="never"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/book_button"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="300dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/table_shape"
         android:text="Выбрать стол"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
