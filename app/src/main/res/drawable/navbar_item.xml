@@ -1,6 +1,0 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/nav_bar"/>
-    <stroke android:color="@color/white"
-        android:width="0.5dp"
-        android:dashGap="0.5dp"/>
-</shape>

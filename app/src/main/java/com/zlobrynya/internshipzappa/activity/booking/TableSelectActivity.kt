@@ -67,18 +67,18 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Заполняет объект для POST запрос
      */
     private fun initRequest() {
-        val bookDateBegin = intent.getStringExtra("book_date_begin")
+        val bookDateBegin: String? = intent.getStringExtra("book_date_begin")
         //поменять на реальную дату окончания
-        val bookDateEnd = intent.getStringExtra("book_date_end")
-        val bookTimeBegin = intent.getStringExtra("book_time_begin")
-        val bookTimeEnd = intent.getStringExtra("book_time_end")
+        val bookDateEnd: String? = intent.getStringExtra("book_date_end")
+        val bookTimeBegin: String? = intent.getStringExtra("book_time_begin")
+        val bookTimeEnd: String? = intent.getStringExtra("book_time_end")
         newBooking.date = bookDateBegin
         newBooking.time_from = bookTimeBegin
         newBooking.time_to = bookTimeEnd
         newBooking.date_to = bookDateEnd
-        Log.d("TOPKEK", bookDateBegin)
-        Log.d("TOPKEK", bookTimeBegin)
-        Log.d("TOPKEK", bookTimeEnd)
+        //Log.d("TOPKEK", bookDateBegin)
+        //Log.d("TOPKEK", bookTimeBegin)
+        //Log.d("TOPKEK", bookTimeEnd)
     }
 
     /**
