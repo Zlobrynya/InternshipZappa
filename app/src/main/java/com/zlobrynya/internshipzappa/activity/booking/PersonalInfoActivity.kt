@@ -315,8 +315,14 @@ class PersonalInfoActivity : AppCompatActivity() {
     }
 
     private fun validatePhone(phone: String): Boolean {
-        val phoneLength = 16
-        return android.util.Patterns.PHONE.matcher(phone).matches() && phone.length == phoneLength
+        val phoneLength7 = 16
+        val phoneLength8 = 17
+        val firstChar: Char = phone[0]
+        return if (firstChar == '8') {
+            phone.length == phoneLength8
+        } else {
+            phone.length == phoneLength7
+        }
     }
 
     private fun validateEmail(email: String): Boolean {
