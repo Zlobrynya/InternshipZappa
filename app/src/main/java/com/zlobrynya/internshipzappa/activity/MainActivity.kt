@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun startMenu() {
-        val intent = Intent(this, MenuActivity::class.java)
+        val intent = Intent(this, Menu2Activity::class.java)
         startActivity(intent)
         finish()
     }

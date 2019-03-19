@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.fragment.BookingFragment
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
@@ -24,23 +25,17 @@ class Menu2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu2)
         toolbar = supportActionBar
-
-        if (savedInstanceState == null) {
-            toolbar!!.title = "Меню"
-        }
+        toolbar!!.hide()
 
         navigation2.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_menu -> {
-                    toolbar!!.title = "Меню"
                     viewpager2.currentItem = 0
                 }
                 R.id.navigation_booking -> {
-                    toolbar!!.title = "Бронь"
                     viewpager2.currentItem = 1
                 }
                 R.id.navigation_contacts -> {
-                    toolbar!!.title = "Контакты"
                     viewpager2.currentItem = 2
                 }
             }
@@ -79,6 +74,8 @@ class Menu2Activity : AppCompatActivity() {
                 return true;
             }
         });*/
+
+        viewpager2.offscreenPageLimit = 2
 
         setupViewPager(viewpager2)
     }

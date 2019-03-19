@@ -135,9 +135,22 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
 
-        dataBase = VisitingHoursDB(context!!) // Инициализация БД
+        /*dataBase = VisitingHoursDB(context!!) // Инициализация БД
         timeTable = dataBase.getVisitingHours() // Получение графика работы ресторана
-        dataBase.closeDataBase()
+
+        for (i in 0 until timeTable.size) {
+            Log.d("LMAO", "${timeTable[i].time_from} , ${timeTable[i].time_to}, ${timeTable[i].week_day} ")
+        }
+        dataBase.closeDataBase()*/
+
+        timeTable = ArrayList()
+        timeTable.add(visitingHoursDTO("12:00:00", "23:00:00", "пн"))
+        timeTable.add(visitingHoursDTO("12:00:00", "23:00:00", "вт"))
+        timeTable.add(visitingHoursDTO("12:00:00", "23:00:00", "ср"))
+        timeTable.add(visitingHoursDTO("12:00:00", "23:00:00", "чт"))
+        timeTable.add(visitingHoursDTO("12:00:00", "01:00:00", "пт"))
+        timeTable.add(visitingHoursDTO("13:00:00", "01:00:00", "сб"))
+        timeTable.add(visitingHoursDTO("13:00:00", "22:00:00", "вс"))
 
         initCalendar()
         updateSchedule()
