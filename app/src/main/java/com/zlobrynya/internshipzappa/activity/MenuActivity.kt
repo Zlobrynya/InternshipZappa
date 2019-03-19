@@ -32,22 +32,17 @@ class MenuActivity: AppCompatActivity() {
 
             // Профиль
             R.id.navigation_contacts -> {
-                toolbar.title = "Контакты"
                 selectedFragment = kontaktiFragment
             }
 
             // Меню
             R.id.navigation_menu -> {
-                supportActionBar!!.title = "Меню"
                 selectedFragment = menuFragment
             }
 
             // Бронирование
             R.id.navigation_booking -> {
-                supportActionBar!!.title = "Бронь"
                 selectedFragment = bookingFragment
-                //val intent = Intent(this, BookingEnd::class.java)
-                //startActivity(intent)
             }
         }
         // Загружаем фрагмент
@@ -64,6 +59,7 @@ class MenuActivity: AppCompatActivity() {
         setContentView(R.layout.activity_menu)
 
         toolbar = supportActionBar!!
+        toolbar.hide()
         //supportActionBar!!.setTitle(R.string.menu_toolbar)
         //supportActionBar!!.elevation = 0.0F
 
