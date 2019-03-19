@@ -68,11 +68,10 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                 .skipMemoryCache(true)
                 .placeholder(R.drawable.no_toping)
                 .error(R.drawable.no_toping)
-                .apply(RequestOptions.overrideOf(130, 50))
                 .into(object:SimpleTarget<Bitmap>(){
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         progressBar2.visibility = View.GONE
-                        topingPhoto.setImageBitmap(getRoundedCornerBitmap(resource))
+                        topingPhoto.setImageBitmap(resource)
                     }
 
                     override fun onLoadFailed(errorDrawable: Drawable?) {
@@ -119,28 +118,6 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                     }
                 }
             }
-        }
-
-        fun getRoundedCornerBitmap(bitmap: Bitmap): Bitmap {
-            val output = Bitmap.createBitmap(
-                bitmap.width,
-                bitmap.height, Bitmap.Config.ARGB_8888
-            )
-            val canvas = Canvas(output)
-
-            val paint = Paint()
-            val rect = Rect(0, 0, bitmap.width, bitmap.height)
-            val rectF = RectF(rect)
-            val roundPx = 9f
-
-            paint.setAntiAlias(true)
-            canvas.drawARGB(0, 0, 0, 0)
-            canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
-
-            paint.setXfermode(PorterDuffXfermode(PorterDuff.Mode.SRC_IN))
-            canvas.drawBitmap(bitmap, rect, rect, paint)
-
-            return output
         }
     }
 }

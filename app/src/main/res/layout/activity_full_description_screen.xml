@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/color_primary_dark"
         android:scrollbarThumbVertical="@drawable/scrollbar_fulldesc"
+        android:scrollbarThumbHorizontal="@drawable/scrollbar_fulldesc"
         android:scrollbars="vertical"
         android:verticalScrollbarPosition="defaultPosition"
         app:layout_constraintBottom_toBottomOf="parent"
