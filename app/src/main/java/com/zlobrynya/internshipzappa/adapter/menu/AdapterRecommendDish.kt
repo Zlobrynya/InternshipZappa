@@ -40,7 +40,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
         holder.bind(values.get(position))
     }
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
         // Установка данных в view
         @SuppressLint("SetTextI18n")
@@ -58,7 +58,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                 }
             }
 
-            topingName.text = dishDTO.name
+            topingName.text = dishDTO.name.replace("\'", "\"")
 
             //Glide
             Glide.with(context)
@@ -88,7 +88,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
 
         }
 
-        override fun onClick(view: View) = with(itemView) {
+        /*override fun onClick(view: View) = with(itemView) {
             when (view){
                 btnToping -> {
                     btnToping.visibility = View.GONE
@@ -118,6 +118,6 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
                     }
                 }
             }
-        }
+        }*/
     }
 }
