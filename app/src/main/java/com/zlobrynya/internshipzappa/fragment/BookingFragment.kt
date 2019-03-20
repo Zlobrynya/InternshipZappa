@@ -17,6 +17,7 @@ import kotlin.collections.ArrayList
 import android.text.format.DateUtils
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.adapter.booking.BookDuration
 import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
@@ -285,10 +286,12 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         when (it.id) {
             // Кнопка выбрать стол
             R.id.book_button -> {
+
                 if (bookTimeAndDate != null) { // Проверим, выбрал ли пользователь время
                     bookingView.book_time_select_label.error = null // Скроем варнинг
 
                     openTableList()
+
                 } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
             }
             // Поле "Выберите время"
@@ -297,6 +300,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
             }
         }
     }
+
 
     /**
      * Открывает таймпикер
