@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.MainActivity
+import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.activity.MenuActivity
 import kotlinx.android.synthetic.main.activity_end_booking.*
 
@@ -44,7 +46,7 @@ class BookingEnd: AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val intent = Intent(this, MenuActivity::class.java)
+        val intent = Intent(this, Menu2Activity::class.java)
         startActivity(intent)
         finish()
     }
