@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.fragment
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -274,6 +275,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 }
                 break
             }
+            Log.e("updateSch", timeClose)
         }
 
         //bookTimeAndDate = null // Сбросим выбранное время
@@ -515,12 +517,15 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      * @return true, если до закрытия ресторана 5+ часов, иначе - false
      * 5 часов потому что отсечка 2 часа до закрытия ресторана + 3 часа отсечка до ближайшей брони
      */
+    @SuppressLint("SimpleDateFormat")
     private fun checkToday() {
         updateSchedule()
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(Calendar.SECOND, 0)
         val timeNow = calendar.timeInMillis
         Log.d("TOPKEK", "Текущее время ${calendar.time}")
+        Log.d("TOPKEK", "Текущее время ${timeClose}")
+
 
         val hourOfClose: Int = SimpleDateFormat("HH:mm:ss").parse(timeClose).hours
 

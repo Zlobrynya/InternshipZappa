@@ -47,6 +47,7 @@ class BookingEnd: AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         val intent = Intent(this, Menu2Activity::class.java)
+        //intent.setFlags()
         startActivity(intent)
         finish()
     }

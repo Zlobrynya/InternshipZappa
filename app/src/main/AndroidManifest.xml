@@ -20,6 +20,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.Menu2Activity"
+            android:launchMode="singleTask"
             android:screenOrientation="locked" />
         <activity
             android:name=".activity.booking.PersonalInfoActivity"
