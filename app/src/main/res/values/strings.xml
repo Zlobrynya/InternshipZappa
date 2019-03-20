@@ -7,11 +7,11 @@
     <string name="code_0">Проверьте интернет соединение.</string>
     <string name="code_503">Техническое обслуживание сервера.</string>
     <string name="code_else">Случилось что то непостижимое, раз вы увидели это сообщение. Попробуйте попозже зайти.</string>
-    <string name="something_wrong">Упс! Что то не так!</string>
-    <string name="repeat_connection">Повторить соединение.</string>
+    <string name="something_wrong">Ошибка соединения</string>
+    <string name="repeat_connection">ПОВТОРИТЬ СОЕДИНЕНИЕ</string>
     <string name="call">Позвонить в ресторан</string>
-    <string name="offline">Работа будет продолжена в оффлайн режиме. Меню может быть неактуальным.</string>
-    <string name="well">Хорошо</string>
+    <string name="offline">Приложение запустится в офлайн режиме. Меню может оказаться неактуальным.</string>
+    <string name="well">ПРОДОЛЖИТЬ</string>
     <string name="close_app">Закрыть приложение</string>
 
 

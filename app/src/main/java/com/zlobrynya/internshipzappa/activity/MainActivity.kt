@@ -75,12 +75,13 @@ class MainActivity : AppCompatActivity() {
 
     //вызов диалога
     private fun allert(text: String, id: Int) {
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
         builder.setTitle(getString(R.string.something_wrong))
             .setMessage(text)
             .setCancelable(false)
             .setPositiveButton(
                 getString(R.string.repeat_connection)
+
             ) { dialog, _ ->
                 run {
                     Log.i("check", "it's fine")
@@ -88,14 +89,14 @@ class MainActivity : AppCompatActivity() {
                     dialog.cancel()
                 }
             }
-            .setNeutralButton(getString(R.string.call)) { dialog, _ ->
+            /*.setNeutralButton(getString(R.string.call)) { dialog, _ ->
                 run {
                     val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:+7(8142)63-23-89"))
                     if (intent.resolveActivity(packageManager) != null) {
                         startActivity(intent)
                     }
                 }
-            }
+            }*/
             .setNegativeButton(
                 getString(id)
             ) { dialog, _ ->
@@ -108,6 +109,9 @@ class MainActivity : AppCompatActivity() {
             }
         val alert = builder.create()
         alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+
     }
 
     /* private fun allertNoInternet(text: String){
