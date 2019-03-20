@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.annotation.RequiresApi
-import android.support.v4.content.ContextCompat.getSystemService
 import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.InputFilter
@@ -19,31 +18,16 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.respDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
-import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
-import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
-import kotlinx.android.synthetic.main.activity_end_booking.*
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 
 class PersonalInfoActivity : AppCompatActivity() {
