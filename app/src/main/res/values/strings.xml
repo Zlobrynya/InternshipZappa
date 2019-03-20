@@ -99,4 +99,7 @@
     <string name="error_phone">Введите корректный номер телефона</string>
     <string name="error_email">Введите корректный E-mail</string>
     <string name="error_name">Введите корректное имя</string>
+
+    <string name="enter_email">Введите код из E-mail сообщения</string>
+    <string name="wrong_code">Код введен неверно</string>
 </resources>

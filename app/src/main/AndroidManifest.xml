@@ -60,6 +60,9 @@
             android:name=".activity.MenuActivity"
             android:launchMode="singleTask"
             android:screenOrientation="locked" />
+        <activity android:name=".activity.profile.CodeFEmailActivity"
+            android:screenOrientation="locked">
+        </activity>
     </application>
 
 </manifest>

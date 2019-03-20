@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
@@ -8,6 +9,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
 import com.zlobrynya.internshipzappa.fragment.BookingFragment
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
@@ -18,6 +20,7 @@ class Menu2Activity : AppCompatActivity() {
     private lateinit var menuFragment: MenuFragment
     private lateinit var bookingFragment: BookingFragment
     private lateinit var contactsFragment: KontaktiFragment
+    private lateinit var codeFEmailActivity: CodeFEmailActivity
     internal var prevMenuItem: MenuItem? = null
     private var toolbar: ActionBar? = null
 
@@ -36,7 +39,9 @@ class Menu2Activity : AppCompatActivity() {
                     viewpager2.currentItem = 1
                 }
                 R.id.navigation_contacts -> {
-                    viewpager2.currentItem = 2
+                    //viewpager2.currentItem = 2
+                    val intent = Intent(this, CodeFEmailActivity::class.java)
+                    startActivity(intent)
                 }
             }
             false
@@ -85,6 +90,7 @@ class Menu2Activity : AppCompatActivity() {
         bookingFragment = BookingFragment()
         contactsFragment = KontaktiFragment()
         menuFragment = MenuFragment()
+        codeFEmailActivity = CodeFEmailActivity()
 
         adapter.addFragment(menuFragment)
         adapter.addFragment(bookingFragment)
