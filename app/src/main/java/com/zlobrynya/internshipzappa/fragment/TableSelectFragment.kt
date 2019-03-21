@@ -42,8 +42,8 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
         //trans.replace(R.id.root_frame, BookingFragment())
         trans.remove(this)
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        //trans.addToBackStack(null)
         trans.commit()
+        fragmentManager!!.popBackStack() // Снимаем фрагмент со стека
     }
 
     /**
