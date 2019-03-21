@@ -20,5 +20,6 @@
     <color name="btn_continue">#FF0000</color>
     <color name="bg_nav_bar">#AFAFAF</color>
     <color name="toggle">#D0D0D0</color>
+    <color name="toggle">#D0D0D0</color>
     <color name="white_line_table">#1AFFFFFF</color>
 </resources>

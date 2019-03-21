@@ -48,6 +48,8 @@ class RetrofitClientInstance {
 
     fun postPassRecData(recovery: passwordRecoveryDTO): Observable<Response<respDTO>> = postRequest!!.postPassRecData(recovery)
 
+    fun postStatusData(status: checkDTO): Observable<Response<respDTO>> = postRequest!!.postStatusData(status)
+
     //fun getDishCount() : Observable<Response<ResponseBody>> = getRequest!!.getDishCount()
 
     companion object {

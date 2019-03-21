@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 
-
 /**
  * Фрагмент-контейнер для фрагментов связанных с бронью
  */
@@ -17,11 +16,11 @@ class RootFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_root, container, false)
 
         val transaction = fragmentManager!!.beginTransaction()
-        // Загружаем контейнер для фрагментов "новая бронь" и "мои брони"
-        transaction.replace(R.id.root_frame, BookingContainerFragment())
+        transaction.replace(R.id.root_frame, BookingFragment()) // Загружаем реальный фрагмент брони
         transaction.commit()
 
         return view
     }
+
 
 }

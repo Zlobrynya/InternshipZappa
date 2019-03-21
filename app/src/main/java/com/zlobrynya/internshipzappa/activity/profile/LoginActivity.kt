@@ -1,6 +1,5 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
-import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -29,9 +28,9 @@ class LoginActivity : AppCompatActivity() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        log_email.addTextChangedListener(object : TextWatcher {
+        log_email.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+                log_email.onFocusChangeListener = object : View.OnFocusChangeListener{
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val email = log_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
@@ -56,16 +55,15 @@ class LoginActivity : AppCompatActivity() {
 
         })
 
-        log_password.addTextChangedListener(object : TextWatcher {
+        log_password.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                log_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+                log_password.onFocusChangeListener = object : View.OnFocusChangeListener{
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val password = log_password_input_layout.editText!!.text.toString()
                         val validatePassword = validatePassword(password)
 
                         if (!validatePassword) {
-                            log_password_input_layout.error =
-                                getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                            log_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_password)
                             log_password.setCompoundDrawables(null, null, icon, null)
                         } else {
                             log_password_input_layout.isErrorEnabled = false
@@ -107,22 +105,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        /*super.onBackPressed()
+        super.onBackPressed()
         val intent = Intent(this, Menu2Activity::class.java)
         startActivity(intent)
-        finish()*/
-
-        super.onBackPressed()
-        // Закрываем активити с кодом RESULT_CANCELED если юзер закрыл авторизацию
-        setResult(Activity.RESULT_CANCELED)
         finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        super.onBackPressed()
-        // Закрываем активити с кодом RESULT_CANCELED если юзер закрыл авторизацию
-        setResult(Activity.RESULT_CANCELED)
-        finish()
+        onBackPressed()
         return true
     }
 }

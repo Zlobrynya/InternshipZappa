@@ -43,4 +43,7 @@ interface PostRequest {
     fun postPassRecData(@Body verifyData: passwordRecoveryDTO): Observable<Response<respDTO>>
 
     //здесь должен будет быть запрос на определение статуса юзера
+    @Headers("Content-Type: application/json")
+    @POST("check_auth")
+    fun postStatusData(@Body statusData: checkDTO): Observable<Response<respDTO>>
 }
