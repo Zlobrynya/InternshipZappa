@@ -69,6 +69,8 @@ class CodeFEmailActivity: AppCompatActivity() {
                         thirdNumber.text.toString() + fourthNumber.text.toString()
                 if (!code.equals("1111")){
                     allert_text.visibility = View.VISIBLE
+                }else{
+                    allert_text.visibility = View.GONE
                 }
                 Log.d("code", "$code")
             }
