@@ -5,53 +5,6 @@
                                              android:layout_height="match_parent" android:background="@color/color_app">
 
     <TextView
-        android:id="@+id/booking_end_phone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="110dp"
-        android:text="@string/phone_booking"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/booking_end_otmena" />
-
-    <TextView
-        android:id="@+id/booking_end_otmena"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="50dp"
-        android:text="@string/otmena"
-        android:textAlignment="center"
-        android:textColor="@color/text_end_booking"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/perezvon" />
-
-    <TextView
-        android:id="@+id/app_in_test"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginEnd="32dp"
-        android:text="@string/app_in_test"
-        android:textAlignment="center"
-        android:textColor="@color/text_end_booking"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/izmena" />
-
-    <TextView
         android:id="@+id/izmena"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -71,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="112dp"
         android:layout_marginEnd="16dp"
         android:textAlignment="center"
         android:textColor="@color/text_end_booking"
@@ -80,22 +33,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/perezvon"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/perezvon"
-        android:textAlignment="center"
-        android:textColor="@color/text_end_booking"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/izmena" />
 
     <Button
         android:id="@+id/btn_back"

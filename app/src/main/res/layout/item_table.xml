@@ -40,4 +40,16 @@
         android:text="Выбрать"
         android:textColor="@color/white"
         android:textSize="14sp" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="376dp"
+        android:layout_height="2dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="70dp"
+        android:background="@color/white_line_table" />
 </RelativeLayout>

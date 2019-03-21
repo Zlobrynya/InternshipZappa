@@ -118,7 +118,7 @@ class CodeFEmailActivity: AppCompatActivity() {
             override fun onClick(v: View?) {
                 code = firstNumber.text.toString() + secondNumber.text.toString() +
                         thirdNumber.text.toString() + fourthNumber.text.toString()
-                if (!code.equals("1111")){
+                if (!code.equals("11111")){
                     allert_text.visibility = View.VISIBLE
                     firstNumber.setTextColor(resources.getColor(R.color.color_accent))
                     secondNumber.setTextColor(resources.getColor(R.color.color_accent))

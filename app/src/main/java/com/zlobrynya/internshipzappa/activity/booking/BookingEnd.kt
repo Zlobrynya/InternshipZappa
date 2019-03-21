@@ -26,16 +26,11 @@ class BookingEnd: AppCompatActivity() {
         when(code){
             200 -> {
                 otmena.text = getString(R.string.prinyal, na)
-                izmena.text = getString(R.string.po_nomeru, phone)
-                app_in_test.text = getString(R.string.app_in_test, "возможные")
+                izmena.text = getString(R.string.recall)
             }
             else -> {
-                app_in_test.text = getString(R.string.app_in_test, "причинённые")
                 otmena.text = getString(R.string.otclonena, na)
                 izmena.text = getString(R.string.izmeni)
-                booking_end_phone.visibility = View.GONE
-                booking_end_otmena.visibility = View.GONE
-                perezvon.visibility = View.GONE
             }
         }
 
