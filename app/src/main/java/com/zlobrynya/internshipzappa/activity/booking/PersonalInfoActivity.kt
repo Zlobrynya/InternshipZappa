@@ -295,7 +295,7 @@ class PersonalInfoActivity : AppCompatActivity() {
 
     private fun validateName(name: String) : Boolean {
         val nameLength = 2
-        return name.matches("[A-ZА-Я][a-zA-Zа-яА-Я]*".toRegex()) && name.length >= nameLength
+        return name.matches("[a-zA-Zа-яА-ЯёЁ]*".toRegex()) && name.length >= nameLength
     }
 
     private fun validatePhone(phone: String): Boolean {

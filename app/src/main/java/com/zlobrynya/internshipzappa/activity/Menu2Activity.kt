@@ -10,6 +10,7 @@ import android.view.View
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.fragment.BookingFragment
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
+import com.zlobrynya.internshipzappa.fragment.ProfileFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_menu2.*
 
@@ -18,6 +19,7 @@ class Menu2Activity : AppCompatActivity() {
     private lateinit var menuFragment: MenuFragment
     private lateinit var bookingFragment: BookingFragment
     private lateinit var contactsFragment: KontaktiFragment
+    private lateinit var profileFragment: ProfileFragment
     internal var prevMenuItem: MenuItem? = null
     private var toolbar: ActionBar? = null
 
@@ -37,6 +39,9 @@ class Menu2Activity : AppCompatActivity() {
                 }
                 R.id.navigation_contacts -> {
                     viewpager2.currentItem = 2
+                }
+                R.id.navigation_profile -> {
+                    viewpager2.currentItem = 3
                 }
             }
             false
@@ -85,10 +90,12 @@ class Menu2Activity : AppCompatActivity() {
         bookingFragment = BookingFragment()
         contactsFragment = KontaktiFragment()
         menuFragment = MenuFragment()
+        profileFragment = ProfileFragment()
 
         adapter.addFragment(menuFragment)
         adapter.addFragment(bookingFragment)
         adapter.addFragment(contactsFragment)
+        adapter.addFragment(profileFragment)
         viewPager.adapter = adapter
     }
 }
