@@ -8,11 +8,22 @@ import android.support.annotation.RequiresApi
 import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.Observer
 import kotlinx.android.synthetic.main.activity_personal_info.*
 import kotlinx.android.synthetic.main.activity_register.*
+import retrofit2.Response
+import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -182,7 +193,7 @@ class RegisterActivity : AppCompatActivity() {
         })
 
         btnRegister.setOnClickListener {
-            val name = reg_username_input_layout.editText!!.text.toString()
+           /* val name = reg_username_input_layout.editText!!.text.toString()
             val phone = reg_phone_number_input_layout.editText!!.text.toString()
             val email = reg_email_input_layout.editText!!.text.toString()
             val password = reg_password_input_layout.editText!!.text.toString()
@@ -193,11 +204,50 @@ class RegisterActivity : AppCompatActivity() {
             val validatePhone = validatePhone(phone)
             val validateEmail = validateEmail(email)
             val validatePassword = validatePassword(password)
-            val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
+            val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)*/
 
-            if (validateName && validatePhone && validateEmail && validatePassword && validateConfirmPassword) {
-                onBackPressed()
-            }
+
+            /*if (validateName && validatePhone && validateEmail && validatePassword && validateConfirmPassword) {
+                //onBackPressed()
+                val intent = Intent(this, CodeFEmailActivity::class.java)
+                startActivity(intent)
+            }*/
+
+
+            val newVerify = verifyEmailDTO()
+
+            newVerify.email = reg_email.text.toString()
+
+            RetrofitClientInstance.getInstance()
+                .postVerifyData(newVerify)
+                .subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(object : Observer<Response<respDTO>> {
+
+                    override fun onComplete() {}
+
+                    override fun onSubscribe(d: Disposable) {}
+
+                    override fun onNext(t: Response<respDTO>) {
+                        Log.d("onNextTA", "зашёл")
+                        //responseBodyStatus = t.body()
+                        Log.i("check5", "${t.code()}")
+
+                        if(t.isSuccessful) {
+                            val intent = Intent(applicationContext, CodeFEmailActivity::class.java)
+                            intent.putExtra("name", reg_username.text.toString())
+                            intent.putExtra("phone", reg_phone_number.text.toString())
+                            intent.putExtra("email", reg_email.text.toString())
+                            intent.putExtra("password", reg_password.text.toString())
+                            startActivity(intent)
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.i("check", "that's not fineIn")
+                    }
+
+                })
         }
     }
 

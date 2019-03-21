@@ -10,6 +10,7 @@ import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
 import kotlinx.android.synthetic.main.activity_table_select.*
 import android.support.v7.widget.DividerItemDecoration
 import android.util.Log
+import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
@@ -164,7 +165,9 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      */
     override fun onTableClick(position: Int, isButtonClick: Boolean) {
         if (isButtonClick) { //Открываем новую активити
-            val intent = Intent(this, PersonalInfoActivity::class.java)
+            //val intent = Intent(this, PersonalInfoActivity::class.java)
+            //тут будет взаимодействие с сервом для проверки статуса авторизации пользователя
+            val intent = Intent(this, LoginActivity::class.java)
             intent.putExtra("table_id", tableList[position].seatId)
             intent.putExtra("book_date_begin", newBooking.date)
             intent.putExtra("book_date_end", newBooking.date_to)

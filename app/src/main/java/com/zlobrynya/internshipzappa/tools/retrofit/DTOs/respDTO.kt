@@ -3,6 +3,6 @@ package com.zlobrynya.internshipzappa.tools.retrofit.DTOs
 import com.google.gson.annotations.SerializedName
 
 data class respDTO(
-    @SerializedName("code")val code: Int,
-    @SerializedName("desc")val desc: String
+    @SerializedName("code")var code: Int = 0,
+    @SerializedName("desc")var desc: String = ""
 )

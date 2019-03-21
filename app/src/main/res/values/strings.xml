@@ -104,4 +104,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enter_email">Введите код из E-mail сообщения</string>
+    <string name="wrong_code">Код введен неверно</string>
+
+    <!-- инфа о юзере -->
+    <string name="user_info">user_info</string>
+    <string name="user_email">email</string>
+    <string name="uuid">uuid</string>
 </resources>

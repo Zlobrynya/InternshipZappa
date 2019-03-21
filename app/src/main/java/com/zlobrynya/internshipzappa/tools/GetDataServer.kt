@@ -93,6 +93,16 @@ class GetDataServer(val context: Context) {
         val sharedPreferencesTime = context.getSharedPreferences(context.getString(R.string.key_shared_time), Context.MODE_PRIVATE)
         val savedTime = context.getString(R.string.key_time)
         val savedTimeIn = sharedPreferencesTime.getInt(savedTime, 0)
+        //создание префов для статуса
+        val sharedPreferencesStat = context.getSharedPreferences(context.getString(R.string.user_info), Context.MODE_PRIVATE)
+        val savedEmail = context.getString(R.string.user_email)
+        val uuid = context.getString(R.string.uuid)
+        if(sharedPreferencesStat.getString(savedEmail, "null") == "null"){
+            val editor = sharedPreferencesStat.edit()
+            editor.putString(savedEmail, "")
+            editor.putString(uuid, "")
+            editor.apply()
+        }
 
         if(timeLog.hashCode() == savedTimeIn) {
             hoursDB.closeDataBase()
