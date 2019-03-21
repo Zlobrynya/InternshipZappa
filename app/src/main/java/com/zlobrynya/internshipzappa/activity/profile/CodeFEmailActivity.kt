@@ -20,6 +20,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_code_f_email.*
 import org.w3c.dom.Text
 import retrofit2.Response
+import retrofit2.converter.gson.GsonConverterFactory
 
 class CodeFEmailActivity: AppCompatActivity() {
 
