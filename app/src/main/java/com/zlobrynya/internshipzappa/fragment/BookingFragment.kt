@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentTransaction
+import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,9 +19,11 @@ import kotlinx.android.synthetic.main.fragment_booking.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import android.text.format.DateUtils
+import android.view.ViewParent
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
+import com.zlobrynya.internshipzappa.activity.ViewPagerAdapter
 import com.zlobrynya.internshipzappa.adapter.booking.BookDuration
 import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
@@ -292,7 +297,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 if (bookTimeAndDate != null) { // Проверим, выбрал ли пользователь время
                     bookingView.book_time_select_label.error = null // Скроем варнинг
 
-                    openTableList()
+                    //openTableList()
+                    openTableListFragment()
 
                 } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
             }
@@ -483,6 +489,88 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         }
 
         startActivity(intent)
+    }
+
+    /**
+     * Открывает список доступных столов (фрагмент)
+     */
+    private fun openTableListFragment() {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd") // Форматирование для даты
+        val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
+
+        val args = Bundle()
+        args.putString("book_date_begin", dateFormat.format(bookTimeAndDate!!.time)) // Заполняем дату начала брони
+        args.putString("book_time_begin", timeFormat.format(calendar.timeInMillis)) // Заполняем время начала брони
+        args.putString("book_date_end", dateFormat.format(calendar.timeInMillis)) // Заполняем дату конца брони
+
+        when (selectedDuration) { // И время конца
+            // 2 часа
+            0 -> {
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + TWO_HOURS)) {
+                    args.putString("book_date_end", dateFormat.format(calendar.timeInMillis + TWO_HOURS))
+                }
+                args.putString( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + TWO_HOURS)
+                )
+            }
+            // 2 часа 30 минут
+            1 -> {
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)) {
+                    args.putString(
+                        "book_date_end",
+                        dateFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
+                    )
+                }
+                args.putString( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
+                )
+            }
+            // 3 часа
+            2 -> {
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + THREE_HOURS)) {
+                    args.putString("book_date_end", dateFormat.format(calendar.timeInMillis + THREE_HOURS))
+                }
+                args.putString( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + THREE_HOURS)
+                )
+            }
+            // 3 часа 30 минут
+            3 -> {
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)) {
+                    args.putString(
+                        "book_date_end",
+                        dateFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
+                    )
+                }
+                args.putString( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
+                )
+            }
+            // 4 часа
+            4 -> {
+                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + FOUR_HOURS)) {
+                    args.putString("book_date_end", dateFormat.format(calendar.timeInMillis + FOUR_HOURS))
+                }
+                args.putString( // Заполняем время конца брони
+                    "book_time_end",
+                    timeFormat.format(calendar.timeInMillis + FOUR_HOURS)
+                )
+            }
+        }
+        // Загрузим фрагмент выбора столов
+        val trans = fragmentManager!!.beginTransaction()
+        val tableSelectFragment = TableSelectFragment()
+        tableSelectFragment.arguments = args
+        //trans.replace(R.id.root_frame, tableSelectFragment)
+        trans.add(R.id.root_frame, tableSelectFragment)
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        trans.addToBackStack(null)
+        trans.commit()
+
     }
 
     /**
