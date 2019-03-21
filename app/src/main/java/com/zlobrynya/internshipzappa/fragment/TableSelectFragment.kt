@@ -15,6 +15,7 @@ import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.PersonalInfoActivity
 import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
+import com.zlobrynya.internshipzappa.adapter.booking.PersonalInfoFragment
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
@@ -40,11 +41,10 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
     private val navigationClickListener = View.OnClickListener {
         // Удалим фрагмент со стека
         val trans = fragmentManager!!.beginTransaction()
-        //trans.replace(R.id.root_frame, BookingFragment())
         trans.remove(this)
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        //trans.addToBackStack(null)
         trans.commit()
+        fragmentManager!!.popBackStack()
     }
 
     /**
@@ -166,19 +166,35 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
      * @param isButtonClick Произошло ли нажатие на кнопку "выбрать"
      */
     override fun onTableClick(position: Int, isButtonClick: Boolean) {
-        if (isButtonClick) { //Открываем новую активити
+        if (isButtonClick) {
             //val intent = Intent(context, PersonalInfoActivity::class.java)
-            val intent = Intent(context, LoginActivity::class.java)
-            intent.putExtra("table_id", tableList[position].seatId)
-            intent.putExtra("book_date_begin", newBooking.date)
-            intent.putExtra("book_date_end", newBooking.date_to)
-            intent.putExtra("book_time_begin", newBooking.time_from)
-            intent.putExtra("book_time_end", newBooking.time_to)
-            intent.putExtra("seat_count", tableList[position].seatCount)
-            intent.putExtra("seat_position", tableList[position].seatPosition)
-            intent.putExtra("seat_type", tableList[position].seatType)
-            startActivity(intent)
+            //val intent = Intent(context, LoginActivity::class.java)
+            openPersonalInfo(position)
         }
+    }
+
+    /**
+     * Загружает фрагмент с персональной инфой
+     */
+    private fun openPersonalInfo(position: Int) {
+        val args = Bundle()
+        args.putInt("table_id", tableList[position].seatId)
+        args.putString("book_date_begin", newBooking.date)
+        args.putString("book_date_end", newBooking.date_to)
+        args.putString("book_time_begin", newBooking.time_from)
+        args.putString("book_time_end", newBooking.time_to)
+        args.putInt("seat_count", tableList[position].seatCount)
+        args.putString("seat_position", tableList[position].seatPosition)
+        args.putString("seat_type", tableList[position].seatType)
+
+        // Загрузим фрагмент персональной инфы
+        val trans = fragmentManager!!.beginTransaction()
+        val personalInfoFragment = PersonalInfoFragment()
+        personalInfoFragment.arguments = args
+        trans.add(R.id.root_frame, personalInfoFragment)
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        trans.addToBackStack(null)
+        trans.commit()
     }
 
 }
