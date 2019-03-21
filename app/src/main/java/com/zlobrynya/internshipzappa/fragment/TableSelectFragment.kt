@@ -1,16 +1,20 @@
-package com.zlobrynya.internshipzappa.activity.booking
+package com.zlobrynya.internshipzappa.fragment
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.view.View
-import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
-import kotlinx.android.synthetic.main.activity_table_select.*
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+
+import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.booking.PersonalInfoActivity
 import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
+import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
@@ -19,15 +23,11 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_table_select.view.*
 import retrofit2.Response
-import kotlin.collections.ArrayList
 
 
-/**
- * Активити для выбора столика для бронирования
- */
-class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
-
+class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
 
     /**
      * Объект для POST запроса
@@ -38,7 +38,13 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Обработчик нажатий на стрелочку в тулбаре
      */
     private val navigationClickListener = View.OnClickListener {
-        this.finish()
+        // Удалим фрагмент со стека
+        val trans = fragmentManager!!.beginTransaction()
+        //trans.replace(R.id.root_frame, BookingFragment())
+        trans.remove(this)
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        //trans.addToBackStack(null)
+        trans.commit()
     }
 
     /**
@@ -51,35 +57,31 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      */
     private val tableList: ArrayList<Table> = ArrayList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_table_select)
+    /**
+     * Вьюшка для фрагмента
+     */
+    private lateinit var tableView: View
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        tableView = inflater.inflate(R.layout.fragment_table_select, container, false)
         initRequest()
         initToolBar()
         networkRxjavaPost()
-
-        //networkPost()
-        //initTableList()
-        //initRecycler()
+        return tableView
     }
 
     /**
      * Заполняет объект для POST запрос
      */
     private fun initRequest() {
-        val bookDateBegin: String? = intent.getStringExtra("book_date_begin")
-        //поменять на реальную дату окончания
-        val bookDateEnd: String? = intent.getStringExtra("book_date_end")
-        val bookTimeBegin: String? = intent.getStringExtra("book_time_begin")
-        val bookTimeEnd: String? = intent.getStringExtra("book_time_end")
+        val bookDateBegin: String? = arguments!!.getString("book_date_begin")
+        val bookDateEnd: String? = arguments!!.getString("book_date_end")
+        val bookTimeBegin: String? = arguments!!.getString("book_time_begin")
+        val bookTimeEnd: String? = arguments!!.getString("book_time_end")
         newBooking.date = bookDateBegin
         newBooking.time_from = bookTimeBegin
         newBooking.time_to = bookTimeEnd
         newBooking.date_to = bookDateEnd
-        //Log.d("TOPKEK", bookDateBegin)
-        //Log.d("TOPKEK", bookTimeBegin)
-        //Log.d("TOPKEK", bookTimeEnd)
     }
 
     /**
@@ -104,16 +106,16 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
                         Log.i("check1", "${t.code()}")
                         if (t.body() != null) {
                             if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
-                                table_recycler.visibility = View.GONE
-                                no_tables_available.visibility = View.VISIBLE
+                                tableView.table_recycler.visibility = View.GONE
+                                tableView.no_tables_available.visibility = View.VISIBLE
                             } else {
                                 Log.d("TOPKEK", t.body()!!.data.size.toString())
                                 initTableList()
                                 initRecycler()
                             }
                         } else { // Если свободных столиков нету, то выведем сообщение об этом
-                            table_recycler.visibility = View.GONE
-                            no_tables_available.visibility = View.VISIBLE
+                            tableView.table_recycler.visibility = View.GONE
+                            tableView.no_tables_available.visibility = View.VISIBLE
                         }
                     } else {
                         Log.i("check2", "${t.code()}")
@@ -131,8 +133,8 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Настраивает тулбар
      */
     private fun initToolBar() {
-        toolbar.setNavigationIcon(R.drawable.ic_back_button) // Установим иконку в тулбаре
-        toolbar.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
+        tableView.toolbar.setNavigationIcon(R.drawable.ic_back_button) // Установим иконку в тулбаре
+        tableView.toolbar.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
     }
 
     /**
@@ -150,12 +152,12 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      * Настраивает ресайклер вью
      */
     private fun initRecycler() {
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        table_recycler.layoutManager = layoutManager
-        table_recycler.addItemDecoration(
-            DividerItemDecoration(this, DividerItemDecoration.VERTICAL) // Разделитель элементов внутри ресайклера
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        tableView.table_recycler.layoutManager = layoutManager
+        tableView.table_recycler.addItemDecoration(
+            DividerItemDecoration(context, DividerItemDecoration.VERTICAL) // Разделитель элементов внутри ресайклера
         )
-        table_recycler.adapter = AdapterTable(tableList, this)
+        tableView.table_recycler.adapter = AdapterTable(tableList, this)
     }
 
     /**
@@ -165,9 +167,8 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
      */
     override fun onTableClick(position: Int, isButtonClick: Boolean) {
         if (isButtonClick) { //Открываем новую активити
-            //val intent = Intent(this, PersonalInfoActivity::class.java)
-            //тут будет взаимодействие с сервом для проверки статуса авторизации пользователя
-            val intent = Intent(this, LoginActivity::class.java)
+            //val intent = Intent(context, PersonalInfoActivity::class.java)
+            val intent = Intent(context, LoginActivity::class.java)
             intent.putExtra("table_id", tableList[position].seatId)
             intent.putExtra("book_date_begin", newBooking.date)
             intent.putExtra("book_date_end", newBooking.date_to)
@@ -179,4 +180,5 @@ class TableSelectActivity : AppCompatActivity(), AdapterTable.OnTableListener {
             startActivity(intent)
         }
     }
+
 }

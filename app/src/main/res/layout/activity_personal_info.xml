@@ -72,10 +72,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_hint"
-            android:digits="0123456789"
+            android:digits="+() 1234567890-"
             android:hint="@string/hint_phone_number"
             android:textColor="@color/white"
-            android:maxLength="11"/>
+            android:inputType="phone"
+            android:imeOptions="actionNext"
+            android:maxLength="17" />
 
     </android.support.design.widget.TextInputLayout>
 

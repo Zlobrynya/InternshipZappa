@@ -54,6 +54,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             //В класс помощник записываем данные
             nameDish?.text = dishDTO.name.replace("\'", "\"")
             shortDescDish?.text = dishDTO.desc_short.replace("\'", "\"")
+            if(shortDescDish?.text == "")shortDescDish.visibility = View.GONE
             idDish = dishDTO.item_id
             Log.i("delivery", dishDTO.delivery)
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
@@ -73,8 +74,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
             Glide.with(this)
                 .asBitmap()
                 .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    //не уверен
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .placeholder(R.drawable.menu)
                 .error(R.drawable.menu)

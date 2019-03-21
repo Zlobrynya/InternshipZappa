@@ -2,9 +2,11 @@ package com.zlobrynya.internshipzappa.tools.retrofit
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.*
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -37,6 +39,14 @@ class RetrofitClientInstance {
     fun postBookingDate(book: bookingDataDTO) : Observable<Response<tableList>> = postRequest!!.postBookingData(book)
 
     fun postReserve(reserve: bookingUserDTO): Observable<Response<respDTO>> = postRequest!!.postReserve(reserve)
+
+    fun postVerifyData(verify: verifyEmailDTO): Observable<Response<respDTO>> = postRequest!!.postVerifyData(verify)
+
+    fun postRegData(registration: regDTO): Observable<Response<respDTO>> = postRequest!!.postRegData(registration)
+
+    fun postAuthData(auth: authDTO): Observable<Response<authRespDTO>> = postRequest!!.postAuthData(auth)
+
+    fun postPassRecData(recovery: passwordRecoveryDTO): Observable<Response<respDTO>> = postRequest!!.postPassRecData(recovery)
 
     //fun getDishCount() : Observable<Response<ResponseBody>> = getRequest!!.getDishCount()
 

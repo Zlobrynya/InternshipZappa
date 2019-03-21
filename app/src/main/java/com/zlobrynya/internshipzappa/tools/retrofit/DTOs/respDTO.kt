@@ -1,4 +1,4 @@
-package com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs
+package com.zlobrynya.internshipzappa.tools.retrofit.DTOs
 
 import com.google.gson.annotations.SerializedName
 

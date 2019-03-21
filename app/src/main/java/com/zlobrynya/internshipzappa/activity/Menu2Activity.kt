@@ -1,6 +1,5 @@
 package com.zlobrynya.internshipzappa.activity
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
@@ -9,39 +8,58 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
 import com.zlobrynya.internshipzappa.fragment.BookingFragment
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
+import com.zlobrynya.internshipzappa.fragment.ProfileFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_menu2.*
+import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import com.zlobrynya.internshipzappa.fragment.RootFragment
+
+const val MENU_PAGE: Int = 0
+const val BOOKING_PAGE: Int = 1
+const val CONTACTS_PAGE: Int = 2
+const val PROFILE_PAGE: Int = 3
 
 class Menu2Activity : AppCompatActivity() {
 
-    private lateinit var menuFragment: MenuFragment
-    private lateinit var bookingFragment: BookingFragment
-    private lateinit var contactsFragment: KontaktiFragment
-    private lateinit var codeFEmailActivity: CodeFEmailActivity
+    private val menuFragment: MenuFragment = MenuFragment()
+    private val contactsFragment: KontaktiFragment = KontaktiFragment()
+    private val rootFragment: RootFragment = RootFragment()
+    private val profileFragment: ProfileFragment = ProfileFragment()
+
     internal var prevMenuItem: MenuItem? = null
     private var toolbar: ActionBar? = null
+
+    var mPagerAdapter: SlidePagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu2)
-        toolbar = supportActionBar
-        toolbar!!.hide()
+        hideToolbar()
+        initNavigation()
+        initAdapter()
+    }
 
+    /**
+     * Инициалирует навигацию по вкладкам
+     */
+    private fun initNavigation() {
         navigation2.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_menu -> {
-                    viewpager2.currentItem = 0
+                    viewpager2.currentItem = MENU_PAGE
                 }
                 R.id.navigation_booking -> {
-                    viewpager2.currentItem = 1
+                    viewpager2.currentItem = BOOKING_PAGE
                 }
                 R.id.navigation_contacts -> {
-                    //viewpager2.currentItem = 2
-                    val intent = Intent(this, CodeFEmailActivity::class.java)
-                    startActivity(intent)
+                    viewpager2.currentItem = CONTACTS_PAGE
+                }
+                R.id.navigation_profile -> {
+                    viewpager2.currentItem = PROFILE_PAGE
                 }
             }
             false
@@ -69,32 +87,42 @@ class Menu2Activity : AppCompatActivity() {
             }
         })
 
-        //Disable ViewPager Swipe
-
-        /*viewPager.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                return true;
-            }
-        });*/
-
-        viewpager2.offscreenPageLimit = 2
-
-        setupViewPager(viewpager2)
+        viewpager2.offscreenPageLimit = 3 // Установим отступ для кеширования страниц
     }
 
-    private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = ViewPagerAdapter(supportFragmentManager)
-        bookingFragment = BookingFragment()
-        contactsFragment = KontaktiFragment()
-        menuFragment = MenuFragment()
-        codeFEmailActivity = CodeFEmailActivity()
+    /**
+     * Инициализирует адаптер
+     */
+    private fun initAdapter() {
+        mPagerAdapter = SlidePagerAdapter(supportFragmentManager)
+        viewpager2.adapter = mPagerAdapter
+    }
 
-        adapter.addFragment(menuFragment)
-        adapter.addFragment(bookingFragment)
-        adapter.addFragment(contactsFragment)
-        viewPager.adapter = adapter
+    /**
+     * Скрывает тулбар
+     */
+    private fun hideToolbar() {
+        toolbar = supportActionBar
+        toolbar!!.hide()
+    }
+
+    /**
+     * Кастомный адаптер для постраничной навигации
+     */
+    inner class SlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
+        override fun getItem(position: Int): Fragment {
+
+            return when (position) {
+                MENU_PAGE -> menuFragment
+                BOOKING_PAGE -> rootFragment // На вкладку "Бронь" положим фрагмент-контейнер
+                PROFILE_PAGE -> profileFragment
+                else -> contactsFragment
+            }
+        }
+
+        override fun getCount(): Int {
+            return 4
+        }
     }
 }
