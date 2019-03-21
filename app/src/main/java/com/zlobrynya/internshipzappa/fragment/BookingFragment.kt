@@ -568,7 +568,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         //trans.replace(R.id.root_frame, tableSelectFragment)
         trans.add(R.id.root_frame, tableSelectFragment)
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        trans.addToBackStack(null)
+        trans.addToBackStack(null) // Добавим фрагмент в стек
         trans.commit()
 
     }
