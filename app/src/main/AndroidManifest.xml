@@ -20,6 +20,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.Menu2Activity"
+            android:launchMode="singleTask"
             android:screenOrientation="locked" />
         <activity
             android:name=".activity.booking.PersonalInfoActivity"
@@ -56,13 +57,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.profile.CodeFEmailActivity"
+            android:screenOrientation="locked">
+        </activity>
         <activity
             android:name=".activity.MenuActivity"
             android:launchMode="singleTask"
             android:screenOrientation="locked" />
-        <activity android:name=".activity.profile.CodeFEmailActivity"
-            android:screenOrientation="locked">
-        </activity>
     </application>
 
 </manifest>

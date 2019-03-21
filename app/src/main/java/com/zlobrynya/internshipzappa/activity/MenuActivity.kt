@@ -13,27 +13,22 @@ import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
 import com.zlobrynya.internshipzappa.fragment.BookingFragment
 import android.widget.Toast
-
-
+import com.zlobrynya.internshipzappa.fragment.ProfileFragment
 
 
 class MenuActivity: AppCompatActivity() {
 
     private val menuFragment: Fragment = MenuFragment()
 
-    private val kontaktiFragment = KontaktiFragment()
-
     private val bookingFragment: Fragment = BookingFragment()
 
+    private val kontaktiFragment = KontaktiFragment()
+
+    private val profileFragment: Fragment = ProfileFragment()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         var selectedFragment: Fragment? = null
         when (item.itemId) {
-
-            // Профиль
-            R.id.navigation_contacts -> {
-                selectedFragment = kontaktiFragment
-            }
 
             // Меню
             R.id.navigation_menu -> {
@@ -43,6 +38,16 @@ class MenuActivity: AppCompatActivity() {
             // Бронирование
             R.id.navigation_booking -> {
                 selectedFragment = bookingFragment
+            }
+
+            // Контакты
+            R.id.navigation_contacts -> {
+                selectedFragment = kontaktiFragment
+            }
+
+            // Профиль
+            R.id.navigation_profile -> {
+                selectedFragment = profileFragment
             }
         }
         // Загружаем фрагмент

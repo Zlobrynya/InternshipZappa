@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.annotation.RequiresApi
-import android.support.v4.content.ContextCompat.getSystemService
+import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
@@ -15,36 +15,33 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.respDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
-import com.zlobrynya.internshipzappa.tools.retrofit.PostRequest
-import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
-import kotlinx.android.synthetic.main.activity_end_booking.*
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 
 class PersonalInfoActivity : AppCompatActivity() {
+
+    private val blockCharacterSet: String  = ".,- "
+
+    private val filter = object: InputFilter {
+        override fun filter(source:CharSequence, start:Int, end:Int, dest: Spanned, dstart:Int, dend:Int): CharSequence? {
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return ""
+            }
+            return null
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,9 +72,8 @@ class PersonalInfoActivity : AppCompatActivity() {
         val savedEmail = this.getString(R.string.key_user_email)
         if(sharedPreferences.getString(savedName, "") != "") username_input_layout.editText!!.setText(sharedPreferences.getString(savedName, ""))
         if(sharedPreferences.getString(savedPhone, "") != "") {
-            phone_number.setText("")
-            val change_phone = replaceStartPhone(sharedPreferences.getString(savedPhone, ""))
-            //phone_number.setMaskedText(change_phone)
+            val change_phone = sharedPreferences.getString(savedPhone, "")
+            phone_number_input_layout.editText!!.setText(change_phone)
         }
         if(sharedPreferences.getString(savedEmail, "") != "") register_email_input_layout.editText!!.setText(sharedPreferences.getString(savedEmail, ""))
 
@@ -142,9 +138,26 @@ class PersonalInfoActivity : AppCompatActivity() {
         })
 
         phone_number.addTextChangedListener(object: TextWatcher{
+
+            private var mFormatting: Boolean = false
+            private var mAfter: Int = 0
+
             override fun afterTextChanged(s: Editable?) {
                 phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                        if (!mFormatting) {
+                            mFormatting = true
+                            if (mAfter != 0) {
+                                val num = s.toString()
+                                val data = PhoneNumberUtils.formatNumber(num, "RU")
+                                if (data != null) {
+                                    s!!.clear()
+                                    s.append(data)
+                                }
+                            }
+                            mFormatting = false
+                        }
+
                         val phone = phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
 
@@ -160,7 +173,7 @@ class PersonalInfoActivity : AppCompatActivity() {
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
+                mAfter  = after
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -211,6 +224,8 @@ class PersonalInfoActivity : AppCompatActivity() {
                 newBooking.email = email
                 newBooking.phone = phone
                 networkRxjavaPost(newBooking, it.context)
+            } else {
+                Toast.makeText(this, "Введите корректные данные", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -280,13 +295,18 @@ class PersonalInfoActivity : AppCompatActivity() {
 
     private fun validateName(name: String) : Boolean {
         val nameLength = 2
-        return name.matches("[A-ZА-Я][a-zA-Zа-яА-Я]*".toRegex()) && name.length >= nameLength
+        return name.matches("[a-zA-Zа-яА-ЯёЁ]*".toRegex()) && name.length >= nameLength
     }
 
     private fun validatePhone(phone: String): Boolean {
-        val phoneLength = 11
-        //8012345678
-        return android.util.Patterns.PHONE.matcher(phone).matches() && phone.length == phoneLength
+        val phoneLength7 = 16
+        val phoneLength8 = 17
+        val firstChar: Char = phone[0]
+        return if (firstChar == '8') {
+            phone.length == phoneLength8
+        } else {
+            phone.length == phoneLength7
+        }
     }
 
     private fun validateEmail(email: String): Boolean {
@@ -297,20 +317,22 @@ class PersonalInfoActivity : AppCompatActivity() {
         return str.substring(0, str.length - 3)
     }
 
-    private fun replaceStartPhone(str: String?): String {
+    /*private fun replaceStartPhone(str: String?): String {
         val newstr = str!!.replace(" ", "")
         val newstra = newstr.replace("(", "")
         val newstrb = newstra.replace(")", "")
         val newstrc = newstrb.replace("-", "")
         return newstrc.replace("+7", "")
-    }
+    }*/
 
     override fun onBackPressed() {
+        // Вот этот метод не надо переносить
         super.onBackPressed()
         finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        // Вот этот метод тоже не надо переносить
         onBackPressed()
         return true
     }

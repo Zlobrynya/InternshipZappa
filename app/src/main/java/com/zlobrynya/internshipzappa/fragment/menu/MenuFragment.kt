@@ -42,7 +42,7 @@ class MenuFragment : Fragment() {
         Log.i("cat","$categories")
         viewPagerMenu.adapter =
             AdapterTab(childFragmentManager, categories, categories.size)
-        viewPagerMenu.offscreenPageLimit = 7
+        viewPagerMenu.offscreenPageLimit = 6
         sliding_tabs.setupWithViewPager(viewPagerMenu)
 
 
