@@ -66,13 +66,12 @@
     <string name="hint_email">E-mail</string>
     <string name="hint_password">Пароль</string>
     <string name="hint_forgot">Забыли пароль?</string>
-    <string name="hint_remember">Запомнить пароль</string>
     <string name="btn_login">Войти</string>
     <string name="btn_link_to_register">Регистрация</string>
 
     <string name="btn_register">Зарегистрироваться</string>
     <string name="hint_username">Имя</string>
-    <string name="hint_phone_number">Телефон</string>
+    <string name="hint_phone_number">Номер телефона</string>
 
     <!-- конец бронирования -->
     <string name="app_in_test">Приложение работает в тестовом режиме, приносим свои извинения за %1$s неудобства</string>
@@ -99,6 +98,9 @@
     <string name="error_phone">Введите корректный номер телефона</string>
     <string name="error_email">Введите корректный E-mail</string>
     <string name="error_name">Введите корректное имя</string>
+    <string name="error_password">Введите корректный пароль</string>
+    <string name="hint_confirm_password">Введите пароль еще раз</string>
+    <string name="error_confirm_password">Пароли не совпадают</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

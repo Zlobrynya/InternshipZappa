@@ -6,8 +6,11 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.fragment.BookingFragment
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
+import com.zlobrynya.internshipzappa.fragment.ProfileFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_menu2.*
 import android.support.v4.app.FragmentPagerAdapter
@@ -18,12 +21,14 @@ import com.zlobrynya.internshipzappa.fragment.RootFragment
 const val MENU_PAGE: Int = 0
 const val BOOKING_PAGE: Int = 1
 const val CONTACTS_PAGE: Int = 2
+const val PROFILE_PAGE: Int = 3
 
 class Menu2Activity : AppCompatActivity() {
 
     private val menuFragment: MenuFragment = MenuFragment()
     private val contactsFragment: KontaktiFragment = KontaktiFragment()
     private val rootFragment: RootFragment = RootFragment()
+    private val profileFragment: ProfileFragment = ProfileFragment()
 
     internal var prevMenuItem: MenuItem? = null
     private var toolbar: ActionBar? = null
@@ -53,6 +58,9 @@ class Menu2Activity : AppCompatActivity() {
                 R.id.navigation_contacts -> {
                     viewpager2.currentItem = CONTACTS_PAGE
                 }
+                R.id.navigation_profile -> {
+                    viewpager2.currentItem = PROFILE_PAGE
+                }
             }
             false
         }
@@ -79,7 +87,7 @@ class Menu2Activity : AppCompatActivity() {
             }
         })
 
-        viewpager2.offscreenPageLimit = 2 // Установим отступ для кеширования страниц
+        viewpager2.offscreenPageLimit = 3 // Установим отступ для кеширования страниц
     }
 
     /**
@@ -108,12 +116,13 @@ class Menu2Activity : AppCompatActivity() {
             return when (position) {
                 MENU_PAGE -> menuFragment
                 BOOKING_PAGE -> rootFragment // На вкладку "Бронь" положим фрагмент-контейнер
+                PROFILE_PAGE -> profileFragment
                 else -> contactsFragment
             }
         }
 
         override fun getCount(): Int {
-            return 3
+            return 4
         }
     }
 }
