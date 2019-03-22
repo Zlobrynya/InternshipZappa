@@ -175,12 +175,12 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
 
         val uuid = context?.getString(R.string.uuid)
         val authSatus = sharedPreferencesStat?.getString(uuid, "null").toString()
-        newStatus.code = authSatus
+        newStatus.uuid = authSatus
 
         if (isButtonClick) { //Открываем новую активити
             //val intent = Intent(context, PersonalInfoActivity::class.java)
-
-            RetrofitClientInstance.getInstance()
+            openPersonalInfo(position)
+            /*RetrofitClientInstance.getInstance()
                 .postStatusData(newStatus)
                 .subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
@@ -208,21 +208,44 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
                              intent.putExtra("seat_type", tableList[position].seatType)
                              startActivity(intent)
                         }
-                        /*if (t.isSuccessful) {
+                        *//*if (t.isSuccessful) {
 
                         } else {
                             Log.i("check2", "${t.code()}")
 
 
-                        }*/
+                        }*//*
                     }
 
                     override fun onError(e: Throwable) {
                         Log.i("check", "that's not fineIn")
                     }
 
-                })
+                })*/
         }
-    }
 
+    }
+    /**
+     * Загружает фрагмент с персональной инфой
+     */
+    private fun openPersonalInfo(position: Int) {
+        val args = Bundle()
+        args.putInt("table_id", tableList[position].seatId)
+        args.putString("book_date_begin", newBooking.date)
+        args.putString("book_date_end", newBooking.date_to)
+        args.putString("book_time_begin", newBooking.time_from)
+        args.putString("book_time_end", newBooking.time_to)
+        args.putInt("seat_count", tableList[position].seatCount)
+        args.putString("seat_position", tableList[position].seatPosition)
+        args.putString("seat_type", tableList[position].seatType)
+
+        // Загрузим фрагмент персональной инфы
+        val trans = fragmentManager!!.beginTransaction()
+        val personalInfoFragment = PersonalInfoFragment()
+        personalInfoFragment.arguments = args
+        trans.add(R.id.root_frame, personalInfoFragment)
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        trans.addToBackStack(null)
+        trans.commit()
+    }
 }

@@ -7,10 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 5b7d7e25e5fcf99fad4402f34217178e50f67031
 /**
  * Фрагмент-контейнер для фрагментов связанных с бронью
  */
@@ -26,9 +22,4 @@ class RootFragment : Fragment() {
 
         return view
     }
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 5b7d7e25e5fcf99fad4402f34217178e50f67031
 }
