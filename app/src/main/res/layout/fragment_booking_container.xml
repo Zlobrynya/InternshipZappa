@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_app">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/nav_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMaxWidth="0dp"
+        android:background="@color/color_primary_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabIndicatorGravity="bottom"
+        app:tabSelectedTextColor="@color/text_tab_bar_select"
+        app:tabTextColor="@color/text_tab_bar_not_select" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerBooking"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/color_app"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nav_tabs" />
+
+</android.support.constraint.ConstraintLayout>

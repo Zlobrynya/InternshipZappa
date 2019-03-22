@@ -326,11 +326,13 @@ class PersonalInfoActivity : AppCompatActivity() {
     }*/
 
     override fun onBackPressed() {
+        // Вот этот метод не надо переносить
         super.onBackPressed()
         finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        // Вот этот метод тоже не надо переносить
         onBackPressed()
         return true
     }

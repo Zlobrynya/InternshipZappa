@@ -16,6 +16,7 @@ import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.PersonalInfoActivity
 import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
+import com.zlobrynya.internshipzappa.adapter.booking.PersonalInfoFragment
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.checkDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
@@ -43,11 +44,10 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
     private val navigationClickListener = View.OnClickListener {
         // Удалим фрагмент со стека
         val trans = fragmentManager!!.beginTransaction()
-        //trans.replace(R.id.root_frame, BookingFragment())
         trans.remove(this)
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        //trans.addToBackStack(null)
         trans.commit()
+        fragmentManager!!.popBackStack()
     }
 
     /**
