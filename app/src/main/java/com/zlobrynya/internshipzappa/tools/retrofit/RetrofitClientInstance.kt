@@ -7,6 +7,7 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.*
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
+import com.zyr.library.FastJsonConverterFactory
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -49,8 +50,6 @@ class RetrofitClientInstance {
     fun postPassRecData(recovery: passwordRecoveryDTO): Observable<Response<respDTO>> = postRequest!!.postPassRecData(recovery)
 
     fun postStatusData(status: checkDTO): Observable<Response<respDTO>> = postRequest!!.postStatusData(status)
-
-    //fun getDishCount() : Observable<Response<ResponseBody>> = getRequest!!.getDishCount()
 
     companion object {
         private var instance: RetrofitClientInstance? = null

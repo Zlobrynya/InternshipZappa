@@ -1,6 +1,7 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authRespDTO
@@ -101,18 +103,12 @@ class LoginActivity : AppCompatActivity() {
             val email = log_email_input_layout.editText!!.text.toString()
             val password = log_password_input_layout.editText!!.text.toString()
 
-
             val validateEmail = validateEmail(email)
             val validatePassword = validatePassword(password)
 
-            if (validateEmail && validatePassword) {
-                onBackPressed()
-            }
-
             newAuth.email = email
             newAuth.password = password
-            Log.i("dataAuth", newAuth.email)
-            Log.i("dataAuth", newAuth.password)
+            if (validateEmail && validatePassword) {
 
             RetrofitClientInstance.getInstance()
                 .postAuthData(newAuth)
@@ -125,20 +121,32 @@ class LoginActivity : AppCompatActivity() {
                     override fun onSubscribe(d: Disposable) {}
 
                     override fun onNext(t: Response<authRespDTO>) {
-                        Log.d("onNextTA", "зашёл")
-                        //responseBodyStatus = t.body()
                         Log.i("checkAuth", "${t.code()}")
-                        Log.i("check221", t.code().toString())
                         if(t.isSuccessful) {
-                            Log.i("check2218", "${t.code()}")
+                            val sharedPreferencesStat = applicationContext.getSharedPreferences(applicationContext.getString(R.string.user_info), Context.MODE_PRIVATE)
+                            val savedEmail = applicationContext.getString(R.string.user_email)
+                            val uuid = applicationContext.getString(R.string.uuid)
+                            val editor = sharedPreferencesStat.edit()
+                            editor.putString(savedEmail, t.body()!!.email)
+                            editor.putString(uuid, t.body()!!.uuid)
+                            editor.apply()
+
+
+                            Log.i("checkAuth", t.body()!!.email)
+                            Log.i("checkAuth", t.body()!!.uuid)
+                            onBackPressed()
+                        }else{
+                            Log.i("checkAuth", "введены некоректные данные")
                         }
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.i("check", "that's not fineIn")
+                        Log.i("checkAuth", "that's not fineIn")
                     }
 
                 })
+
+            }
 
         }
     }

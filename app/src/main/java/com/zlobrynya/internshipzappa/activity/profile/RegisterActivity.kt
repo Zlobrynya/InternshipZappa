@@ -230,7 +230,6 @@ class RegisterActivity : AppCompatActivity() {
 
                     override fun onNext(t: Response<respDTO>) {
                         Log.d("onNextTA", "зашёл")
-                        //responseBodyStatus = t.body()
                         Log.i("check5", "${t.code()}")
 
                         if(t.isSuccessful) {
