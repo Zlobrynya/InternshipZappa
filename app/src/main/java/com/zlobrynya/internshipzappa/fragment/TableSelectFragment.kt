@@ -16,7 +16,7 @@ import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.PersonalInfoActivity
 import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
-import com.zlobrynya.internshipzappa.adapter.booking.PersonalInfoFragment
+
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.checkDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
