@@ -30,17 +30,23 @@ interface PostRequest {
     //запрос на регистрацию
     @Headers("Content-Type: application/json")
     @POST("reg_user")
-    fun postRegData(@Body verifyData: regDTO): Observable<Response<respDTO>>
+    fun postRegData(@Body regData: regDTO): Observable<Response<respDTO>>
 
     //запрос на авторизацию
     @Headers("Content-Type: application/json")
-    @POST("authorize")
-    fun postAuthData(@Body verifyData: authDTO): Observable<Response<authRespDTO>>
+    @POST("auth")
+    fun postAuthData(@Body authData: authDTO): Observable<Response<authRespDTO>>
 
     //запрос на восстановление пароля
     @Headers("Content-Type: application/json")
     @POST("password_recovery")
-    fun postPassRecData(@Body verifyData: passwordRecoveryDTO): Observable<Response<respDTO>>
+    fun postPassRecData(@Body recoveryData: passwordRecoveryDTO): Observable<Response<respDTO>>
+
+
+    //запрос на проверку статуса
+    @Headers("Content-Type: application/json")
+    @POST("check_auth")
+    fun postStatusData(@Body statusData: passwordRecoveryDTO): Observable<Response<respDTO>>
 
     //здесь должен будет быть запрос на определение статуса юзера
     @Headers("Content-Type: application/json")
