@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.FragmentTransaction
-import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,11 +17,8 @@ import kotlinx.android.synthetic.main.fragment_booking.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 import android.text.format.DateUtils
-import android.view.ViewParent
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.Menu2Activity
-import com.zlobrynya.internshipzappa.activity.ViewPagerAdapter
 import com.zlobrynya.internshipzappa.adapter.booking.BookDuration
 import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
@@ -31,7 +26,10 @@ import com.zlobrynya.internshipzappa.util.CustomTimePickerDialog
 import com.zlobrynya.internshipzappa.util.PositiveClickListener
 import kotlinx.android.synthetic.main.fragment_booking.*
 import java.text.SimpleDateFormat
-
+import android.net.NetworkInfo
+import android.net.ConnectivityManager
+import android.content.Context
+import android.support.v7.app.AlertDialog
 
 /**
  * Число дней, добавляемых к дате в календаре
@@ -298,7 +296,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                     bookingView.book_time_select_label.error = null // Скроем варнинг
 
                     //openTableList()
-                    openTableListFragment()
+                    prepare()
 
                 } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
             }
@@ -713,5 +711,48 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      */
     override fun onDurationClick(position: Int) {
         selectedDuration = position
+    }
+
+    /**
+     * Проверка на наличие интерента
+     * @return Наличие интенета
+     */
+    private fun checkInternetConnection(): Boolean {
+        val connected: Boolean
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        connected =
+            connectivityManager!!.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).state == NetworkInfo.State.CONNECTED || connectivityManager.getNetworkInfo(
+                ConnectivityManager.TYPE_WIFI
+            ).state == NetworkInfo.State.CONNECTED
+        return connected
+    }
+
+    /**
+     * Выводит диалоговое окно с сообщением об отсутствии интернета
+     */
+    private fun showAlert() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
+        builder.setTitle("Ошибка соединения")
+            .setCancelable(false)
+            .setMessage("Без подключения к сети невозможно продолжить бронирование")
+            .setPositiveButton("Повторить попытку", { dialog, which ->
+                run {
+                    Log.d("NOPE", "Еще раз")
+                    prepare()
+                }
+            })
+            .setNegativeButton("Отмена", { dialog, which -> Log.d("NOPE", "Отмена") })
+        val alert = builder.create()
+        alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+    }
+
+    /**
+     * Вызывает checkInternetConnection и в зависимости от результата вызывает showAlert или openTableListFragment
+     */
+    private fun prepare() {
+        if (!checkInternetConnection()) showAlert()
+        else openTableListFragment()
     }
 }
