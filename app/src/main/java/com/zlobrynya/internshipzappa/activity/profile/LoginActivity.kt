@@ -97,6 +97,11 @@ class LoginActivity : AppCompatActivity() {
 
         })
 
+        forgot_password.setOnClickListener({
+            val intent = Intent(this, PasswordRecovery::class.java)
+            startActivity(intent)
+        })
+
         btnLogin.setOnClickListener {
             val email = log_email_input_layout.editText!!.text.toString()
             val password = log_password_input_layout.editText!!.text.toString()

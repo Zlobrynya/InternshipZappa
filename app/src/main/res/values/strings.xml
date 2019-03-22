@@ -107,4 +107,12 @@
     <string name="user_email">email</string>
     <string name="uuid">uuid</string>
 
+    <string name="change_password_letter">На указанный почтовый адрес мы отправим вам письмо с кодом, для смены пароля</string>
+    <string name="send">Отправить</string>
+    <string name="user_not_exist">Введенного вами адреса нет в базе</string>
+    <string name="code_from_email">Код из E-mail</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="change_pass_good">Ваш пароль успешно изменен. Мы рады, что вы снова с нами.</string>
+    <string name="OK">OK</string>
+    <string name="pass_changed">Пароль изменен</string>
 </resources>

@@ -36,6 +36,8 @@ class RetrofitClientInstance {
 
     fun getTimeTable() : Observable<Response<visitingHoursList>> = getRequest!!.getTimeTable()
 
+    fun getUserExists(userEmail: String) : Observable<Response<respDTO>> = getRequest!!.getUserExists(userEmail)
+
     fun postBookingDate(book: bookingDataDTO) : Observable<Response<tableList>> = postRequest!!.postBookingData(book)
 
     fun postReserve(reserve: bookingUserDTO): Observable<Response<respDTO>> = postRequest!!.postReserve(reserve)

@@ -64,6 +64,12 @@
             android:name=".activity.MenuActivity"
             android:launchMode="singleTask"
             android:screenOrientation="locked" />
+        <activity
+            android:name=".activity.profile.PasswordRecovery"
+            android:screenOrientation="locked"/>
+        <activity
+            android:name=".activity.profile.PasswordChange"
+            android:screenOrientation="locked"/>
     </application>
 
 </manifest>

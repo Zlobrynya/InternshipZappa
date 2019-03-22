@@ -32,17 +32,6 @@ import java.util.*
 
 class PersonalInfoActivity : AppCompatActivity() {
 
-    private val blockCharacterSet: String  = ".,- "
-
-    private val filter = object: InputFilter {
-        override fun filter(source:CharSequence, start:Int, end:Int, dest: Spanned, dstart:Int, dend:Int): CharSequence? {
-            if (source != null && blockCharacterSet.contains(("" + source))) {
-                return ""
-            }
-            return null
-        }
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
