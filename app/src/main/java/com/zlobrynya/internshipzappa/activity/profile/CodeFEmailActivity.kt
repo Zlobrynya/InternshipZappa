@@ -156,8 +156,13 @@ class CodeFEmailActivity: AppCompatActivity() {
                 Log.d("code", "$code")
 
                 newRegister.code = code.toInt()
-
-
+/*
+                newRegister.email = "sanchos24263@gmail.com"
+                newRegister.password = "000000"
+                newRegister.code = 34271
+                newRegister.name = "Илья"
+                newRegister.phone = "11111111111"
+*/
 
                 Log.i("data", newRegister.email)
                 Log.i("data", newRegister.code.toString())
@@ -182,6 +187,7 @@ class CodeFEmailActivity: AppCompatActivity() {
                             Log.i("check221", t.code().toString())
                             if(t.isSuccessful) {
                                 Log.i("check2218", "${t.code()}")
+                                Log.i("check2218", "${t.raw()}")
                             }
                         }
 
