@@ -1,14 +1,25 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
+import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authRespDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
+import retrofit2.Response
 
 
 class LoginActivity : AppCompatActivity() {
@@ -19,6 +30,9 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar!!.title = "Вход"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
+        val newAuth = authDTO()
+
+
         btnLinkToRegisterActivity.setOnClickListener {
             val i = Intent(this, RegisterActivity::class.java)
             startActivity(i)
@@ -28,9 +42,9 @@ class LoginActivity : AppCompatActivity() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        log_email.addTextChangedListener(object: TextWatcher {
+        log_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                log_email.onFocusChangeListener = object : View.OnFocusChangeListener{
+                log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val email = log_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
@@ -55,15 +69,16 @@ class LoginActivity : AppCompatActivity() {
 
         })
 
-        log_password.addTextChangedListener(object: TextWatcher {
+        log_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                log_password.onFocusChangeListener = object : View.OnFocusChangeListener{
+                log_password.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val password = log_password_input_layout.editText!!.text.toString()
                         val validatePassword = validatePassword(password)
 
                         if (!validatePassword) {
-                            log_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                            log_password_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_password)
                             log_password.setCompoundDrawables(null, null, icon, null)
                         } else {
                             log_password_input_layout.isErrorEnabled = false
@@ -93,6 +108,38 @@ class LoginActivity : AppCompatActivity() {
             if (validateEmail && validatePassword) {
                 onBackPressed()
             }
+
+            newAuth.email = email
+            newAuth.password = password
+            Log.i("dataAuth", newAuth.email)
+            Log.i("dataAuth", newAuth.password)
+
+            RetrofitClientInstance.getInstance()
+                .postAuthData(newAuth)
+                .subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(object : Observer<Response<authRespDTO>> {
+
+                    override fun onComplete() {}
+
+                    override fun onSubscribe(d: Disposable) {}
+
+                    override fun onNext(t: Response<authRespDTO>) {
+                        Log.d("onNextTA", "зашёл")
+                        //responseBodyStatus = t.body()
+                        Log.i("checkAuth", "${t.code()}")
+                        Log.i("check221", t.code().toString())
+                        if(t.isSuccessful) {
+                            Log.i("check2218", "${t.code()}")
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.i("check", "that's not fineIn")
+                    }
+
+                })
+
         }
     }
 
@@ -101,18 +148,26 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validatePassword(password: String): Boolean {
-        return password.matches("((?=.*[a-z0-9]).{6,20})".toRegex())
+        return password.matches("((?=.*[a-z0-9]).{4,20})".toRegex())
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        /*super.onBackPressed()
         val intent = Intent(this, Menu2Activity::class.java)
         startActivity(intent)
+        finish()*/
+
+        super.onBackPressed()
+        // Закрываем активити с кодом RESULT_CANCELED если юзер закрыл авторизацию
+        setResult(Activity.RESULT_CANCELED)
         finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        super.onBackPressed()
+        // Закрываем активити с кодом RESULT_CANCELED если юзер закрыл авторизацию
+        setResult(Activity.RESULT_CANCELED)
+        finish()
         return true
     }
 }

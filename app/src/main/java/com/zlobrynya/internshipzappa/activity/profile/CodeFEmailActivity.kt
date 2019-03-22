@@ -32,10 +32,10 @@ class CodeFEmailActivity: AppCompatActivity() {
 
         //принимаем параметры и формируем отсылку
         val newRegister = regDTO()
-        newRegister.email = intent.getStringExtra("email")
+        /*newRegister.email = intent.getStringExtra("email")
         newRegister.password = intent.getStringExtra("password")
         newRegister.name = intent.getStringExtra("name")
-        newRegister.phone = intent.getStringExtra("phone")
+        newRegister.phone = intent.getStringExtra("phone")*/
 
 
 
@@ -138,7 +138,7 @@ class CodeFEmailActivity: AppCompatActivity() {
             override fun onClick(v: View?) {
                 code = firstNumber.text.toString() + secondNumber.text.toString() +
                         thirdNumber.text.toString() + fourthNumber.text.toString() + fifthNumber.text.toString()
-                if (!code.equals("1111")){
+                /*if (!code.equals("1111")){
                     allert_text.visibility = View.VISIBLE
                     firstNumber.setTextColor(resources.getColor(R.color.color_accent))
                     secondNumber.setTextColor(resources.getColor(R.color.color_accent))
@@ -152,17 +152,16 @@ class CodeFEmailActivity: AppCompatActivity() {
                     thirdNumber.setTextColor(resources.getColor(R.color.white))
                     fourthNumber.setTextColor(resources.getColor(R.color.white))
                     fifthNumber.setTextColor(resources.getColor(R.color.white))
-                }
+                }*/
                 Log.d("code", "$code")
 
-                newRegister.code = code.toInt()
-/*
-                newRegister.email = "sanchos24263@gmail.com"
+                //newRegister.code = code
+                newRegister.email = "obscurexdlol@gmail.com"
                 newRegister.password = "000000"
-                newRegister.code = 34271
-                newRegister.name = "Илья"
-                newRegister.phone = "11111111111"
-*/
+                newRegister.name = "Artem"
+                newRegister.phone = "89116662182"
+                newRegister.code = 63349
+
 
                 Log.i("data", newRegister.email)
                 Log.i("data", newRegister.code.toString())
@@ -187,18 +186,14 @@ class CodeFEmailActivity: AppCompatActivity() {
                             Log.i("check221", t.code().toString())
                             if(t.isSuccessful) {
                                 Log.i("check2218", "${t.code()}")
-                                Log.i("check2218", "${t.raw()}")
+                                Log.i("check2218", t.body()!!.desc)
                             }
                         }
-
                         override fun onError(e: Throwable) {
                             Log.i("check", "that's not fineIn")
                         }
-
                     })
             }
-
         })
     }
-
 }

@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 data class authRespDTO (
-    @SerializedName("code") val code: Int,
-    @SerializedName("desc") val password: String,
-    @SerializedName("email") val email: String,
-    @SerializedName("uuid") val uuid: String
+    @SerializedName("code") var code: Int = 0,
+    @SerializedName("desc") var password: String = "",
+    @SerializedName("email") var email: String = "",
+    @SerializedName("uuid") var uuid: String = ""
 )

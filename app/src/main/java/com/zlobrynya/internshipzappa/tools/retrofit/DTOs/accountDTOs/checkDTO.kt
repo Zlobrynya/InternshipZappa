@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class checkDTO (
     @SerializedName("email") var email: String = "",
-    @SerializedName("code") var code: String = ""
+    @SerializedName("uuid") var uuid: String = ""
 )
