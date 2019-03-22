@@ -34,7 +34,7 @@ interface PostRequest {
 
     //запрос на авторизацию
     @Headers("Content-Type: application/json")
-    @POST("authorize")
+    @POST("auth")
     fun postAuthData(@Body verifyData: authDTO): Observable<Response<authRespDTO>>
 
     //запрос на восстановление пароля
