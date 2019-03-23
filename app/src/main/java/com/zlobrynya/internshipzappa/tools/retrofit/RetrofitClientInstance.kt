@@ -7,7 +7,6 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.*
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
-import com.zyr.library.FastJsonConverterFactory
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.Retrofit

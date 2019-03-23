@@ -9,9 +9,20 @@
     tools:context=".activity.booking.TableSelectActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/table_recycler"
+        android:id="@+id/user_bookings_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:overScrollMode="never" />
+        android:overScrollMode="never"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/no_user_bookings_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="У вас нет активных броней"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:visibility="gone" />
 </LinearLayout>
