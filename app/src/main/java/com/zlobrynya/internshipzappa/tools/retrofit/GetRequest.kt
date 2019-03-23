@@ -5,6 +5,7 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.GET
@@ -24,5 +25,8 @@ interface GetRequest {
 
     @GET("timetable")
     fun getTimeTable() : Observable<Response<visitingHoursList>>
+    //проверка на есть ли юзер с таким мылом в бд на сервере
+    @GET("find_user/{user_email}")
+    fun getEmailExistence(@Path(value = "user_email", encoded = true) userEmail: String) : Observable<Response<respDTO>>
 
 }

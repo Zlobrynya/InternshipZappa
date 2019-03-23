@@ -31,8 +31,8 @@ class CodeFEmailActivity: AppCompatActivity() {
 
         //принимаем параметры и формируем отсылку
         val newRegister = regDTO()
-        /*newRegister.email = intent.getStringExtra("email")
-        newRegister.password = intent.getStringExtra("password")
+        newRegister.email = intent.getStringExtra("email")
+        /*newRegister.password = intent.getStringExtra("password")
         newRegister.name = intent.getStringExtra("name")
         newRegister.phone = intent.getStringExtra("phone")*/
 
@@ -155,7 +155,7 @@ class CodeFEmailActivity: AppCompatActivity() {
                 Log.d("code", "$code")
 
                 //newRegister.code = code
-                newRegister.email = "example@mail.com"//адрес для получения кода
+                //newRegister.email = /адрес для получения кода
                 newRegister.password = "000000"
                 newRegister.name = "Name"
                 newRegister.phone = "89111111111"
@@ -191,4 +191,6 @@ class CodeFEmailActivity: AppCompatActivity() {
             }
         })
     }
+
+
 }

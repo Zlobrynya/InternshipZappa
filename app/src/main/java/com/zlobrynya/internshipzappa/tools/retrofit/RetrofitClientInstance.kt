@@ -51,6 +51,8 @@ class RetrofitClientInstance {
 
     fun postStatusData(status: checkDTO): Observable<Response<respDTO>> = postRequest!!.postStatusData(status)
 
+    fun getEmailExistence(url: String) : Observable<Response<respDTO>> = getRequest!!.getEmailExistence(url)
+
     companion object {
         private var instance: RetrofitClientInstance? = null
         fun getInstance(): RetrofitClientInstance {

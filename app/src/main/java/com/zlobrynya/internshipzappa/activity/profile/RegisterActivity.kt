@@ -218,36 +218,63 @@ class RegisterActivity : AppCompatActivity() {
 
             newVerify.email = reg_email.text.toString()
 
-            RetrofitClientInstance.getInstance()
-                .postVerifyData(newVerify)
-                .subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(object : Observer<Response<respDTO>> {
-
-                    override fun onComplete() {}
-
-                    override fun onSubscribe(d: Disposable) {}
-
-                    override fun onNext(t: Response<respDTO>) {
-                        Log.d("onNextTA", "зашёл")
-                        Log.i("check5", "${t.code()}")
-
-                        if(t.isSuccessful) {
-                            val intent = Intent(applicationContext, CodeFEmailActivity::class.java)
-                            intent.putExtra("name", reg_username.text.toString())
-                            intent.putExtra("phone", reg_phone_number.text.toString())
-                            intent.putExtra("email", reg_email.text.toString())
-                            intent.putExtra("password", reg_password.text.toString())
-                            startActivity(intent)
-                        }
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.i("check", "that's not fineIn")
-                    }
-
-                })
+            checkExistenceEmail(newVerify)
         }
+    }
+
+    private fun checkExistenceEmail(newVerify: verifyEmailDTO){
+
+
+        RetrofitClientInstance.getInstance()
+            .getEmailExistence(newVerify.email)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<respDTO>> {
+
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<respDTO>) {
+                    Log.i("checkEmailExistence", t.code().toString())
+                    if(t.isSuccessful) {
+                        Log.i("checkEmailExistence", "${t.code()}")
+                        Log.i("checkEmailExistence", t.body()!!.desc)
+                    }else{
+                        RetrofitClientInstance.getInstance()
+                            .postVerifyData(newVerify)
+                            .subscribeOn(Schedulers.io())
+                            ?.observeOn(AndroidSchedulers.mainThread())
+                            ?.subscribe(object : Observer<Response<respDTO>> {
+
+                                override fun onComplete() {}
+
+                                override fun onSubscribe(d: Disposable) {}
+
+                                override fun onNext(t: Response<respDTO>) {
+                                    Log.i("checkCode", "${t.code()}")
+
+                                    if(t.isSuccessful) {
+                                        val intent = Intent(applicationContext, CodeFEmailActivity::class.java)
+                                        intent.putExtra("name", reg_username.text.toString())
+                                        intent.putExtra("phone", reg_phone_number.text.toString())
+                                        intent.putExtra("email", reg_email.text.toString())
+                                        intent.putExtra("password", reg_password.text.toString())
+                                        startActivity(intent)
+                                    }
+                                }
+
+                                override fun onError(e: Throwable) {
+                                    Log.i("check", "that's not fineIn")
+                                }
+
+                            })
+                    }
+                }
+                override fun onError(e: Throwable) {
+                    Log.i("checkReg", "that's not fineIn")
+                }
+            })
     }
 
     private fun validateName(name: String) : Boolean {
