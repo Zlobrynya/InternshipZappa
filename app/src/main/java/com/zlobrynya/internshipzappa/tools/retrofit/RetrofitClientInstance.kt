@@ -7,6 +7,7 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.*
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
+import com.zyr.library.FastJsonConverterFactory
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -52,7 +53,7 @@ class RetrofitClientInstance {
 
     fun postStatusData(status: checkDTO): Observable<Response<respDTO>> = postRequest!!.postStatusData(status)
 
-    //fun getDishCount() : Observable<Response<ResponseBody>> = getRequest!!.getDishCount()
+    fun getEmailExistence(url: String) : Observable<Response<respDTO>> = getRequest!!.getEmailExistence(url)
 
     companion object {
         private var instance: RetrofitClientInstance? = null

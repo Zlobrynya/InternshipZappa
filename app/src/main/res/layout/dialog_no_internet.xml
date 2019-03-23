@@ -1,29 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#424242"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:text="Без подключения к сети невозможно продолжить бронирование" />
-
-    <TextView
-        android:id="@+id/try_again"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="start"
+        android:text="Ошибка соединения"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="start"
+        android:text="Без подключения к сети невозможно продолжить бронирование. \nПроверьте соединение и попробуйте снова"
+        android:textColor="@color/bg_nav_bar"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/repeat_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:gravity="end"
         android:text="Повторить попытку"
-        android:textAllCaps="true" />
+        android:textAllCaps="true"
+        android:textColor="@color/color_accent"
+        android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/cancel"
+        android:id="@+id/dismiss_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:gravity="end"
         android:text="Отмена"
-        android:textAllCaps="true" />
+        android:textAllCaps="true"
+        android:textColor="@color/color_accent"
+        android:textSize="16sp" />
 </LinearLayout>

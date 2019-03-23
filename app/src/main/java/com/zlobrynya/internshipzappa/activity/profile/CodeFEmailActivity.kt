@@ -32,8 +32,8 @@ class CodeFEmailActivity: AppCompatActivity() {
 
         //принимаем параметры и формируем отсылку
         val newRegister = regDTO()
-        /*newRegister.email = intent.getStringExtra("email")
-        newRegister.password = intent.getStringExtra("password")
+        newRegister.email = intent.getStringExtra("email")
+        /*newRegister.password = intent.getStringExtra("password")
         newRegister.name = intent.getStringExtra("name")
         newRegister.phone = intent.getStringExtra("phone")*/
 
@@ -156,12 +156,11 @@ class CodeFEmailActivity: AppCompatActivity() {
                 Log.d("code", "$code")
 
                 //newRegister.code = code
-                newRegister.email = "obscurexdlol@gmail.com"
+                //newRegister.email = /адрес для получения кода
                 newRegister.password = "000000"
-                newRegister.name = "Artem"
-                newRegister.phone = "89116662182"
+                newRegister.name = "Name"
+                newRegister.phone = "89111111111"
                 newRegister.code = 63349
-
 
                 Log.i("data", newRegister.email)
                 Log.i("data", newRegister.code.toString())
@@ -180,20 +179,19 @@ class CodeFEmailActivity: AppCompatActivity() {
                         override fun onSubscribe(d: Disposable) {}
 
                         override fun onNext(t: Response<respDTO>) {
-                            Log.d("onNextTA", "зашёл")
-                            //responseBodyStatus = t.body()
-                            Log.i("check221", "${t.code()}")
-                            Log.i("check221", t.code().toString())
+                            Log.i("checkReg", t.code().toString())
                             if(t.isSuccessful) {
-                                Log.i("check2218", "${t.code()}")
-                                Log.i("check2218", t.body()!!.desc)
+                                Log.i("checkReg", "${t.code()}")
+                                Log.i("checkReg", t.body()!!.desc)
                             }
                         }
                         override fun onError(e: Throwable) {
-                            Log.i("check", "that's not fineIn")
+                            Log.i("checkReg", "that's not fineIn")
                         }
                     })
             }
         })
     }
+
+
 }

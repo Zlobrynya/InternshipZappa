@@ -25,6 +25,9 @@ interface GetRequest {
 
     @GET("timetable")
     fun getTimeTable() : Observable<Response<visitingHoursList>>
+    //проверка на есть ли юзер с таким мылом в бд на сервере
+    @GET("find_user/{user_email}")
+    fun getEmailExistence(@Path(value = "user_email", encoded = true) userEmail: String) : Observable<Response<respDTO>>
 
     @GET("find_user/{userEmail}")
     fun getUserExists(@Path(value = "userEmail", encoded = true) userEmail: String) : Observable<Response<respDTO>>

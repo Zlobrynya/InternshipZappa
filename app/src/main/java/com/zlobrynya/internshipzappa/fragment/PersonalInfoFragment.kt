@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
 import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.checkDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
@@ -71,7 +72,8 @@ class PersonalInfoFragment : Fragment() {
         view = initToolBar(view)
 
         // TODO активти не должна запускаться, если юзер уже авторизован
-        openLoginActivity()
+        //openLoginActivity()
+        checkStatus()
 
         // Чтобы принять аргумент во фрагменте пиши arguments!!.getString или getInt
         val bookDateBegin = arguments!!.getString("book_date_begin")
@@ -303,5 +305,48 @@ class PersonalInfoFragment : Fragment() {
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         trans.commit()
         fragmentManager!!.popBackStack()
+    }
+
+    /**
+     * Проверяет, авторизован ли юзер
+     */
+    private fun checkStatus() {
+        val newStatus = checkDTO()
+        val sharedPreferencesStat =
+            context?.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
+        val uuid = context?.getString(R.string.uuid)
+        val authSatus = sharedPreferencesStat?.getString(uuid, "null").toString()
+        val savedEmail = context?.getString(R.string.user_email)
+        newStatus.uuid = authSatus
+        newStatus.email = sharedPreferencesStat?.getString(savedEmail, "null").toString()
+
+
+        Log.i("checkStatusData", newStatus.uuid)
+        Log.i("checkStatusData", newStatus.email)
+
+        RetrofitClientInstance.getInstance()
+            .postStatusData(newStatus)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<respDTO>> {
+
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<respDTO>) {
+                    Log.i("checkStatus", "${t.code()}")
+                    if (t.isSuccessful) {
+                        Log.i("checkStatus", "u're good to go")
+                    } else {
+                        openLoginActivity() // Откроем аквтивити авторизации
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.i("check", "that's not fineIn")
+                }
+
+            })
     }
 }
