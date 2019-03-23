@@ -30,7 +30,15 @@ import android.net.NetworkInfo
 import android.net.ConnectivityManager
 import android.content.Context
 import android.support.v7.app.AlertDialog
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
+import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.dialog_no_internet.view.*
+import retrofit2.Response
 
 /**
  * Число дней, добавляемых к дате в календаре
@@ -418,79 +426,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     }
 
     /**
-     * Открывает список доступных столов
-     */
-    private fun openTableList() {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd") // Форматирование для даты
-        val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
-
-        val intent = Intent(activity, TableSelectActivity::class.java)
-        intent.putExtra("book_date_begin", dateFormat.format(bookTimeAndDate!!.time)) // Заполняем дату брони
-        intent.putExtra("book_time_begin", timeFormat.format(calendar.timeInMillis))// Заполняем время начала брони
-        intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis)) // Заполняем дату брони
-        when (selectedDuration) { // И время конца
-            // 2 часа
-            0 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + TWO_HOURS)) {
-                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + TWO_HOURS))
-                }
-                intent.putExtra( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + TWO_HOURS)
-                )
-            }
-            // 2 часа 30 минут
-            1 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)) {
-                    intent.putExtra(
-                        "book_date_end",
-                        dateFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
-                    )
-                }
-                intent.putExtra( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
-                )
-            }
-            // 3 часа
-            2 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + THREE_HOURS)) {
-                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + THREE_HOURS))
-                }
-                intent.putExtra( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + THREE_HOURS)
-                )
-            }
-            // 3 часа 30 минут
-            3 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)) {
-                    intent.putExtra(
-                        "book_date_end",
-                        dateFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
-                    )
-                }
-                intent.putExtra( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
-                )
-            }
-            // 4 часа
-            4 -> {
-                if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + FOUR_HOURS)) {
-                    intent.putExtra("book_date_end", dateFormat.format(calendar.timeInMillis + FOUR_HOURS))
-                }
-                intent.putExtra( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + FOUR_HOURS)
-                )
-            }
-        }
-
-        startActivity(intent)
-    }
-
-    /**
      * Открывает список доступных столов (фрагмент)
      */
     private fun openTableListFragment() {
@@ -502,74 +437,67 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         args.putString("book_time_begin", timeFormat.format(calendar.timeInMillis)) // Заполняем время начала брони
         args.putString("book_date_end", dateFormat.format(calendar.timeInMillis)) // Заполняем дату конца брони
 
+        val newBooking = bookingDataDTO() // Объект для POST запроса
+        newBooking.date = dateFormat.format(bookTimeAndDate!!.time)
+        newBooking.time_from = timeFormat.format(calendar.timeInMillis)
+
         when (selectedDuration) { // И время конца
             // 2 часа
             0 -> {
                 if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + TWO_HOURS)) {
                     args.putString("book_date_end", dateFormat.format(calendar.timeInMillis + TWO_HOURS))
+                    newBooking.date_to = dateFormat.format(calendar.timeInMillis + TWO_HOURS)
                 }
-                args.putString( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + TWO_HOURS)
-                )
+                args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + TWO_HOURS))
+                newBooking.time_to = timeFormat.format(calendar.timeInMillis + TWO_HOURS)
             }
             // 2 часа 30 минут
             1 -> {
                 if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)) {
-                    args.putString(
-                        "book_date_end",
-                        dateFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
-                    )
+                    args.putString("book_date_end", dateFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS))
+                    newBooking.date_to = dateFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
                 }
-                args.putString( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
-                )
+                args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS))
+                newBooking.time_to = timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
             }
             // 3 часа
             2 -> {
                 if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + THREE_HOURS)) {
                     args.putString("book_date_end", dateFormat.format(calendar.timeInMillis + THREE_HOURS))
+                    newBooking.date_to = dateFormat.format(calendar.timeInMillis + THREE_HOURS)
                 }
-                args.putString( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + THREE_HOURS)
-                )
+                args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + THREE_HOURS))
+                newBooking.time_to = timeFormat.format(calendar.timeInMillis + THREE_HOURS)
             }
             // 3 часа 30 минут
             3 -> {
                 if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)) {
-                    args.putString(
-                        "book_date_end",
-                        dateFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
-                    )
+                    args.putString("book_date_end", dateFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS))
+                    newBooking.date_to = dateFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
                 }
-                args.putString( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
-                )
+                args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS))
+                newBooking.time_to = timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
             }
             // 4 часа
             4 -> {
                 if (timeFormat.format(calendar.timeInMillis) > timeFormat.format(calendar.timeInMillis + FOUR_HOURS)) {
                     args.putString("book_date_end", dateFormat.format(calendar.timeInMillis + FOUR_HOURS))
+                    newBooking.date_to = dateFormat.format(calendar.timeInMillis + FOUR_HOURS)
                 }
-                args.putString( // Заполняем время конца брони
-                    "book_time_end",
-                    timeFormat.format(calendar.timeInMillis + FOUR_HOURS)
-                )
+                args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + FOUR_HOURS))
+                newBooking.time_to = timeFormat.format(calendar.timeInMillis + FOUR_HOURS)
             }
         }
+
+        //networkRxJavaPost(newBooking) // TODO тупа не работает
         // Загрузим фрагмент выбора столов
         val trans = fragmentManager!!.beginTransaction()
         val tableSelectFragment = TableSelectFragment()
         tableSelectFragment.arguments = args
-        //trans.replace(R.id.root_frame, tableSelectFragment)
         trans.add(R.id.root_frame, tableSelectFragment)
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         trans.addToBackStack(null)
         trans.commit()
-
     }
 
     /**
@@ -751,4 +679,53 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         if (!checkInternetConnection()) showAlert()
         else openTableListFragment()
     }
+
+    /**
+     * Отправляет POST запрос на сервер и получает в ответе список доступных столиков(RxJava2)
+     */
+    private fun networkRxJavaPost(newBooking: bookingDataDTO): Boolean {
+
+        var areTablesAvailable = false
+        var responseBody: tableList? = null
+
+        RetrofitClientInstance.getInstance()
+            .postBookingDate(newBooking)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<tableList>> {
+
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<tableList>) {
+                    Log.d("onNextTA", "зашёл")
+                    if (t.isSuccessful) {
+                        responseBody = t.body()
+                        Log.i("check1", "${t.code()}")
+                        if (t.body() != null) {
+                            if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету
+                                areTablesAvailable = false
+                                Log.d("TOPKEK", "Столиков нету")
+                            } else { // Если свободные столики есть
+                                Log.d("TOPKEK", t.body()!!.data.size.toString())
+                                areTablesAvailable = true
+                            }
+                        } else { // Если свободных столиков нету
+                            Log.d("TOPKEK", "Прилетел нулл")
+                            areTablesAvailable = false
+                        }
+                    } else {
+                        Log.i("check2", "${t.code()}")
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.i("check", "that's not fineIn")
+                }
+
+            })
+        return areTablesAvailable
+    }
+
 }
