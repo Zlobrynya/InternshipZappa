@@ -55,9 +55,6 @@ class Menu2Activity : AppCompatActivity() {
                 R.id.navigation_booking -> {
                     viewpager2.currentItem = BOOKING_PAGE
                 }
-                R.id.navigation_contacts -> {
-                    viewpager2.currentItem = CONTACTS_PAGE
-                }
                 R.id.navigation_profile -> {
                     viewpager2.currentItem = PROFILE_PAGE
                 }
@@ -116,13 +113,12 @@ class Menu2Activity : AppCompatActivity() {
             return when (position) {
                 MENU_PAGE -> menuFragment
                 BOOKING_PAGE -> rootFragment // На вкладку "Бронь" положим фрагмент-контейнер
-                PROFILE_PAGE -> profileFragment
-                else -> contactsFragment
+                else -> profileFragment
             }
         }
 
         override fun getCount(): Int {
-            return 4
+            return 3
         }
     }
 }

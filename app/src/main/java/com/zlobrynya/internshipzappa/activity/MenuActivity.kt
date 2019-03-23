@@ -22,8 +22,6 @@ class MenuActivity: AppCompatActivity() {
 
     private val bookingFragment: Fragment = BookingFragment()
 
-    private val kontaktiFragment = KontaktiFragment()
-
     private val profileFragment: Fragment = ProfileFragment()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -38,11 +36,6 @@ class MenuActivity: AppCompatActivity() {
             // Бронирование
             R.id.navigation_booking -> {
                 selectedFragment = bookingFragment
-            }
-
-            // Контакты
-            R.id.navigation_contacts -> {
-                selectedFragment = kontaktiFragment
             }
 
             // Профиль

@@ -10,31 +10,15 @@
         android:visible="true" />
 
     <item
-        android:id="@+id/navigation_profile"
-        android:enabled="true"
-        android:icon="@drawable/person_icon"
-        android:title="Профиль"
-        android:visible="true"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/navigation_booking"
         android:enabled="true"
         android:icon="@drawable/calendar_icon"
         android:title="Бронь"
         android:visible="true" />
-
-    <item
-        android:id="@+id/navigation_contacts"
-        android:enabled="true"
-        android:icon="@drawable/phone_icon"
-        android:title="Контакты"
-        android:visible="true"
-        app:showAsAction="never" />
-
     <item
         android:id="@+id/navigation_profile"
         android:enabled="true"
-        android:icon="@drawable/phone_icon"
+        android:icon="@drawable/person_icon"
         android:title="Профиль"
         android:visible="true"
         app:showAsAction="never" />
