@@ -146,6 +146,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      */
     private var isTodayAvailable: Boolean = false
 
+    /**
+     * Ответ сервера со списком свободных столиков
+     */
+    var responseBody: tableList? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
 
@@ -449,6 +454,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                     newBooking.date_to = dateFormat.format(calendar.timeInMillis + TWO_HOURS)
                 }
                 args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + TWO_HOURS))
+                newBooking.date_to = dateFormat.format(calendar.timeInMillis + TWO_HOURS)
                 newBooking.time_to = timeFormat.format(calendar.timeInMillis + TWO_HOURS)
             }
             // 2 часа 30 минут
@@ -458,6 +464,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                     newBooking.date_to = dateFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
                 }
                 args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS))
+                newBooking.date_to = dateFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
                 newBooking.time_to = timeFormat.format(calendar.timeInMillis + TWO_AND_HALF_HOURS)
             }
             // 3 часа
@@ -467,6 +474,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                     newBooking.date_to = dateFormat.format(calendar.timeInMillis + THREE_HOURS)
                 }
                 args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + THREE_HOURS))
+                newBooking.date_to = dateFormat.format(calendar.timeInMillis + THREE_HOURS)
                 newBooking.time_to = timeFormat.format(calendar.timeInMillis + THREE_HOURS)
             }
             // 3 часа 30 минут
@@ -476,6 +484,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                     newBooking.date_to = dateFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
                 }
                 args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS))
+                newBooking.date_to = dateFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
                 newBooking.time_to = timeFormat.format(calendar.timeInMillis + THREE_AND_HALF_HOURS)
             }
             // 4 часа
@@ -485,19 +494,28 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                     newBooking.date_to = dateFormat.format(calendar.timeInMillis + FOUR_HOURS)
                 }
                 args.putString("book_time_end", timeFormat.format(calendar.timeInMillis + FOUR_HOURS))
+                newBooking.date_to = dateFormat.format(calendar.timeInMillis + FOUR_HOURS)
                 newBooking.time_to = timeFormat.format(calendar.timeInMillis + FOUR_HOURS)
             }
         }
-
-        //networkRxJavaPost(newBooking) // TODO тупа не работает
-        // Загрузим фрагмент выбора столов
-        val trans = fragmentManager!!.beginTransaction()
-        val tableSelectFragment = TableSelectFragment()
-        tableSelectFragment.arguments = args
-        trans.add(R.id.root_frame, tableSelectFragment)
-        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        trans.addToBackStack(null)
-        trans.commit()
+        Log.d("TOPKEK2", "date from ${newBooking.date}")
+        Log.d("TOPKEK2", "time from ${newBooking.time_from}")
+        Log.d("TOPKEK2", "date to ${newBooking.date_to}")
+        Log.d("TOPKEK2", "time to ${newBooking.time_to}")
+        networkRxJavaPost(newBooking)
+        if (responseBody!!.data.isNotEmpty()) {
+            // Загрузим фрагмент выбора столов
+            // TODO передать список столиков на TableSelectFragment
+            val trans = fragmentManager!!.beginTransaction()
+            val tableSelectFragment = TableSelectFragment()
+            tableSelectFragment.arguments = args
+            trans.add(R.id.root_frame, tableSelectFragment)
+            trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            trans.addToBackStack(null)
+            trans.commit()
+        } else {
+            // TODO Вывести алерт об отсутствии свободных столиков
+        }
     }
 
     /**
@@ -683,10 +701,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     /**
      * Отправляет POST запрос на сервер и получает в ответе список доступных столиков(RxJava2)
      */
-    private fun networkRxJavaPost(newBooking: bookingDataDTO): Boolean {
-
-        var areTablesAvailable = false
-        var responseBody: tableList? = null
+    private fun networkRxJavaPost(newBooking: bookingDataDTO) {
 
         RetrofitClientInstance.getInstance()
             .postBookingDate(newBooking)
@@ -705,15 +720,13 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                         Log.i("check1", "${t.code()}")
                         if (t.body() != null) {
                             if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету
-                                areTablesAvailable = false
-                                Log.d("TOPKEK", "Столиков нету")
+                                Log.d("TOPKEK2", "Столиков нету")
                             } else { // Если свободные столики есть
-                                Log.d("TOPKEK", t.body()!!.data.size.toString())
-                                areTablesAvailable = true
+                                Log.d("TOPKEK2", t.body()!!.data.size.toString())
                             }
                         } else { // Если свободных столиков нету
-                            Log.d("TOPKEK", "Прилетел нулл")
-                            areTablesAvailable = false
+                            Log.d("TOPKEK2", "Прилетел нулл")
+
                         }
                     } else {
                         Log.i("check2", "${t.code()}")
@@ -723,9 +736,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 override fun onError(e: Throwable) {
                     Log.i("check", "that's not fineIn")
                 }
-
             })
-        return areTablesAvailable
     }
 
 }
