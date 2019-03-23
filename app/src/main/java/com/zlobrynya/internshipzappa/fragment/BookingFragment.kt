@@ -30,6 +30,7 @@ import android.net.NetworkInfo
 import android.net.ConnectivityManager
 import android.content.Context
 import android.support.v7.app.AlertDialog
+import kotlinx.android.synthetic.main.dialog_no_internet.view.*
 
 /**
  * Число дней, добавляемых к дате в календаре
@@ -732,20 +733,15 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      */
     private fun showAlert() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
-        builder.setTitle("Ошибка соединения")
-            .setCancelable(false)
-            .setMessage("Без подключения к сети невозможно продолжить бронирование")
-            .setPositiveButton("Повторить попытку", { dialog, which ->
-                run {
-                    Log.d("NOPE", "Еще раз")
-                    prepare()
-                }
-            })
-            .setNegativeButton("Отмена", { dialog, which -> Log.d("NOPE", "Отмена") })
+        val view = layoutInflater.inflate(R.layout.dialog_no_internet, null)
+        builder.setView(view)
         val alert = builder.create()
+        view.dismiss_button.setOnClickListener { alert.dismiss() }
+        view.repeat_button.setOnClickListener {
+            alert.dismiss()
+            prepare()
+        }
         alert.show()
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
-        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
     }
 
     /**
