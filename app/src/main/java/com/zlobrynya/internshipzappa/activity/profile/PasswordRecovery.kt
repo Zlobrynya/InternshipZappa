@@ -20,16 +20,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_password_recovery.*
+import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Response
 
 class PasswordRecovery: AppCompatActivity() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_recovery)
         supportActionBar!!.title = "Восстановление пароля"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
+        val icon: Drawable = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
 
         val newVerify = verifyEmailDTO()
 
@@ -37,20 +39,6 @@ class PasswordRecovery: AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 register_email.onFocusChangeListener = object : View.OnFocusChangeListener{
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        /*
-                        val email = register_email_input_layout.editText!!.text.toString()
-                        val validateEmail = validateEmail(email)
-
-                        if (!validateEmail) {
-                            register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
-                            register_email.setCompoundDrawables(null, null, icon, null)
-                        } else {
-                            register_email_input_layout.isErrorEnabled = false
-                            register_email.setCompoundDrawables(null, null, null, null)
-                            btnSendPassChange.background = resources.getDrawable(R.drawable.btn_can_click)
-
-                        }
-                        */
                     }
 
                 }
@@ -83,16 +71,16 @@ class PasswordRecovery: AppCompatActivity() {
             if (validateEmail) {
                 newVerify.email = email
                 btnSendPassChange.background = resources.getDrawable(R.drawable.btn_can_click)
-                checkUserExist(newVerify.email, icon)
+                checkExistenceEmail(newVerify, icon)
             } else {
                 Toast.makeText(this, "Введите корректные данные", Toast.LENGTH_SHORT).show()
                 btnSendPassChange.background = resources.getDrawable(R.drawable.btn_not_click)
             }
-
+/*
             val intent = Intent(this, PasswordChange::class.java)
             finish()
             startActivity(intent)
-
+*/
         }
     }
 
@@ -100,29 +88,57 @@ class PasswordRecovery: AppCompatActivity() {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    fun checkUserExist(userEmail: String, icon: Drawable){
+
+    private fun checkExistenceEmail(newVerify: verifyEmailDTO, icon: Drawable){
+
         RetrofitClientInstance.getInstance()
-            .getUserExists(userEmail)
+            .getEmailExistence(newVerify.email)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : Observer<Response<respDTO>>{
-                override fun onComplete() {
+            ?.subscribe(object : Observer<Response<respDTO>> {
 
-                }
+                override fun onComplete() {}
 
-                override fun onSubscribe(d: Disposable) {
-
-                }
+                override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    if (t.isSuccessful){
+                    Log.i("checkEmailExistence", t.code().toString())
+                    if(t.isSuccessful) {
+                        Toast.makeText(applicationContext, "Пользователь существует", Toast.LENGTH_SHORT).show()
+                        verifyEmail(newVerify)
+                    }else{
                         register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.user_not_exist)
                         register_email.setCompoundDrawables(null, null, icon, null)
                     }
                 }
+                override fun onError(e: Throwable) {
+                    Log.i("checkReg", "that's not fineIn")
+                }
+            })
+    }
+
+    private fun verifyEmail(newVerify: verifyEmailDTO){
+        RetrofitClientInstance.getInstance()
+            .postVerifyData(newVerify)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<respDTO>> {
+
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<respDTO>) {
+                    Log.i("checkCode", "${t.code()}")
+
+                    if(t.isSuccessful) {
+                        val intent = Intent(applicationContext, PasswordChange::class.java)
+                        startActivity(intent)
+                    }
+                }
 
                 override fun onError(e: Throwable) {
-
+                    Log.i("check", "that's not fineIn")
                 }
 
             })

@@ -115,4 +115,6 @@
     <string name="change_pass_good">Ваш пароль успешно изменен. Мы рады, что вы снова с нами.</string>
     <string name="OK">OK</string>
     <string name="pass_changed">Пароль изменен</string>
+
+    <string name="wrong_password_email">Неверный пароль или E-mail</string>
 </resources>

@@ -29,7 +29,4 @@ interface GetRequest {
     @GET("find_user/{user_email}")
     fun getEmailExistence(@Path(value = "user_email", encoded = true) userEmail: String) : Observable<Response<respDTO>>
 
-    @GET("find_user/{userEmail}")
-    fun getUserExists(@Path(value = "userEmail", encoded = true) userEmail: String) : Observable<Response<respDTO>>
-
 }

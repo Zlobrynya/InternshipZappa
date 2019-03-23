@@ -128,7 +128,10 @@ class LoginActivity : AppCompatActivity() {
                     override fun onNext(t: Response<authRespDTO>) {
                         Log.i("checkAuth", "${t.code()}")
                         if(t.isSuccessful) {
-                            val sharedPreferencesStat = applicationContext.getSharedPreferences(applicationContext.getString(R.string.user_info), Context.MODE_PRIVATE)
+                            val sharedPreferencesStat = applicationContext.getSharedPreferences(
+                                applicationContext.getString(R.string.user_info),
+                                Context.MODE_PRIVATE
+                            )
                             val savedEmail = applicationContext.getString(R.string.user_email)
                             val uuid = applicationContext.getString(R.string.uuid)
                             val editor = sharedPreferencesStat.edit()
@@ -136,11 +139,12 @@ class LoginActivity : AppCompatActivity() {
                             editor.putString(uuid, t.body()!!.uuid)
                             editor.apply()
 
-
                             Log.i("checkAuth", t.body()!!.email)
                             Log.i("checkAuth", t.body()!!.uuid)
                             onBackPressed()
                         }else{
+                            log_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
+                            log_password.setCompoundDrawables(null, null, icon, null)
                             Log.i("checkAuth", "введены некоректные данные")
                         }
                     }
