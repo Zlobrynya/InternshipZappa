@@ -26,15 +26,14 @@ class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTabl
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.seatType.text = values[position].seatType
         //обрабатываем падежы
-        if (values[position].seatPosition == ""){
-            when(values[position].seatCount){
-             4-> holder.seatCount.text = "${values[position].seatCount} места"
-             else -> holder.seatCount.text = "${values[position].seatCount} мест"
+        if (values[position].seatPosition == "") {
+            when (values[position].seatCount) {
+                4 -> holder.seatCount.text = "${values[position].seatCount} места"
+                else -> holder.seatCount.text = "${values[position].seatCount} мест"
             }
-        }
-        else{
-            when(values[position].seatCount){
-                4-> holder.seatCount.text = "${values[position].seatCount} места, ${values[position].seatPosition}"
+        } else {
+            when (values[position].seatCount) {
+                4 -> holder.seatCount.text = "${values[position].seatCount} места, ${values[position].seatPosition}"
                 else -> holder.seatCount.text = "${values[position].seatCount} мест, ${values[position].seatPosition}"
             }
         }
