@@ -125,7 +125,7 @@ class FullDescriptionScreen : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        when (item.itemId) {
             android.R.id.home -> {
                 this.finish()
                 return true
@@ -135,8 +135,5 @@ class FullDescriptionScreen : AppCompatActivity() {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-    }
 }
 
