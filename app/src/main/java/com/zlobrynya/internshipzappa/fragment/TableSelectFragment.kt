@@ -1,6 +1,8 @@
 package com.zlobrynya.internshipzappa.fragment
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -12,13 +14,23 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
 
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.checkDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import com.zlobrynya.internshipzappa.util.TableParceling
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_table_select.view.*
+import retrofit2.Response
+
+const val REQUEST_CODE: Int = 11
 
 class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
 
@@ -48,6 +60,11 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
      * Вьюшка для фрагмента
      */
     private lateinit var tableView: View
+
+    /**
+     * Номер выбранного стола в ресайклер вью
+     */
+    var selectedPosition: Int = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         tableView = inflater.inflate(R.layout.fragment_table_select, container, false)
@@ -116,12 +133,12 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
             context?.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
 
         val uuid = context?.getString(R.string.uuid)
-        val authSatus = sharedPreferencesStat?.getString(uuid, "null").toString()
-        newStatus.uuid = authSatus
+        val authStatus = sharedPreferencesStat?.getString(uuid, "null").toString()
+        newStatus.uuid = authStatus
 
-        if (isButtonClick) { //Открываем новую активити
-            //val intent = Intent(context, PersonalInfoActivity::class.java)
-            openPersonalInfo(position)
+        if (isButtonClick) {
+            selectedPosition = position
+            checkStatus(position)
             /*RetrofitClientInstance.getInstance()
                 .postStatusData(newStatus)
                 .subscribeOn(Schedulers.io())
@@ -170,8 +187,10 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
 
     /**
      * Загружает фрагмент с персональной инфой
+     * @param position Номер выбранного столика
      */
     private fun openPersonalInfo(position: Int) {
+        // Подготовим аргументы
         val args = Bundle()
         args.putInt("table_id", tableList[position].seatId)
         args.putString("book_date_begin", newBooking.date)
@@ -190,5 +209,77 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         trans.addToBackStack(null)
         trans.commit()
+    }
+
+    /**
+     * Проверяет, авторизован ли юзер
+     * @param position Номер выбранного столика
+     */
+    private fun checkStatus(position: Int) {
+        val newStatus = checkDTO()
+        val sharedPreferencesStat =
+            context?.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
+        val uuid = context?.getString(R.string.uuid)
+        val authStatus = sharedPreferencesStat?.getString(uuid, "null").toString()
+        val savedEmail = context?.getString(R.string.user_email)
+        newStatus.uuid = authStatus
+        newStatus.email = sharedPreferencesStat?.getString(savedEmail, "null").toString()
+
+
+        Log.i("checkStatusData", newStatus.uuid)
+        Log.i("checkStatusData", newStatus.email)
+
+        RetrofitClientInstance.getInstance()
+            .postStatusData(newStatus)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<respDTO>> {
+
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<respDTO>) {
+                    Log.d("BOOP", "Код ${t.code()}")
+                    if (t.isSuccessful) { // Юзер авторизован
+                        Log.d("BOOP", "Юзер авторизован")
+                        openPersonalInfo(position) // Откроем фрагмент с персональной инфой
+                    } else { // Юзер не авторизован
+                        Log.d("BOOP", "Не авторизован")
+                        openLoginActivity() // Откроем аквтивити авторизации
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.d("BOOP", "Вообще ошибка")
+                }
+            })
+    }
+
+    /**
+     * Открывает логин активити
+     */
+    private fun openLoginActivity() {
+        val intent = Intent(activity, LoginActivity::class.java)
+        startActivityForResult(intent, REQUEST_CODE)
+    }
+
+    /**
+     * Проверят как завершила работу активити вызванная на результат
+     * @param requestCode Код вызова
+     * @param resultCode Код результата работы активити
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                // Юзер авторизовался
+                openPersonalInfo(selectedPosition) // Откроем фрагмент с персональной инфой
+                Log.d("BOOP", "Выбранный стол $selectedPosition")
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                // Юзер закрыл авторизацию
+            }
+        }
     }
 }

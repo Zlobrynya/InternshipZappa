@@ -10,17 +10,14 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authRespDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Response
 
 
@@ -99,10 +96,10 @@ class LoginActivity : AppCompatActivity() {
 
         })
 
-        forgot_password.setOnClickListener({
+        forgot_password.setOnClickListener {
             val intent = Intent(this, PasswordRecovery::class.java)
             startActivity(intent)
-        })
+        }
 
         btnLogin.setOnClickListener {
             val email = log_email_input_layout.editText!!.text.toString()
@@ -115,45 +112,48 @@ class LoginActivity : AppCompatActivity() {
             newAuth.password = password
             if (validateEmail && validatePassword) {
 
-            RetrofitClientInstance.getInstance()
-                .postAuthData(newAuth)
-                .subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(object : Observer<Response<authRespDTO>> {
+                RetrofitClientInstance.getInstance()
+                    .postAuthData(newAuth)
+                    .subscribeOn(Schedulers.io())
+                    ?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribe(object : Observer<Response<authRespDTO>> {
 
-                    override fun onComplete() {}
+                        override fun onComplete() {}
 
-                    override fun onSubscribe(d: Disposable) {}
+                        override fun onSubscribe(d: Disposable) {}
 
-                    override fun onNext(t: Response<authRespDTO>) {
-                        Log.i("checkAuth", "${t.code()}")
-                        if(t.isSuccessful) {
-                            val sharedPreferencesStat = applicationContext.getSharedPreferences(
-                                applicationContext.getString(R.string.user_info),
-                                Context.MODE_PRIVATE
-                            )
-                            val savedEmail = applicationContext.getString(R.string.user_email)
-                            val uuid = applicationContext.getString(R.string.uuid)
-                            val editor = sharedPreferencesStat.edit()
-                            editor.putString(savedEmail, t.body()!!.email)
-                            editor.putString(uuid, t.body()!!.uuid)
-                            editor.apply()
+                        override fun onNext(t: Response<authRespDTO>) {
+                            Log.i("checkAuth", "${t.code()}")
+                            if (t.isSuccessful) {
+                                val sharedPreferencesStat = applicationContext.getSharedPreferences(
+                                    applicationContext.getString(R.string.user_info),
+                                    Context.MODE_PRIVATE
+                                )
+                                val savedEmail = applicationContext.getString(R.string.user_email)
+                                val uuid = applicationContext.getString(R.string.uuid)
+                                val editor = sharedPreferencesStat.edit()
+                                editor.putString(savedEmail, t.body()!!.email)
+                                editor.putString(uuid, t.body()!!.uuid)
+                                editor.apply()
 
-                            Log.i("checkAuth", t.body()!!.email)
-                            Log.i("checkAuth", t.body()!!.uuid)
-                            onBackPressed()
-                        }else{
-                            log_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
-                            log_password.setCompoundDrawables(null, null, icon, null)
-                            Log.i("checkAuth", "введены некоректные данные")
+                                Log.i("checkAuth", t.body()!!.email)
+                                Log.i("checkAuth", t.body()!!.uuid)
+                                //onBackPressed()
+                                setResult(Activity.RESULT_OK)
+                                finish()
+                            } else {
+                                log_password_input_layout.error =
+                                    getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
+                                log_password.setCompoundDrawables(null, null, icon, null)
+                                Log.i("checkAuth", "введены некоректные данные")
+                            }
                         }
-                    }
 
-                    override fun onError(e: Throwable) {
-                        Log.i("checkAuth", "that's not fineIn")
-                    }
+                        override fun onError(e: Throwable) {
+                            Log.i("checkAuth", "that's not fineIn")
+                        }
 
-                })
+                    })
 
             }
 
