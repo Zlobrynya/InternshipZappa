@@ -5,11 +5,15 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.RequiresApi
+import android.support.design.widget.TextInputEditText
 import android.telephony.PhoneNumberUtils
 import android.text.Editable
+import android.text.InputFilter
+import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regDTO
@@ -26,6 +30,24 @@ import retrofit2.Response
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
+
+    /*private val blockCharacterSet: String = ".,-~@№:;_=#^|$%&*! "
+
+    private val filter = object : InputFilter {
+        override fun filter(
+            source: CharSequence,
+            start: Int,
+            end: Int,
+            dest: Spanned,
+            dstart: Int,
+            dend: Int
+        ): CharSequence? {
+            if (source != null && blockCharacterSet.contains(("" + source))) {
+                return ""
+            }
+            return null
+        }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,13 +91,13 @@ class RegisterActivity : AppCompatActivity() {
 
         reg_phone_number.addTextChangedListener(object: TextWatcher{
 
-            private var mFormatting: Boolean = false
-            private var mAfter: Int = 0
+            //private var mFormatting: Boolean = false
+            //private var mAfter: Int = 0
 
             override fun afterTextChanged(s: Editable?) {
                 reg_phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        if (!mFormatting) {
+                        /*if (!mFormatting) {
                             mFormatting = true
                             if (mAfter != 0) {
                                 val num = s.toString()
@@ -86,7 +108,7 @@ class RegisterActivity : AppCompatActivity() {
                                 }
                             }
                             mFormatting = false
-                        }
+                        }*/
 
                         val phone = reg_phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
@@ -103,7 +125,7 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                mAfter  = after
+                //mAfter  = after
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -277,20 +299,26 @@ class RegisterActivity : AppCompatActivity() {
             })
     }
 
+    /*fun Editable.limitLength(maxLength: Int) {
+        filters = arrayOf(InputFilter.LengthFilter(maxLength))
+    }*/
+
     private fun validateName(name: String) : Boolean {
         val nameLength = 2
         return name.matches("[a-zA-Zа-яА-ЯёЁ]*".toRegex()) && name.length >= nameLength
     }
 
     private fun validatePhone(phone: String): Boolean {
-        val phoneLength7 = 16
-        val phoneLength8 = 17
-        val firstChar: Char = phone[0]
-        return if (firstChar == '8') {
+        //val phoneLength7 = 16
+        //val phoneLength8 = 17
+        //val firstChar: Char = phone[0]
+        /*return if (firstChar == '8') {
             phone.length == phoneLength8
         } else {
             phone.length == phoneLength7
-        }
+        }*/
+        val phoneLength = 10
+        return phone.length == phoneLength
     }
 
     private fun validateEmail(email: String): Boolean {
@@ -298,11 +326,11 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun validatePassword(password: String): Boolean {
-        return password.matches("((?=.*[a-z0-9]).{6,20})".toRegex())
+        return password.matches("((?=.*[a-z0-9]).{4,20})".toRegex())
     }
 
     private fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
-        return confirmPassword.matches("((?=.*[a-z0-9]).{6,20})".toRegex()) && password == confirmPassword
+        return password == confirmPassword
     }
 
     override fun onBackPressed() {

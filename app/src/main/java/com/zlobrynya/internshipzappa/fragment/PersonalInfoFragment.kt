@@ -1,5 +1,7 @@
 package com.zlobrynya.internshipzappa.fragment
 
+
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -22,6 +24,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_personal_info.view.*
 import kotlinx.android.synthetic.main.fragment_personal_info.view.*
 import retrofit2.Response
 import java.text.DateFormat
@@ -102,77 +105,44 @@ class PersonalInfoFragment : Fragment() {
         )*/
 
         if (seatPosition == "" && seatCount == "4") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table4, seatCount, seatType)
-            view.selected_table.setText(textTable)
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table4, bookTableId, seatCount, seatType)
+            view.fm_selected_table.setText(textTable)
         } else if (seatPosition == "" && seatCount != "4") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table68, seatCount, seatType)
-            view.selected_table.setText(textTable)
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table68, bookTableId, seatCount, seatType)
+            view.fm_selected_table.setText(textTable)
         } else if (seatPosition != "" && seatCount == "4") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table43, seatCount, seatPosition, seatType)
-            view.selected_table.setText(textTable)
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table43, bookTableId, seatCount, seatPosition, seatType)
+            view.fm_selected_table.setText(textTable)
         } else {
             val textTable =
-                getString(com.zlobrynya.internshipzappa.R.string.table683, seatCount, seatPosition, seatType)
-            view.selected_table.setText(textTable)
+                getString(com.zlobrynya.internshipzappa.R.string.table683, bookTableId, seatCount, seatPosition, seatType)
+            view.fm_selected_table.setText(textTable)
         }
 
         val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
         val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy")
         val date: Date = inputFormat.parse(bookDateBegin)
         val outputDateStr = outputFormat.format(date)
-        view.selected_date.text = outputDateStr
+        view.fm_selected_date.text = outputDateStr
 
         val textWoSecI = bookTimeBegin.toString()
         val textWoSecO = bookTimeEnd.toString()
         val woSecI = deleteSecInTime(textWoSecI)
         val woSecO = deleteSecInTime(textWoSecO)
         var text = getString(com.zlobrynya.internshipzappa.R.string.period, woSecI, woSecO)
-        view.selected_time.text = text
+        view.fm_selected_time.text = text
 
-        val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
-
-        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
-
-        view.btnContinue.setOnClickListener {
-            hideKeyboard()
+        view.fm_btnContinue.setOnClickListener {
 
             // TODO эти данные больше не нужно получать из полей в XML, а получать из ШередПреференс
-            val name = view.username_input_layout.text.toString()
-            val phone = view.phone_number_input_layout.text.toString()
-            val email = view.register_email_input_layout.text.toString()
-
-            // TODO валидация теперь наверно не нужна
-            /*val validateName = validateName(name)
-            val validatePhone = validatePhone(phone)
-            val validateEmail = validateEmail(email)
-
-            if (validateName && validateEmail && validatePhone) {
-                //btnContinue.setBackgroundColor(resources.getColor(R.color.btn_continue))
-                newBooking.name = name
-                newBooking.email = email
-                newBooking.phone = phone
-                networkRxjavaPost(newBooking, it.context)
-            } else {
-                Toast.makeText(activity, "Введите корректные данные", Toast.LENGTH_SHORT).show()
-            }*/
+            //val name = view.username_input_layout.text.toString()
+            val name = "KEK"
 
             newBooking.name = name
-            newBooking.email = email
-            newBooking.phone = phone
             networkRxjavaPost(newBooking, it.context)
         }
 
         return view
-    }
-
-    private fun hideKeyboard() {
-        val view = activity!!.currentFocus
-        if (view != null) {
-            (activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                view.windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
-            )
-        }
     }
 
     //Пост запрос на размещение личной информации(RxJava2)
@@ -232,26 +202,6 @@ class PersonalInfoFragment : Fragment() {
             })
     }
 
-    private fun validateName(name: String): Boolean {
-        val nameLength = 2
-        return name.matches("[a-zA-Zа-яА-ЯёЁ]*".toRegex()) && name.length >= nameLength
-    }
-
-    private fun validatePhone(phone: String): Boolean {
-        val phoneLength7 = 16
-        val phoneLength8 = 17
-        val firstChar: Char = phone[0]
-        return if (firstChar == '8') {
-            phone.length == phoneLength8
-        } else {
-            phone.length == phoneLength7
-        }
-    }
-
-    private fun validateEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
     private fun deleteSecInTime(str: String): String {
         return str.substring(0, str.length - 3)
     }
@@ -260,8 +210,8 @@ class PersonalInfoFragment : Fragment() {
      * Настраивает тулбар
      */
     private fun initToolBar(view: View): View {
-        view.enter_personal_info.setNavigationIcon(R.drawable.ic_back_button) // Установим иконку в тулбаре
-        view.enter_personal_info.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
+        view.fm_enter_personal_info.setNavigationIcon(R.drawable.ic_back_button) // Установим иконку в тулбаре
+        view.fm_enter_personal_info.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
         return view
     }
 
