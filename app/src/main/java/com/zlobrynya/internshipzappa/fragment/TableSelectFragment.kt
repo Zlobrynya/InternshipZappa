@@ -1,7 +1,6 @@
 package com.zlobrynya.internshipzappa.fragment
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -13,23 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.booking.PersonalInfoActivity
-import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
 
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.checkDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import com.zlobrynya.internshipzappa.util.TableParceling
 import kotlinx.android.synthetic.main.fragment_table_select.view.*
-import retrofit2.Response
-
 
 class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
 
@@ -51,12 +40,6 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
     }
 
     /**
-     * Ответ сервера
-     */
-    var responseBody: tableList? = null
-    var responseBodyStatus: respDTO? = null
-
-    /**
      * Список столиков
      */
     private val tableList: ArrayList<Table> = ArrayList()
@@ -70,7 +53,8 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
         tableView = inflater.inflate(R.layout.fragment_table_select, container, false)
         initRequest()
         initToolBar()
-        networkRxjavaPost()
+        initTableList()
+        initRecycler()
         return tableView
     }
 
@@ -89,51 +73,6 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
     }
 
     /**
-     * Отправляет POST запрос на сервер и получает в ответе список доступных столиков(RxJava2)
-     */
-
-    private fun networkRxjavaPost() {
-        RetrofitClientInstance.getInstance()
-            .postBookingDate(newBooking)
-            .subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : Observer<Response<tableList>> {
-
-                override fun onComplete() {}
-
-                override fun onSubscribe(d: Disposable) {}
-
-                override fun onNext(t: Response<tableList>) {
-                    Log.d("onNextTA", "зашёл")
-                    if (t.isSuccessful) {
-                        responseBody = t.body()
-                        Log.i("check1", "${t.code()}")
-                        if (t.body() != null) {
-                            if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету, то выведем сообщение об этом
-                                tableView.table_recycler.visibility = View.GONE
-                                tableView.no_tables_available.visibility = View.VISIBLE
-                            } else {
-                                Log.d("TOPKEK", t.body()!!.data.size.toString())
-                                initTableList()
-                                initRecycler()
-                            }
-                        } else { // Если свободных столиков нету, то выведем сообщение об этом
-                            tableView.table_recycler.visibility = View.GONE
-                            tableView.no_tables_available.visibility = View.VISIBLE
-                        }
-                    } else {
-                        Log.i("check2", "${t.code()}")
-                    }
-                }
-
-                override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
-                }
-
-            })
-    }
-
-    /**
      * Настраивает тулбар
      */
     private fun initToolBar() {
@@ -145,8 +84,9 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
      * Заполняет данными список столиков
      */
     private fun initTableList() {
-        for (i in 0 until responseBody!!.data.size) {
-            val tmp = responseBody!!.data[i]
+        val tableArray = arguments!!.getParcelable("table_list") as TableParceling
+        for (i in 0 until tableArray.tableList.data.size) {
+            val tmp = tableArray.tableList.data[i]
             val table = Table(tmp.chair_count, tmp.position, tmp.chair_type, tmp.table_id)
             tableList.add(table)
         }
@@ -171,7 +111,8 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
      */
     override fun onTableClick(position: Int, isButtonClick: Boolean) {
         val newStatus = checkDTO()
-        val sharedPreferencesStat = context?.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
+        val sharedPreferencesStat =
+            context?.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
 
         val uuid = context?.getString(R.string.uuid)
         val authSatus = sharedPreferencesStat?.getString(uuid, "null").toString()
@@ -225,6 +166,7 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
         }
 
     }
+
     /**
      * Загружает фрагмент с персональной инфой
      */
