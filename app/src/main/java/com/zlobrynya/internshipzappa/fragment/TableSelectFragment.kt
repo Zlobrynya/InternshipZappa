@@ -90,6 +90,7 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
             val table = Table(tmp.chair_count, tmp.position, tmp.chair_type, tmp.table_id)
             tableList.add(table)
         }
+        arguments!!.remove("table_list")
     }
 
     /**

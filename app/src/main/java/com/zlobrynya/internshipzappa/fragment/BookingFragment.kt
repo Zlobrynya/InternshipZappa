@@ -698,24 +698,25 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 override fun onNext(t: Response<tableList>) {
                     Log.d("onNextTA", "зашёл")
                     if (t.isSuccessful) {
-                        Log.i("check1", "${t.code()}")
+                        Log.i("BOOP", "Код удачи${t.code()}")
                         if (t.body() != null) {
                             if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету
                                 showNoTablesAvailableAlert()
                             } else { // Если свободные столики есть
                                 val responseBody = t.body() as tableList
+                                Log.d("BOOP", "Число столиков ${responseBody.data.size}")
                                 openTableSelectFragment(args, responseBody)
                             }
                         } else { // Если свободных столиков нету
-                            Log.d("TOPKEK", "Прилетел нулл")
+                            Log.d("BOOP", "Прилетел нулл")
                         }
                     } else { // В случае ошибок
-                        Log.i("check2", "${t.code()}")
+                        Log.i("BOOP", "Код ошибки ${t.code()}")
                     }
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
+                    Log.i("BOOP", "Вообще ошибка")
                 }
             })
     }
