@@ -142,6 +142,7 @@ class LoginActivity : AppCompatActivity() {
                                 Log.i("checkAuth", t.body()!!.email)
                                 Log.i("checkAuth", t.body()!!.access_token)
                                 //onBackPressed()
+                                updateUserBookingList()
                                 setResult(Activity.RESULT_OK)
                                 finish()
                             } else {
@@ -189,5 +190,16 @@ class LoginActivity : AppCompatActivity() {
         setResult(Activity.RESULT_CANCELED)
         finish()
         return true
+    }
+
+    /**
+     * Обновляет список броней юзера
+     * Вызывать надо при любом чихе с авторизацией\бронью\отменой брони
+     */
+    private fun updateUserBookingList() {
+        val fragment = supportFragmentManager.findFragmentByTag("USER_BOOKING_LIST")
+        if (fragment != null) {
+            fragment.onResume()
+        }
     }
 }
