@@ -661,15 +661,20 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      */
     private fun showNoInternetConnectionAlert() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
-        val view = layoutInflater.inflate(R.layout.dialog_no_internet, null)
-        builder.setView(view)
+        builder.setTitle("Ошибка соединения")
+            .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+            .setCancelable(false)
+            .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    prepare()
+                }
+            }
+            .setNegativeButton("Отмена") { dialog, which -> dialog.dismiss() }
         val alert = builder.create()
-        view.dismiss_button.setOnClickListener { alert.dismiss() }
-        view.repeat_button.setOnClickListener {
-            alert.dismiss()
-            prepare()
-        }
         alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
     }
 
     /**
