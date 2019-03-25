@@ -148,11 +148,15 @@ class ProfileFragment : Fragment() {
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                s!!.replaceFirst(regex = "[8]".toRegex(), replacement = "")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                profile.visibility = View.VISIBLE
             }
         })
+
+
 
         view.btnSaveChanges.setOnClickListener {
             val name = profile_username_input_layout.editText!!.text.toString()

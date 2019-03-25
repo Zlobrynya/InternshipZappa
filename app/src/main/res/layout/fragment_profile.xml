@@ -106,30 +106,11 @@
             android:textColor="@color/white" />
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/profile_plus_seven"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="8dp"
-        android:text="+7"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_email_input_layout"
-        app:layout_constraintVertical_bias="0.08" />
-
     <android.support.design.widget.TextInputLayout
         android:id="@+id/profile_phone_number_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:textColorHint="@color/color_hint"
         app:errorTextAppearance="@style/error_appearance"
@@ -167,5 +148,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.95" />
+
+    <EditText
+        android:id="@+id/profile"
+        android:layout_width="34dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="14.5dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/color_hint"
+        android:clickable="false"
+        android:editable="false"
+        android:focusableInTouchMode="false"
+        android:maxLength="2"
+        android:text="+7"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profile_phone_number_input_layout" />
 
 </android.support.constraint.ConstraintLayout>

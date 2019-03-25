@@ -48,6 +48,12 @@ class CodeFEmailActivity: AppCompatActivity() {
         firstNumber.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 if (firstNumber.text.toString() == ""){
+                    allert_text.visibility = View.GONE
+                    firstNumber.setTextColor(resources.getColor(R.color.white))
+                    secondNumber.setTextColor(resources.getColor(R.color.white))
+                    thirdNumber.setTextColor(resources.getColor(R.color.white))
+                    fourthNumber.setTextColor(resources.getColor(R.color.white))
+                    fifthNumber.setTextColor(resources.getColor(R.color.white))
                     firstNumber.requestFocus()
                 } else {
                     secondNumber.requestFocus()
@@ -67,6 +73,12 @@ class CodeFEmailActivity: AppCompatActivity() {
         secondNumber.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 if (secondNumber.text.toString() == ""){
+                    allert_text.visibility = View.GONE
+                    firstNumber.setTextColor(resources.getColor(R.color.white))
+                    secondNumber.setTextColor(resources.getColor(R.color.white))
+                    thirdNumber.setTextColor(resources.getColor(R.color.white))
+                    fourthNumber.setTextColor(resources.getColor(R.color.white))
+                    fifthNumber.setTextColor(resources.getColor(R.color.white))
                     firstNumber.requestFocus()
                 } else {
                     thirdNumber.requestFocus()
@@ -86,6 +98,12 @@ class CodeFEmailActivity: AppCompatActivity() {
         thirdNumber.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 if (thirdNumber.text.toString() == ""){
+                    allert_text.visibility = View.GONE
+                    firstNumber.setTextColor(resources.getColor(R.color.white))
+                    secondNumber.setTextColor(resources.getColor(R.color.white))
+                    thirdNumber.setTextColor(resources.getColor(R.color.white))
+                    fourthNumber.setTextColor(resources.getColor(R.color.white))
+                    fifthNumber.setTextColor(resources.getColor(R.color.white))
                     secondNumber.requestFocus()
                 } else {
                     fourthNumber.requestFocus()
@@ -105,6 +123,12 @@ class CodeFEmailActivity: AppCompatActivity() {
         fourthNumber.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 if (fourthNumber.text.toString() == ""){
+                    allert_text.visibility = View.GONE
+                    firstNumber.setTextColor(resources.getColor(R.color.white))
+                    secondNumber.setTextColor(resources.getColor(R.color.white))
+                    thirdNumber.setTextColor(resources.getColor(R.color.white))
+                    fourthNumber.setTextColor(resources.getColor(R.color.white))
+                    fifthNumber.setTextColor(resources.getColor(R.color.white))
                     thirdNumber.requestFocus()
                 } else {
                     fifthNumber.requestFocus()
@@ -124,6 +148,12 @@ class CodeFEmailActivity: AppCompatActivity() {
         fifthNumber.addTextChangedListener(object: TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 if (fifthNumber.text.toString() == ""){
+                    allert_text.visibility = View.GONE
+                    firstNumber.setTextColor(resources.getColor(R.color.white))
+                    secondNumber.setTextColor(resources.getColor(R.color.white))
+                    thirdNumber.setTextColor(resources.getColor(R.color.white))
+                    fourthNumber.setTextColor(resources.getColor(R.color.white))
+                    fifthNumber.setTextColor(resources.getColor(R.color.white))
                     fourthNumber.requestFocus()
                 } else {
                     fifthNumber.requestFocus()
