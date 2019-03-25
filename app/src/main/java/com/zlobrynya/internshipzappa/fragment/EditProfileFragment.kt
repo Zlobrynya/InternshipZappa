@@ -44,9 +44,10 @@ class EditProfileFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
-        initToolBar()
+        initToolBar(view)
 
-        val sharedPreferences = context?.getSharedPreferences(this.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
+        val sharedPreferences =
+            context?.getSharedPreferences(this.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
         val savedName = context?.getString(R.string.key_user_name)
         val savedDate = context?.getString(R.string.key_user_date)
         val savedEmail = context?.getString(R.string.key_user_email)
@@ -55,14 +56,28 @@ class EditProfileFragment : Fragment() {
         Log.d("ALOHA4", sharedPreferences?.getString(savedDate, "").toString())
         Log.d("ALOHA5", sharedPreferences?.getString(savedEmail, "").toString())
         Log.d("ALOHA6", sharedPreferences?.getString(savedPhone, "").toString())
-        if (sharedPreferences?.getString(savedName, "") != "") view.edit_profile_username_input_layout.editText!!.setText(sharedPreferences?.getString(savedName, ""))
-        if (sharedPreferences?.getString(savedDate, "") != "") view.edit_profile_dob_input_layout.editText!!.setText(sharedPreferences?.getString(savedDate, ""))
-        if (sharedPreferences?.getString(savedEmail, "") != "") view.edit_profile_email_input_layout.editText!!.setText(sharedPreferences?.getString(savedEmail, ""))
-        if (sharedPreferences?.getString(savedPhone, "") != "") view.edit_profile_phone_number_input_layout.editText!!.setText(sharedPreferences?.getString(savedPhone, ""))
+        if (sharedPreferences?.getString(
+                savedName,
+                ""
+            ) != ""
+        ) view.edit_profile_username_input_layout.editText!!.setText(sharedPreferences?.getString(savedName, ""))
+        if (sharedPreferences?.getString(savedDate, "") != "") view.edit_profile_dob_input_layout.editText!!.setText(
+            sharedPreferences?.getString(savedDate, "")
+        )
+        if (sharedPreferences?.getString(savedEmail, "") != "") view.edit_profile_email_input_layout.editText!!.setText(
+            sharedPreferences?.getString(savedEmail, "")
+        )
+        if (sharedPreferences?.getString(
+                savedPhone,
+                ""
+            ) != ""
+        ) view.edit_profile_phone_number_input_layout.editText!!.setText(sharedPreferences?.getString(savedPhone, ""))
 
         val dateSetListener = object : DatePickerDialog.OnDateSetListener {
-            override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int,
-                                   dayOfMonth: Int) {
+            override fun onDateSet(
+                view: DatePicker, year: Int, monthOfYear: Int,
+                dayOfMonth: Int
+            ) {
                 calendar.set(Calendar.YEAR, year)
                 calendar.set(Calendar.MONTH, monthOfYear)
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
@@ -72,11 +87,13 @@ class EditProfileFragment : Fragment() {
 
         view.edit_profile_dob.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
-                DatePickerDialog(context!!, R.style.DatePickerTheme,
+                DatePickerDialog(
+                    context!!, R.style.DatePickerTheme,
                     dateSetListener,
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)).show()
+                    calendar.get(Calendar.DAY_OF_MONTH)
+                ).show()
             }
 
         })
@@ -85,16 +102,17 @@ class EditProfileFragment : Fragment() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        view.edit_profile_username.addTextChangedListener(object: TextWatcher {
+        view.edit_profile_username.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                edit_profile_username.onFocusChangeListener = object: View.OnFocusChangeListener{
+                edit_profile_username.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         if (!hasFocus) {
                             val name = edit_profile_username_input_layout.editText!!.text.toString()
                             val validateName = validateName(name)
 
                             if (!validateName) {
-                                edit_profile_username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
+                                edit_profile_username_input_layout.error =
+                                    getString(com.zlobrynya.internshipzappa.R.string.error_name)
                                 edit_profile_username.setCompoundDrawables(null, null, icon, null)
                             } else {
                                 edit_profile_username_input_layout.isErrorEnabled = false
@@ -114,15 +132,16 @@ class EditProfileFragment : Fragment() {
 
         })
 
-        view.edit_profile_email.addTextChangedListener(object: TextWatcher{
+        view.edit_profile_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                edit_profile_email.onFocusChangeListener = object : View.OnFocusChangeListener{
+                edit_profile_email.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val email = edit_profile_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
 
                         if (!validateEmail) {
-                            edit_profile_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
+                            edit_profile_email_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_email)
                             edit_profile_email.setCompoundDrawables(null, null, icon, null)
                         } else {
                             edit_profile_email_input_layout.isErrorEnabled = false
@@ -141,15 +160,16 @@ class EditProfileFragment : Fragment() {
 
         })
 
-        view.edit_profile_phone_number.addTextChangedListener(object: TextWatcher{
+        view.edit_profile_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                edit_profile_phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
+                edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val phone = edit_profile_phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
 
                         if (!validatePhone) {
-                            edit_profile_phone_number_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                            edit_profile_phone_number_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_phone)
                             edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
                         } else {
                             edit_profile_phone_number_input_layout.isErrorEnabled = false
@@ -172,16 +192,17 @@ class EditProfileFragment : Fragment() {
             val email = edit_profile_email_input_layout.editText!!.text.toString()
             val phone = edit_profile_phone_number_input_layout.editText!!.text.toString()
 
-            val sharedPreferences = context!!.getSharedPreferences(context!!.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
+            val sharedPreferences =
+                context!!.getSharedPreferences(context!!.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
             val savedName = context!!.getString(R.string.key_user_name)
             val savedDate = context!!.getString(R.string.key_user_date)
             val savedEmail = context!!.getString(R.string.key_user_email)
             val savedPhone = context!!.getString(R.string.key_user_phone)
             val editor = sharedPreferences.edit()
-            editor.putString(savedName,name)
-            editor.putString(savedDate,date)
-            editor.putString(savedEmail,email)
-            editor.putString(savedPhone,phone)
+            editor.putString(savedName, name)
+            editor.putString(savedDate, date)
+            editor.putString(savedEmail, email)
+            editor.putString(savedPhone, phone)
             editor.apply()
         }
 
@@ -191,17 +212,17 @@ class EditProfileFragment : Fragment() {
     /**
      * Настраивает тулбар
      */
-    private fun initToolBar() {
-        view!!.edit_profile.setNavigationIcon(R.drawable.ic_back_button) // Установим иконку в тулбаре
-        view!!.edit_profile.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
+    private fun initToolBar(view: View) {
+        view.edit_profile.setNavigationIcon(R.drawable.ic_back_button) // Установим иконку в тулбаре
+        view.edit_profile.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
     }
 
-    private fun validateName(name: String) : Boolean {
+    private fun validateName(name: String): Boolean {
         val nameLength = 2
         return name.matches("[a-zA-Zа-яА-ЯёЁ]*".toRegex()) && name.length >= nameLength
     }
 
-    fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
+    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
     private fun updateDate() {
         val myFormat = "dd.MM.yyyy" // mention the format you need
