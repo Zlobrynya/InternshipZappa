@@ -52,6 +52,10 @@ class RetrofitClientInstance {
 
     fun getEmailExistence(url: String) : Observable<Response<respDTO>> = getRequest!!.getEmailExistence(url)
 
+    fun postUserBookings(authorization: String, userEmail: verifyEmailDTO): Observable<Response<UserBookingList>> = postRequest!!.postUserBookings(authorization, userEmail)
+
+    fun postDeleteUserBookings(authorization: String, deleteBooking: deleteBookingDTO): Observable<Response<respDTO>> = postRequest!!.postDeleteUserBookings(authorization, deleteBooking)
+
     fun getTestAuth(authorization: String) : Observable<Response<respDTO>> = getRequest!!.getTestAuth(authorization)
 
     companion object {

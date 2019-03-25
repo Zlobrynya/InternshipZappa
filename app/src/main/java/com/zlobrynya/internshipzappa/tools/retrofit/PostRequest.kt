@@ -1,10 +1,8 @@
 package com.zlobrynya.internshipzappa.tools.retrofit
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.*
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.*
@@ -39,5 +37,15 @@ interface PostRequest {
     @Headers("Content-Type: application/json")
     @POST("password_recovery")
     fun postPassRecData(@Body recoveryData: passwordRecoveryDTO): Observable<Response<respDTO>>
+
+    //запрос на получение бронирований пользователя
+    @Headers("Content-Type: application/json")
+    @POST("show_user_booking")
+    fun postUserBookings(@Header("Authorization") authorization: String, @Body userEmail: verifyEmailDTO): Observable<Response<UserBookingList>>
+
+    //запрос на получение бронирований пользователя
+    @Headers("Content-Type: application/json")
+    @POST("delete_user_booking")
+    fun postDeleteUserBookings(@Header("Authorization") authorization: String, @Body deleteBooking: deleteBookingDTO): Observable<Response<respDTO>>
 
 }
