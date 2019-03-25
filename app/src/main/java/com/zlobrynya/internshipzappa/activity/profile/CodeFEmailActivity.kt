@@ -30,6 +30,11 @@ class CodeFEmailActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_code_f_email)
 
+        supportActionBar!!.title = "Регистрация"
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setBackgroundDrawable(resources.getDrawable(R.drawable.actionbar))
+        supportActionBar!!.elevation = 0F
+
         //принимаем параметры и формируем отсылку
         val newRegister = regDTO()
         newRegister.email = intent.getStringExtra("email")

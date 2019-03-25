@@ -31,8 +31,11 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
         supportActionBar!!.title = "Регистрация"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setBackgroundDrawable(resources.getDrawable(R.drawable.actionbar))
+        supportActionBar!!.elevation = 0F
 
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
 

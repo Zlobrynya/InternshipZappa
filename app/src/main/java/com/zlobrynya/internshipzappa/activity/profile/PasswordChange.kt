@@ -21,6 +21,7 @@ class PasswordChange: AppCompatActivity() {
         supportActionBar!!.title = "Восстановление пароля"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setBackgroundDrawable(resources.getDrawable(R.drawable.actionbar))
+        supportActionBar!!.elevation = 0F
 
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)

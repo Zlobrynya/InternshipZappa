@@ -29,8 +29,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.zlobrynya.internshipzappa.R.layout.activity_login)
+
         supportActionBar!!.title = "Вход"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setBackgroundDrawable(resources.getDrawable(R.drawable.actionbar))
+        supportActionBar!!.elevation = 0F
 
         val newAuth = authDTO()
 
