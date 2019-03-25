@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class bookingUserDTO (
     @SerializedName("email") var email: String = "",
-    @SerializedName("name") var name: String = "",
-    @SerializedName("phone") var phone: String = "",
     @SerializedName("date") var date: String = "",
     @SerializedName("time_from") var time_from: String = "",
     @SerializedName("date_to") var date_to: String = "",

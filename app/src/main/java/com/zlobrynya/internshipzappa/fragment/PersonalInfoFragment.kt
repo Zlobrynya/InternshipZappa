@@ -17,7 +17,10 @@ import android.view.inputmethod.InputMethodManager
 
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.deleteBookingDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
@@ -89,11 +92,11 @@ class PersonalInfoFragment : Fragment() {
 
 
         val newBooking = bookingUserDTO()
-        newBooking.date = bookDateBegin
-        newBooking.time_from = bookTimeBegin
-        newBooking.time_to = bookTimeEnd
+        newBooking.date = bookDateBegin!!.toString()
+        newBooking.time_from = bookTimeBegin!!.toString()
+        newBooking.time_to = bookTimeEnd!!.toString()
         newBooking.table_id = bookTableId
-        newBooking.date_to = bookDateEnd
+        newBooking.date_to = bookDateEnd!!.toString()
 
         // TODO Работа с шаред преференс должна будет быть переделана
         /*val sharedPreferences =
@@ -148,7 +151,6 @@ class PersonalInfoFragment : Fragment() {
             //val name = view.username_input_layout.text.toString()
             val name = "KEK"
 
-            newBooking.name = name
             networkRxjavaPost(newBooking, it.context)
         }
 
@@ -157,8 +159,14 @@ class PersonalInfoFragment : Fragment() {
 
     //Пост запрос на размещение личной информации(RxJava2)
     private fun networkRxjavaPost(newBooking: bookingUserDTO, context: Context) {
+
+        val sharedPreferences =
+            activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
+        val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
+        newBooking.email = sharedPreferences.getString(this.getString(R.string.user_email), "")!!.toString()
+
         RetrofitClientInstance.getInstance()
-            .postReserve(newBooking)
+            .postReserve(jwt, newBooking)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : Observer<Response<respDTO>> {
@@ -168,7 +176,7 @@ class PersonalInfoFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    Log.d("onNextPA", "зашёл")
+                    Log.d("booking", t.code().toString())
                     if (t.isSuccessful) {
                         Log.i("check1", "${t.code()}")
                         if (t.body() != null) {
@@ -178,27 +186,28 @@ class PersonalInfoFragment : Fragment() {
                                     context.getString(R.string.key_shared_users),
                                     Context.MODE_PRIVATE
                                 )
+                                //преференсы будут не нужны, получать данные о юзере из функции
                                 val savedName = context.getString(R.string.key_user_name)
                                 val savedPhone = context.getString(R.string.key_user_phone)
                                 val savedEmail = context.getString(R.string.key_user_email)
                                 val editor = sharedPreferences.edit()
-                                editor.putString(savedName, newBooking.name)
-                                editor.putString(savedPhone, newBooking.phone)
+                                editor.putString(savedName, "временное имя")
+                                editor.putString(savedPhone, "временный телефон")
                                 editor.putString(savedEmail, newBooking.email)
                                 editor.apply()
                             }
                             val intent = Intent(context, BookingEnd::class.java)
                             intent.putExtra("code", t.code())
-                            intent.putExtra("name", newBooking.name)
-                            intent.putExtra("phone", newBooking.phone)
+                            intent.putExtra("name", "временное имя")
+                            intent.putExtra("phone", "временный телефон")
                             context.startActivity(intent)
                         }
                     } else {
                         Log.i("check2", "${t.code()}")
                         val intent = Intent(context, BookingEnd::class.java)
                         intent.putExtra("code", t.code())
-                        intent.putExtra("name", newBooking.name)
-                        intent.putExtra("phone", newBooking.phone)
+                        intent.putExtra("name", "временное имя")
+                        intent.putExtra("phone", "временный телефон")
                         //finish()
                         closeFragment() // Закроем фрагмент
                         context.startActivity(intent)
@@ -224,6 +233,55 @@ class PersonalInfoFragment : Fragment() {
         view.fm_enter_personal_info.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
         return view
     }
+
+    /**
+     * На выхов этой функции ждать отмашку, бэк пока не готов
+     * TODO юзаем вместо преф этот вызов, получаем данные пользователя с него
+     * Закрывает текущий фрагмент и удаляет его со стека
+     */
+    private fun postUserCredentials(){
+        val sharedPreferences =
+            activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
+        val newEmail = verifyEmailDTO()
+        newEmail.email = sharedPreferences.getString(this.getString(R.string.user_email), "")!!.toString()
+        val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
+
+        RetrofitClientInstance.getInstance()
+            .postViewUserCredentials(jwt, newEmail)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<userDataDTO>> {
+
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<userDataDTO>) {
+                    Log.i("checkMyBooking", "${t.code()}")
+
+                    if(t.isSuccessful) {
+                        /**
+                         * TODO юзер авторизирован и запрос прошёл, сюда пихнуть обработку
+                         */
+                        //
+                    }else{
+                        /**
+                         * TODO
+                         * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
+                         *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
+                         *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
+                         */
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.i("check", "that's not fineIn")
+                    //запрос не выполнен, всё плохо
+                }
+
+            })
+    }
+
 
     /**
      * Закрывает текущий фрагмент и удаляет его со стека

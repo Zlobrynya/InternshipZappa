@@ -16,7 +16,7 @@ interface PostRequest {
     //запрос на бронирование
     @Headers("Content-Type: application/json")
     @POST("reserve_place")
-    fun postReserve(@Body reserve: bookingUserDTO): Observable<Response<respDTO>>
+    fun postReserve(@Header("Authorization") authorization: String, @Body reserve: bookingUserDTO): Observable<Response<respDTO>>
 
     //запрос на подтверждение мыла
     @Headers("Content-Type: application/json", "Accept: application/json")
@@ -48,4 +48,8 @@ interface PostRequest {
     @POST("delete_user_booking")
     fun postDeleteUserBookings(@Header("Authorization") authorization: String, @Body deleteBooking: deleteBookingDTO): Observable<Response<respDTO>>
 
+    //запрос на получение данных пользователя
+    @Headers("Content-Type: application/json")
+    @POST("view_user_credentials")
+    fun postViewUserCredentials(@Header("Authorization") authorization: String, @Body userEmail: verifyEmailDTO): Observable<Response<userDataDTO>>
 }

@@ -1,3 +1,4 @@
+/*
 package com.zlobrynya.internshipzappa.activity.booking
 
 import android.support.v7.app.AppCompatActivity
@@ -306,13 +307,15 @@ class PersonalInfoActivity : AppCompatActivity() {
         return str.substring(0, str.length - 3)
     }
 
-    /*private fun replaceStartPhone(str: String?): String {
+    */
+/*private fun replaceStartPhone(str: String?): String {
         val newstr = str!!.replace(" ", "")
         val newstra = newstr.replace("(", "")
         val newstrb = newstra.replace(")", "")
         val newstrc = newstrb.replace("-", "")
         return newstrc.replace("+7", "")
-    }*/
+    }*//*
+
 
     override fun onBackPressed() {
         // Вот этот метод не надо переносить
@@ -327,3 +330,4 @@ class PersonalInfoActivity : AppCompatActivity() {
     }
 }
 
+*/
