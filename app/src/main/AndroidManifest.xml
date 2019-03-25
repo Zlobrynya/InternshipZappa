@@ -21,6 +21,7 @@
         <activity
             android:name=".activity.Menu2Activity"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="locked" />
         <activity
             android:name=".activity.booking.PersonalInfoActivity"

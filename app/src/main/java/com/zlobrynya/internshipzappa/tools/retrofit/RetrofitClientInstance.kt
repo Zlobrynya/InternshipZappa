@@ -40,7 +40,7 @@ class RetrofitClientInstance {
 
     fun postReserve(reserve: bookingUserDTO): Observable<Response<respDTO>> = postRequest!!.postReserve(reserve)
 
-    fun postVerifyData(verify: verifyEmailDTO): Observable<Response<respDTO>> = postRequest!!.postVerifyData(verify)
+    fun postVerifyData(verify: verifyEmailDTO): Observable<Response<verifyRespDTO>> = postRequest!!.postVerifyData(verify)
 
     fun postRegData(registration: regDTO): Observable<Response<respDTO>> = postRequest!!.postRegData(registration)
 
@@ -48,9 +48,11 @@ class RetrofitClientInstance {
 
     fun postPassRecData(recovery: passwordRecoveryDTO): Observable<Response<respDTO>> = postRequest!!.postPassRecData(recovery)
 
-    fun postStatusData(status: checkDTO): Observable<Response<respDTO>> = postRequest!!.postStatusData(status)
+    fun getStatusData(authorization: String): Observable<Response<respDTO>> = getRequest!!.getStatusData(authorization)
 
     fun getEmailExistence(url: String) : Observable<Response<respDTO>> = getRequest!!.getEmailExistence(url)
+
+    fun getTestAuth(authorization: String) : Observable<Response<respDTO>> = getRequest!!.getTestAuth(authorization)
 
     companion object {
         private var instance: RetrofitClientInstance? = null

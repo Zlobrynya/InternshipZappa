@@ -7,10 +7,7 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import io.reactivex.Observable
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface PostRequest {
     //запрос на свободные столы по указанным параметрам
@@ -24,12 +21,12 @@ interface PostRequest {
     fun postReserve(@Body reserve: bookingUserDTO): Observable<Response<respDTO>>
 
     //запрос на подтверждение мыла
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/json", "Accept: application/json")
     @POST("verify_email")
-    fun postVerifyData(@Body verifyData: verifyEmailDTO): Observable<Response<respDTO>>
+    fun postVerifyData(@Body verifyData: verifyEmailDTO): Observable<Response<verifyRespDTO>>
 
     //запрос на регистрацию
-    @Headers("Content-Type: application/json")
+    @Headers("Content-Type: application/json", "Accept: application/json")
     @POST("reg_user")
     fun postRegData(@Body regData: regDTO): Observable<Response<respDTO>>
 
@@ -43,8 +40,4 @@ interface PostRequest {
     @POST("password_recovery")
     fun postPassRecData(@Body recoveryData: passwordRecoveryDTO): Observable<Response<respDTO>>
 
-    //здесь должен будет быть запрос на определение статуса юзера
-    @Headers("Content-Type: application/json")
-    @POST("check_auth")
-    fun postStatusData(@Body statusData: checkDTO): Observable<Response<respDTO>>
 }

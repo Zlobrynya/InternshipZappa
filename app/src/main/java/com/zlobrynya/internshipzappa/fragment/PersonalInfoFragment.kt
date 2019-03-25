@@ -17,8 +17,6 @@ import android.view.inputmethod.InputMethodManager
 
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
-import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.checkDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
@@ -26,13 +24,13 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_personal_info.view.*
 import kotlinx.android.synthetic.main.fragment_personal_info.view.*
 import retrofit2.Response
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val REQUEST_CODE: Int = 11
 
 /**
  * Фрагмент персональное инфо
@@ -71,19 +69,24 @@ class PersonalInfoFragment : Fragment() {
         var view = inflater.inflate(R.layout.fragment_personal_info, container, false)
         view = initToolBar(view)
 
-        // TODO активти не должна запускаться, если юзер уже авторизован
-        //openLoginActivity()
-        checkStatus()
-
-        // Чтобы принять аргумент во фрагменте пиши arguments!!.getString или getInt
         val bookDateBegin = arguments!!.getString("book_date_begin")
         val bookTimeBegin = arguments!!.getString("book_time_begin")
         val bookTimeEnd = arguments!!.getString("book_time_end")
         val bookDateEnd = arguments!!.getString("book_date_end")
-        val bookTableId = arguments!!.getInt("table_id", 1).toString().toInt()
+        val bookTableId = arguments!!.getInt("table_id", 1)
         val seatCount = arguments!!.getInt("seat_count", 1).toString()
         val seatPosition = arguments!!.getString("seat_position")
         val seatType = arguments!!.getString("seat_type")
+
+        Log.d("bookdata", bookDateBegin)
+        Log.d("bookdata", bookTimeBegin)
+        Log.d("bookdata", bookTimeEnd)
+        Log.d("bookdata", bookDateEnd)
+        Log.d("bookdata", bookTableId.toString())
+        Log.d("bookdata", bookDateBegin)
+        Log.d("bookdata", seatCount)
+        Log.d("bookdata", seatType)
+
 
         val newBooking = bookingUserDTO()
         newBooking.date = bookDateBegin
@@ -112,77 +115,44 @@ class PersonalInfoFragment : Fragment() {
         )*/
 
         if (seatPosition == "" && seatCount == "4") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table4, seatCount, seatType)
-            view.selected_table.setText(textTable)
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table4, bookTableId, seatCount, seatType)
+            view.fm_selected_table.setText(textTable)
         } else if (seatPosition == "" && seatCount != "4") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table68, seatCount, seatType)
-            view.selected_table.setText(textTable)
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table68, bookTableId, seatCount, seatType)
+            view.fm_selected_table.setText(textTable)
         } else if (seatPosition != "" && seatCount == "4") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table43, seatCount, seatPosition, seatType)
-            view.selected_table.setText(textTable)
+            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table43, bookTableId, seatCount, seatPosition, seatType)
+            view.fm_selected_table.setText(textTable)
         } else {
             val textTable =
-                getString(com.zlobrynya.internshipzappa.R.string.table683, seatCount, seatPosition, seatType)
-            view.selected_table.setText(textTable)
+                getString(com.zlobrynya.internshipzappa.R.string.table683, bookTableId, seatCount, seatPosition, seatType)
+            view.fm_selected_table.setText(textTable)
         }
 
         val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
         val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy")
         val date: Date = inputFormat.parse(bookDateBegin)
         val outputDateStr = outputFormat.format(date)
-        view.selected_date.text = outputDateStr
+        view.fm_selected_date.text = outputDateStr
 
         val textWoSecI = bookTimeBegin.toString()
         val textWoSecO = bookTimeEnd.toString()
         val woSecI = deleteSecInTime(textWoSecI)
         val woSecO = deleteSecInTime(textWoSecO)
         var text = getString(com.zlobrynya.internshipzappa.R.string.period, woSecI, woSecO)
-        view.selected_time.text = text
+        view.fm_selected_time.text = text
 
-        val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
-
-        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
-
-        view.btnContinue.setOnClickListener {
-            hideKeyboard()
+        view.fm_btnContinue.setOnClickListener {
 
             // TODO эти данные больше не нужно получать из полей в XML, а получать из ШередПреференс
-            val name = view.username_input_layout.text.toString()
-            val phone = view.phone_number_input_layout.text.toString()
-            val email = view.register_email_input_layout.text.toString()
-
-            // TODO валидация теперь наверно не нужна
-            /*val validateName = validateName(name)
-            val validatePhone = validatePhone(phone)
-            val validateEmail = validateEmail(email)
-
-            if (validateName && validateEmail && validatePhone) {
-                //btnContinue.setBackgroundColor(resources.getColor(R.color.btn_continue))
-                newBooking.name = name
-                newBooking.email = email
-                newBooking.phone = phone
-                networkRxjavaPost(newBooking, it.context)
-            } else {
-                Toast.makeText(activity, "Введите корректные данные", Toast.LENGTH_SHORT).show()
-            }*/
+            //val name = view.username_input_layout.text.toString()
+            val name = "KEK"
 
             newBooking.name = name
-            newBooking.email = email
-            newBooking.phone = phone
             networkRxjavaPost(newBooking, it.context)
         }
 
         return view
-    }
-
-    private fun hideKeyboard() {
-        val view = activity!!.currentFocus
-        if (view != null) {
-            (activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
-                view.windowToken,
-                InputMethodManager.HIDE_NOT_ALWAYS
-            )
-        }
     }
 
     //Пост запрос на размещение личной информации(RxJava2)
@@ -242,26 +212,6 @@ class PersonalInfoFragment : Fragment() {
             })
     }
 
-    private fun validateName(name: String): Boolean {
-        val nameLength = 2
-        return name.matches("[a-zA-Zа-яА-ЯёЁ]*".toRegex()) && name.length >= nameLength
-    }
-
-    private fun validatePhone(phone: String): Boolean {
-        val phoneLength7 = 16
-        val phoneLength8 = 17
-        val firstChar: Char = phone[0]
-        return if (firstChar == '8') {
-            phone.length == phoneLength8
-        } else {
-            phone.length == phoneLength7
-        }
-    }
-
-    private fun validateEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
     private fun deleteSecInTime(str: String): String {
         return str.substring(0, str.length - 3)
     }
@@ -270,30 +220,9 @@ class PersonalInfoFragment : Fragment() {
      * Настраивает тулбар
      */
     private fun initToolBar(view: View): View {
-        view.enter_personal_info.setNavigationIcon(R.drawable.ic_back_button) // Установим иконку в тулбаре
-        view.enter_personal_info.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
+        view.fm_enter_personal_info.setNavigationIcon(R.drawable.ic_back_button) // Установим иконку в тулбаре
+        view.fm_enter_personal_info.setNavigationOnClickListener(navigationClickListener) // Установим обработчик нажатий на тулбар
         return view
-    }
-
-    /**
-     * Открывает логин активити
-     */
-    private fun openLoginActivity() {
-        val intent = Intent(activity, LoginActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                // Логин активити успешно завершила работу
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // Юзер нажал назад
-                closeFragment()
-            }
-        }
     }
 
     /**
@@ -305,48 +234,5 @@ class PersonalInfoFragment : Fragment() {
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         trans.commit()
         fragmentManager!!.popBackStack()
-    }
-
-    /**
-     * Проверяет, авторизован ли юзер
-     */
-    private fun checkStatus() {
-        val newStatus = checkDTO()
-        val sharedPreferencesStat =
-            context?.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-        val uuid = context?.getString(R.string.uuid)
-        val authSatus = sharedPreferencesStat?.getString(uuid, "null").toString()
-        val savedEmail = context?.getString(R.string.user_email)
-        newStatus.uuid = authSatus
-        newStatus.email = sharedPreferencesStat?.getString(savedEmail, "null").toString()
-
-
-        Log.i("checkStatusData", newStatus.uuid)
-        Log.i("checkStatusData", newStatus.email)
-
-        RetrofitClientInstance.getInstance()
-            .postStatusData(newStatus)
-            .subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : Observer<Response<respDTO>> {
-
-                override fun onComplete() {}
-
-                override fun onSubscribe(d: Disposable) {}
-
-                override fun onNext(t: Response<respDTO>) {
-                    Log.i("checkStatus", "${t.code()}")
-                    if (t.isSuccessful) {
-                        Log.i("checkStatus", "u're good to go")
-                    } else {
-                        openLoginActivity() // Откроем аквтивити авторизации
-                    }
-                }
-
-                override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
-                }
-
-            })
     }
 }

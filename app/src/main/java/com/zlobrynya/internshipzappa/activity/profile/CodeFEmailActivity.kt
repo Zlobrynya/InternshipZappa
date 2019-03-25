@@ -38,9 +38,10 @@ class CodeFEmailActivity: AppCompatActivity() {
         //принимаем параметры и формируем отсылку
         val newRegister = regDTO()
         newRegister.email = intent.getStringExtra("email")
-        /*newRegister.password = intent.getStringExtra("password")
+        newRegister.code = intent.getStringExtra("code")
+        newRegister.password = intent.getStringExtra("password")
         newRegister.name = intent.getStringExtra("name")
-        newRegister.phone = intent.getStringExtra("phone")*/
+        newRegister.phone = intent.getStringExtra("phone")
 
 
 
@@ -143,32 +144,13 @@ class CodeFEmailActivity: AppCompatActivity() {
             override fun onClick(v: View?) {
                 code = firstNumber.text.toString() + secondNumber.text.toString() +
                         thirdNumber.text.toString() + fourthNumber.text.toString() + fifthNumber.text.toString()
-                /*if (!code.equals("1111")){
-                    allert_text.visibility = View.VISIBLE
-                    firstNumber.setTextColor(resources.getColor(R.color.color_accent))
-                    secondNumber.setTextColor(resources.getColor(R.color.color_accent))
-                    thirdNumber.setTextColor(resources.getColor(R.color.color_accent))
-                    fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
-                    fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
-                }else{
-                    allert_text.visibility = View.GONE
-                    firstNumber.setTextColor(resources.getColor(R.color.white))
-                    secondNumber.setTextColor(resources.getColor(R.color.white))
-                    thirdNumber.setTextColor(resources.getColor(R.color.white))
-                    fourthNumber.setTextColor(resources.getColor(R.color.white))
-                    fifthNumber.setTextColor(resources.getColor(R.color.white))
-                }*/
                 Log.d("code", "$code")
 
-                //newRegister.code = code
-                //newRegister.email = /адрес для получения кода
-                newRegister.password = "000000"
-                newRegister.name = "Name"
-                newRegister.phone = "89111111111"
-                newRegister.code = 63349
+                newRegister.code = code
+
 
                 Log.i("data", newRegister.email)
-                Log.i("data", newRegister.code.toString())
+                Log.i("data", newRegister.code)
                 Log.i("data", newRegister.phone)
                 Log.i("data", newRegister.password)
                 Log.i("data", newRegister.name)
@@ -186,8 +168,20 @@ class CodeFEmailActivity: AppCompatActivity() {
                         override fun onNext(t: Response<respDTO>) {
                             Log.i("checkReg", t.code().toString())
                             if(t.isSuccessful) {
-                                Log.i("checkReg", "${t.code()}")
+                                    allert_text.visibility = View.GONE
+                                    firstNumber.setTextColor(resources.getColor(R.color.white))
+                                    secondNumber.setTextColor(resources.getColor(R.color.white))
+                                    thirdNumber.setTextColor(resources.getColor(R.color.white))
+                                    fourthNumber.setTextColor(resources.getColor(R.color.white))
+                                    fifthNumber.setTextColor(resources.getColor(R.color.white))
                                 Log.i("checkReg", t.body()!!.desc)
+                            }else{
+                                allert_text.visibility = View.VISIBLE
+                                firstNumber.setTextColor(resources.getColor(R.color.color_accent))
+                                secondNumber.setTextColor(resources.getColor(R.color.color_accent))
+                                thirdNumber.setTextColor(resources.getColor(R.color.color_accent))
+                                fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
+                                fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
                             }
                         }
                         override fun onError(e: Throwable) {

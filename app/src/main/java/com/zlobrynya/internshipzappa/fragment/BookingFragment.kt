@@ -1,7 +1,6 @@
 package com.zlobrynya.internshipzappa.fragment
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -10,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.zlobrynya.internshipzappa.activity.booking.TableSelectActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterBookingDuration
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterDays
 import kotlinx.android.synthetic.main.fragment_booking.view.*
@@ -29,10 +27,12 @@ import java.text.SimpleDateFormat
 import android.net.NetworkInfo
 import android.net.ConnectivityManager
 import android.content.Context
+import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import com.zlobrynya.internshipzappa.util.TableParceling
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -145,11 +145,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      * Доступна ли бронь на сегодня
      */
     private var isTodayAvailable: Boolean = false
-
-    /**
-     * Ответ сервера со списком свободных столиков
-     */
-    var responseBody: tableList? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bookingView = inflater.inflate(R.layout.fragment_booking, container, false)
@@ -433,7 +428,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     /**
      * Открывает список доступных столов (фрагмент)
      */
-    private fun openTableListFragment() {
+    private fun preparePostParams() {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd") // Форматирование для даты
         val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
 
@@ -502,20 +497,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         Log.d("TOPKEK2", "time from ${newBooking.time_from}")
         Log.d("TOPKEK2", "date to ${newBooking.date_to}")
         Log.d("TOPKEK2", "time to ${newBooking.time_to}")
-        networkRxJavaPost(newBooking)
-        if (responseBody!!.data.isNotEmpty()) {
-            // Загрузим фрагмент выбора столов
-            // TODO передать список столиков на TableSelectFragment
-            val trans = fragmentManager!!.beginTransaction()
-            val tableSelectFragment = TableSelectFragment()
-            tableSelectFragment.arguments = args
-            trans.add(R.id.root_frame, tableSelectFragment)
-            trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            trans.addToBackStack(null)
-            trans.commit()
-        } else {
-            // TODO Вывести алерт об отсутствии свободных столиков
-        }
+        networkRxJavaPost(newBooking, args)
     }
 
     /**
@@ -677,31 +659,36 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     /**
      * Выводит диалоговое окно с сообщением об отсутствии интернета
      */
-    private fun showAlert() {
+    private fun showNoInternetConnectionAlert() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
-        val view = layoutInflater.inflate(R.layout.dialog_no_internet, null)
-        builder.setView(view)
+        builder.setTitle("Ошибка соединения")
+            .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+            .setCancelable(false)
+            .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    prepare()
+                }
+            }
+            .setNegativeButton("Отмена") { dialog, which -> dialog.dismiss() }
         val alert = builder.create()
-        view.dismiss_button.setOnClickListener { alert.dismiss() }
-        view.repeat_button.setOnClickListener {
-            alert.dismiss()
-            prepare()
-        }
         alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
     }
 
     /**
-     * Вызывает checkInternetConnection и в зависимости от результата вызывает showAlert или openTableListFragment
+     * Вызывает checkInternetConnection и в зависимости от результата вызывает showNoInternetConnectionAlert или preparePostParams
      */
     private fun prepare() {
-        if (!checkInternetConnection()) showAlert()
-        else openTableListFragment()
+        if (!checkInternetConnection()) showNoInternetConnectionAlert()
+        else preparePostParams()
     }
 
     /**
      * Отправляет POST запрос на сервер и получает в ответе список доступных столиков(RxJava2)
      */
-    private fun networkRxJavaPost(newBooking: bookingDataDTO) {
+    private fun networkRxJavaPost(newBooking: bookingDataDTO, args: Bundle) {
 
         RetrofitClientInstance.getInstance()
             .postBookingDate(newBooking)
@@ -716,27 +703,57 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 override fun onNext(t: Response<tableList>) {
                     Log.d("onNextTA", "зашёл")
                     if (t.isSuccessful) {
-                        responseBody = t.body()
-                        Log.i("check1", "${t.code()}")
+                        Log.i("BOOP", "Код удачи${t.code()}")
                         if (t.body() != null) {
                             if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету
-                                Log.d("TOPKEK2", "Столиков нету")
+                                showNoTablesAvailableAlert()
                             } else { // Если свободные столики есть
-                                Log.d("TOPKEK2", t.body()!!.data.size.toString())
+                                val responseBody = t.body() as tableList
+                                Log.d("BOOP", "Число столиков ${responseBody.data.size}")
+                                openTableSelectFragment(args, responseBody)
                             }
                         } else { // Если свободных столиков нету
-                            Log.d("TOPKEK2", "Прилетел нулл")
-
+                            Log.d("BOOP", "Прилетел нулл")
                         }
-                    } else {
-                        Log.i("check2", "${t.code()}")
+                    } else { // В случае ошибок
+                        Log.i("BOOP", "Код ошибки ${t.code()}")
                     }
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
+                    Log.i("BOOP", "Вообще ошибка")
                 }
             })
+    }
+
+    /**
+     * Открывает фрагмент со списком столов
+     * @param args Аргументы
+     */
+    private fun openTableSelectFragment(args: Bundle, tableList: tableList) {
+        Log.d("TOPKEK2", "${tableList.data.size}")
+        val trans = fragmentManager!!.beginTransaction()
+        val tableSelectFragment = TableSelectFragment()
+        args.putParcelable("table_list", TableParceling(tableList))
+        tableSelectFragment.arguments = args
+        trans.add(R.id.root_frame, tableSelectFragment)
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        trans.addToBackStack(null)
+        trans.commit()
+    }
+
+    /**
+     * Выводит алерт об отсутствии столиков
+     */
+    private fun showNoTablesAvailableAlert() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
+        builder.setTitle("Все столы заняты")
+            .setMessage("Измените время, дату или продолжительность визита и попробуйте снова")
+            .setCancelable(false)
+            .setPositiveButton("OK") { dialog, which -> dialog.dismiss() }
+        val alert = builder.create()
+        alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
     }
 
 }

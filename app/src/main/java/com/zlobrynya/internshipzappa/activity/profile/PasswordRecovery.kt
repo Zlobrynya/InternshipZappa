@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
@@ -29,36 +30,35 @@ class PasswordRecovery: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_recovery)
-
         supportActionBar!!.title = "Восстановление пароля"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setBackgroundDrawable(resources.getDrawable(R.drawable.actionbar))
-        supportActionBar!!.elevation = 0F
-
         val icon: Drawable = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
-        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
         val newVerify = verifyEmailDTO()
 
-        recovery_email.addTextChangedListener(object: TextWatcher {
-
+        register_email.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                register_email.onFocusChangeListener = object : View.OnFocusChangeListener{
+                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                    }
+
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val email = recovery_email_input_layout.editText!!.text.toString()
+                val email = register_email_input_layout.editText!!.text.toString()
                 val validateEmail = validateEmail(email)
 
                 if (!validateEmail) {
-                    recovery_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
-                    recovery_email.setCompoundDrawables(null, null, icon, null)
+                    register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
+                    register_email.setCompoundDrawables(null, null, icon, null)
                     btnSendPassChange.background = resources.getDrawable(R.drawable.btn_not_click)
                 } else {
-                    recovery_email_input_layout.isErrorEnabled = false
-                    recovery_email.setCompoundDrawables(null, null, null, null)
+                    register_email_input_layout.isErrorEnabled = false
+                    register_email.setCompoundDrawables(null, null, null, null)
                     btnSendPassChange.background = resources.getDrawable(R.drawable.btn_can_click)
                 }
             }
@@ -66,7 +66,7 @@ class PasswordRecovery: AppCompatActivity() {
         })
 
         btnSendPassChange.setOnClickListener {
-            val email = recovery_email_input_layout.editText!!.text.toString()
+            val email = register_email_input_layout.editText!!.text.toString()
 
             val validateEmail = validateEmail(email)
             if (validateEmail) {
@@ -108,8 +108,8 @@ class PasswordRecovery: AppCompatActivity() {
                         Toast.makeText(applicationContext, "Пользователь существует", Toast.LENGTH_SHORT).show()
                         verifyEmail(newVerify)
                     }else{
-                        recovery_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.user_not_exist)
-                        recovery_email.setCompoundDrawables(null, null, icon, null)
+                        register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.user_not_exist)
+                        register_email.setCompoundDrawables(null, null, icon, null)
                     }
                 }
                 override fun onError(e: Throwable) {
@@ -123,17 +123,18 @@ class PasswordRecovery: AppCompatActivity() {
             .postVerifyData(newVerify)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : Observer<Response<respDTO>> {
+            ?.subscribe(object : Observer<Response<verifyRespDTO>> {
 
                 override fun onComplete() {}
 
                 override fun onSubscribe(d: Disposable) {}
 
-                override fun onNext(t: Response<respDTO>) {
+                override fun onNext(t: Response<verifyRespDTO>) {
                     Log.i("checkCode", "${t.code()}")
 
                     if(t.isSuccessful) {
                         val intent = Intent(applicationContext, PasswordChange::class.java)
+                        intent.putExtra("email", newVerify.email)
                         startActivity(intent)
                     }
                 }
@@ -143,17 +144,5 @@ class PasswordRecovery: AppCompatActivity() {
                 }
 
             })
-    }
-
-    override fun onBackPressed() {
-        // Вот этот метод не надо переносить
-        super.onBackPressed()
-        finish()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        // Вот этот метод тоже не надо переносить
-        onBackPressed()
-        return true
     }
 }

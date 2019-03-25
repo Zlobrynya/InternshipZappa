@@ -96,7 +96,7 @@ class GetDataServer(val context: Context) {
         //создание префов для статуса
         val sharedPreferencesStat = context.getSharedPreferences(context.getString(R.string.user_info), Context.MODE_PRIVATE)
         val savedEmail = context.getString(R.string.user_email)
-        val uuid = context.getString(R.string.uuid)
+        val uuid = context.getString(R.string.access_token)
         if(sharedPreferencesStat.getString(savedEmail, "null") == "null"){
             val editor = sharedPreferencesStat.edit()
             editor.putString(savedEmail, "")

@@ -5,7 +5,7 @@ import java.util.*
 
 data class authRespDTO (
     @SerializedName("code") var code: Int = 0,
-    @SerializedName("desc") var password: String = "",
+    @SerializedName("desc") var desc: String = "",
     @SerializedName("email") var email: String = "",
-    @SerializedName("uuid") var uuid: String = ""
+    @SerializedName("access_token") var access_token: String = ""
 )
