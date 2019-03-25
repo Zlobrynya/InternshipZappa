@@ -38,7 +38,7 @@ class RetrofitClientInstance {
 
     fun postBookingDate(book: bookingDataDTO) : Observable<Response<tableList>> = postRequest!!.postBookingData(book)
 
-    fun postReserve(reserve: bookingUserDTO): Observable<Response<respDTO>> = postRequest!!.postReserve(reserve)
+    fun postReserve(authorization: String, reserve: bookingUserDTO): Observable<Response<respDTO>> = postRequest!!.postReserve(authorization, reserve)
 
     fun postVerifyData(verify: verifyEmailDTO): Observable<Response<verifyRespDTO>> = postRequest!!.postVerifyData(verify)
 
@@ -52,6 +52,12 @@ class RetrofitClientInstance {
 
     fun getEmailExistence(url: String) : Observable<Response<respDTO>> = getRequest!!.getEmailExistence(url)
 
+    fun postUserBookings(authorization: String, userEmail: verifyEmailDTO): Observable<Response<UserBookingList>> = postRequest!!.postUserBookings(authorization, userEmail)
+
+    fun postDeleteUserBookings(authorization: String, deleteBooking: deleteBookingDTO): Observable<Response<respDTO>> = postRequest!!.postDeleteUserBookings(authorization, deleteBooking)
+
+    //fun postViewUserCredentials(@Header("Authorization") authorization: String, @Body userEmail: verifyEmailDTO): Observable<Response<userDataDTO>>
+    fun postViewUserCredentials(authorization: String, userEmail: verifyEmailDTO): Observable<Response<userDataDTO>> = postRequest!!.postViewUserCredentials(authorization, userEmail)
     fun getTestAuth(authorization: String) : Observable<Response<respDTO>> = getRequest!!.getTestAuth(authorization)
 
     companion object {
