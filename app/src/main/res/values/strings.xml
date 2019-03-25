@@ -80,10 +80,10 @@
     <string name="prinyal">%1$s, заявка на бронирование принята.</string>
     <string name="recall">В ближайшее время вам позвонит наш администратор и уточнит детали.</string>
     <string name="back">Вернуться</string>
-    <string name="table4">№%1$ на %2$s места, %3$s</string>
-    <string name="table68">№%1$ на %2$s мест, %3$s</string>
-    <string name="table43">№%1$ на %2$s места, %3$s, %4$s</string>
-    <string name="table683">№%1$ на %2$s мест, %3$s, %4$s</string>
+    <string name="table4">№%1$d на %2$s места, %3$s</string>
+    <string name="table68">№%1$d на %2$s мест, %3$s</string>
+    <string name="table43">№%1$d на %2$s места, %3$s, %4$s</string>
+    <string name="table683">№%1$d на %2$s мест, %3$s, %4$s</string>
     <string name="period">%1$s - %2$s</string>
 
     <string name="btn_continue">Продолжить</string>
@@ -106,7 +106,7 @@
     <!-- инфа о юзере -->
     <string name="user_info">user_info</string>
     <string name="user_email">email</string>
-    <string name="uuid">uuid</string>
+    <string name="access_token">access_token</string>
     <string name="label_name">Имя</string>
 
     <string name="change_password_letter">На указанный почтовый адрес мы отправим вам письмо с кодом, для смены пароля</string>

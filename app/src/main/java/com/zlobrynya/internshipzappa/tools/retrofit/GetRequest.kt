@@ -8,8 +8,7 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import io.reactivex.Observable
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 
 interface GetRequest {
@@ -29,4 +28,13 @@ interface GetRequest {
     @GET("find_user/{user_email}")
     fun getEmailExistence(@Path(value = "user_email", encoded = true) userEmail: String) : Observable<Response<respDTO>>
 
+    //тест jwt
+    @GET("test_auth")
+    fun getTestAuth(@Header("Authorization") authorization: String) : Observable<Response<respDTO>>
+
+
+    //здесь должен будет быть запрос на определение статуса юзера
+    @Headers("Content-Type: application/json")
+    @GET("check_auth")
+    fun getStatusData(@Header("Authorization") authorization: String): Observable<Response<respDTO>>
 }

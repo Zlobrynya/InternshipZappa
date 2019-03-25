@@ -73,10 +73,20 @@ class PersonalInfoFragment : Fragment() {
         val bookTimeBegin = arguments!!.getString("book_time_begin")
         val bookTimeEnd = arguments!!.getString("book_time_end")
         val bookDateEnd = arguments!!.getString("book_date_end")
-        val bookTableId = arguments!!.getInt("table_id", 1).toString().toInt()
+        val bookTableId = arguments!!.getInt("table_id", 1)
         val seatCount = arguments!!.getInt("seat_count", 1).toString()
         val seatPosition = arguments!!.getString("seat_position")
         val seatType = arguments!!.getString("seat_type")
+
+        Log.d("bookdata", bookDateBegin)
+        Log.d("bookdata", bookTimeBegin)
+        Log.d("bookdata", bookTimeEnd)
+        Log.d("bookdata", bookDateEnd)
+        Log.d("bookdata", bookTableId.toString())
+        Log.d("bookdata", bookDateBegin)
+        Log.d("bookdata", seatCount)
+        Log.d("bookdata", seatType)
+
 
         val newBooking = bookingUserDTO()
         newBooking.date = bookDateBegin

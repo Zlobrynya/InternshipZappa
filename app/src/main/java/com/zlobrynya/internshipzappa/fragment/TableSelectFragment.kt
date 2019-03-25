@@ -18,7 +18,7 @@ import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
 
 import com.zlobrynya.internshipzappa.adapter.booking.Table
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.checkDTO
+//import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.checkDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
@@ -128,13 +128,13 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
      * @param isButtonClick Произошло ли нажатие на кнопку "выбрать"
      */
     override fun onTableClick(position: Int, isButtonClick: Boolean) {
-        val newStatus = checkDTO()
+        //val newStatus = checkDTO()
         val sharedPreferencesStat =
             context?.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
 
-        val uuid = context?.getString(R.string.uuid)
-        val authStatus = sharedPreferencesStat?.getString(uuid, "null").toString()
-        newStatus.uuid = authStatus
+        val access_token = context?.getString(R.string.access_token)
+        val authStatus = sharedPreferencesStat?.getString(access_token, "null").toString()
+        //newStatus.uuid = authStatus
 
         if (isButtonClick) {
             selectedPosition = position
@@ -216,21 +216,21 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
      * @param position Номер выбранного столика
      */
     private fun checkStatus(position: Int) {
-        val newStatus = checkDTO()
+        //val newStatus = checkDTO()
         val sharedPreferencesStat =
             context?.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-        val uuid = context?.getString(R.string.uuid)
-        val authStatus = sharedPreferencesStat?.getString(uuid, "null").toString()
+        val access_token = context?.getString(R.string.access_token)
+        val authStatus = sharedPreferencesStat?.getString(access_token, "null").toString()
         val savedEmail = context?.getString(R.string.user_email)
-        newStatus.uuid = authStatus
-        newStatus.email = sharedPreferencesStat?.getString(savedEmail, "null").toString()
+        //newStatus.uuid = authStatus
+        //newStatus.email = sharedPreferencesStat?.getString(savedEmail, "null").toString()
 
 
-        Log.i("checkStatusData", newStatus.uuid)
-        Log.i("checkStatusData", newStatus.email)
+        Log.i("checkStatusData", authStatus)
+
 
         RetrofitClientInstance.getInstance()
-            .postStatusData(newStatus)
+            .getStatusData(authStatus)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : Observer<Response<respDTO>> {

@@ -20,11 +20,7 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
     </style>
 
-    <style
-        name="Theme.Toolbar"
-        parent="android:Theme.Material"
-        tools:targetApi="lollipop">
-    </style>
+    <style name="Theme.Toolbar" parent="android:Theme.Material" tools:targetApi="lollipop"></style>
 
     <style name="textDish">
         <item name="android:textSize">20sp</item>

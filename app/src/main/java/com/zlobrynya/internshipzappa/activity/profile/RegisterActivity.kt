@@ -18,6 +18,7 @@ import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -267,13 +268,13 @@ class RegisterActivity : AppCompatActivity() {
                             .postVerifyData(newVerify)
                             .subscribeOn(Schedulers.io())
                             ?.observeOn(AndroidSchedulers.mainThread())
-                            ?.subscribe(object : Observer<Response<respDTO>> {
+                            ?.subscribe(object : Observer<Response<verifyRespDTO>> {
 
                                 override fun onComplete() {}
 
                                 override fun onSubscribe(d: Disposable) {}
 
-                                override fun onNext(t: Response<respDTO>) {
+                                override fun onNext(t: Response<verifyRespDTO>) {
                                     Log.i("checkCode", "${t.code()}")
 
                                     if(t.isSuccessful) {
@@ -282,6 +283,7 @@ class RegisterActivity : AppCompatActivity() {
                                         intent.putExtra("phone", reg_phone_number.text.toString())
                                         intent.putExtra("email", reg_email.text.toString())
                                         intent.putExtra("password", reg_password.text.toString())
+                                        intent.putExtra("code", t.body()!!.email_code)
                                         startActivity(intent)
                                     }
                                 }

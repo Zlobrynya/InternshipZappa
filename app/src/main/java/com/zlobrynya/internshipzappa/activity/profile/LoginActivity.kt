@@ -130,14 +130,14 @@ class LoginActivity : AppCompatActivity() {
                                     Context.MODE_PRIVATE
                                 )
                                 val savedEmail = applicationContext.getString(R.string.user_email)
-                                val uuid = applicationContext.getString(R.string.uuid)
+                                val access_token = applicationContext.getString(R.string.access_token)
                                 val editor = sharedPreferencesStat.edit()
                                 editor.putString(savedEmail, t.body()!!.email)
-                                editor.putString(uuid, t.body()!!.uuid)
+                                editor.putString(access_token, t.body()!!.access_token)
                                 editor.apply()
 
                                 Log.i("checkAuth", t.body()!!.email)
-                                Log.i("checkAuth", t.body()!!.uuid)
+                                Log.i("checkAuth", t.body()!!.access_token)
                                 //onBackPressed()
                                 setResult(Activity.RESULT_OK)
                                 finish()
