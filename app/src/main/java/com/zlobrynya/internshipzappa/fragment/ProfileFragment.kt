@@ -1,26 +1,16 @@
 package com.zlobrynya.internshipzappa.fragment
 
 
-import android.app.DatePickerDialog
-import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.TextView
 import com.zlobrynya.internshipzappa.R
-import kotlinx.android.synthetic.main.activity_personal_info.*
 
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Фрагмент профиля.
@@ -28,12 +18,11 @@ import java.util.*
  */
 class ProfileFragment : Fragment() {
 
-    var calendar = Calendar.getInstance()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         var view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+<<<<<<< HEAD
         val sharedPreferences = context?.getSharedPreferences(this.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
         val savedName = context?.getString(R.string.key_user_name)
         val savedDate = context?.getString(R.string.key_user_date)
@@ -175,30 +164,19 @@ class ProfileFragment : Fragment() {
             editor.putString(savedEmail,email)
             editor.putString(savedPhone,phone)
             editor.apply()
+=======
+        view.btnEdit.setOnClickListener {
+            val trans = fragmentManager!!.beginTransaction()
+            val editProfileFragment = EditProfileFragment()
+            trans.add(R.id.root_frame2, editProfileFragment)
+            trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            trans.addToBackStack(null)
+            trans.commit()
+>>>>>>> 44ea66b9ec165fcbca70092cb049d5bef496feb3
         }
 
         return view
     }
 
-    private fun validateName(name: String) : Boolean {
-        val nameLength = 2
-        return name.matches("[a-zA-Zа-яА-ЯёЁ]*".toRegex()) && name.length >= nameLength
-    }
-
     fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
-
-    private fun updateDate() {
-        val myFormat = "dd.MM.yyyy" // mention the format you need
-        val sdf = SimpleDateFormat(myFormat, Locale.US)
-        profile_dob.text = sdf.format(calendar.time).toEditable()
-    }
-
-    private fun validatePhone(phone: String): Boolean {
-        val phoneLength = 10
-        return phone.length == phoneLength
-    }
-
-    private fun validateEmail(email: String): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
 }

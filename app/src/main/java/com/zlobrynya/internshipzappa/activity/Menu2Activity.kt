@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_menu2.*
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import com.zlobrynya.internshipzappa.fragment.RootFragment
+import com.zlobrynya.internshipzappa.fragment.*
 
 const val MENU_PAGE: Int = 0
 const val BOOKING_PAGE: Int = 1
@@ -28,6 +28,7 @@ class Menu2Activity : AppCompatActivity() {
     private val menuFragment: MenuFragment = MenuFragment()
     private val contactsFragment: KontaktiFragment = KontaktiFragment()
     private val rootFragment: RootFragment = RootFragment()
+    private val rootFragment2: RootFragment2 = RootFragment2()
     private val profileFragment: ProfileFragment = ProfileFragment()
 
     internal var prevMenuItem: MenuItem? = null
@@ -113,7 +114,7 @@ class Menu2Activity : AppCompatActivity() {
             return when (position) {
                 MENU_PAGE -> menuFragment
                 BOOKING_PAGE -> rootFragment // На вкладку "Бронь" положим фрагмент-контейнер
-                else -> profileFragment
+                else -> rootFragment2
             }
         }
 

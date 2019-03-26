@@ -7,121 +7,140 @@
         android:layout_height="match_parent"
         android:background="@color/color_app">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/edit_profile"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/color_primary_dark"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Редактирования профиля"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_username_input_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColorHint="@color/color_hint"
-        app:errorTextAppearance="@style/error_appearance"
-        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
+    <ImageView
+        android:id="@+id/profile_logo"
+        android:layout_width="158dp"
+        android:layout_height="170dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_profile"
-        app:layout_constraintVertical_bias="0.02"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/profile_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/color_hint"
-            android:hint="@string/hint_username"
-            android:inputType="textPersonName"
-            android:singleLine="true"
-            android:textColor="@color/white" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_dob_input_layout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/profile_label_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
-        android:textColorHint="@color/color_hint"
-        app:errorTextAppearance="@style/error_appearance"
-        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
+        android:text="@string/label_name"
+        android:textColor="@color/color_hint"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_logo"
+        app:layout_constraintVertical_bias="0.02" />
+
+    <TextView
+        android:id="@+id/profile_username"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:text="Екатерина"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_username_input_layout"
+        app:layout_constraintTop_toBottomOf="@+id/profile_label_name"
+        app:layout_constraintVertical_bias="0" />
+
+    <TextView
+        android:id="@+id/profile_label_dob"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Дата рождения"
+        android:textColorHint="@color/color_hint"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_username"
+        app:layout_constraintVertical_bias="0.04" />
+
+    <TextView
+        android:id="@+id/profile_dob"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:text="не указана"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_label_dob"
         app:layout_constraintVertical_bias="0.02">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/profile_dob"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/color_hint"
-            android:clickable="true"
-            android:focusable="false"
-            android:hint="@string/hint_dob"
-            android:inputType="date"
-            android:singleLine="true"
-            android:textColor="@color/white" />
-    </android.support.design.widget.TextInputLayout>
+    </TextView>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_email_input_layout"
+    <TextView
+        android:id="@+id/profile_label_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textColorHint="@color/color_hint"
-        app:errorTextAppearance="@style/error_appearance"
-        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
+        android:text="@string/hint_email"
+        android:textColor="@color/color_hint"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_dob_input_layout"
-        app:layout_constraintVertical_bias="0.04">
+        app:layout_constraintTop_toBottomOf="@+id/profile_dob"
+        app:layout_constraintVertical_bias="0.04" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/profile_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/color_hint"
-            android:hint="@string/hint_email"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"
-            android:textColor="@color/white" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/profile_phone_number_input_layout"
+    <TextView
+        android:id="@+id/profile_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:text="mail@yandex.ru"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_label_email" />
+
+    <TextView
+        android:id="@+id/profile_label_phone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:hint="Телефон"
         android:textColorHint="@color/color_hint"
-        app:errorTextAppearance="@style/error_appearance"
-        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_email_input_layout"
         app:layout_constraintVertical_bias="0.04">
 
-        <android.support.design.widget.TextInputEditText
+    <android.support.design.widget.TextInputEditText
             app:mask="+7(###)###-##-##"
             app:allowed_chars="0123456789"
             android:id="@+id/profile_phone_number"
@@ -133,23 +152,27 @@
             android:imeOptions="actionNext"
             android:inputType="phone"
             android:maxLength="10"
-            android:textColor="@color/white"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <Button
-            android:id="@+id/btnSaveChanges"
-            android:layout_width="328dp"
-            android:layout_height="42dp"
-            android:background="@drawable/table_shape"
-            android:text="Сохранить изменения"
-            android:textAllCaps="false"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.95" />
+            app:layout_constraintTop_toBottomOf="@id/profile_email"
+            app:layout_constraintVertical_bias="0.04" />
+
+
+    <TextView
+        android:id="@+id/profile_phone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:text="+7 999 12 12 123"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_label_phone"
+        app:layout_constraintVertical_bias="0.02" />
 
     <br.com.sapereaude.maskedEditText.MaskedEditText
         android:id="@+id/phone_input"
@@ -167,5 +190,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_phone_number_input_layout" />
+
+    <TextView
+        android:id="@+id/profile_exit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:text="Выйти"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_phone"
+        app:layout_constraintVertical_bias="0.12" />
+
+    <Button
+        android:id="@+id/btnEdit"
+        android:layout_width="328dp"
+        android:layout_height="42dp"
+        android:background="@drawable/table_shape"
+        android:text="@string/btn_edit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95" />
+>>>>>>> 44ea66b9ec165fcbca70092cb049d5bef496feb3
 
 </android.support.constraint.ConstraintLayout>
