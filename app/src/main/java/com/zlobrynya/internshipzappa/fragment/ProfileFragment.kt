@@ -15,12 +15,14 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userCredent
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.deleteBookingDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import retrofit2.Response
@@ -50,8 +52,15 @@ class ProfileFragment : Fragment() {
         }
 
         view.btnEdit.setOnClickListener {
+            val args = Bundle()
+            args.putString("name", profile_username.text.toString())
+            args.putString("dob", profile_dob.text.toString())
+            args.putString("email", profile_email.text.toString())
+            args.putString("phone", profile_phone.text.toString())
+
             val trans = fragmentManager!!.beginTransaction()
             val editProfileFragment = EditProfileFragment()
+            editProfileFragment.arguments = args
             trans.add(R.id.root_frame2, editProfileFragment)
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             trans.addToBackStack(null)

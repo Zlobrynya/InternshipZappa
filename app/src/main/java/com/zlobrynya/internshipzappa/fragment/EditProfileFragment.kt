@@ -54,6 +54,16 @@ class EditProfileFragment : Fragment() {
 
         initToolBar(view)
 
+        val username = arguments!!.getString("name")
+        val dob = arguments!!.getString("dob")
+        val email = arguments!!.getString("email")
+        val phone = arguments!!.getString("phone")
+
+        view.edit_profile_username_input_layout.editText!!.setText(username)
+        view.edit_profile_dob_input_layout.editText!!.setText(dob)
+        view.edit_profile_email_input_layout.editText!!.setText(email)
+        view.edit_profile_phone_number_input_layout.editText!!.setText(phone)
+
         val sharedPreferences =
             context?.getSharedPreferences(this.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
         val savedName = context?.getString(R.string.key_user_name)

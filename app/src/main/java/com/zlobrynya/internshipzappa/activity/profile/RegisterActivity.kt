@@ -219,7 +219,7 @@ class RegisterActivity : AppCompatActivity() {
         })
 
         btnRegister.setOnClickListener {
-           /* val name = reg_username_input_layout.editText!!.text.toString()
+            val name = reg_username_input_layout.editText!!.text.toString()
             val phone = reg_phone_number_input_layout.editText!!.text.toString()
             val email = reg_email_input_layout.editText!!.text.toString()
             val password = reg_password_input_layout.editText!!.text.toString()
@@ -230,21 +230,16 @@ class RegisterActivity : AppCompatActivity() {
             val validatePhone = validatePhone(phone)
             val validateEmail = validateEmail(email)
             val validatePassword = validatePassword(password)
-            val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)*/
+            val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
 
-            /*if (validateName && validatePhone && validateEmail && validatePassword && validateConfirmPassword) {
-                //onBackPressed()
-                val intent = Intent(this, CodeFEmailActivity::class.java)
-                startActivity(intent)
-            }*/
+            if (validateName && validatePhone && validateEmail && validatePassword && validateConfirmPassword) {
+                val newVerify = verifyEmailDTO()
 
+                newVerify.email = reg_email.text.toString()
 
-            val newVerify = verifyEmailDTO()
-
-            newVerify.email = reg_email.text.toString()
-
-            checkExistenceEmail(newVerify)
+                checkExistenceEmail(newVerify)
+            }
         }
     }
 
