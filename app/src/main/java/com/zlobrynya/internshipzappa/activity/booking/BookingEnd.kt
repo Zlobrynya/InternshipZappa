@@ -47,5 +47,10 @@ class BookingEnd : AppCompatActivity() {
         this.finish()
     }
 
+    override fun onBackPressed() {
+        finishBooking()
+        //super.onBackPressed()
+    }
+
 }
 
