@@ -165,29 +165,89 @@ class EditProfileFragment : Fragment() {
 
         })
 
+        view.edit_profile_phone_number.setOnClickListener {
+            phone_masked.visibility = View.VISIBLE
+            phone_masked.requestFocus()
+            phone_masked.addTextChangedListener(object: TextWatcher {
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    val phone = phone_masked.text.toString()
+                    val validatePhone = validatePhone(phone)
+
+                    if (!validatePhone) {
+                        edit_profile_phone_number_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                        edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
+                    } else {
+                        edit_profile_phone_number_input_layout.isErrorEnabled = false
+                        edit_profile_phone_number.setCompoundDrawables(null, null, null, null)
+                    }
+                }
+            })
+        }
+
         view.edit_profile_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
-                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        val phone = edit_profile_phone_number_input_layout.editText!!.text.toString()
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                phone_masked.visibility = View.VISIBLE
+                phone_masked.requestFocus()
+                phone_masked.addTextChangedListener(object: TextWatcher {
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    }
+
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {
+                        val phone = phone_masked.text.toString()
                         val validatePhone = validatePhone(phone)
 
                         if (!validatePhone) {
                             edit_profile_phone_number_input_layout.error =
-                                getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                                    getString(com.zlobrynya.internshipzappa.R.string.error_phone)
                             edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
                         } else {
                             edit_profile_phone_number_input_layout.isErrorEnabled = false
                             edit_profile_phone_number.setCompoundDrawables(null, null, null, null)
                         }
                     }
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                })
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                /*
+                phone_masked.visibility = View.VISIBLE
+                phone_masked.requestFocus()
+                phone_masked.addTextChangedListener(object: TextWatcher {
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    }
+
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    }
+
+                    override fun afterTextChanged(s: Editable?) {
+                        val phone = phone_masked.text.toString()
+                        val validatePhone = validatePhone(phone)
+
+                        if (!validatePhone) {
+                            edit_profile_phone_number_input_layout.error =
+                                    getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                            edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
+                        } else {
+                            edit_profile_phone_number_input_layout.isErrorEnabled = false
+                            edit_profile_phone_number.setCompoundDrawables(null, null, null, null)
+                        }
+                    }
+                })
+                */
             }
         })
 
