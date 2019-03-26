@@ -42,7 +42,7 @@ class RetrofitClientInstance {
 
     fun postVerifyData(verify: verifyEmailDTO): Observable<Response<verifyRespDTO>> = postRequest!!.postVerifyData(verify)
 
-    fun postRegData(registration: regDTO): Observable<Response<respDTO>> = postRequest!!.postRegData(registration)
+    fun postRegData(registration: regDTO): Observable<Response<regRespDTO>> = postRequest!!.postRegData(registration)
 
     fun postAuthData(auth: authDTO): Observable<Response<authRespDTO>> = postRequest!!.postAuthData(auth)
 

@@ -26,7 +26,7 @@ interface PostRequest {
     //запрос на регистрацию
     @Headers("Content-Type: application/json", "Accept: application/json")
     @POST("reg_user")
-    fun postRegData(@Body regData: regDTO): Observable<Response<respDTO>>
+    fun postRegData(@Body regData: regDTO): Observable<Response<regRespDTO>>
 
     //запрос на авторизацию
     @Headers("Content-Type: application/json")

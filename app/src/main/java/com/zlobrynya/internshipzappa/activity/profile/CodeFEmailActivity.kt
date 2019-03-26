@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -9,8 +10,10 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
@@ -189,13 +192,13 @@ class CodeFEmailActivity: AppCompatActivity() {
                     .postRegData(newRegister)
                     .subscribeOn(Schedulers.io())
                     ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe(object : Observer<Response<respDTO>> {
+                    ?.subscribe(object : Observer<Response<regRespDTO>> {
 
                         override fun onComplete() {}
 
                         override fun onSubscribe(d: Disposable) {}
 
-                        override fun onNext(t: Response<respDTO>) {
+                        override fun onNext(t: Response<regRespDTO>) {
                             Log.i("checkReg", t.code().toString())
                             if(t.isSuccessful) {
                                     allert_text.visibility = View.GONE
@@ -204,7 +207,22 @@ class CodeFEmailActivity: AppCompatActivity() {
                                     thirdNumber.setTextColor(resources.getColor(R.color.white))
                                     fourthNumber.setTextColor(resources.getColor(R.color.white))
                                     fifthNumber.setTextColor(resources.getColor(R.color.white))
+
+                                val sharedPreferencesStat = applicationContext.getSharedPreferences(
+                                    applicationContext.getString(R.string.user_info),
+                                    Context.MODE_PRIVATE
+                                )
+
+                                val savedEmail = applicationContext.getString(R.string.user_email)
+                                val access_token = applicationContext.getString(R.string.access_token)
+                                val editor = sharedPreferencesStat.edit()
+                                editor.putString(savedEmail, newRegister.email)
+                                editor.putString(access_token, t.body()!!.access_token)
+                                editor.apply()
                                 Log.i("checkReg", t.body()!!.desc)
+
+                                val intent = Intent(applicationContext, Menu2Activity::class.java)
+                                startActivity(intent)
                             }else{
                                 allert_text.visibility = View.VISIBLE
                                 firstNumber.setTextColor(resources.getColor(R.color.color_accent))

@@ -237,7 +237,6 @@ class PersonalInfoFragment : Fragment() {
     /**
      * На выхов этой функции ждать отмашку, бэк пока не готов
      * TODO юзаем вместо преф этот вызов, получаем данные пользователя с него
-     * Закрывает текущий фрагмент и удаляет его со стека
      */
     private fun postUserCredentials(){
         val sharedPreferences =
