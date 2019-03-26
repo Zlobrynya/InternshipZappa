@@ -13,27 +13,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.deleteBookingDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_personal_info.view.*
 import kotlinx.android.synthetic.main.fragment_personal_info.view.*
 import retrofit2.Response
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+const val REQUEST_CODE_BOOKING_END: Int = 12
 
 /**
  * Фрагмент персональное инфо
@@ -124,11 +123,23 @@ class PersonalInfoFragment : Fragment() {
             val textTable = getString(com.zlobrynya.internshipzappa.R.string.table68, bookTableId, seatCount, seatType)
             view.fm_selected_table.setText(textTable)
         } else if (seatPosition != "" && seatCount == "4") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table43, bookTableId, seatCount, seatPosition, seatType)
+            val textTable = getString(
+                com.zlobrynya.internshipzappa.R.string.table43,
+                bookTableId,
+                seatCount,
+                seatPosition,
+                seatType
+            )
             view.fm_selected_table.setText(textTable)
         } else {
             val textTable =
-                getString(com.zlobrynya.internshipzappa.R.string.table683, bookTableId, seatCount, seatPosition, seatType)
+                getString(
+                    com.zlobrynya.internshipzappa.R.string.table683,
+                    bookTableId,
+                    seatCount,
+                    seatPosition,
+                    seatType
+                )
             view.fm_selected_table.setText(textTable)
         }
 
@@ -200,7 +211,8 @@ class PersonalInfoFragment : Fragment() {
                             intent.putExtra("code", t.code())
                             intent.putExtra("name", "временное имя")
                             intent.putExtra("phone", "временный телефон")
-                            context.startActivity(intent)
+                            //context.startActivity(intent)
+                            startActivityForResult(intent, REQUEST_CODE_BOOKING_END)
                         }
                     } else {
                         Log.i("check2", "${t.code()}")
@@ -209,7 +221,7 @@ class PersonalInfoFragment : Fragment() {
                         intent.putExtra("name", "временное имя")
                         intent.putExtra("phone", "временный телефон")
                         //finish()
-                        closeFragment() // Закроем фрагмент
+                        //closeFragment() // Закроем фрагмент
                         context.startActivity(intent)
                     }
                 }
@@ -240,7 +252,7 @@ class PersonalInfoFragment : Fragment() {
      *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
      *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
      */
-    private fun showUserCredentials(){
+    private fun showUserCredentials() {
 
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
@@ -265,7 +277,7 @@ class PersonalInfoFragment : Fragment() {
                         /**
                          * TODO при получении проверять, что поля не равны нулл
                          */
-                        val data =t.body()!!.data
+                        val data = t.body()!!.data
                         Log.i("checkMyCredentials", t.body().toString())
                         Log.i("checkMyCredentials", data.toString())
                         //Log.i("checkMyCredentials", data.birthday)
@@ -285,7 +297,11 @@ class PersonalInfoFragment : Fragment() {
 
                 override fun onError(e: Throwable) {
                     Log.i("check", "that's not fineIn")
-                    //запрос не выполнен, всё плохо
+                    Toast.makeText(
+                        context,
+                        "Проверьте ваше интернет подключение",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
             })
@@ -301,5 +317,30 @@ class PersonalInfoFragment : Fragment() {
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         trans.commit()
         fragmentManager!!.popBackStack()
+    }
+
+    /**
+     * Проверят как завершила работу активити вызванная на результат
+     * @param requestCode Код вызова
+     * @param resultCode Код результата работы активити
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_BOOKING_END) {
+            if (resultCode == Activity.RESULT_OK) {
+                val trans = fragmentManager!!.beginTransaction()
+                val personalInfoFragment = fragmentManager!!.findFragmentByTag("PERSONAL_INFO")
+                val tableSelectFragment = fragmentManager!!.findFragmentByTag("TABLE_SELECT")
+
+                if (personalInfoFragment != null && tableSelectFragment != null) {
+                    trans.remove(personalInfoFragment)
+                    trans.remove(tableSelectFragment)
+                    trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    trans.commit()
+                    fragmentManager!!.popBackStack()
+                }
+            }
+        }
     }
 }

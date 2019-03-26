@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authRespDTO
@@ -152,11 +153,18 @@ class LoginActivity : AppCompatActivity() {
                                     getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
                                 log_password.setCompoundDrawables(null, null, icon, null)
                                 Log.i("checkAuth", "введены некоректные данные")
+                                Toast.makeText(this@LoginActivity, "Введены некоректные данные", Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
 
                         override fun onError(e: Throwable) {
                             Log.i("checkAuth", "that's not fineIn")
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Проверьте ваше интернет подключение",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                     })

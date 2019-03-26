@@ -8,9 +8,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.fragment.BookingFragment
 import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
 import com.zlobrynya.internshipzappa.fragment.ProfileFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
