@@ -152,7 +152,7 @@ class ProfileFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                profile.visibility = View.VISIBLE
+
             }
         })
 

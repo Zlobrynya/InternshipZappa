@@ -77,6 +77,8 @@ dependencies {
 
     //json converters
     implementation 'com.github.ZYRzyr:FastJsonConverter:1.7'
+
+    implementation 'ru.egslava:MaskedEditText:1.0.5'
 }
 
 apply plugin: 'com.google.gms.google-services'
