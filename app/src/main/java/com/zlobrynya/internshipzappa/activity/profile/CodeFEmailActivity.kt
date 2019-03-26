@@ -41,12 +41,7 @@ class CodeFEmailActivity: AppCompatActivity() {
         firstNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (firstNumber.text.toString() == "") {
-                    allert_text.visibility = View.GONE
-                    firstNumber.setTextColor(resources.getColor(R.color.white))
-                    secondNumber.setTextColor(resources.getColor(R.color.white))
-                    thirdNumber.setTextColor(resources.getColor(R.color.white))
-                    fourthNumber.setTextColor(resources.getColor(R.color.white))
-                    fifthNumber.setTextColor(resources.getColor(R.color.white))
+                    allCorrect()
                     firstNumber.requestFocus()
                 } else {
                     secondNumber.requestFocus()
@@ -66,12 +61,7 @@ class CodeFEmailActivity: AppCompatActivity() {
         secondNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (secondNumber.text.toString() == "") {
-                    allert_text.visibility = View.GONE
-                    firstNumber.setTextColor(resources.getColor(R.color.white))
-                    secondNumber.setTextColor(resources.getColor(R.color.white))
-                    thirdNumber.setTextColor(resources.getColor(R.color.white))
-                    fourthNumber.setTextColor(resources.getColor(R.color.white))
-                    fifthNumber.setTextColor(resources.getColor(R.color.white))
+                    allCorrect()
                     firstNumber.requestFocus()
                 } else {
                     thirdNumber.requestFocus()
@@ -91,12 +81,7 @@ class CodeFEmailActivity: AppCompatActivity() {
         thirdNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (thirdNumber.text.toString() == "") {
-                    allert_text.visibility = View.GONE
-                    firstNumber.setTextColor(resources.getColor(R.color.white))
-                    secondNumber.setTextColor(resources.getColor(R.color.white))
-                    thirdNumber.setTextColor(resources.getColor(R.color.white))
-                    fourthNumber.setTextColor(resources.getColor(R.color.white))
-                    fifthNumber.setTextColor(resources.getColor(R.color.white))
+                    allCorrect()
                     secondNumber.requestFocus()
                 } else {
                     fourthNumber.requestFocus()
@@ -116,12 +101,7 @@ class CodeFEmailActivity: AppCompatActivity() {
         fourthNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (fourthNumber.text.toString() == "") {
-                    allert_text.visibility = View.GONE
-                    firstNumber.setTextColor(resources.getColor(R.color.white))
-                    secondNumber.setTextColor(resources.getColor(R.color.white))
-                    thirdNumber.setTextColor(resources.getColor(R.color.white))
-                    fourthNumber.setTextColor(resources.getColor(R.color.white))
-                    fifthNumber.setTextColor(resources.getColor(R.color.white))
+                    allCorrect()
                     thirdNumber.requestFocus()
                 } else {
                     fifthNumber.requestFocus()
@@ -141,12 +121,7 @@ class CodeFEmailActivity: AppCompatActivity() {
         fifthNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (fifthNumber.text.toString() == "") {
-                    allert_text.visibility = View.GONE
-                    firstNumber.setTextColor(resources.getColor(R.color.white))
-                    secondNumber.setTextColor(resources.getColor(R.color.white))
-                    thirdNumber.setTextColor(resources.getColor(R.color.white))
-                    fourthNumber.setTextColor(resources.getColor(R.color.white))
-                    fifthNumber.setTextColor(resources.getColor(R.color.white))
+                    allCorrect()
                     fourthNumber.requestFocus()
                 } else {
                     fifthNumber.requestFocus()
@@ -209,20 +184,10 @@ class CodeFEmailActivity: AppCompatActivity() {
                                 override fun onNext(t: Response<regRespDTO>) {
                                     Log.i("checkReg", t.code().toString())
                                     if (t.isSuccessful) {
-                                        allert_text.visibility = View.GONE
-                                        firstNumber.setTextColor(resources.getColor(R.color.white))
-                                        secondNumber.setTextColor(resources.getColor(R.color.white))
-                                        thirdNumber.setTextColor(resources.getColor(R.color.white))
-                                        fourthNumber.setTextColor(resources.getColor(R.color.white))
-                                        fifthNumber.setTextColor(resources.getColor(R.color.white))
+                                        allCorrect()
                                         Log.i("checkReg", t.body()!!.desc)
                                     } else {
-                                        allert_text.visibility = View.VISIBLE
-                                        firstNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                        secondNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                        thirdNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                        fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                        fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
+                                        allWrong()
                                     }
                                 }
 
@@ -279,20 +244,10 @@ class CodeFEmailActivity: AppCompatActivity() {
                                 override fun onNext(t: Response<changeUserDataRespDTO>) {
                                     Log.i("checkChange", t.code().toString())
                                     if (t.isSuccessful) {
-                                        allert_text.visibility = View.GONE
-                                        firstNumber.setTextColor(resources.getColor(R.color.white))
-                                        secondNumber.setTextColor(resources.getColor(R.color.white))
-                                        thirdNumber.setTextColor(resources.getColor(R.color.white))
-                                        fourthNumber.setTextColor(resources.getColor(R.color.white))
-                                        fifthNumber.setTextColor(resources.getColor(R.color.white))
+                                        allCorrect()
                                         Log.i("checkChange", t.body()!!.desc)
                                     } else {
-                                        allert_text.visibility = View.VISIBLE
-                                        firstNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                        secondNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                        thirdNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                        fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                        fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
+                                        allWrong()
                                     }
                                 }
 
@@ -304,5 +259,23 @@ class CodeFEmailActivity: AppCompatActivity() {
                 })
             }
         }
+    }
+
+    private fun allWrong(){
+        allert_text.visibility = View.VISIBLE
+        firstNumber.setTextColor(resources.getColor(R.color.color_accent))
+        secondNumber.setTextColor(resources.getColor(R.color.color_accent))
+        thirdNumber.setTextColor(resources.getColor(R.color.color_accent))
+        fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
+        fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
+    }
+
+    private fun allCorrect(){
+        allert_text.visibility = View.GONE
+        firstNumber.setTextColor(resources.getColor(R.color.white))
+        secondNumber.setTextColor(resources.getColor(R.color.white))
+        thirdNumber.setTextColor(resources.getColor(R.color.white))
+        fourthNumber.setTextColor(resources.getColor(R.color.white))
+        fifthNumber.setTextColor(resources.getColor(R.color.white))
     }
 }

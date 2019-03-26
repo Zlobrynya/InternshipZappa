@@ -109,6 +109,8 @@
     <string name="access_token">access_token</string>
     <string name="label_name">Имя</string>
 
+    <string name="send_code">Отправить код</string>
+
     <string name="change_password_letter">На указанный почтовый адрес мы отправим вам письмо с кодом, для смены пароля</string>
     <string name="send">Отправить</string>
     <string name="user_not_exist">Введенного вами адреса нет в базе</string>
