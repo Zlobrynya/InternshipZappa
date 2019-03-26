@@ -735,9 +735,9 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         val tableSelectFragment = TableSelectFragment()
         args.putParcelable("table_list", TableParceling(tableList))
         tableSelectFragment.arguments = args
-        trans.add(R.id.root_frame, tableSelectFragment)
+        trans.add(R.id.root_frame, tableSelectFragment, "TABLE_SELECT")
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        trans.addToBackStack(null)
+        trans.addToBackStack("TABLE_SELECT")
         trans.commit()
     }
 

@@ -206,9 +206,9 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
         val trans = fragmentManager!!.beginTransaction()
         val personalInfoFragment = PersonalInfoFragment()
         personalInfoFragment.arguments = args
-        trans.add(R.id.root_frame, personalInfoFragment)
+        trans.add(R.id.root_frame, personalInfoFragment, "PERSONAL_INFO")
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        trans.addToBackStack(null)
+        trans.addToBackStack("PERSONAL_INFO")
         trans.commit()
     }
 
