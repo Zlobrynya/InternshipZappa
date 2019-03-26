@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -21,6 +22,7 @@ import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import com.zlobrynya.internshipzappa.util.StaticMethods
 import com.zlobrynya.internshipzappa.util.TableParceling
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -63,7 +65,7 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
     /**
      * Номер выбранного стола в ресайклер вью
      */
-    var selectedPosition: Int = -1
+    private var selectedPosition: Int = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         tableView = inflater.inflate(R.layout.fragment_table_select, container, false)
@@ -137,7 +139,7 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
 
         if (isButtonClick) {
             selectedPosition = position
-            checkStatus(position)
+            prepare(position)
             /*RetrofitClientInstance.getInstance()
                 .postStatusData(newStatus)
                 .subscribeOn(Schedulers.io())
@@ -264,6 +266,35 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
     }
 
     /**
+     * Проверяет наличие интернета и действует дальше по обстоятельствам
+     */
+    private fun prepare(position: Int) {
+        if (!StaticMethods.checkInternetConnection(context)) showNoInternetConnectionAlert(position)
+        else checkStatus(position)
+    }
+
+    /**
+     * Выводит диалоговое окно с сообщением об отсутствии интернета
+     */
+    private fun showNoInternetConnectionAlert(position: Int) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
+        builder.setTitle("Ошибка соединения")
+            .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+            .setCancelable(false)
+            .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    prepare(position)
+                }
+            }
+            .setNegativeButton("Отмена") { dialog, which -> dialog.dismiss() }
+        val alert = builder.create()
+        alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+    }
+
+    /**
      * Проверят как завершила работу активити вызванная на результат
      * @param requestCode Код вызова
      * @param resultCode Код результата работы активити
@@ -274,7 +305,8 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 // Юзер авторизовался
-                openPersonalInfo(selectedPosition) // Откроем фрагмент с персональной инфой
+                prepare(selectedPosition)
+                //openPersonalInfo(selectedPosition) // Откроем фрагмент с персональной инфой
                 Log.d("BOOP", "Выбранный стол $selectedPosition")
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // Юзер закрыл авторизацию

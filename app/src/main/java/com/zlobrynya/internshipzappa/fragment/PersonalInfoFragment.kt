@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
@@ -124,11 +125,23 @@ class PersonalInfoFragment : Fragment() {
             val textTable = getString(com.zlobrynya.internshipzappa.R.string.table68, bookTableId, seatCount, seatType)
             view.fm_selected_table.setText(textTable)
         } else if (seatPosition != "" && seatCount == "4") {
-            val textTable = getString(com.zlobrynya.internshipzappa.R.string.table43, bookTableId, seatCount, seatPosition, seatType)
+            val textTable = getString(
+                com.zlobrynya.internshipzappa.R.string.table43,
+                bookTableId,
+                seatCount,
+                seatPosition,
+                seatType
+            )
             view.fm_selected_table.setText(textTable)
         } else {
             val textTable =
-                getString(com.zlobrynya.internshipzappa.R.string.table683, bookTableId, seatCount, seatPosition, seatType)
+                getString(
+                    com.zlobrynya.internshipzappa.R.string.table683,
+                    bookTableId,
+                    seatCount,
+                    seatPosition,
+                    seatType
+                )
             view.fm_selected_table.setText(textTable)
         }
 
@@ -240,7 +253,7 @@ class PersonalInfoFragment : Fragment() {
      *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
      *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
      */
-    private fun showUserCredentials(){
+    private fun showUserCredentials() {
 
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
@@ -265,7 +278,7 @@ class PersonalInfoFragment : Fragment() {
                         /**
                          * TODO при получении проверять, что поля не равны нулл
                          */
-                        val data =t.body()!!.data
+                        val data = t.body()!!.data
                         Log.i("checkMyCredentials", t.body().toString())
                         Log.i("checkMyCredentials", data.toString())
                         //Log.i("checkMyCredentials", data.birthday)
@@ -285,7 +298,11 @@ class PersonalInfoFragment : Fragment() {
 
                 override fun onError(e: Throwable) {
                     Log.i("check", "that's not fineIn")
-                    //запрос не выполнен, всё плохо
+                    Toast.makeText(
+                        context,
+                        "Проверьте ваше интернет подключение",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
             })

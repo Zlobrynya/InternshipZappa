@@ -27,17 +27,16 @@ import java.text.SimpleDateFormat
 import android.net.NetworkInfo
 import android.net.ConnectivityManager
 import android.content.Context
-import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import com.zlobrynya.internshipzappa.util.StaticMethods
 import com.zlobrynya.internshipzappa.util.TableParceling
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.dialog_no_internet.view.*
 import retrofit2.Response
 
 /**
@@ -678,10 +677,10 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     }
 
     /**
-     * Вызывает checkInternetConnection и в зависимости от результата вызывает showNoInternetConnectionAlert или preparePostParams
+     * Проверяет доступ в интернет и в зависимости от результата вызывает showNoInternetConnectionAlert или preparePostParams
      */
     private fun prepare() {
-        if (!checkInternetConnection()) showNoInternetConnectionAlert()
+        if (!StaticMethods.checkInternetConnection(context)) showNoInternetConnectionAlert()
         else preparePostParams()
     }
 
