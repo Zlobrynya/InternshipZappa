@@ -26,6 +26,9 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 
 import kotlinx.android.synthetic.main.fragment_profile.view.*
 import retrofit2.Response
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Фрагмент профиля.
@@ -114,7 +117,11 @@ class ProfileFragment : Fragment() {
                         Log.i("checkMyCredentials", data.reg_date)
                         profile_username.text = data.name
                         if (data.birthday != null) {
-                            profile_dob.text = data.birthday
+                            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+                            val outputFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy")
+                            val date: Date = inputFormat.parse(data.birthday)
+                            val outputDateStr = outputFormat.format(date)
+                            profile_dob.text = outputDateStr
                         }else{
                             profile_dob.text = ""
                         }
