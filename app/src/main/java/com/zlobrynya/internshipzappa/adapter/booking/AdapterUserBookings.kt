@@ -37,7 +37,7 @@ class AdapterUserBookings(
             "${getDate(booking.date_time_from)}, ${getTime(booking.date_time_from)} - ${getTime(booking.date_time_to)}"
 
         holder.seatInfo.text =
-            "№${booking.table_id}, ${booking.seat_count} ${getCase(booking.seat_count)}, ${booking.seat_place}, ${booking.seat_type}"
+            "№${booking.table_id}, ${booking.seat_count} ${getCase(booking.seat_count)}${getSeatPlace(booking.seat_place)}, ${booking.seat_type}"
 
         if (booking.accepted) {
             holder.discardButton.visibility = View.VISIBLE
@@ -120,6 +120,19 @@ class AdapterUserBookings(
             in 2..4 -> "места"
             else -> "мест"
         }
+    }
+
+    /**
+     * Возвращает местонахождение столика с запятой если оно есть
+     * Пустую строчку если местонахождение не указано
+     * @param place Место столика
+     * @return Местонахождение столика или пустая строка
+     */
+    private fun getSeatPlace(place: String?): String {
+        return if (place != null) {
+            if (place.isEmpty()) ""
+            else ", $place"
+        } else ""
     }
 
     /**
