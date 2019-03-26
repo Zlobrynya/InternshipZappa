@@ -38,11 +38,13 @@ class CodeFEmailActivity: AppCompatActivity() {
         //принимаем параметры и формируем отсылку
         val newRegister = regDTO()
         val userCredentials = userCredentialsDTO()
+        val id = intent.getStringExtra("id")
 
         userCredentials.email = intent.getStringExtra("change_email")
         userCredentials.name = intent.getStringExtra("change_name")
         userCredentials.phone = intent.getStringExtra("change_phone")
         userCredentials.birthday = intent.getStringExtra("change_birthday")
+        val new_email = intent.getStringExtra("new_email")
 
         newRegister.email = intent.getStringExtra("email")
         newRegister.code = intent.getStringExtra("code")
@@ -175,8 +177,6 @@ class CodeFEmailActivity: AppCompatActivity() {
 
         })
 
-        val id = intent.getStringExtra("id")
-
         when (id){
             "0"->{
                 supportActionBar!!.title = "Регистрация"
@@ -204,73 +204,6 @@ class CodeFEmailActivity: AppCompatActivity() {
                 supportActionBar!!.title = "Редактирование профиля"
             }
         }
-        button2.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                code = firstNumber.text.toString() + secondNumber.text.toString() +
-                        thirdNumber.text.toString() + fourthNumber.text.toString() + fifthNumber.text.toString()
-                Log.d("code", "$code")
-
-                newRegister.code = code
-
-
-                Log.i("data", newRegister.email)
-                Log.i("data", newRegister.code)
-                Log.i("data", newRegister.phone)
-                Log.i("data", newRegister.password)
-                Log.i("data", newRegister.name)
-
-                postRegister(newRegister)
-
-                RetrofitClientInstance.getInstance()
-                    .postRegData(newRegister)
-                    .subscribeOn(Schedulers.io())
-                    ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe(object : Observer<Response<regRespDTO>> {
-
-                        override fun onComplete() {}
-
-                        override fun onSubscribe(d: Disposable) {}
-
-                        override fun onNext(t: Response<regRespDTO>) {
-                            Log.i("checkReg", t.code().toString())
-                            if(t.isSuccessful) {
-                                    allert_text.visibility = View.GONE
-                                    firstNumber.setTextColor(resources.getColor(R.color.white))
-                                    secondNumber.setTextColor(resources.getColor(R.color.white))
-                                    thirdNumber.setTextColor(resources.getColor(R.color.white))
-                                    fourthNumber.setTextColor(resources.getColor(R.color.white))
-                                    fifthNumber.setTextColor(resources.getColor(R.color.white))
-
-                                val sharedPreferencesStat = applicationContext.getSharedPreferences(
-                                    applicationContext.getString(R.string.user_info),
-                                    Context.MODE_PRIVATE
-                                )
-
-                                val savedEmail = applicationContext.getString(R.string.user_email)
-                                val access_token = applicationContext.getString(R.string.access_token)
-                                val editor = sharedPreferencesStat.edit()
-                                editor.putString(savedEmail, newRegister.email)
-                                editor.putString(access_token, t.body()!!.access_token)
-                                editor.apply()
-                                Log.i("checkReg", t.body()!!.desc)
-
-                                val intent = Intent(applicationContext, Menu2Activity::class.java)
-                                startActivity(intent)
-                            }else{
-                                allert_text.visibility = View.VISIBLE
-                                firstNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                secondNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                thirdNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
-                                fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
-                            }
-                        }
-                        override fun onError(e: Throwable) {
-                            Log.i("checkReg", "that's not fineIn")
-                        }
-                    })
-            }
-        })
     }
 
     private fun postRegister(newRegister: regDTO){
