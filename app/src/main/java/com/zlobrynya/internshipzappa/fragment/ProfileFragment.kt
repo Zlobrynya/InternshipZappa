@@ -112,6 +112,14 @@ class ProfileFragment : Fragment() {
                         Log.i("checkMyCredentials", data.name)
                         Log.i("checkMyCredentials", data.phone)
                         Log.i("checkMyCredentials", data.reg_date)
+                        profile_username.text = data.name
+                        if (data.birthday != null) {
+                            profile_dob.text = data.birthday
+                        }else{
+                            profile_dob.text = ""
+                        }
+                        profile_email.text = data.email
+                        profile_phone.text = data.phone
                     } else {
                         /**
                          * TODO

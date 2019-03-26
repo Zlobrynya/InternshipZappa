@@ -14,6 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.changeUserDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.changeUserDataRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
@@ -54,6 +56,7 @@ class EditProfileFragment : Fragment() {
 
         initToolBar(view)
 
+
         val username = arguments!!.getString("name")
         val dob = arguments!!.getString("dob")
         val email = arguments!!.getString("email")
@@ -74,22 +77,6 @@ class EditProfileFragment : Fragment() {
         Log.d("ALOHA4", sharedPreferences?.getString(savedDate, "").toString())
         Log.d("ALOHA5", sharedPreferences?.getString(savedEmail, "").toString())
         Log.d("ALOHA6", sharedPreferences?.getString(savedPhone, "").toString())
-        if (sharedPreferences?.getString(
-                savedName,
-                ""
-            ) != ""
-        ) view.edit_profile_username_input_layout.editText!!.setText(sharedPreferences?.getString(savedName, ""))
-        if (sharedPreferences?.getString(savedDate, "") != "") view.edit_profile_dob_input_layout.editText!!.setText(
-            sharedPreferences?.getString(savedDate, "")
-        )
-        if (sharedPreferences?.getString(savedEmail, "") != "") view.edit_profile_email_input_layout.editText!!.setText(
-            sharedPreferences?.getString(savedEmail, "")
-        )
-        if (sharedPreferences?.getString(
-                savedPhone,
-                ""
-            ) != ""
-        ) view.edit_profile_phone_number_input_layout.editText!!.setText(sharedPreferences?.getString(savedPhone, ""))
 
         val dateSetListener = object : DatePickerDialog.OnDateSetListener {
             override fun onDateSet(
@@ -205,12 +192,12 @@ class EditProfileFragment : Fragment() {
         })
 
         view.btnSaveChanges.setOnClickListener {
-            val name = edit_profile_username_input_layout.editText!!.text.toString()
-            val date = edit_profile_dob_input_layout.editText!!.text.toString()
-            val email = edit_profile_email_input_layout.editText!!.text.toString()
-            val phone = edit_profile_phone_number_input_layout.editText!!.text.toString()
+            val newName = edit_profile_username_input_layout.editText!!.text.toString()
+            val newDate = edit_profile_dob_input_layout.editText!!.text.toString()
+            val newEmail = edit_profile_email_input_layout.editText!!.text.toString()
+            val newPhone = edit_profile_phone_number_input_layout.editText!!.text.toString()
 
-            val sharedPreferences =
+            /*val sharedPreferences =
                 context!!.getSharedPreferences(context!!.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
             val savedName = context!!.getString(R.string.key_user_name)
             val savedDate = context!!.getString(R.string.key_user_date)
@@ -221,7 +208,26 @@ class EditProfileFragment : Fragment() {
             editor.putString(savedDate, date)
             editor.putString(savedEmail, email)
             editor.putString(savedPhone, phone)
-            editor.apply()
+            editor.apply()*/
+
+            //не трогать
+            val newChangeData = changeUserDataDTO()
+            val email = arguments!!.getString("email")
+            if(email != newEmail){
+                Log.i("checkChangeCredentials", "pupa")
+            }else{
+                /**
+                 * TODO поменять дату на нужный формат
+                 */
+
+                newChangeData.birthday = newDate
+                newChangeData.name = newName
+                Log.i("checkChangeCredentials", newChangeData.name)
+                newChangeData.new_email = ""
+                newChangeData.email = email
+                newChangeData.phone = newPhone
+                changeUserCredentials(newChangeData)
+            }
         }
 
         return view
@@ -258,44 +264,35 @@ class EditProfileFragment : Fragment() {
     }
 
     /**
-     * TODO использовать для получения данных пользователя, то есть тут и в PersonalInfoFragment
+     * TODO меняет данные юзера (если мыло старое)
      * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
      *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
      *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
      */
-    private fun showUserCredentials(){
+    private fun changeUserCredentials(newChangeUser: changeUserDataDTO){
 
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-        val newShowUser = verifyEmailDTO()
-        newShowUser.email = sharedPreferences.getString(this.getString(R.string.user_email), "")!!.toString()
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
 
         RetrofitClientInstance.getInstance()
-            .postViewUserCredentials(jwt, newShowUser)
+            .postChangeUserCredentials(jwt, newChangeUser)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : Observer<Response<userDataDTO>> {
+            ?.subscribe(object : Observer<Response<changeUserDataRespDTO>> {
 
                 override fun onComplete() {}
 
                 override fun onSubscribe(d: Disposable) {}
 
-                override fun onNext(t: Response<userDataDTO>) {
+                override fun onNext(t: Response<changeUserDataRespDTO>) {
                     Log.i("checkMyCredentials", "${t.code()}")
 
                     if (t.isSuccessful) {
                         /**
                          * TODO при получении проверять, что поля не равны нулл
                          */
-                        val data =t.body()!!.data
-                        Log.i("checkMyCredentials", t.body().toString())
-                        Log.i("checkMyCredentials", data.toString())
-                        //Log.i("checkMyCredentials", data.birthday)
-                        Log.i("checkMyCredentials", data.email)
-                        Log.i("checkMyCredentials", data.name)
-                        Log.i("checkMyCredentials", data.phone)
-                        Log.i("checkMyCredentials", data.reg_date)
+                        Log.i("checkChangeCredentials", "${t.code()}")
                     } else {
                         /**
                          * TODO
