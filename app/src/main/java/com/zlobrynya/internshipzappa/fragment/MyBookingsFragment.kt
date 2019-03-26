@@ -4,6 +4,7 @@ package com.zlobrynya.internshipzappa.fragment
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -26,6 +27,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_my_bookings.view.*
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Фрагмент мои брони
@@ -88,16 +91,13 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      * @param isButtonClick Произошло ли нажатие на кнопку "Отменить"
      */
     override fun onDiscardClick(position: Int, isButtonClick: Boolean) {
-        // TODO Сделать реальную отмену брони
         if (isButtonClick) {
-            postDeleteUserBookings(bookingList[position].booking_id)
-            Toast.makeText(context, "Отмена брони", Toast.LENGTH_SHORT).show()
+            confirmDiscard(position)
         }
     }
 
     /**
-     * получает столики для текущего авторизированного пользователя (проверил, работает)
-     * TODO воткнуть и обработать
+     * Получает столики для текущего авторизированного пользователя
      */
     private fun postUserBookings(view: View) {
 
@@ -134,7 +134,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                         Если юзер не авторизован, то скрываем рейсайклер и выводим сообщение
                          */
                         if (t.code() == 401) {
-                            // TODO тут по-хорошему надо вывести сообщение с просьбой авторизоваться, а не "броней нету"
                             view.user_not_authorized.visibility = View.VISIBLE
                             view.no_user_bookings_text_view.visibility = View.GONE
                             view.user_bookings_recycler.visibility = View.GONE
@@ -151,9 +150,8 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
     }
 
     /**
-     * удаляет бронь по id из списка (не проверял, пока никак)
+     * Удаляет бронь по id из списка
      * @param bookingId id элемента
-     * TODO воткнуть и обработать
      */
     private fun postDeleteUserBookings(bookingId: Int) {
 
@@ -178,15 +176,24 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                     Log.i("checkMyBooking", "${t.code()}")
 
                     if (t.isSuccessful) {
-                        // TODO проверить как работает удаление брони
+                        /*
+                        Юзер авторизован, удаляем бронь
+                         */
                         this@MyBookingsFragment.onResume()
                     } else {
-                        /**
-                         * TODO
-                         * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
-                         *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
-                         *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
+                        /*
+                        Юзер не авторизован, пишем что сессия истекла
                          */
+                        if (t.code() == 401) {
+                            Toast.makeText(context, "Ваша сессия истекла, авторизуйтесь повторно", Toast.LENGTH_SHORT)
+                                .show()
+                            val view = this@MyBookingsFragment.view
+                            if (view != null) {
+                                view.user_not_authorized.visibility = View.VISIBLE
+                                view.no_user_bookings_text_view.visibility = View.GONE
+                                view.user_bookings_recycler.visibility = View.GONE
+                            }
+                        }
                     }
                 }
 
@@ -196,5 +203,55 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                 }
 
             })
+    }
+
+    /**
+     * Выводит с просьбой отменить бронь
+     */
+    private fun confirmDiscard(position: Int) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
+        val booking: UserBookingDTO = bookingList[position]
+        builder.setTitle("Отменить бронирование")
+            .setMessage(
+                "Вы уверены, что хотите отменить бронь на " +
+                        "${getDate(booking.date_time_from)} " +
+                        "${getTime(booking.date_time_from)} - ${getTime(booking.date_time_to)}?"
+            )
+            .setCancelable(false)
+            .setPositiveButton("Да") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    postDeleteUserBookings(bookingList[position].booking_id)
+                }
+            }
+            .setNegativeButton("Нет") { dialog, which -> dialog.dismiss() }
+        val alert = builder.create()
+        alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+    }
+
+    /**
+     * Возвращает число в строковом представлении
+     * @param date Дата в формате 2019-03-09 18:30:00
+     * @return Число в строковом представлении с указанием месяца (пр. 28 сентября)
+     */
+    private fun getDate(date: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val parsedDate = inputFormat.parse(date)
+        val outputFormat = SimpleDateFormat("d.MM.yyyy", Locale.getDefault())
+        return outputFormat.format(parsedDate)
+    }
+
+    /**
+     * Возвращает время в строковом представлении в формате 18:30
+     * @param date Дата в формате 2019-03-09 18:30:00
+     * @return Время в строковом представлении в формате 18:30
+     */
+    private fun getTime(date: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val parsedDate = inputFormat.parse(date)
+        val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return outputFormat.format(parsedDate)
     }
 }

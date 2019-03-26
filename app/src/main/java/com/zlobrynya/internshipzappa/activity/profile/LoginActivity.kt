@@ -113,6 +113,8 @@ class LoginActivity : AppCompatActivity() {
 
             newAuth.email = email
             newAuth.password = password
+            Log.i("checkAuth", newAuth.email)
+            Log.i("checkAuth", newAuth.password)
             if (validateEmail && validatePassword) {
 
                 RetrofitClientInstance.getInstance()

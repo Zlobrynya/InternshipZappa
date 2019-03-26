@@ -26,7 +26,7 @@ interface PostRequest {
     //запрос на регистрацию
     @Headers("Content-Type: application/json", "Accept: application/json")
     @POST("reg_user")
-    fun postRegData(@Body regData: regDTO): Observable<Response<respDTO>>
+    fun postRegData(@Body regData: regDTO): Observable<Response<regRespDTO>>
 
     //запрос на авторизацию
     @Headers("Content-Type: application/json")
@@ -52,4 +52,9 @@ interface PostRequest {
     @Headers("Content-Type: application/json")
     @POST("view_user_credentials")
     fun postViewUserCredentials(@Header("Authorization") authorization: String, @Body userEmail: verifyEmailDTO): Observable<Response<userDataDTO>>
+
+    //запрос на изменение данных пользователя
+    @Headers("Content-Type: application/json")
+    @POST("change_user_credentials")
+    fun postChangeUserCredentials(@Header("Authorization") authorization: String, @Body userChangedData: changeUserDataDTO): Observable<Response<changeUserDataRespDTO>>
 }

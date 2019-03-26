@@ -235,19 +235,21 @@ class PersonalInfoFragment : Fragment() {
     }
 
     /**
-     * На выхов этой функции ждать отмашку, бэк пока не готов
-     * TODO юзаем вместо преф этот вызов, получаем данные пользователя с него
-     * Закрывает текущий фрагмент и удаляет его со стека
+     * TODO использовать для получения данных пользователя, то есть тут и в PersonalInfoFragment
+     * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
+     *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
+     *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
      */
-    private fun postUserCredentials(){
+    private fun showUserCredentials(){
+
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-        val newEmail = verifyEmailDTO()
-        newEmail.email = sharedPreferences.getString(this.getString(R.string.user_email), "")!!.toString()
+        val newShowUser = verifyEmailDTO()
+        newShowUser.email = sharedPreferences.getString(this.getString(R.string.user_email), "")!!.toString()
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
 
         RetrofitClientInstance.getInstance()
-            .postViewUserCredentials(jwt, newEmail)
+            .postViewUserCredentials(jwt, newShowUser)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : Observer<Response<userDataDTO>> {
@@ -257,14 +259,21 @@ class PersonalInfoFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<userDataDTO>) {
-                    Log.i("checkMyBooking", "${t.code()}")
+                    Log.i("checkMyCredentials", "${t.code()}")
 
-                    if(t.isSuccessful) {
+                    if (t.isSuccessful) {
                         /**
-                         * TODO юзер авторизирован и запрос прошёл, сюда пихнуть обработку
+                         * TODO при получении проверять, что поля не равны нулл
                          */
-                        //
-                    }else{
+                        val data =t.body()!!.data
+                        Log.i("checkMyCredentials", t.body().toString())
+                        Log.i("checkMyCredentials", data.toString())
+                        //Log.i("checkMyCredentials", data.birthday)
+                        Log.i("checkMyCredentials", data.email)
+                        Log.i("checkMyCredentials", data.name)
+                        Log.i("checkMyCredentials", data.phone)
+                        Log.i("checkMyCredentials", data.reg_date)
+                    } else {
                         /**
                          * TODO
                          * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать

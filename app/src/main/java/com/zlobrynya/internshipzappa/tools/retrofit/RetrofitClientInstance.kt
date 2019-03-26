@@ -42,7 +42,7 @@ class RetrofitClientInstance {
 
     fun postVerifyData(verify: verifyEmailDTO): Observable<Response<verifyRespDTO>> = postRequest!!.postVerifyData(verify)
 
-    fun postRegData(registration: regDTO): Observable<Response<respDTO>> = postRequest!!.postRegData(registration)
+    fun postRegData(registration: regDTO): Observable<Response<regRespDTO>> = postRequest!!.postRegData(registration)
 
     fun postAuthData(auth: authDTO): Observable<Response<authRespDTO>> = postRequest!!.postAuthData(auth)
 
@@ -56,8 +56,10 @@ class RetrofitClientInstance {
 
     fun postDeleteUserBookings(authorization: String, deleteBooking: deleteBookingDTO): Observable<Response<respDTO>> = postRequest!!.postDeleteUserBookings(authorization, deleteBooking)
 
-    //fun postViewUserCredentials(@Header("Authorization") authorization: String, @Body userEmail: verifyEmailDTO): Observable<Response<userDataDTO>>
     fun postViewUserCredentials(authorization: String, userEmail: verifyEmailDTO): Observable<Response<userDataDTO>> = postRequest!!.postViewUserCredentials(authorization, userEmail)
+
+    fun postChangeUserCredentials(authorization: String, userData: changeUserDataDTO): Observable<Response<changeUserDataRespDTO>> = postRequest!!.postChangeUserCredentials(authorization, userData)
+
     fun getTestAuth(authorization: String) : Observable<Response<respDTO>> = getRequest!!.getTestAuth(authorization)
 
     companion object {
