@@ -3,6 +3,7 @@ package com.zlobrynya.internshipzappa.fragment
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -14,15 +15,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.changeUserDataDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.changeUserDataRespDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
+import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import retrofit2.Response
@@ -257,32 +258,23 @@ class EditProfileFragment : Fragment() {
             val newEmail = edit_profile_email_input_layout.editText!!.text.toString()
             val newPhone = edit_profile_phone_number_input_layout.editText!!.text.toString()
 
-            /*val sharedPreferences =
-                context!!.getSharedPreferences(context!!.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
-            val savedName = context!!.getString(R.string.key_user_name)
-            val savedDate = context!!.getString(R.string.key_user_date)
-            val savedEmail = context!!.getString(R.string.key_user_email)
-            val savedPhone = context!!.getString(R.string.key_user_phone)
-            val editor = sharedPreferences.edit()
-            editor.putString(savedName, name)
-            editor.putString(savedDate, date)
-            editor.putString(savedEmail, email)
-            editor.putString(savedPhone, phone)
-            editor.apply()*/
-
             //не трогать
             val newChangeData = changeUserDataDTO()
             val email = arguments!!.getString("email")
             if(email != newEmail){
-                Log.i("checkChangeCredentials", "pupa")
+
+                newChangeData.birthday = newDate
+                newChangeData.name = newName
+                newChangeData.new_email = newEmail
+                newChangeData.email = email
+                newChangeData.phone = newPhone
+                checkExistenceEmail(newChangeData)
             }else{
                 /**
                  * TODO поменять дату на нужный формат
                  */
-
                 newChangeData.birthday = newDate
                 newChangeData.name = newName
-                Log.i("checkChangeCredentials", newChangeData.name)
                 newChangeData.new_email = ""
                 newChangeData.email = email
                 newChangeData.phone = newPhone
@@ -331,6 +323,13 @@ class EditProfileFragment : Fragment() {
      */
     private fun changeUserCredentials(newChangeUser: changeUserDataDTO){
 
+        Log.i("checkChangeCredentials", newChangeUser.name)
+        Log.i("checkChangeCredentials", newChangeUser.phone)
+        //Log.i("checkChangeCredentials", newChangeUser.birthday)
+        Log.i("checkChangeCredentials", newChangeUser.code.toString())
+        Log.i("checkChangeCredentials", newChangeUser.email)
+        Log.i("checkChangeCredentials", newChangeUser.new_email)
+
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
@@ -346,7 +345,7 @@ class EditProfileFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<changeUserDataRespDTO>) {
-                    Log.i("checkMyCredentials", "${t.code()}")
+                    Log.i("checkChangeCredentials", "${t.code()}")
 
                     if (t.isSuccessful) {
                         /**
@@ -368,6 +367,63 @@ class EditProfileFragment : Fragment() {
                     //запрос не выполнен, всё плохо
                 }
 
+            })
+    }
+    private fun checkExistenceEmail(newChange: changeUserDataDTO){
+
+        val newVerify = verifyEmailDTO()
+        newVerify.email = newChange.new_email
+        RetrofitClientInstance.getInstance()
+            .getEmailExistence(newVerify.email)
+            .subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe(object : Observer<Response<respDTO>> {
+
+                override fun onComplete() {}
+
+                override fun onSubscribe(d: Disposable) {}
+
+                override fun onNext(t: Response<respDTO>) {
+                    Log.i("checkEmailExistence", t.code().toString())
+                    if(t.isSuccessful) {
+                        Log.i("checkEmailExistence", "${t.code()}")
+                        Log.i("checkEmailExistence", t.body()!!.desc)
+                    }else{
+                        RetrofitClientInstance.getInstance()
+                            .postVerifyData(newVerify)
+                            .subscribeOn(Schedulers.io())
+                            ?.observeOn(AndroidSchedulers.mainThread())
+                            ?.subscribe(object : Observer<Response<verifyRespDTO>> {
+
+                                override fun onComplete() {}
+
+                                override fun onSubscribe(d: Disposable) {}
+
+                                override fun onNext(t: Response<verifyRespDTO>) {
+                                    Log.i("checkCode", "${t.code()}")
+
+                                    if(t.isSuccessful) {
+                                        val intent = Intent(context, CodeFEmailActivity::class.java)
+                                        intent.putExtra("change_name", newChange.name)
+                                        intent.putExtra("change_phone", newChange.phone)
+                                        intent.putExtra("change_email", newChange.email)
+                                        intent.putExtra("change_birthday", newChange.birthday)
+                                        intent.putExtra("new_email", newChange.new_email)
+                                        intent.putExtra("id", "1")
+                                        startActivity(intent)
+                                    }
+                                }
+
+                                override fun onError(e: Throwable) {
+                                    Log.i("check", "that's not fineIn")
+                                }
+
+                            })
+                    }
+                }
+                override fun onError(e: Throwable) {
+                    Log.i("checkReg", "that's not fineIn")
+                }
             })
     }
 }
