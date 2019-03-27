@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import android.view.LayoutInflater
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -17,13 +16,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.zlobrynya.internshipzappa.activity.menu.FullDescriptionScreen
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import kotlinx.android.synthetic.main.item_menu.view.*
 
 /*
 * Адаптер для RecyclerMenu отображение каточек блюда активити MenuActivity
  */
 
-class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
+class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val context: Context): RecyclerView.Adapter<AdapterRecyclerMenu.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(com.zlobrynya.internshipzappa.R.layout.item_menu, parent, false) as View
@@ -48,14 +48,15 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
     //Класс помощник, для правильного отображение view
     inner class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         var idDish = 0
-
+        var subDish = "null"
         @SuppressLint("SetTextI18n")
-        fun bind(dishDTO: DishDTO) = with(itemView){
+        fun bind(dishDTO: DishClientDTO) = with(itemView){
             //В класс помощник записываем данные
             nameDish?.text = dishDTO.name.replace("\'", "\"")
             shortDescDish?.text = dishDTO.desc_short.replace("\'", "\"")
             if(shortDescDish?.text == "")shortDescDish.visibility = View.GONE
             idDish = dishDTO.item_id
+            subDish = dishDTO.sub_menu
             Log.i("delivery", dishDTO.delivery)
             priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
@@ -96,6 +97,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishDTO>, val context
         }
 
         override fun onClick(view: View) {
+            Log.i("qq", subDish)
             val intent = Intent(context, FullDescriptionScreen::class.java)
             intent.putExtra(context.getString(R.string.key_id), idDish)
             context.startActivity(intent)

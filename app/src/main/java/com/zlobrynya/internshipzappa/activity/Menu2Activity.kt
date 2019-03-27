@@ -1,7 +1,5 @@
 package com.zlobrynya.internshipzappa.activity
 
-import android.content.Context
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.ViewPager
@@ -16,15 +14,7 @@ import kotlinx.android.synthetic.main.activity_menu2.*
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.fragment.*
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Response
 
 const val MENU_PAGE: Int = 0
 const val BOOKING_PAGE: Int = 1
@@ -44,7 +34,7 @@ class Menu2Activity : AppCompatActivity() {
     internal var prevMenuItem: MenuItem? = null
     private var toolbar: ActionBar? = null
 
-    var mPagerAdapter: SlidePagerAdapter? = null
+    private var mPagerAdapter: SlidePagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +57,7 @@ class Menu2Activity : AppCompatActivity() {
                     viewpager2.currentItem = BOOKING_PAGE
                 }
                 R.id.navigation_profile -> {
-                    checkStatus()
+                    viewpager2.currentItem = PROFILE_PAGE
                 }
             }
             false
@@ -75,7 +65,6 @@ class Menu2Activity : AppCompatActivity() {
 
         viewpager2.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
             }
 
             override fun onPageSelected(position: Int) {
@@ -133,48 +122,4 @@ class Menu2Activity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Проверяет, авторизован ли юзер
-     */
-    private fun checkStatus() {
-        val sharedPreferencesStat = this.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-        val access_token = this.getString(R.string.access_token)
-        val authStatus = sharedPreferencesStat?.getString(access_token, "null").toString()
-
-        Log.i("checkStatusData", authStatus)
-
-        RetrofitClientInstance.getInstance()
-            .getStatusData(authStatus)
-            .subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : Observer<Response<respDTO>> {
-
-                override fun onComplete() {}
-
-                override fun onSubscribe(d: Disposable) {}
-
-                override fun onNext(t: Response<respDTO>) {
-                    Log.d("BOOP", "Код ${t.code()}")
-                    if (t.isSuccessful) { // Юзер авторизован
-                        Log.d("BOOP", "Юзер авторизован")
-                        viewpager2.currentItem = PROFILE_PAGE // Откроем фрагмент rootFragment2
-                    } else { // Юзер не авторизован
-                        Log.d("BOOP", "Не авторизован")
-                        openLoginActivity() // Откроем аквтивити авторизации
-                    }
-                }
-
-                override fun onError(e: Throwable) {
-                    Log.d("BOOP", "Вообще ошибка")
-                }
-            })
-    }
-
-    /**
-     * Открывает логин активити
-     */
-    private fun openLoginActivity() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivityForResult(intent, REQUEST_CODE)
-    }
 }

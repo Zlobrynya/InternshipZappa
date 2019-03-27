@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
@@ -23,10 +24,10 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import retrofit2.Response
+import java.text.DateFormat
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,12 +44,23 @@ class EditProfileFragment : Fragment() {
      * Обработчик нажатий на стрелочку в тулбаре
      */
     private val navigationClickListener = View.OnClickListener {
-        // Удалим фрагмент со стека
+        closeFragment()
+    }
+
+    /**
+     * Закрывает текущий фрагмент и снимает его со стека
+     */
+    private fun closeFragment() {
         val trans = fragmentManager!!.beginTransaction()
         trans.remove(this)
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         trans.commit()
         fragmentManager!!.popBackStack()
+    }
+
+    private fun reloadActivity() {
+        val intent = Intent(context, Menu2Activity::class.java)
+        startActivity(intent)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,11 +74,12 @@ class EditProfileFragment : Fragment() {
         val dob = arguments!!.getString("dob")
         val email = arguments!!.getString("email")
         val phone = arguments!!.getString("phone")
+        val changedPhone = replaceStartPhone(phone)
 
         view.edit_profile_username_input_layout.editText!!.setText(username)
         view.edit_profile_dob_input_layout.editText!!.setText(dob)
         view.edit_profile_email_input_layout.editText!!.setText(email)
-        view.edit_profile_phone_number_input_layout.editText!!.setText(phone)
+        view.edit_profile_phone_number_input_layout.editText!!.setText(changedPhone)
 
         val sharedPreferences =
             context?.getSharedPreferences(this.getString(R.string.key_shared_users), Context.MODE_PRIVATE)
@@ -166,89 +179,29 @@ class EditProfileFragment : Fragment() {
 
         })
 
-        view.edit_profile_phone_number.setOnClickListener {
-            phone_masked.visibility = View.VISIBLE
-            phone_masked.requestFocus()
-            phone_masked.addTextChangedListener(object: TextWatcher {
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    val phone = phone_masked.text.toString()
-                    val validatePhone = validatePhone(phone)
-
-                    if (!validatePhone) {
-                        edit_profile_phone_number_input_layout.error =
-                                getString(com.zlobrynya.internshipzappa.R.string.error_phone)
-                        edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
-                    } else {
-                        edit_profile_phone_number_input_layout.isErrorEnabled = false
-                        edit_profile_phone_number.setCompoundDrawables(null, null, null, null)
-                    }
-                }
-            })
-        }
-
         view.edit_profile_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
+                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                        val phone = edit_profile_phone_number_input_layout.editText!!.text.toString()
+                        val validatePhone = validatePhone(phone)
 
+                        if (!validatePhone) {
+                            edit_profile_phone_number_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                            edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
+                        } else {
+                            edit_profile_phone_number_input_layout.isErrorEnabled = false
+                            edit_profile_phone_number.setCompoundDrawables(null, null, null, null)
+                        }
+                    }
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                phone_masked.visibility = View.VISIBLE
-                phone_masked.requestFocus()
-                phone_masked.addTextChangedListener(object: TextWatcher {
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    }
-
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {
-                        val phone = phone_masked.text.toString()
-                        val validatePhone = validatePhone(phone)
-
-                        if (!validatePhone) {
-                            edit_profile_phone_number_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.error_phone)
-                            edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
-                        } else {
-                            edit_profile_phone_number_input_layout.isErrorEnabled = false
-                            edit_profile_phone_number.setCompoundDrawables(null, null, null, null)
-                        }
-                    }
-                })
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                /*
-                phone_masked.visibility = View.VISIBLE
-                phone_masked.requestFocus()
-                phone_masked.addTextChangedListener(object: TextWatcher {
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    }
-
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {
-                        val phone = phone_masked.text.toString()
-                        val validatePhone = validatePhone(phone)
-
-                        if (!validatePhone) {
-                            edit_profile_phone_number_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.error_phone)
-                            edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
-                        } else {
-                            edit_profile_phone_number_input_layout.isErrorEnabled = false
-                            edit_profile_phone_number.setCompoundDrawables(null, null, null, null)
-                        }
-                    }
-                })
-                */
             }
         })
 
@@ -258,28 +211,41 @@ class EditProfileFragment : Fragment() {
             val newEmail = edit_profile_email_input_layout.editText!!.text.toString()
             val newPhone = edit_profile_phone_number_input_layout.editText!!.text.toString()
 
-            //не трогать
-            val newChangeData = changeUserDataDTO()
-            val email = arguments!!.getString("email")
-            if(email != newEmail){
+            val inputFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy")
+            val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+            val date: Date = inputFormat.parse(newDate)
+            val outputDateStr = outputFormat.format(date)
 
-                newChangeData.birthday = newDate
-                newChangeData.name = newName
-                newChangeData.new_email = newEmail
-                newChangeData.email = email
-                newChangeData.phone = newPhone
-                checkExistenceEmail(newChangeData)
-            }else{
-                /**
-                 * TODO поменять дату на нужный формат
-                 */
-                newChangeData.birthday = newDate
-                newChangeData.name = newName
-                newChangeData.new_email = ""
-                newChangeData.email = email
-                newChangeData.phone = newPhone
-                changeUserCredentials(newChangeData)
+            val validateName = validateName(newName)
+            val validatePhone = validatePhone(newPhone)
+            val validateEmail = validateEmail(newEmail)
+
+            if (validateName && validateEmail && validatePhone) {
+                //не трогать
+                val newChangeData = changeUserDataDTO()
+                val email = arguments!!.getString("email")
+                if (email != newEmail) {
+
+                    newChangeData.birthday = outputDateStr
+                    newChangeData.name = newName
+                    newChangeData.new_email = newEmail
+                    newChangeData.email = email
+                    newChangeData.phone = newPhone
+                    checkExistenceEmail(newChangeData)
+                } else {
+                    /**
+                     * TODO поменять дату на нужный формат
+                     */
+                    newChangeData.birthday = outputDateStr
+                    newChangeData.name = newName
+                    newChangeData.new_email = ""
+                    newChangeData.email = email
+                    newChangeData.phone = newPhone
+                    changeUserCredentials(newChangeData)
+                }
             }
+            closeFragment()
+            reloadActivity()
         }
 
         return view
@@ -307,12 +273,20 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun validatePhone(phone: String): Boolean {
-        val phoneLength = 10
+        val phoneLength = 16
         return phone.length == phoneLength
     }
 
     private fun validateEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun replaceStartPhone(str: String?): String {
+        val newstr = str!!.replace(" ", "")
+        val newstra = newstr.replace("(", "")
+        val newstrb = newstra.replace(")", "")
+        val newstrc = newstrb.replace("-", "")
+        return newstrc.replace("+7", "")
     }
 
     /**
@@ -321,7 +295,7 @@ class EditProfileFragment : Fragment() {
      *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
      *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
      */
-    private fun changeUserCredentials(newChangeUser: changeUserDataDTO){
+    private fun changeUserCredentials(newChangeUser: changeUserDataDTO) {
 
         Log.i("checkChangeCredentials", newChangeUser.name)
         Log.i("checkChangeCredentials", newChangeUser.phone)
@@ -352,6 +326,14 @@ class EditProfileFragment : Fragment() {
                          * TODO при получении проверять, что поля не равны нулл
                          */
                         Log.i("checkChangeCredentials", "${t.code()}")
+                        val sharedPreferencesStat = context!!.getSharedPreferences(
+                            context!!.getString(R.string.user_info),
+                            Context.MODE_PRIVATE
+                        )
+                        val access_token = context!!.getString(R.string.access_token)
+                        val editor = sharedPreferencesStat.edit()
+                        editor.putString(access_token, t.body()!!.access_token)
+                        editor.apply()
                     } else {
                         /**
                          * TODO
@@ -369,7 +351,8 @@ class EditProfileFragment : Fragment() {
 
             })
     }
-    private fun checkExistenceEmail(newChange: changeUserDataDTO){
+
+    private fun checkExistenceEmail(newChange: changeUserDataDTO) {
 
         val newVerify = verifyEmailDTO()
         newVerify.email = newChange.new_email
@@ -385,10 +368,10 @@ class EditProfileFragment : Fragment() {
 
                 override fun onNext(t: Response<respDTO>) {
                     Log.i("checkEmailExistence", t.code().toString())
-                    if(t.isSuccessful) {
+                    if (t.isSuccessful) {
                         Log.i("checkEmailExistence", "${t.code()}")
                         Log.i("checkEmailExistence", t.body()!!.desc)
-                    }else{
+                    } else {
                         RetrofitClientInstance.getInstance()
                             .postVerifyData(newVerify)
                             .subscribeOn(Schedulers.io())
@@ -402,7 +385,7 @@ class EditProfileFragment : Fragment() {
                                 override fun onNext(t: Response<verifyRespDTO>) {
                                     Log.i("checkCode", "${t.code()}")
 
-                                    if(t.isSuccessful) {
+                                    if (t.isSuccessful) {
                                         val intent = Intent(context, CodeFEmailActivity::class.java)
                                         intent.putExtra("change_name", newChange.name)
                                         intent.putExtra("change_phone", newChange.phone)
@@ -421,6 +404,7 @@ class EditProfileFragment : Fragment() {
                             })
                     }
                 }
+
                 override fun onError(e: Throwable) {
                     Log.i("checkReg", "that's not fineIn")
                 }

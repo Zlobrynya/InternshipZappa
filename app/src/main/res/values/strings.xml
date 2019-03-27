@@ -72,7 +72,7 @@
 
     <string name="btn_register">Зарегистрироваться</string>
     <string name="hint_username">Имя</string>
-    <string name="hint_phone_number">Телефон</string>
+    <string name="label_hint_phone_number">Телефон</string>
 
     <!-- конец бронирования -->
     <string name="otclonena">%1$s, к сожалению, выбранный Вами стол уже забронирован.</string>
@@ -122,9 +122,7 @@
     <string name="code_null">Поле состоит из 5 символов</string>
 
     <string name="wrong_password_email">Неверный пароль или E-mail</string>
-    <string name="hint_dob">Дата рождения</string>
-    <string name="btn_edit">Редактировать</string>
+    <string name="label_hint_dob">Дата рождения</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_edit">Редактировать</string>
 </resources>

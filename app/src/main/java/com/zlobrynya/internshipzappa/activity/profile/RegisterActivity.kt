@@ -94,26 +94,9 @@ class RegisterActivity : AppCompatActivity() {
         })
 
         reg_phone_number.addTextChangedListener(object: TextWatcher{
-
-            //private var mFormatting: Boolean = false
-            //private var mAfter: Int = 0
-
             override fun afterTextChanged(s: Editable?) {
                 reg_phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        /*if (!mFormatting) {
-                            mFormatting = true
-                            if (mAfter != 0) {
-                                val num = s.toString()
-                                val data = PhoneNumberUtils.formatNumber(num, "RU")
-                                if (data != null) {
-                                    s!!.clear()
-                                    s.append(data)
-                                }
-                            }
-                            mFormatting = false
-                        }*/
-
                         val phone = reg_phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
 
@@ -129,7 +112,6 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //mAfter  = after
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -282,6 +264,7 @@ class RegisterActivity : AppCompatActivity() {
                                         intent.putExtra("email", reg_email.text.toString())
                                         intent.putExtra("password", reg_password.text.toString())
                                         intent.putExtra("code", t.body()!!.email_code)
+                                        intent.putExtra("id", "0")
                                         startActivity(intent)
                                     }
                                 }
@@ -317,7 +300,7 @@ class RegisterActivity : AppCompatActivity() {
         } else {
             phone.length == phoneLength7
         }*/
-        val phoneLength = 10
+        val phoneLength = 16
         return phone.length == phoneLength
     }
 

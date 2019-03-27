@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 import kotlinx.android.synthetic.main.item_rect_recommend_dish.view.*
 import android.graphics.*
 import android.graphics.Bitmap
@@ -19,12 +18,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 
 
 /*
 * Адаптер для RecyclerView рекомендованных блюд на экране FullDescriptionScreen
 * */
-class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
+class AdapterRecommendDish(private val values: ArrayList<DishClientDTO>): RecyclerView.Adapter<AdapterRecommendDish.ViewHolder>() {
 
     override fun getItemCount() = values!!.size
 
@@ -44,7 +44,7 @@ class AdapterRecommendDish(private val values: ArrayList<DishDTO>): RecyclerView
 
         // Установка данных в view
         @SuppressLint("SetTextI18n")
-        fun bind(dishDTO: DishDTO) = with(itemView){
+        fun bind(dishDTO: DishClientDTO) = with(itemView){
             topingPrice.text = if (dishDTO.price == 0.0) "-"
             else dishDTO.price.toInt().toString() + context.getString(R.string.rub)
 

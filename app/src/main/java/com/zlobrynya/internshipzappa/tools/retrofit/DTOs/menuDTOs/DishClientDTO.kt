@@ -2,7 +2,7 @@ package com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs
 
 import com.google.gson.annotations.SerializedName
 
-data class DishDTO(
+data class DishClientDTO(
     @SerializedName("item_id") var item_id: Int = 0,
     @SerializedName("class_name") var class_name: String = "",
     @SerializedName("name") var name: String ="Без наименования",
@@ -13,5 +13,5 @@ data class DishDTO(
     @SerializedName("weight") var weight: String = "null",
     @SerializedName("recommended") var recommended: String = "null",
     @SerializedName("delivery") var delivery: String = "null",
-    @SerializedName("sub_menu") var sub_menu: List<DishSubDTO>? = null
+    @SerializedName("sub_menu") var sub_menu: String = "null"
 )
