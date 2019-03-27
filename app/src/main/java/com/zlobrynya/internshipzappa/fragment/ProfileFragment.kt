@@ -74,16 +74,6 @@ class ProfileFragment : Fragment() {
         return view
     }
 
-    //private val listener: UpdateGui
-
-    interface UpdateGui {
-        fun updateGui()
-    }
-
-    /*init {
-        listener = context as UpdateGui
-    }*/
-
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
 
