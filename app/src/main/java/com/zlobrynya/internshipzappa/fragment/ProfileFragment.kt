@@ -1,6 +1,7 @@
 package com.zlobrynya.internshipzappa.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
@@ -47,6 +49,10 @@ class ProfileFragment : Fragment() {
             editor.putString(savedEmail, "")
             editor.putString(access_token, "")
             editor.apply()
+
+            val intent = Intent(context, Menu2Activity::class.java)
+            startActivity(intent)
+
         }
 
         view.btnEdit.setOnClickListener {
@@ -68,7 +74,17 @@ class ProfileFragment : Fragment() {
         return view
     }
 
-    fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
+    //private val listener: UpdateGui
+
+    interface UpdateGui {
+        fun updateGui()
+    }
+
+    /*init {
+        listener = context as UpdateGui
+    }*/
+
+    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
 
     /**
@@ -77,7 +93,7 @@ class ProfileFragment : Fragment() {
      *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
      *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
      */
-    private fun showUserCredentials(){
+    private fun showUserCredentials() {
 
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
@@ -102,7 +118,7 @@ class ProfileFragment : Fragment() {
                         /**
                          * TODO при получении проверять, что поля не равны нулл
                          */
-                        val data =t.body()!!.data
+                        val data = t.body()!!.data
                         Log.i("checkMyCredentials", t.body().toString())
                         Log.i("checkMyCredentials", data.toString())
                         //Log.i("checkMyCredentials", data.birthday)
@@ -117,7 +133,7 @@ class ProfileFragment : Fragment() {
                             val date: Date = inputFormat.parse(data.birthday)
                             val outputDateStr = outputFormat.format(date)
                             profile_dob.text = outputDateStr
-                        }else{
+                        } else {
                             profile_dob.text = ""
                         }
                         profile_email.text = data.email

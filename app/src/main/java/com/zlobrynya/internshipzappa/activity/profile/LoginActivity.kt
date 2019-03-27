@@ -204,7 +204,6 @@ class LoginActivity : AppCompatActivity() {
 
     /**
      * Обновляет список броней юзера
-     * Вызывать надо при любом чихе с авторизацией\бронью\отменой брони
      */
     private fun updateUserBookingList() {
         val fragment = supportFragmentManager.findFragmentByTag("USER_BOOKING_LIST")
