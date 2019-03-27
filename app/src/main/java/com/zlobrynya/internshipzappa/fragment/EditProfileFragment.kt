@@ -210,11 +210,16 @@ class EditProfileFragment : Fragment() {
             val newDate = edit_profile_dob_input_layout.editText!!.text.toString()
             val newEmail = edit_profile_email_input_layout.editText!!.text.toString()
             val newPhone = edit_profile_phone_number_input_layout.editText!!.text.toString()
+            val outputDateStr: String
 
-            val inputFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy")
-            val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-            val date: Date = inputFormat.parse(newDate)
-            val outputDateStr = outputFormat.format(date)
+            if (newDate != "") {
+                val inputFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy")
+                val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
+                val date: Date = inputFormat.parse(newDate)
+                outputDateStr = outputFormat.format(date)
+            } else {
+                outputDateStr = ""
+            }
 
             val validateName = validateName(newName)
             val validatePhone = validatePhone(newPhone)
@@ -326,14 +331,14 @@ class EditProfileFragment : Fragment() {
                          * TODO при получении проверять, что поля не равны нулл
                          */
                         Log.i("checkChangeCredentials", "${t.code()}")
-                        val sharedPreferencesStat = context!!.getSharedPreferences(
+                        /*val sharedPreferencesStat = context!!.getSharedPreferences(
                             context!!.getString(R.string.user_info),
                             Context.MODE_PRIVATE
                         )
                         val access_token = context!!.getString(R.string.access_token)
                         val editor = sharedPreferencesStat.edit()
                         editor.putString(access_token, t.body()!!.access_token)
-                        editor.apply()
+                        editor.apply()*/
                     } else {
                         /**
                          * TODO
