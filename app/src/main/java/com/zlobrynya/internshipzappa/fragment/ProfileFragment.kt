@@ -91,6 +91,10 @@ class ProfileFragment : Fragment() {
      */
     private fun showUserCredentials() {
 
+        val view = this.view
+        if (view != null) {
+            view.progress_spinner.visibility = View.VISIBLE // Покажем спиннер загрузки
+        }
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
         val newShowUser = verifyEmailDTO()
@@ -134,6 +138,11 @@ class ProfileFragment : Fragment() {
                         }
                         profile_email.text = data.email
                         profile_phone.text = data.phone
+
+                        val view = this@ProfileFragment.view
+                        if (view != null) {
+                            view.progress_spinner.visibility = View.GONE // Скроем спиннер загрузки
+                        }
                     } else {
                         /**
                          * TODO
