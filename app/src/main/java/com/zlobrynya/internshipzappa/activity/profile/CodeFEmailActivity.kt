@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
@@ -301,5 +302,15 @@ class CodeFEmailActivity: AppCompatActivity() {
         thirdNumber.setTextColor(resources.getColor(R.color.white))
         fourthNumber.setTextColor(resources.getColor(R.color.white))
         fifthNumber.setTextColor(resources.getColor(R.color.white))
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                this.finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 }

@@ -73,7 +73,8 @@
             android:screenOrientation="locked"/>
         <activity
             android:name=".activity.menu.SubDescriptionScreen"
-            android:screenOrientation="locked"/>
+            android:screenOrientation="locked"
+            android:theme="@style/AppTheme.NoBar"/>
     </application>
 
 </manifest>

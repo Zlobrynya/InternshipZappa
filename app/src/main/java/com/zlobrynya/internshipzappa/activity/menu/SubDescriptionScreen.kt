@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -36,10 +37,10 @@ class SubDescriptionScreen : AppCompatActivity() {
         val id = intent.getIntExtra(getString(R.string.key_id),0)
 
         //ToolBar
-       /* toolbar4.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
+        toolbar4.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
         setSupportActionBar(toolbar4)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)*/
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         subScrollView.smoothScrollTo(0,0)
 
@@ -73,6 +74,7 @@ class SubDescriptionScreen : AppCompatActivity() {
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
             .placeholder(R.drawable.menu)
+            .centerCrop()
             .error(R.drawable.menu)
             .into(object: SimpleTarget<Bitmap>(){
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
@@ -86,6 +88,16 @@ class SubDescriptionScreen : AppCompatActivity() {
                     subDishPhoto.setImageDrawable(errorDrawable)
                 }
             })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                this.finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
 }
