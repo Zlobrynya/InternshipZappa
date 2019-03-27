@@ -144,6 +144,7 @@ class GetDataServer(val context: Context) {
         //чистим таблицы
         menuDb.clearTableDB()
         categoryDB.clearTableDB()
+        subMenuDB.clearTableDB()
     }
 
     private fun getCategory(emitter: ObservableEmitter<Boolean>) {
