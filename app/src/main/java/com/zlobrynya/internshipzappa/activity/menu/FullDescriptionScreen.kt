@@ -56,10 +56,6 @@ class FullDescriptionScreen : AppCompatActivity() {
             recyclerView.adapter =
                 AdapterRecommendDish(listRecDish(dish.recommended))
 
-        if (DishClientDTO().sub_menu !== "null"){
-            val intent = Intent(this, SubDescriptionScreen::class.java)
-            startActivity(intent)
-        }
     }
 
     @SuppressLint("SetTextI18n")

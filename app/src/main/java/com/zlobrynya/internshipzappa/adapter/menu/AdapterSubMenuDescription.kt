@@ -31,7 +31,7 @@ class AdapterSubMenuDescription(private val values: ArrayList<DishSubDTO>): Recy
     override fun getItemCount() = values!!.size
 
     override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_rect_recommend_dish, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_sub_menu, parent, false)
 
         return ViewHolder(itemView)
     }
@@ -48,7 +48,7 @@ class AdapterSubMenuDescription(private val values: ArrayList<DishSubDTO>): Recy
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishSubDTO) = with(itemView) {
             sub_price.text = if (dishDTO.price == 0) "-"
-            else dishDTO.price.toInt().toString() + context.getString(R.string.rub)
+            else dishDTO.price.toString() + context.getString(R.string.rub)
             sub_name_dish.text = dishDTO.name.replace("\'", "\"")
 
             if (dishDTO.weight.contains("null")) {

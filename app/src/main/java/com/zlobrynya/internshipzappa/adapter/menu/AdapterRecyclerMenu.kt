@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.zlobrynya.internshipzappa.activity.menu.FullDescriptionScreen
+import com.zlobrynya.internshipzappa.activity.menu.SubDescriptionScreen
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import kotlinx.android.synthetic.main.item_menu.view.*
 
@@ -98,9 +99,15 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
 
         override fun onClick(view: View) {
             Log.i("qq", subDish)
-            val intent = Intent(context, FullDescriptionScreen::class.java)
-            intent.putExtra(context.getString(R.string.key_id), idDish)
-            context.startActivity(intent)
+            if(subDish == "null") {
+                val intent = Intent(context, FullDescriptionScreen::class.java)
+                intent.putExtra(context.getString(R.string.key_id), idDish)
+                context.startActivity(intent)
+            }else{
+                val intent = Intent(context, SubDescriptionScreen::class.java)
+                intent.putExtra(context.getString(R.string.key_id), idDish)
+                context.startActivity(intent)
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -25,27 +27,32 @@ class SubDescriptionScreen : AppCompatActivity() {
     private lateinit var menuDB: MenuDB
     private lateinit var subMenuDB: SubMenuDB
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sub_description_screen)
-
-        subScrollView.smoothScrollTo(0,0)
 
         val intent = intent
         val id = intent.getIntExtra(getString(R.string.key_id),0)
 
         //ToolBar
-        toolbar4.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
+       /* toolbar4.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
         setSupportActionBar(toolbar4)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)*/
+
+        subScrollView.smoothScrollTo(0,0)
+
+        //Создание RecyclerView
+        val layoutManager = LinearLayoutManager(this@SubDescriptionScreen, LinearLayoutManager.VERTICAL,false)
+        subRecyclerView.layoutManager = layoutManager
 
         menuDB = MenuDB(this)
         val dish = menuDB.getDescriptionDish(id)
         showDishDescription(dish)
-
-        val dishSubDTO = DishSubDTO()
-        val array = subMenuDB.getCategoryDish(dishSubDTO.name)
+        subMenuDB = SubMenuDB(this)
+        val array = subMenuDB.getCategoryDish(dish.name)
+        Log.i( "sub", array.size.toString())
         subRecyclerView.adapter = AdapterSubMenuDescription(array)
     }
 
