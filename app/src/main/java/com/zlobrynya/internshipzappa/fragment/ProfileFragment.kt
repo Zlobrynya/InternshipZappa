@@ -139,10 +139,6 @@ class ProfileFragment : Fragment() {
                         profile_email.text = data.email
                         profile_phone.text = data.phone
 
-                        val view = this@ProfileFragment.view
-                        if (view != null) {
-                            view.progress_spinner.visibility = View.GONE // Скроем спиннер загрузки
-                        }
                     } else {
                         /**
                          * TODO
@@ -150,6 +146,10 @@ class ProfileFragment : Fragment() {
                          *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
                          *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
                          */
+                    }
+                    val view = this@ProfileFragment.view
+                    if (view != null) {
+                        view.progress_spinner.visibility = View.GONE // Скроем спиннер загрузки
                     }
                 }
 

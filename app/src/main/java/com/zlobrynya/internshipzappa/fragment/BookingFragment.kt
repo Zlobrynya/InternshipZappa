@@ -642,20 +642,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     }
 
     /**
-     * Проверка на наличие интерента
-     * @return Наличие интенета
-     */
-    private fun checkInternetConnection(): Boolean {
-        val connected: Boolean
-        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        connected =
-            connectivityManager!!.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).state == NetworkInfo.State.CONNECTED || connectivityManager.getNetworkInfo(
-                ConnectivityManager.TYPE_WIFI
-            ).state == NetworkInfo.State.CONNECTED
-        return connected
-    }
-
-    /**
      * Выводит диалоговое окно с сообщением об отсутствии интернета
      */
     private fun showNoInternetConnectionAlert() {
@@ -689,6 +675,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      */
     private fun networkRxJavaPost(newBooking: bookingDataDTO, args: Bundle) {
 
+        val view = this.view
+        if (view != null) {
+            view.progress_spinner.visibility = View.VISIBLE
+        }
+
         RetrofitClientInstance.getInstance()
             .postBookingDate(newBooking)
             .subscribeOn(Schedulers.io())
@@ -716,6 +707,10 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                         }
                     } else { // В случае ошибок
                         Log.i("BOOP", "Код ошибки ${t.code()}")
+                    }
+                    val view = this@BookingFragment.view
+                    if (view != null) {
+                        view.progress_spinner.visibility = View.GONE
                     }
                 }
 
