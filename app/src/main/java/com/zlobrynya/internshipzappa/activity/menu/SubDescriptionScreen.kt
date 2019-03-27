@@ -41,11 +41,12 @@ class SubDescriptionScreen : AppCompatActivity() {
         supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         menuDB = MenuDB(this)
+        subMenuDB = SubMenuDB(this)
+
         val dish = menuDB.getDescriptionDish(id)
         showDishDescription(dish)
 
-        val dishSubDTO = DishSubDTO()
-        val array = subMenuDB.getCategoryDish(dishSubDTO.name)
+        val array = subMenuDB.getCategoryDish(dish.name)
         subRecyclerView.adapter = AdapterSubMenuDescription(array)
     }
 
