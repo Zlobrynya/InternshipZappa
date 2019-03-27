@@ -33,7 +33,7 @@ class ProfileLoginFragment : Fragment() {
     }
 
     /**
-     * Открывает логин активити на результат
+     * Открывает логин активити
      */
     private fun openLoginActivity() {
         val intent = Intent(context, LoginActivity::class.java)

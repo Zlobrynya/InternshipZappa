@@ -2,6 +2,7 @@ package com.zlobrynya.internshipzappa.fragment
 
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -14,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterUserBookings
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.UserBookingDTO
@@ -41,7 +43,9 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
     private val bookingList: ArrayList<UserBookingDTO> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_my_bookings, container, false)
+        val view = inflater.inflate(R.layout.fragment_my_bookings, container, false)
+        view.login_button.setOnClickListener(onClickListener)
+        return view
     }
 
     override fun onResume() {
@@ -52,6 +56,24 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
             postUserBookings(view)
         }
         Log.d("BOOP", "onResume MyBookingsFragment")
+    }
+
+    /**
+     * Обработчик нажатий
+     */
+    private val onClickListener = View.OnClickListener {
+        when (it.id) {
+            // Кнопка залогиниться
+            R.id.login_button -> openLoginActivity()
+        }
+    }
+
+    /**
+     * Открывает логин активити
+     */
+    private fun openLoginActivity() {
+        val intent = Intent(context, LoginActivity::class.java)
+        startActivity(intent)
     }
 
     /**
@@ -127,6 +149,7 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                         val userBookingList = t.body()
                         if (userBookingList != null) {
                             view.user_not_authorized.visibility = View.GONE
+                            view.login_button.visibility = View.GONE
                             initBookingList(userBookingList.bookings, view)
                         }
                     } else {
@@ -137,6 +160,7 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                             view.user_not_authorized.visibility = View.VISIBLE
                             view.no_user_bookings_text_view.visibility = View.GONE
                             view.user_bookings_recycler.visibility = View.GONE
+                            view.login_button.visibility = View.VISIBLE
                         }
                     }
                 }
