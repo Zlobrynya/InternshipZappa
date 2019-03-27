@@ -204,27 +204,33 @@ class EditProfileFragment : Fragment() {
             val date: Date = inputFormat.parse(newDate)
             val outputDateStr = outputFormat.format(date)
 
-            //не трогать
-            val newChangeData = changeUserDataDTO()
-            val email = arguments!!.getString("email")
-            if(email != newEmail){
+            val validateName = validateName(newName)
+            val validatePhone = validatePhone(newPhone)
+            val validateEmail = validateEmail(newEmail)
 
-                newChangeData.birthday = outputDateStr
-                newChangeData.name = newName
-                newChangeData.new_email = newEmail
-                newChangeData.email = email
-                newChangeData.phone = newPhone
-                checkExistenceEmail(newChangeData)
-            }else{
-                /**
-                 * TODO поменять дату на нужный формат
-                 */
-                newChangeData.birthday = outputDateStr
-                newChangeData.name = newName
-                newChangeData.new_email = ""
-                newChangeData.email = email
-                newChangeData.phone = newPhone
-                changeUserCredentials(newChangeData)
+            if (validateName && validateEmail && validatePhone) {
+                //не трогать
+                val newChangeData = changeUserDataDTO()
+                val email = arguments!!.getString("email")
+                if (email != newEmail) {
+
+                    newChangeData.birthday = outputDateStr
+                    newChangeData.name = newName
+                    newChangeData.new_email = newEmail
+                    newChangeData.email = email
+                    newChangeData.phone = newPhone
+                    checkExistenceEmail(newChangeData)
+                } else {
+                    /**
+                     * TODO поменять дату на нужный формат
+                     */
+                    newChangeData.birthday = outputDateStr
+                    newChangeData.name = newName
+                    newChangeData.new_email = ""
+                    newChangeData.email = email
+                    newChangeData.phone = newPhone
+                    changeUserCredentials(newChangeData)
+                }
             }
         }
 

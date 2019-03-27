@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_hint"
             android:digits="+() 1234567890-"
-            android:hint="@string/hint_phone_number"
+            android:hint="@string/label_hint_phone_number"
             android:textColor="@color/white"
             android:inputType="phone"
             android:imeOptions="actionNext"

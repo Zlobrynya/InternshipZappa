@@ -75,7 +75,7 @@
             android:backgroundTint="@color/color_hint"
             android:clickable="true"
             android:focusable="false"
-            android:hint="@string/hint_dob"
+            android:hint="@string/label_hint_dob"
             android:inputType="date"
             android:singleLine="true"
             android:textColor="@color/white" />
