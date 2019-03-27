@@ -145,7 +145,7 @@ class LoginActivity : AppCompatActivity() {
                                 Log.i("checkAuth", t.body()!!.email)
                                 Log.i("checkAuth", t.body()!!.access_token)
                                 //onBackPressed()
-                                updateUserBookingList()
+                                //updateUserBookingList()
                                 setResult(Activity.RESULT_OK)
                                 finish()
                             } else {
