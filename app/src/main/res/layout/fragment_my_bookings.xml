@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Вы не авторизованы"
+        android:text="Для просмотра списка бронирований,\nпожалуйста, войдите в свой профиль"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:visibility="gone" />

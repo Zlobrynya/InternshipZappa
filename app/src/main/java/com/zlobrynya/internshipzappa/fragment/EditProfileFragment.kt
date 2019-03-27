@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
@@ -23,7 +24,6 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_personal_info.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import retrofit2.Response
@@ -44,12 +44,23 @@ class EditProfileFragment : Fragment() {
      * Обработчик нажатий на стрелочку в тулбаре
      */
     private val navigationClickListener = View.OnClickListener {
-        // Удалим фрагмент со стека
+        closeFragment()
+    }
+
+    /**
+     * Закрывает текущий фрагмент и снимает его со стека
+     */
+    private fun closeFragment() {
         val trans = fragmentManager!!.beginTransaction()
         trans.remove(this)
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         trans.commit()
         fragmentManager!!.popBackStack()
+    }
+
+    private fun reloadActivity() {
+        val intent = Intent(context, Menu2Activity::class.java)
+        startActivity(intent)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -168,15 +179,16 @@ class EditProfileFragment : Fragment() {
 
         })
 
-        view.edit_profile_phone_number.addTextChangedListener(object: TextWatcher{
+        view.edit_profile_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                edit_profile_phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
+                edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val phone = edit_profile_phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
 
                         if (!validatePhone) {
-                            edit_profile_phone_number_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                            edit_profile_phone_number_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_phone)
                             edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
                         } else {
                             edit_profile_phone_number_input_layout.isErrorEnabled = false
@@ -232,6 +244,8 @@ class EditProfileFragment : Fragment() {
                     changeUserCredentials(newChangeData)
                 }
             }
+            closeFragment()
+            reloadActivity()
         }
 
         return view
@@ -281,7 +295,7 @@ class EditProfileFragment : Fragment() {
      *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
      *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
      */
-    private fun changeUserCredentials(newChangeUser: changeUserDataDTO){
+    private fun changeUserCredentials(newChangeUser: changeUserDataDTO) {
 
         Log.i("checkChangeCredentials", newChangeUser.name)
         Log.i("checkChangeCredentials", newChangeUser.phone)
@@ -337,7 +351,8 @@ class EditProfileFragment : Fragment() {
 
             })
     }
-    private fun checkExistenceEmail(newChange: changeUserDataDTO){
+
+    private fun checkExistenceEmail(newChange: changeUserDataDTO) {
 
         val newVerify = verifyEmailDTO()
         newVerify.email = newChange.new_email
@@ -353,10 +368,10 @@ class EditProfileFragment : Fragment() {
 
                 override fun onNext(t: Response<respDTO>) {
                     Log.i("checkEmailExistence", t.code().toString())
-                    if(t.isSuccessful) {
+                    if (t.isSuccessful) {
                         Log.i("checkEmailExistence", "${t.code()}")
                         Log.i("checkEmailExistence", t.body()!!.desc)
-                    }else{
+                    } else {
                         RetrofitClientInstance.getInstance()
                             .postVerifyData(newVerify)
                             .subscribeOn(Schedulers.io())
@@ -370,7 +385,7 @@ class EditProfileFragment : Fragment() {
                                 override fun onNext(t: Response<verifyRespDTO>) {
                                     Log.i("checkCode", "${t.code()}")
 
-                                    if(t.isSuccessful) {
+                                    if (t.isSuccessful) {
                                         val intent = Intent(context, CodeFEmailActivity::class.java)
                                         intent.putExtra("change_name", newChange.name)
                                         intent.putExtra("change_phone", newChange.phone)
@@ -389,6 +404,7 @@ class EditProfileFragment : Fragment() {
                             })
                     }
                 }
+
                 override fun onError(e: Throwable) {
                     Log.i("checkReg", "that's not fineIn")
                 }

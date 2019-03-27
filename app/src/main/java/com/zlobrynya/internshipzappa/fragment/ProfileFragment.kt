@@ -1,6 +1,7 @@
 package com.zlobrynya.internshipzappa.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
@@ -35,7 +37,7 @@ class ProfileFragment : Fragment() {
 
         var view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        showUserCredentials()
+
         view.profile_exit.setOnClickListener {
             val sharedPreferencesStat = context!!.getSharedPreferences(
                 context!!.getString(R.string.user_info),
@@ -47,6 +49,10 @@ class ProfileFragment : Fragment() {
             editor.putString(savedEmail, "")
             editor.putString(access_token, "")
             editor.apply()
+
+            val intent = Intent(context, Menu2Activity::class.java)
+            startActivity(intent)
+
         }
 
         view.btnEdit.setOnClickListener {
@@ -68,7 +74,13 @@ class ProfileFragment : Fragment() {
         return view
     }
 
-    fun String.toEditable(): Editable =  Editable.Factory.getInstance().newEditable(this)
+    override fun onResume() {
+        Log.d("BOOP", "onResume profileFragment")
+        showUserCredentials()
+        super.onResume()
+    }
+
+    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 
 
     /**
@@ -77,8 +89,12 @@ class ProfileFragment : Fragment() {
      *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
      *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
      */
-    private fun showUserCredentials(){
+    private fun showUserCredentials() {
 
+        val view = this.view
+        if (view != null) {
+            view.progress_spinner.visibility = View.VISIBLE // Покажем спиннер загрузки
+        }
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
         val newShowUser = verifyEmailDTO()
@@ -102,7 +118,7 @@ class ProfileFragment : Fragment() {
                         /**
                          * TODO при получении проверять, что поля не равны нулл
                          */
-                        val data =t.body()!!.data
+                        val data = t.body()!!.data
                         Log.i("checkMyCredentials", t.body().toString())
                         Log.i("checkMyCredentials", data.toString())
                         //Log.i("checkMyCredentials", data.birthday)
@@ -117,11 +133,12 @@ class ProfileFragment : Fragment() {
                             val date: Date = inputFormat.parse(data.birthday)
                             val outputDateStr = outputFormat.format(date)
                             profile_dob.text = outputDateStr
-                        }else{
+                        } else {
                             profile_dob.text = ""
                         }
                         profile_email.text = data.email
                         profile_phone.text = data.phone
+
                     } else {
                         /**
                          * TODO
@@ -129,6 +146,10 @@ class ProfileFragment : Fragment() {
                          *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
                          *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
                          */
+                    }
+                    val view = this@ProfileFragment.view
+                    if (view != null) {
+                        view.progress_spinner.visibility = View.GONE // Скроем спиннер загрузки
                     }
                 }
 
