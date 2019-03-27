@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishSubDTO
 
@@ -79,6 +80,19 @@ class SubMenuDB(val context: Context) {
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + "\"" + dish.parent_name + "\",\"" +
                 dish.name +  "\",\"" + dish.weight + "\"," + dish.price + ");"
         sqLiteDatabase!!.execSQL(query)
+    }
+
+    //получаем описание блюда
+    fun getDescriptionDish(category: String): DishSubDTO {
+        val query = "SELECT * FROM " + NAME_TABLE + " WHERE " + PARENT_NAME + "=" + category
+        val cursor = sqLiteDatabase!!.rawQuery(query, null)
+        var dish = DishSubDTO()
+        if(cursor.count != 0){
+            cursor.moveToFirst()
+            dish = getDish(cursor)
+        }
+        cursor.close()
+        return dish
     }
 
     //вернет ArrayList<DescriptionDish> определенной категории
