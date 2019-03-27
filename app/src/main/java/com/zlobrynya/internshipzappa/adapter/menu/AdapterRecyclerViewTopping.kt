@@ -8,14 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
 import android.view.LayoutInflater
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import kotlinx.android.synthetic.main.item_topping_menu.view.*
 
 
 /*
 * Адаптер для отобрадежения топингов и напитков RecyclerMenu
 */
-class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val context: Context):
+class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishClientDTO>, val context: Context):
     RecyclerView.Adapter<AdapterRecyclerViewTopping.Holder>() {
 
 
@@ -40,7 +40,7 @@ class AdapterRecyclerViewTopping(private val myDataset: ArrayList<DishDTO>, val 
 
 
         @SuppressLint("SetTextI18n")
-        fun bind(dishDTO: DishDTO) = with(itemView){
+        fun bind(dishDTO: DishClientDTO) = with(itemView){
             //В класс помощник записываем данные
             nameTopping.text = dishDTO.name
             Log.i("cat", dishDTO.class_name)

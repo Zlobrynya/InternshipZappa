@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 
 
@@ -36,6 +37,7 @@ class MenuDB(val context: Context) {
     private val CATEGORY = "category"
     private val RECOMEND = "recommended"
     private val DELIVERY = "delivery"
+    private val SUB_MENU = "submenu"
     private val NAME_TABLE = "menu"
     private var database: Database? = null
     private var sqLiteDatabase: SQLiteDatabase? = null
@@ -58,7 +60,8 @@ class MenuDB(val context: Context) {
                 WEIGHT + " text not null, " +
                 CATEGORY + " text not null, " +
                 RECOMEND + " text not null, " +
-                DELIVERY + " text not null);"
+                DELIVERY + " text not null, " +
+                SUB_MENU + " text not null);"
         //создается таблица
         sqLiteDatabase!!.execSQL(DATABASE_CREATE_SCRIPT)
     }
@@ -84,23 +87,26 @@ class MenuDB(val context: Context) {
 
     //добавляем одну строку в бд
     fun addData(dish: DishDTO){
+        var subCheck = "null"
         if (dish.name.isEmpty())
             dish.name = context.getString(R.string.no_name)
         if (dish.photo.isEmpty())
             dish.photo = "null"
-
+        if (!dish.sub_menu!!.isEmpty()){
+            subCheck = "not_null"
+        }
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.item_id + ",\"" +
                 dish.name +  "\"," + dish.price + ",\"" + dish.photo + "\",\"" +
                 dish.desc_long + "\",\"" + dish.desc_short + "\",\"" + dish.weight + "\",\"" +
-                dish.class_name + "\",\"" + dish.recommended + "\",\"" + dish.delivery + "\");"
+                dish.class_name + "\",\"" + dish.recommended + "\",\"" + dish.delivery + "\",\"" + subCheck + "\");"
         sqLiteDatabase!!.execSQL(query)
     }
 
     //получаем описание блюда
-    fun getDescriptionDish(index: Int): DishDTO {
+    fun getDescriptionDish(index: Int): DishClientDTO {
         val query = "SELECT * FROM " + NAME_TABLE + " WHERE " + DISH_ID + "=" + index
         val cursor = sqLiteDatabase!!.rawQuery(query, null)
-        var dish = DishDTO()
+        var dish = DishClientDTO()
         if(cursor.count != 0){
             cursor.moveToFirst()
             dish = getDish(cursor)
@@ -110,10 +116,10 @@ class MenuDB(val context: Context) {
     }
 
     //вернет ArrayList<DescriptionDish> определенной категории
-    fun getCategoryDish(category: String): ArrayList<DishDTO>{
+    fun getCategoryDish(category: String): ArrayList<DishClientDTO>{
         val query = "SELECT * FROM " + NAME_TABLE + " WHERE " + CATEGORY + "=\"" + category + "\""
         val cursor = sqLiteDatabase!!.rawQuery(query, null)
-        val arrayDish = arrayListOf<DishDTO>()
+        val arrayDish = arrayListOf<DishClientDTO>()
         //cursor.moveToNext() - если больше строк нету то возвращает false
         while (cursor.moveToNext())
             arrayDish.add(getDish(cursor))
@@ -129,8 +135,8 @@ class MenuDB(val context: Context) {
     }
 
     //получаем заполненный класс с бд
-    private fun getDish(cursor: Cursor): DishDTO {
-        val dish = DishDTO()
+    private fun getDish(cursor: Cursor): DishClientDTO {
+        val dish = DishClientDTO()
         dish.item_id = cursor.getInt(cursor.getColumnIndex(DISH_ID))
         dish.name = cursor.getString(cursor.getColumnIndex(TITLE))
         dish.desc_long = cursor.getString(cursor.getColumnIndex(DESC_LONG))
@@ -141,6 +147,7 @@ class MenuDB(val context: Context) {
         dish.price = cursor.getDouble(cursor.getColumnIndex(PRICE))
         dish.weight = cursor.getString(cursor.getColumnIndex(WEIGHT))
         dish.delivery = cursor.getString(cursor.getColumnIndex(DELIVERY))
+        dish.sub_menu = cursor.getString(cursor.getColumnIndex(SUB_MENU))
 
         return dish
     }

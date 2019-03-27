@@ -11,13 +11,13 @@ import android.view.View
 import com.zlobrynya.internshipzappa.adapter.menu.AdapterRecommendDish
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import android.view.MenuItem
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import java.util.*
 
 
@@ -58,7 +58,7 @@ class FullDescriptionScreen : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    fun showDishDescription(dish: DishDTO){
+    fun showDishDescription(dish: DishClientDTO){
         //Проверка получены ли данные
         dishCena.text = if (dish.price == 0.0) getString(R.string.munis) else (dish.price.toInt()).toString() + getString(R.string.rub)
 
@@ -102,8 +102,8 @@ class FullDescriptionScreen : AppCompatActivity() {
             })
     }
 
-    fun listRecDish(str: String): ArrayList<DishDTO> {
-        val list: ArrayList<DishDTO> = ArrayList()
+    fun listRecDish(str: String): ArrayList<DishClientDTO> {
+        val list: ArrayList<DishClientDTO> = ArrayList()
         if (!str.isEmpty()){
             val delimiter = ';'
             val parts = str.split(delimiter)
