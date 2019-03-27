@@ -38,7 +38,7 @@ class ProfileFragment : Fragment() {
         var view = inflater.inflate(R.layout.fragment_profile, container, false)
 
 
-        view.profile_exit.setOnClickListener {
+        view.btn_profile_exit.setOnClickListener {
             val sharedPreferencesStat = context!!.getSharedPreferences(
                 context!!.getString(R.string.user_info),
                 Context.MODE_PRIVATE
@@ -55,7 +55,7 @@ class ProfileFragment : Fragment() {
 
         }
 
-        view.btnEdit.setOnClickListener {
+        view.btn_edit_profile.setOnClickListener {
             val args = Bundle()
             args.putString("name", profile_username.text.toString())
             args.putString("dob", profile_dob.text.toString())

@@ -26,6 +26,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_personal_info.*
 import kotlinx.android.synthetic.main.fragment_personal_info.view.*
 import retrofit2.Response
 import java.text.DateFormat
@@ -209,8 +210,8 @@ class PersonalInfoFragment : Fragment() {
                             }
                             val intent = Intent(context, BookingEnd::class.java)
                             intent.putExtra("code", t.code())
-                            intent.putExtra("name", "временное имя")
-                            intent.putExtra("phone", "временный телефон")
+                            intent.putExtra("name", fm_username.text)
+                            intent.putExtra("phone", fm_phone.text)
                             //context.startActivity(intent)
                             startActivityForResult(intent, REQUEST_CODE_BOOKING_END)
                         }
@@ -218,8 +219,8 @@ class PersonalInfoFragment : Fragment() {
                         Log.i("check2", "${t.code()}")
                         val intent = Intent(context, BookingEnd::class.java)
                         intent.putExtra("code", t.code())
-                        intent.putExtra("name", "временное имя")
-                        intent.putExtra("phone", "временный телефон")
+                        intent.putExtra("name", fm_username.text)
+                        intent.putExtra("phone", fm_phone.text)
                         //finish()
                         //closeFragment() // Закроем фрагмент
                         context.startActivity(intent)
@@ -285,6 +286,8 @@ class PersonalInfoFragment : Fragment() {
                         Log.i("checkMyCredentials", data.name)
                         Log.i("checkMyCredentials", data.phone)
                         Log.i("checkMyCredentials", data.reg_date)
+                        fm_username.text = data.name
+                        fm_phone.text = data.phone
                     } else {
                         /**
                          * TODO
@@ -307,6 +310,11 @@ class PersonalInfoFragment : Fragment() {
             })
     }
 
+    override fun onResume() {
+        Log.d("BOOP", "onResume personalInfoFragment")
+        showUserCredentials()
+        super.onResume()
+    }
 
     /**
      * Закрывает текущий фрагмент и удаляет его со стека
