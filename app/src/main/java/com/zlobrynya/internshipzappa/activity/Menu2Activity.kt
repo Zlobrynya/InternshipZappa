@@ -65,7 +65,6 @@ class Menu2Activity : AppCompatActivity() {
 
         viewpager2.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
             }
 
             override fun onPageSelected(position: Int) {

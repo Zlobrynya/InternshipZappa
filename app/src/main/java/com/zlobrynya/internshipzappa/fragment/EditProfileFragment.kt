@@ -312,6 +312,14 @@ class EditProfileFragment : Fragment() {
                          * TODO при получении проверять, что поля не равны нулл
                          */
                         Log.i("checkChangeCredentials", "${t.code()}")
+                        val sharedPreferencesStat = context!!.getSharedPreferences(
+                            context!!.getString(R.string.user_info),
+                            Context.MODE_PRIVATE
+                        )
+                        val access_token = context!!.getString(R.string.access_token)
+                        val editor = sharedPreferencesStat.edit()
+                        editor.putString(access_token, t.body()!!.access_token)
+                        editor.apply()
                     } else {
                         /**
                          * TODO

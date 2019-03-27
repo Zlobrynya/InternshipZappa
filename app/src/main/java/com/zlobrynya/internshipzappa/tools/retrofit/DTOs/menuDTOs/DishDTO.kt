@@ -12,5 +12,6 @@ data class DishDTO(
     @SerializedName("desc_long") var desc_long: String = "null",
     @SerializedName("weight") var weight: String = "null",
     @SerializedName("recommended") var recommended: String = "null",
-    @SerializedName("delivery") var delivery: String = "null"
+    @SerializedName("delivery") var delivery: String = "null",
+    @SerializedName("sub_menu") var sub_menu: List<DishSubDTO>? = null
 )

@@ -264,6 +264,7 @@ class RegisterActivity : AppCompatActivity() {
                                         intent.putExtra("email", reg_email.text.toString())
                                         intent.putExtra("password", reg_password.text.toString())
                                         intent.putExtra("code", t.body()!!.email_code)
+                                        intent.putExtra("id", "0")
                                         startActivity(intent)
                                     }
                                 }
@@ -299,7 +300,7 @@ class RegisterActivity : AppCompatActivity() {
         } else {
             phone.length == phoneLength7
         }*/
-        val phoneLength = 10
+        val phoneLength = 16
         return phone.length == phoneLength
     }
 

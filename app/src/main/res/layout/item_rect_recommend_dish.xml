@@ -66,10 +66,10 @@
 
         <TextView
             android:id="@+id/topingVes"
-            android:layout_width="117dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="23dp"
+            android:layout_marginBottom="45dp"
             android:text=""
             android:textColor="#B2FFFFFF"
             android:textSize="12sp"
@@ -80,6 +80,7 @@
             android:id="@+id/topingPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="20dp"
             android:text="@string/no_price"
@@ -87,7 +88,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topingVes" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

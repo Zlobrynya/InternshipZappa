@@ -6,6 +6,7 @@ import android.util.Log
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
+import com.zlobrynya.internshipzappa.tools.database.SubMenuDB
 import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
@@ -31,10 +32,12 @@ class GetDataServer(val context: Context) {
     private var menuDb: MenuDB
     private var categoryDB: CategoryDB
     private var hoursDB: VisitingHoursDB
+    private var subMenuDB: SubMenuDB
     init {
         hoursDB = VisitingHoursDB(context)
         menuDb = MenuDB(context)
         categoryDB = CategoryDB(context)
+        subMenuDB = SubMenuDB(context)
     }
 
     fun getData(): Observable<Boolean> {
@@ -81,6 +84,7 @@ class GetDataServer(val context: Context) {
     private fun closeBD(){
         menuDb.closeDataBase()
         categoryDB.closeDataBase()
+        subMenuDB.closeDataBase()
     }
 
 
@@ -248,6 +252,12 @@ class GetDataServer(val context: Context) {
                                     it.class_name = nameCategory
                                 }
                                 menuDb.addAllData(dishes!!)
+
+                                dishes?.forEach {
+                                    if(!it.sub_menu!!.isEmpty()){
+                                        subMenuDB.addAllData(it.sub_menu!!)
+                                    }
+                                }
                                 //считаем сколько потоков завершилось
                                 if (countComplite < 0){
                                     composite.clear()

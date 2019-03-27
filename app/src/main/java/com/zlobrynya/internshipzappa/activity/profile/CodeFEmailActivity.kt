@@ -209,6 +209,18 @@ class CodeFEmailActivity: AppCompatActivity() {
                                 override fun onNext(t: Response<regRespDTO>) {
                                     Log.i("checkReg", t.code().toString())
                                     if (t.isSuccessful) {
+
+                                        val sharedPreferencesStat = applicationContext.getSharedPreferences(
+                                            applicationContext.getString(R.string.user_info),
+                                            Context.MODE_PRIVATE
+                                        )
+                                        val savedEmail = applicationContext.getString(R.string.user_email)
+                                        val access_token = applicationContext.getString(R.string.access_token)
+                                        val editor = sharedPreferencesStat.edit()
+                                        editor.putString(savedEmail, newRegister.email)
+                                        editor.putString(access_token, t.body()!!.access_token)
+                                        editor.apply()
+
                                         allert_text.visibility = View.GONE
                                         firstNumber.setTextColor(resources.getColor(R.color.white))
                                         secondNumber.setTextColor(resources.getColor(R.color.white))
@@ -224,6 +236,8 @@ class CodeFEmailActivity: AppCompatActivity() {
                                         fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
                                         fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
                                     }
+                                    val intent = Intent(applicationContext, Menu2Activity::class.java)
+                                    startActivity(intent)
                                 }
 
                                 override fun onError(e: Throwable) {
@@ -279,6 +293,17 @@ class CodeFEmailActivity: AppCompatActivity() {
                                 override fun onNext(t: Response<changeUserDataRespDTO>) {
                                     Log.i("checkChange", t.code().toString())
                                     if (t.isSuccessful) {
+                                        val sharedPreferencesStat = applicationContext.getSharedPreferences(
+                                            applicationContext.getString(R.string.user_info),
+                                            Context.MODE_PRIVATE
+                                        )
+                                        val savedEmail = applicationContext.getString(R.string.user_email)
+                                        val access_token = applicationContext.getString(R.string.access_token)
+                                        val editor = sharedPreferencesStat.edit()
+                                        editor.putString(savedEmail, newChange.new_email)
+                                        editor.putString(access_token, t.body()!!.access_token)
+                                        editor.apply()
+
                                         allert_text.visibility = View.GONE
                                         firstNumber.setTextColor(resources.getColor(R.color.white))
                                         secondNumber.setTextColor(resources.getColor(R.color.white))
@@ -294,6 +319,8 @@ class CodeFEmailActivity: AppCompatActivity() {
                                         fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
                                         fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
                                     }
+                                    val intent = Intent(applicationContext, Menu2Activity::class.java)
+                                    startActivity(intent)
                                 }
 
                                 override fun onError(e: Throwable) {
