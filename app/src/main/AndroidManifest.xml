@@ -71,6 +71,9 @@
         <activity
             android:name=".activity.profile.PasswordChange"
             android:screenOrientation="locked"/>
+        <activity
+            android:name=".activity.menu.SubDescriptionScreen"
+            android:screenOrientation="locked"/>
     </application>
 
 </manifest>
