@@ -37,7 +37,7 @@ class ProfileFragment : Fragment() {
 
         var view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        showUserCredentials()
+
         view.profile_exit.setOnClickListener {
             val sharedPreferencesStat = context!!.getSharedPreferences(
                 context!!.getString(R.string.user_info),
@@ -72,6 +72,12 @@ class ProfileFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onResume() {
+        Log.d("BOOP", "onResume profileFragment")
+        showUserCredentials()
+        super.onResume()
     }
 
     fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
