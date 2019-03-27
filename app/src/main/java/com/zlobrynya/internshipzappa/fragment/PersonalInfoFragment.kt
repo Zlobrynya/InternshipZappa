@@ -210,8 +210,8 @@ class PersonalInfoFragment : Fragment() {
                             }
                             val intent = Intent(context, BookingEnd::class.java)
                             intent.putExtra("code", t.code())
-                            intent.putExtra("name", "временное имя")
-                            intent.putExtra("phone", "временный телефон")
+                            intent.putExtra("name", fm_username.text)
+                            intent.putExtra("phone", fm_phone.text)
                             //context.startActivity(intent)
                             startActivityForResult(intent, REQUEST_CODE_BOOKING_END)
                         }
@@ -219,8 +219,8 @@ class PersonalInfoFragment : Fragment() {
                         Log.i("check2", "${t.code()}")
                         val intent = Intent(context, BookingEnd::class.java)
                         intent.putExtra("code", t.code())
-                        intent.putExtra("name", "временное имя")
-                        intent.putExtra("phone", "временный телефон")
+                        intent.putExtra("name", fm_username.text)
+                        intent.putExtra("phone", fm_phone.text)
                         //finish()
                         //closeFragment() // Закроем фрагмент
                         context.startActivity(intent)
