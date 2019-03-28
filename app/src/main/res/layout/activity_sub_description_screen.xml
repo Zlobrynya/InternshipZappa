@@ -102,14 +102,14 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:indeterminateDrawable="@drawable/spinner_ring"
                 android:indeterminateOnly="true"
+                android:theme="@style/ProgressBar"
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.853" />
+                app:layout_constraintVertical_bias="0.461" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

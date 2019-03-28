@@ -28,7 +28,6 @@
                 android:id="@+id/topingPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="94dp"
-                android:background="@drawable/no_toping"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -42,8 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="52dp"
                 android:layout_marginTop="20dp"
-                android:indeterminateDrawable="@drawable/spinner_ring"
                 android:indeterminateOnly="true"
+                android:theme="@style/ProgressBar"
                 tools:layout_editor_absoluteX="96dp"
                 tools:layout_editor_absoluteY="16dp" />
 

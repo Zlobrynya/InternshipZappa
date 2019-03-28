@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
@@ -105,7 +106,6 @@ class PasswordRecovery: AppCompatActivity() {
                 override fun onNext(t: Response<respDTO>) {
                     Log.i("checkEmailExistence", t.code().toString())
                     if(t.isSuccessful) {
-                        Toast.makeText(applicationContext, "Пользователь существует", Toast.LENGTH_SHORT).show()
                         verifyEmail(newVerify)
                     }else{
                         register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.user_not_exist)
@@ -144,5 +144,15 @@ class PasswordRecovery: AppCompatActivity() {
                 }
 
             })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                this.finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 }

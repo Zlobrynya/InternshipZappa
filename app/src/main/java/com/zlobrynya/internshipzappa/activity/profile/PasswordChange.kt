@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
@@ -177,6 +178,16 @@ class PasswordChange: AppCompatActivity() {
         val alert = builder.create()
         alert.show()
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                this.finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
 }

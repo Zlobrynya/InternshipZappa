@@ -43,7 +43,6 @@ class CodeFEmailActivity: AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (firstNumber.text.toString() == "") {
                     allCorrect()
-                    firstNumber.requestFocus()
                 } else {
                     secondNumber.requestFocus()
                 }
@@ -125,7 +124,7 @@ class CodeFEmailActivity: AppCompatActivity() {
                     allCorrect()
                     fourthNumber.requestFocus()
                 } else {
-                    fifthNumber.requestFocus()
+
                 }
             }
 
