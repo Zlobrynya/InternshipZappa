@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Залогиньтесь плез"
+        android:text="@string/text_profile_login"
         android:textColor="@color/white"
         android:textSize="18sp" />
 

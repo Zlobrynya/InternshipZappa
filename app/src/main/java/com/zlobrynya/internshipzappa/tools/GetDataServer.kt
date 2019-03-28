@@ -119,9 +119,10 @@ class GetDataServer(val context: Context) {
         }
 
         //если проходит проверку посылаем весь список
+        Log.i("LogCHECK", log.hashCode().toString() + " " + savedText)
         if (log.hashCode() == savedText) {
             val countLocBD = menuDb.getCountRow()
-            Log.i("Log", countLocBD.toString() + " " + count.toString())
+            Log.i("LogCHECK", countLocBD.toString() + " " + count.toString())
             if (countLocBD == count){
                 closeBD()
                 emitter.onNext(true)

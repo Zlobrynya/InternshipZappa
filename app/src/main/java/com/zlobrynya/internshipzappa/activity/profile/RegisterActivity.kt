@@ -68,20 +68,17 @@ class RegisterActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 reg_username.onFocusChangeListener = object: View.OnFocusChangeListener{
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        if (!hasFocus) {
-                            val name = reg_username_input_layout.editText!!.text.toString()
-                            val validateName = validateName(name)
+                        val name = reg_username_input_layout.editText!!.text.toString()
+                        val validateName = validateName(name)
 
-                            if (!validateName) {
-                                reg_username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
-                                reg_username.setCompoundDrawables(null, null, icon, null)
-                            } else {
-                                reg_username_input_layout.isErrorEnabled = false
-                                reg_username.setCompoundDrawables(null, null, null, null)
-                            }
+                        if (!hasFocus && !validateName) {
+                            reg_username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
+                            reg_username.setCompoundDrawables(null, null, icon, null)
+                        } else {
+                            reg_username_input_layout.isErrorEnabled = false
+                            reg_username.setCompoundDrawables(null, null, null, null)
                         }
                     }
-
                 }
             }
 
@@ -100,7 +97,7 @@ class RegisterActivity : AppCompatActivity() {
                         val phone = reg_phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
 
-                        if (!validatePhone) {
+                        if (!hasFocus && !validatePhone) {
                             reg_phone_number_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_phone)
                             reg_phone_number.setCompoundDrawables(null, null, icon, null)
                         } else {
@@ -125,7 +122,7 @@ class RegisterActivity : AppCompatActivity() {
                         val email = reg_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
 
-                        if (!validateEmail) {
+                        if (!hasFocus && !validateEmail) {
                             reg_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
                             reg_email.setCompoundDrawables(null, null, icon, null)
                         } else {
@@ -152,7 +149,7 @@ class RegisterActivity : AppCompatActivity() {
                         val password = reg_password_input_layout.editText!!.text.toString()
                         val validatePassword = validatePassword(password)
 
-                        if (!validatePassword) {
+                        if (!hasFocus && !validatePassword) {
                             reg_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_password)
                             reg_password.setCompoundDrawables(null, null, icon, null)
                         } else {
@@ -180,7 +177,7 @@ class RegisterActivity : AppCompatActivity() {
                         val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
                         val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
-                        if (!validateConfirmPassword) {
+                        if (!hasFocus && !validateConfirmPassword) {
                             reg_confirm_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                             reg_confirm_password.setCompoundDrawables(null, null, icon, null)
                         } else {
