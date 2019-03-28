@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                         val email = log_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
 
-                        if (!validateEmail) {
+                        if (!hasFocus && !validateEmail) {
                             log_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
                             log_email.setCompoundDrawables(null, null, icon, null)
                         } else {
@@ -79,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
                         val password = log_password_input_layout.editText!!.text.toString()
                         val validatePassword = validatePassword(password)
 
-                        if (!validatePassword) {
+                        if (!hasFocus && !validatePassword) {
                             log_password_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.error_password)
                             log_password.setCompoundDrawables(null, null, icon, null)
@@ -149,11 +149,12 @@ class LoginActivity : AppCompatActivity() {
                                 setResult(Activity.RESULT_OK)
                                 finish()
                             } else {
-                                log_password_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
+                                log_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
+                                log_email.setCompoundDrawables(null, null, icon, null)
+                                log_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
                                 log_password.setCompoundDrawables(null, null, icon, null)
                                 Log.i("checkAuth", "введены некоректные данные")
-                                Toast.makeText(this@LoginActivity, "Введены некоректные данные", Toast.LENGTH_SHORT)
+                                Toast.makeText(this@LoginActivity, "Неверный пароль или E-mail", Toast.LENGTH_SHORT)
                                     .show()
                             }
                         }

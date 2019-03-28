@@ -125,21 +125,17 @@ class EditProfileFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 edit_profile_username.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        if (!hasFocus) {
-                            val name = edit_profile_username_input_layout.editText!!.text.toString()
-                            val validateName = validateName(name)
+                        val name = edit_profile_username_input_layout.editText!!.text.toString()
+                        val validateName = validateName(name)
 
-                            if (!validateName) {
-                                edit_profile_username_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.error_name)
-                                edit_profile_username.setCompoundDrawables(null, null, icon, null)
-                            } else {
-                                edit_profile_username_input_layout.isErrorEnabled = false
-                                edit_profile_username.setCompoundDrawables(null, null, null, null)
-                            }
+                        if (!hasFocus && !validateName) {
+                            edit_profile_username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
+                            edit_profile_username.setCompoundDrawables(null, null, icon, null)
+                        } else {
+                            edit_profile_username_input_layout.isErrorEnabled = false
+                            edit_profile_username.setCompoundDrawables(null, null, null, null)
                         }
                     }
-
                 }
             }
 
@@ -158,7 +154,7 @@ class EditProfileFragment : Fragment() {
                         val email = edit_profile_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
 
-                        if (!validateEmail) {
+                        if (!hasFocus && !validateEmail) {
                             edit_profile_email_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.error_email)
                             edit_profile_email.setCompoundDrawables(null, null, icon, null)
@@ -186,7 +182,7 @@ class EditProfileFragment : Fragment() {
                         val phone = edit_profile_phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
 
-                        if (!validatePhone) {
+                        if (!hasFocus && !validatePhone) {
                             edit_profile_phone_number_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.error_phone)
                             edit_profile_phone_number.setCompoundDrawables(null, null, icon, null)
