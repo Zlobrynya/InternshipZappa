@@ -10,7 +10,7 @@
         android:id="@+id/subScrollView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/color_app"
+        android:background="@color/color_primary_dark"
         android:scrollbarThumbHorizontal="@drawable/scrollbar_fulldesc"
         android:scrollbarThumbVertical="@drawable/scrollbar_fulldesc"
         android:scrollbars="vertical"
@@ -40,6 +40,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"></ImageView>
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape"
+                app:layout_constraintBottom_toBottomOf="@+id/subDishPhoto"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constraintLayout"
