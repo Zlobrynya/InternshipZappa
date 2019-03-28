@@ -243,10 +243,11 @@ class EditProfileFragment : Fragment() {
                     newChangeData.email = email
                     newChangeData.phone = newPhone
                     changeUserCredentials(newChangeData)
+                    closeFragment()
+                    reloadActivity()
                 }
             }
-            closeFragment()
-            reloadActivity()
+
         }
 
         return view
