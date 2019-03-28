@@ -29,8 +29,8 @@
         android:id="@+id/edit_profile_username_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textColorHint="@color/color_hint"
         app:errorTextAppearance="@style/error_appearance"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_profile"
-        app:layout_constraintVertical_bias="0.02"
+        app:layout_constraintVertical_bias="0.04"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true">
 
@@ -57,8 +57,8 @@
         android:id="@+id/edit_profile_dob_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textColorHint="@color/color_hint"
         app:errorTextAppearance="@style/error_appearance"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
@@ -66,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/edit_profile_username_input_layout"
-        app:layout_constraintVertical_bias="0.02">
+        app:layout_constraintVertical_bias="0.04">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/edit_profile_dob"
@@ -85,8 +85,8 @@
         android:id="@+id/edit_profile_email_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:textColorHint="@color/color_hint"
         app:errorTextAppearance="@style/error_appearance"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
@@ -111,8 +111,8 @@
         android:id="@+id/edit_profile_phone_number_input_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:hint="Телефон"
         android:textColorHint="@color/color_hint"
         app:errorTextAppearance="@style/error_appearance"
