@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -24,6 +25,8 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
+    var lastCLickTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.zlobrynya.internshipzappa.R.layout.activity_login)
@@ -37,8 +40,13 @@ class LoginActivity : AppCompatActivity() {
 
 
         btnLinkToRegisterActivity.setOnClickListener {
-            val i = Intent(this, RegisterActivity::class.java)
-            startActivity(i)
+            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
+                return@setOnClickListener
+            } else {
+                lastCLickTime = SystemClock.elapsedRealtime()
+                val i = Intent(this, RegisterActivity::class.java)
+                startActivity(i)
+            }
         }
 
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
@@ -101,77 +109,88 @@ class LoginActivity : AppCompatActivity() {
         })
 
         forgot_password.setOnClickListener {
-            val intent = Intent(this, PasswordRecovery::class.java)
-            startActivity(intent)
+            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
+                return@setOnClickListener
+            } else {
+                lastCLickTime = SystemClock.elapsedRealtime()
+                val intent = Intent(this, PasswordRecovery::class.java)
+                startActivity(intent)
+            }
         }
 
         btnLogin.setOnClickListener {
-            val email = log_email_input_layout.editText!!.text.toString()
-            val password = log_password_input_layout.editText!!.text.toString()
+            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
+                return@setOnClickListener
+            } else {
+                lastCLickTime = SystemClock.elapsedRealtime()
+                val email = log_email_input_layout.editText!!.text.toString()
+                val password = log_password_input_layout.editText!!.text.toString()
 
-            val validateEmail = validateEmail(email)
-            val validatePassword = validatePassword(password)
+                val validateEmail = validateEmail(email)
+                val validatePassword = validatePassword(password)
 
-            newAuth.email = email
-            newAuth.password = password
-            Log.i("checkAuth", newAuth.email)
-            Log.i("checkAuth", newAuth.password)
-            if (validateEmail && validatePassword) {
+                newAuth.email = email
+                newAuth.password = password
+                Log.i("checkAuth", newAuth.email)
+                Log.i("checkAuth", newAuth.password)
+                if (validateEmail && validatePassword) {
 
-                RetrofitClientInstance.getInstance()
-                    .postAuthData(newAuth)
-                    .subscribeOn(Schedulers.io())
-                    ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe(object : Observer<Response<authRespDTO>> {
+                    RetrofitClientInstance.getInstance()
+                        .postAuthData(newAuth)
+                        .subscribeOn(Schedulers.io())
+                        ?.observeOn(AndroidSchedulers.mainThread())
+                        ?.subscribe(object : Observer<Response<authRespDTO>> {
 
-                        override fun onComplete() {}
+                            override fun onComplete() {}
 
-                        override fun onSubscribe(d: Disposable) {}
+                            override fun onSubscribe(d: Disposable) {}
 
-                        override fun onNext(t: Response<authRespDTO>) {
-                            Log.i("checkAuth", "${t.code()}")
-                            if (t.isSuccessful) {
-                                val sharedPreferencesStat = applicationContext.getSharedPreferences(
-                                    applicationContext.getString(R.string.user_info),
-                                    Context.MODE_PRIVATE
-                                )
-                                val savedEmail = applicationContext.getString(R.string.user_email)
-                                val access_token = applicationContext.getString(R.string.access_token)
-                                val editor = sharedPreferencesStat.edit()
-                                editor.putString(savedEmail, t.body()!!.email)
-                                editor.putString(access_token, t.body()!!.access_token)
-                                editor.apply()
+                            override fun onNext(t: Response<authRespDTO>) {
+                                Log.i("checkAuth", "${t.code()}")
+                                if (t.isSuccessful) {
+                                    val sharedPreferencesStat = applicationContext.getSharedPreferences(
+                                        applicationContext.getString(R.string.user_info),
+                                        Context.MODE_PRIVATE
+                                    )
+                                    val savedEmail = applicationContext.getString(R.string.user_email)
+                                    val access_token = applicationContext.getString(R.string.access_token)
+                                    val editor = sharedPreferencesStat.edit()
+                                    editor.putString(savedEmail, t.body()!!.email)
+                                    editor.putString(access_token, t.body()!!.access_token)
+                                    editor.apply()
 
-                                Log.i("checkAuth", t.body()!!.email)
-                                Log.i("checkAuth", t.body()!!.access_token)
-                                //onBackPressed()
-                                //updateUserBookingList()
-                                setResult(Activity.RESULT_OK)
-                                finish()
-                            } else {
-                                log_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
-                                log_email.setCompoundDrawables(null, null, icon, null)
-                                log_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
-                                log_password.setCompoundDrawables(null, null, icon, null)
-                                Log.i("checkAuth", "введены некоректные данные")
-                                Toast.makeText(this@LoginActivity, "Неверный пароль или E-mail", Toast.LENGTH_SHORT)
-                                    .show()
+                                    Log.i("checkAuth", t.body()!!.email)
+                                    Log.i("checkAuth", t.body()!!.access_token)
+                                    //onBackPressed()
+                                    //updateUserBookingList()
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
+                                } else {
+                                    log_email_input_layout.error =
+                                        getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
+                                    log_email.setCompoundDrawables(null, null, icon, null)
+                                    log_password_input_layout.error =
+                                        getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
+                                    log_password.setCompoundDrawables(null, null, icon, null)
+                                    Log.i("checkAuth", "введены некоректные данные")
+                                    Toast.makeText(this@LoginActivity, "Неверный пароль или E-mail", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
                             }
-                        }
 
-                        override fun onError(e: Throwable) {
-                            Log.i("checkAuth", "that's not fineIn")
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Проверьте ваше интернет подключение",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                            override fun onError(e: Throwable) {
+                                Log.i("checkAuth", "that's not fineIn")
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    "Проверьте ваше интернет подключение",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
 
-                    })
+                        })
 
+                }
             }
-
         }
     }
 
