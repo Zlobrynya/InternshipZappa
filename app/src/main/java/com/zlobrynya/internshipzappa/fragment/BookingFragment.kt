@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat
 import android.net.NetworkInfo
 import android.net.ConnectivityManager
 import android.content.Context
+import android.os.SystemClock
 import android.support.v7.app.AlertDialog
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
@@ -292,6 +293,8 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         //bookTimeAndDate = null // Сбросим выбранное время
     }
 
+    var lastCLickTime: Long = 0
+
     /**
      * Обработчик нажатий
      */
@@ -299,18 +302,27 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         when (it.id) {
             // Кнопка выбрать стол
             R.id.book_button -> {
+                if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
+                    return@OnClickListener
+                } else {
+                    lastCLickTime = SystemClock.elapsedRealtime()
+                    if (bookTimeAndDate != null) { // Проверим, выбрал ли пользователь время
+                        bookingView.book_time_select_label.error = null // Скроем варнинг
 
-                if (bookTimeAndDate != null) { // Проверим, выбрал ли пользователь время
-                    bookingView.book_time_select_label.error = null // Скроем варнинг
+                        //openTableList()
+                        prepare()
 
-                    //openTableList()
-                    prepare()
-
-                } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
+                    } else bookingView.book_time_select_label.error = "Выберите время" // Выведем варнинг
+                }
             }
             // Поле "Выберите время"
             R.id.book_time_select -> {
-                showTimePickerDialog()
+                if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
+                    return@OnClickListener
+                } else {
+                    lastCLickTime = SystemClock.elapsedRealtime()
+                    showTimePickerDialog()
+                }
             }
         }
     }

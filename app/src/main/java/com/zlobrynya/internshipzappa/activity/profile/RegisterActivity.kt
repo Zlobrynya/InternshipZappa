@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.annotation.RequiresApi
 import android.support.design.widget.TextInputEditText
 import android.telephony.PhoneNumberUtils
@@ -31,6 +32,8 @@ import retrofit2.Response
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
+
+    var lastCLickTime: Long = 0
 
     /*private val blockCharacterSet: String = ".,-~@№:;_=#^|$%&*! "
 
@@ -64,15 +67,16 @@ class RegisterActivity : AppCompatActivity() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        reg_username.addTextChangedListener(object: TextWatcher {
+        reg_username.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                reg_username.onFocusChangeListener = object: View.OnFocusChangeListener{
+                reg_username.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val name = reg_username_input_layout.editText!!.text.toString()
                         val validateName = validateName(name)
 
                         if (!hasFocus && !validateName) {
-                            reg_username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
+                            reg_username_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_name)
                             reg_username.setCompoundDrawables(null, null, icon, null)
                         } else {
                             reg_username_input_layout.isErrorEnabled = false
@@ -90,15 +94,16 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-        reg_phone_number.addTextChangedListener(object: TextWatcher{
+        reg_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                reg_phone_number.onFocusChangeListener = object: View.OnFocusChangeListener{
+                reg_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val phone = reg_phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
 
                         if (!hasFocus && !validatePhone) {
-                            reg_phone_number_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_phone)
+                            reg_phone_number_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_phone)
                             reg_phone_number.setCompoundDrawables(null, null, icon, null)
                         } else {
                             reg_phone_number_input_layout.isErrorEnabled = false
@@ -115,9 +120,9 @@ class RegisterActivity : AppCompatActivity() {
             }
         })
 
-        reg_email.addTextChangedListener(object: TextWatcher{
+        reg_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                reg_email.onFocusChangeListener = object : View.OnFocusChangeListener{
+                reg_email.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val email = reg_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
@@ -142,15 +147,16 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-        reg_password.addTextChangedListener(object: TextWatcher {
+        reg_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                reg_password.onFocusChangeListener = object : View.OnFocusChangeListener{
+                reg_password.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val password = reg_password_input_layout.editText!!.text.toString()
                         val validatePassword = validatePassword(password)
 
                         if (!hasFocus && !validatePassword) {
-                            reg_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                            reg_password_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_password)
                             reg_password.setCompoundDrawables(null, null, icon, null)
                         } else {
                             reg_password_input_layout.isErrorEnabled = false
@@ -169,16 +175,17 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-        reg_confirm_password.addTextChangedListener(object: TextWatcher {
+        reg_confirm_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                reg_confirm_password.onFocusChangeListener = object : View.OnFocusChangeListener{
+                reg_confirm_password.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val password = reg_password_input_layout.editText!!.text.toString()
                         val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
                         val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
                         if (!hasFocus && !validateConfirmPassword) {
-                            reg_confirm_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                            reg_confirm_password_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                             reg_confirm_password.setCompoundDrawables(null, null, icon, null)
                         } else {
                             reg_confirm_password_input_layout.isErrorEnabled = false
@@ -216,14 +223,24 @@ class RegisterActivity : AppCompatActivity() {
                 val newVerify = verifyEmailDTO()
 
                 newVerify.email = reg_email.text.toString()
-
-                checkExistenceEmail(newVerify)
+                if (SystemClock.elapsedRealtime() - lastCLickTime < 10000) {
+                    lastCLickTime = 0
+                } else {
+                    lastCLickTime = SystemClock.elapsedRealtime()
+                    checkExistenceEmail(newVerify)
+                }
+                lastCLickTime = 0
             }
         }
     }
 
-    private fun checkExistenceEmail(newVerify: verifyEmailDTO){
+    override fun onResume() {
+        super.onResume()
+        lastCLickTime = 0
+    }
 
+    private fun checkExistenceEmail(newVerify: verifyEmailDTO) {
+        progress_spinner.visibility = View.VISIBLE
 
         RetrofitClientInstance.getInstance()
             .getEmailExistence(newVerify.email)
@@ -237,10 +254,11 @@ class RegisterActivity : AppCompatActivity() {
 
                 override fun onNext(t: Response<respDTO>) {
                     Log.i("checkEmailExistence", t.code().toString())
-                    if(t.isSuccessful) {
+                    if (t.isSuccessful) {
                         Log.i("checkEmailExistence", "${t.code()}")
                         Log.i("checkEmailExistence", t.body()!!.desc)
-                    }else{
+                        progress_spinner.visibility = View.GONE
+                    } else {
                         RetrofitClientInstance.getInstance()
                             .postVerifyData(newVerify)
                             .subscribeOn(Schedulers.io())
@@ -254,7 +272,7 @@ class RegisterActivity : AppCompatActivity() {
                                 override fun onNext(t: Response<verifyRespDTO>) {
                                     Log.i("checkCode", "${t.code()}")
 
-                                    if(t.isSuccessful) {
+                                    if (t.isSuccessful) {
                                         val intent = Intent(applicationContext, CodeFEmailActivity::class.java)
                                         intent.putExtra("name", reg_username.text.toString())
                                         intent.putExtra("phone", reg_phone_number.text.toString())
@@ -264,6 +282,7 @@ class RegisterActivity : AppCompatActivity() {
                                         intent.putExtra("id", "0")
                                         startActivity(intent)
                                     }
+                                    progress_spinner.visibility = View.GONE
                                 }
 
                                 override fun onError(e: Throwable) {
@@ -273,6 +292,7 @@ class RegisterActivity : AppCompatActivity() {
                             })
                     }
                 }
+
                 override fun onError(e: Throwable) {
                     Log.i("checkReg", "that's not fineIn")
                 }
@@ -283,7 +303,7 @@ class RegisterActivity : AppCompatActivity() {
         filters = arrayOf(InputFilter.LengthFilter(maxLength))
     }*/
 
-    private fun validateName(name: String) : Boolean {
+    private fun validateName(name: String): Boolean {
         val nameLength = 2
         return name.matches("[a-zA-Zа-яА-ЯёЁ]*".toRegex()) && name.length >= nameLength
     }
@@ -313,15 +333,8 @@ class RegisterActivity : AppCompatActivity() {
         return password == confirmPassword
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val intent = Intent(this, Menu2Activity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        finish()
         return true
     }
 }

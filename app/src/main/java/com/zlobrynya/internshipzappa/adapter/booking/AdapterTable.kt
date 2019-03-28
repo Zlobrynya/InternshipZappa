@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.adapter.booking
 
+import android.os.SystemClock
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,8 @@ class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTabl
     RecyclerView.Adapter<AdapterTable.ViewHolder>() {
 
     private val mOnTableListener = onTableListener
+
+    var lastCLickTime: Long = 0
 
     /**
      * Устанавливает в ViewHolder нужные данные
@@ -37,8 +40,14 @@ class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTabl
                 else -> holder.seatCount.text = "${values[position].seatCount} мест, ${values[position].seatPosition}"
             }
         }
+
         holder.choseButton.setOnClickListener {
-            holder.onTableListener.onTableClick(position, true)
+            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
+                return@setOnClickListener
+            } else {
+                lastCLickTime = SystemClock.elapsedRealtime()
+                holder.onTableListener.onTableClick(position, true)
+            }
         }
     }
 

@@ -24,7 +24,7 @@ import org.w3c.dom.Text
 import retrofit2.Response
 import retrofit2.converter.gson.GsonConverterFactory
 
-class CodeFEmailActivity: AppCompatActivity() {
+class CodeFEmailActivity : AppCompatActivity() {
 
     private var code: String = String()
 
@@ -196,11 +196,12 @@ class CodeFEmailActivity: AppCompatActivity() {
                                         editor.putString(access_token, t.body()!!.access_token)
                                         editor.apply()
                                         Log.i("checkReg", t.body()!!.desc)
+
+                                        val intent = Intent(applicationContext, Menu2Activity::class.java)
+                                        startActivity(intent)
                                     } else {
                                         allWrong()
                                     }
-                                    val intent = Intent(applicationContext, Menu2Activity::class.java)
-                                    startActivity(intent)
                                 }
 
                                 override fun onError(e: Throwable) {
@@ -218,8 +219,14 @@ class CodeFEmailActivity: AppCompatActivity() {
                         val userCredentials = changeUserDataDTO()
 
                         val sharedPreferences =
-                            applicationContext!!.getSharedPreferences(applicationContext.getString(R.string.user_info), Context.MODE_PRIVATE)
-                        val jwt = sharedPreferences.getString(applicationContext.getString(R.string.access_token), "null")!!.toString()
+                            applicationContext!!.getSharedPreferences(
+                                applicationContext.getString(R.string.user_info),
+                                Context.MODE_PRIVATE
+                            )
+                        val jwt = sharedPreferences.getString(
+                            applicationContext.getString(R.string.access_token),
+                            "null"
+                        )!!.toString()
 
                         userCredentials.new_email = intent.getStringExtra("new_email")
                         userCredentials.email = intent.getStringExtra("change_email")
@@ -285,7 +292,7 @@ class CodeFEmailActivity: AppCompatActivity() {
         }
     }
 
-    private fun allWrong(){
+    private fun allWrong() {
         allert_text.visibility = View.VISIBLE
         firstNumber.setTextColor(resources.getColor(R.color.color_accent))
         secondNumber.setTextColor(resources.getColor(R.color.color_accent))
@@ -294,7 +301,7 @@ class CodeFEmailActivity: AppCompatActivity() {
         fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
     }
 
-    private fun allCorrect(){
+    private fun allCorrect() {
         allert_text.visibility = View.GONE
         firstNumber.setTextColor(resources.getColor(R.color.white))
         secondNumber.setTextColor(resources.getColor(R.color.white))

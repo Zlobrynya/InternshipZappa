@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.text.InputFilter
@@ -41,6 +42,8 @@ const val REQUEST_CODE_BOOKING_END: Int = 12
  * TODO доделать
  */
 class PersonalInfoFragment : Fragment() {
+
+    var lastCLickTime: Long = 0
 
     private val blockCharacterSet: String = ".,- "
 
@@ -162,8 +165,12 @@ class PersonalInfoFragment : Fragment() {
             // TODO эти данные больше не нужно получать из полей в XML, а получать из ШередПреференс
             //val name = view.username_input_layout.text.toString()
             val name = "KEK"
-
-            networkRxjavaPost(newBooking, it.context)
+            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
+                return@setOnClickListener
+            } else {
+                lastCLickTime = SystemClock.elapsedRealtime()
+                networkRxjavaPost(newBooking, it.context)
+            }
         }
 
         return view

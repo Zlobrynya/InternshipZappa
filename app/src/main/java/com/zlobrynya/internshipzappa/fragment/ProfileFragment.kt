@@ -3,6 +3,7 @@ package com.zlobrynya.internshipzappa.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.text.Editable
@@ -33,10 +34,11 @@ import java.util.*
  */
 class ProfileFragment : Fragment() {
 
+    var lastCLickTime: Long = 0
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         var view = inflater.inflate(R.layout.fragment_profile, container, false)
-
 
         view.btn_profile_exit.setOnClickListener {
             val sharedPreferencesStat = context!!.getSharedPreferences(
@@ -56,19 +58,24 @@ class ProfileFragment : Fragment() {
         }
 
         view.btn_edit_profile.setOnClickListener {
-            val args = Bundle()
-            args.putString("name", profile_username.text.toString())
-            args.putString("dob", profile_dob.text.toString())
-            args.putString("email", profile_email.text.toString())
-            args.putString("phone", profile_phone.text.toString())
+            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
+                return@setOnClickListener
+            } else {
+                lastCLickTime = SystemClock.elapsedRealtime()
+                val args = Bundle()
+                args.putString("name", profile_username.text.toString())
+                args.putString("dob", profile_dob.text.toString())
+                args.putString("email", profile_email.text.toString())
+                args.putString("phone", profile_phone.text.toString())
 
-            val trans = fragmentManager!!.beginTransaction()
-            val editProfileFragment = EditProfileFragment()
-            editProfileFragment.arguments = args
-            trans.add(R.id.root_frame2, editProfileFragment)
-            trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            trans.addToBackStack(null)
-            trans.commit()
+                val trans = fragmentManager!!.beginTransaction()
+                val editProfileFragment = EditProfileFragment()
+                editProfileFragment.arguments = args
+                trans.add(R.id.root_frame2, editProfileFragment)
+                trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                trans.addToBackStack(null)
+                trans.commit()
+            }
         }
 
         return view
