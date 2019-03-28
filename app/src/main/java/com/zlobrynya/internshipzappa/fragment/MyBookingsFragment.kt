@@ -23,6 +23,7 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.UserBooking
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.deleteBookingDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import com.zlobrynya.internshipzappa.util.StaticMethods
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -114,8 +115,16 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      */
     override fun onDiscardClick(position: Int, isButtonClick: Boolean) {
         if (isButtonClick) {
-            confirmDiscard(position)
+            prepare(position)
         }
+    }
+
+    /**
+     * Проверяет доступ в интернет и в зависимости от результата вызывает showNoInternetConnectionAlert или preparePostParams
+     */
+    private fun prepare(position: Int) {
+        if (!StaticMethods.checkInternetConnection(context)) showNoInternetConnectionAlert(position)
+        else confirmDiscard(position)
     }
 
     /**
@@ -277,5 +286,26 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
         val parsedDate = inputFormat.parse(date)
         val outputFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return outputFormat.format(parsedDate)
+    }
+
+    /**
+     * Выводит диалоговое окно с сообщением об отсутствии интернета
+     */
+    private fun showNoInternetConnectionAlert(position: Int) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
+        builder.setTitle("Ошибка соединения")
+            .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+            .setCancelable(false)
+            .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    prepare(position)
+                }
+            }
+            .setNegativeButton("Отмена") { dialog, which -> dialog.dismiss() }
+        val alert = builder.create()
+        alert.show()
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
     }
 }
