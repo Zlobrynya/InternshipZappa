@@ -257,6 +257,15 @@ class GetDataServer(val context: Context) {
 
                                 dishes?.forEach {
                                     if(!it.sub_menu!!.isEmpty()){
+                                        it.sub_menu!!.forEach {
+                                            if (it.name == null){it.name = ""}
+                                            if (it.parent_name == null){it.parent_name = ""}
+                                            if (it.weight == null){it.weight = ""}
+
+                                            it.name = it.name.replace('\"', '\'')
+                                            it.parent_name = it.parent_name.replace('\"', '\'')
+                                            it.weight = it.weight.replace('\"', '\'')
+                                        }
                                         subMenuDB.addAllData(it.sub_menu!!)
                                     }
                                 }

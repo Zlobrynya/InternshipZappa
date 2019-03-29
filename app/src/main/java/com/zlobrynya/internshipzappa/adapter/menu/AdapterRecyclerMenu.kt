@@ -100,6 +100,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
         override fun onClick(view: View) {
             Log.i("qq", subDish)
             if(subDish == "null") {
+                Log.i("qq", subDish)
                 val intent = Intent(context, FullDescriptionScreen::class.java)
                 intent.putExtra(context.getString(R.string.key_id), idDish)
                 context.startActivity(intent)
