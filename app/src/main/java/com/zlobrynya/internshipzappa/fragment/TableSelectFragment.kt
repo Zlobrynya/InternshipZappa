@@ -287,7 +287,7 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
                     prepare(position)
                 }
             }
-            .setNegativeButton("Отмена") { dialog, which -> dialog.dismiss() }
+            .setNegativeButton("ОТМЕНА") { dialog, which -> dialog.dismiss() }
         val alert = builder.create()
         alert.show()
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
