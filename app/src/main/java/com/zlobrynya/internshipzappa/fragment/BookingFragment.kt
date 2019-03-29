@@ -632,13 +632,15 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         if (selectedDate != position) {
             selectedDate = position // Обновим выбранную дату
             calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
+            calendar.set(Calendar.MONTH, schedule[position].month)
+            calendar.set(Calendar.YEAR, schedule[position].year + 1900)
             calendar.set(Calendar.SECOND, 0)
             Log.d(
                 "TOPKEK",
                 DateUtils.formatDateTime(
                     activity,
                     calendar.timeInMillis,
-                    DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+                    DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_YEAR
                 )
             )
             updateSchedule() // Обновим расписание
