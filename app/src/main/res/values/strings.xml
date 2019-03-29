@@ -95,6 +95,7 @@
     <string name="time">Время</string>
     <string name="error_phone">Введите корректный номер телефона</string>
     <string name="error_email">Введите корректный E-mail</string>
+    <string name="exist_email">Эта почта уже занята</string>
     <string name="error_name">Введите корректное имя</string>
     <string name="error_password">Неверный пароль или E-mail</string>
     <string name="hint_confirm_password">Введите пароль еще раз</string>

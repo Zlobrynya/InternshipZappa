@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -14,7 +15,9 @@ import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regDTO
@@ -177,13 +180,11 @@ class RegisterActivity : AppCompatActivity() {
 
         reg_confirm_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                reg_confirm_password.onFocusChangeListener = object : View.OnFocusChangeListener {
-                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val password = reg_password_input_layout.editText!!.text.toString()
                         val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
                         val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
-                        if (!hasFocus && !validateConfirmPassword) {
+                        if (!validateConfirmPassword) {
                             reg_confirm_password_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                             reg_confirm_password.setCompoundDrawables(null, null, icon, null)
@@ -191,10 +192,8 @@ class RegisterActivity : AppCompatActivity() {
                             reg_confirm_password_input_layout.isErrorEnabled = false
                             reg_confirm_password.setCompoundDrawables(null, null, null, null)
                         }
-                    }
 
                 }
-            }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -230,6 +229,9 @@ class RegisterActivity : AppCompatActivity() {
                     checkExistenceEmail(newVerify)
                 }
                 lastCLickTime = 0
+            } else {
+                Toast.makeText(this@RegisterActivity, "Заполните данные", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -257,6 +259,10 @@ class RegisterActivity : AppCompatActivity() {
                     if (t.isSuccessful) {
                         Log.i("checkEmailExistence", "${t.code()}")
                         Log.i("checkEmailExistence", t.body()!!.desc)
+                        val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
+                        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+                        reg_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.exist_email)
+                        reg_email.setCompoundDrawables(null, null, icon, null)
                         progress_spinner.visibility = View.GONE
                     } else {
                         RetrofitClientInstance.getInstance()
