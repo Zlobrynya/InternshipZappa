@@ -59,6 +59,8 @@ class SubDescriptionScreen : AppCompatActivity() {
         Log.i( "sub", array.size.toString())
 
         subRecyclerView.adapter = AdapterSubMenuDescription(array)
+        subMenuDB.closeDataBase()
+        menuDB.closeDataBase()
     }
 
     @SuppressLint("SetTextI18n")

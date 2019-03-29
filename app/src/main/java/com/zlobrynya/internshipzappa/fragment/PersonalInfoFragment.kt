@@ -184,6 +184,9 @@ class PersonalInfoFragment : Fragment() {
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
         newBooking.email = sharedPreferences.getString(this.getString(R.string.user_email), "")!!.toString()
 
+        Log.i("checkDateFrom", newBooking.date)
+        Log.i("checkDateFrom", newBooking.date_to)
+
         RetrofitClientInstance.getInstance()
             .postReserve(jwt, newBooking)
             .subscribeOn(Schedulers.io())
