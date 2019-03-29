@@ -196,11 +196,11 @@ class CodeFEmailActivity : AppCompatActivity() {
                                         editor.putString(access_token, t.body()!!.access_token)
                                         editor.apply()
                                         Log.i("checkChange", t.body()!!.desc)
+                                        val intent = Intent(applicationContext, Menu2Activity::class.java)
+                                        startActivity(intent)
                                     } else {
                                         allWrong()
                                     }
-                                    val intent = Intent(applicationContext, Menu2Activity::class.java)
-                                    startActivity(intent)
                                 }
 
                                 override fun onError(e: Throwable) {
