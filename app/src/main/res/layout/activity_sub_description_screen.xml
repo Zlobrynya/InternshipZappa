@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_app" >
+    android:background="@color/color_primary_dark" >
 
     <ScrollView
         android:id="@+id/subScrollView"
@@ -27,6 +27,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewRec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/color_primary_dark"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/recommendation"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/constraintLayout"
+                app:layout_constraintTop_toTopOf="@+id/recyclerViewRec"
+                tools:ignore="RtlHardcoded"></TextView>
+
 
             <ImageView
                 android:id="@+id/subDishPhoto"
@@ -55,7 +83,7 @@
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="395dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="228dp"
                 android:background="@drawable/shape"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.text.Editable
@@ -37,6 +38,8 @@ import java.util.*
  *
  */
 class EditProfileFragment : Fragment() {
+
+    var lastCLickTime: Long = 0
 
     var calendar = Calendar.getInstance()
 
@@ -129,7 +132,8 @@ class EditProfileFragment : Fragment() {
                         val validateName = validateName(name)
 
                         if (!hasFocus && !validateName) {
-                            edit_profile_username_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_name)
+                            edit_profile_username_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_name)
                             edit_profile_username.setCompoundDrawables(null, null, icon, null)
                         } else {
                             edit_profile_username_input_layout.isErrorEnabled = false
@@ -226,13 +230,18 @@ class EditProfileFragment : Fragment() {
                 val newChangeData = changeUserDataDTO()
                 val email = arguments!!.getString("email")
                 if (email != newEmail) {
-
+                    Log.d("BOOP", "Валидация прошла")
                     newChangeData.birthday = outputDateStr
                     newChangeData.name = newName
                     newChangeData.new_email = newEmail
                     newChangeData.email = email
                     newChangeData.phone = newPhone
-                    checkExistenceEmail(newChangeData)
+                    if (SystemClock.elapsedRealtime() - lastCLickTime < 10000) {
+                        return@setOnClickListener
+                    } else {
+                        lastCLickTime = SystemClock.elapsedRealtime()
+                        checkExistenceEmail(newChangeData)
+                    }
                 } else {
                     /**
                      * TODO поменять дату на нужный формат
@@ -251,6 +260,11 @@ class EditProfileFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lastCLickTime = 0
     }
 
     /**
@@ -355,7 +369,10 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun checkExistenceEmail(newChange: changeUserDataDTO) {
-
+        val view = this.view
+        if (view != null) {
+            view.progress_spinner.visibility = View.VISIBLE
+        }
         val newVerify = verifyEmailDTO()
         newVerify.email = newChange.new_email
         RetrofitClientInstance.getInstance()
@@ -373,6 +390,10 @@ class EditProfileFragment : Fragment() {
                     if (t.isSuccessful) {
                         Log.i("checkEmailExistence", "${t.code()}")
                         Log.i("checkEmailExistence", t.body()!!.desc)
+                        val view = this@EditProfileFragment.view
+                        if (view != null) {
+                            view.progress_spinner.visibility = View.GONE
+                        }
                     } else {
                         RetrofitClientInstance.getInstance()
                             .postVerifyData(newVerify)
@@ -396,6 +417,10 @@ class EditProfileFragment : Fragment() {
                                         intent.putExtra("new_email", newChange.new_email)
                                         intent.putExtra("id", "1")
                                         startActivity(intent)
+                                    }
+                                    val view = this@EditProfileFragment.view
+                                    if (view != null) {
+                                        view.progress_spinner.visibility = View.GONE
                                     }
                                 }
 

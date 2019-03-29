@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.adapter.menu.AdapterRecommendDish
 import com.zlobrynya.internshipzappa.adapter.menu.AdapterSubMenuDescription
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.database.SubMenuDB
@@ -48,6 +49,10 @@ class SubDescriptionScreen : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this@SubDescriptionScreen, LinearLayoutManager.VERTICAL,false)
         subRecyclerView.layoutManager = layoutManager
 
+        //Создание RecyclerView
+        val layoutManagerRec = LinearLayoutManager(this@SubDescriptionScreen, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewRec.layoutManager = layoutManagerRec
+
         menuDB = MenuDB(this)
         subMenuDB = SubMenuDB(this)
 
@@ -59,6 +64,12 @@ class SubDescriptionScreen : AppCompatActivity() {
         Log.i( "sub", array.size.toString())
 
         subRecyclerView.adapter = AdapterSubMenuDescription(array)
+        if (!array.isEmpty())
+            recyclerViewRec.adapter =
+                AdapterRecommendDish(listRecDish(dish.recommended))
+
+        subMenuDB.closeDataBase()
+        menuDB.closeDataBase()
     }
 
     @SuppressLint("SetTextI18n")
@@ -98,6 +109,28 @@ class SubDescriptionScreen : AppCompatActivity() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    fun listRecDish(str: String): ArrayList<DishClientDTO> {
+        val list: ArrayList<DishClientDTO> = ArrayList()
+        if (!str.isEmpty()){
+            val delimiter = ';'
+            val parts = str.split(delimiter)
+            for (i in 0 until parts.size){
+                if (!parts.get(i).contains("null"))
+                    list.add(menuDB.getDescriptionDish(parts.get(i).toInt()))
+            }
+            if (list.size == 0)
+                textView8.visibility = View.GONE
+        }else{
+            textView8.visibility = View.GONE
+        }
+        return list
+    }
+
+    override fun onDestroy() {
+        menuDB.closeDataBase()
+        super.onDestroy()
     }
 
 }

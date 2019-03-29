@@ -2,6 +2,7 @@ package com.zlobrynya.internshipzappa.adapter.booking
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,7 @@ class AdapterDays(private val values: ArrayList<Date>, onDateListener: OnDateLis
      * @param position Позиция элемента
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.i("checkDateFrom1", values.toString())
 
         holder.dayNumber.text = getDayNumber(values[position])
         holder.dayOfWeek.text = getDayOfWeek(values[position])

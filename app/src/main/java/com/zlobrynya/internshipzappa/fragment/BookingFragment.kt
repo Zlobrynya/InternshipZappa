@@ -444,10 +444,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
 
         val args = Bundle()
+        Log.i("checkDateFrom", bookTimeAndDate.toString())
         args.putString("book_date_begin", dateFormat.format(bookTimeAndDate!!.time)) // Заполняем дату начала брони
         args.putString("book_time_begin", timeFormat.format(calendar.timeInMillis)) // Заполняем время начала брони
         args.putString("book_date_end", dateFormat.format(calendar.timeInMillis)) // Заполняем дату конца брони
-
+        Log.i("checkDateFrom", dateFormat.format(bookTimeAndDate!!.time))
         val newBooking = bookingDataDTO() // Объект для POST запроса
         newBooking.date = dateFormat.format(bookTimeAndDate!!.time)
         newBooking.time_from = timeFormat.format(calendar.timeInMillis)
@@ -536,6 +537,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 schedule.add(localCalendar.time)
             }
         }
+        Log.i("checkDateFrom", schedule.toString())
     }
 
     /**
@@ -630,13 +632,15 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         if (selectedDate != position) {
             selectedDate = position // Обновим выбранную дату
             calendar.set(Calendar.DATE, schedule[position].date) // Установим в календарь выбранную дату
+            calendar.set(Calendar.MONTH, schedule[position].month)
+            calendar.set(Calendar.YEAR, schedule[position].year + 1900)
             calendar.set(Calendar.SECOND, 0)
             Log.d(
                 "TOPKEK",
                 DateUtils.formatDateTime(
                     activity,
                     calendar.timeInMillis,
-                    DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+                    DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_YEAR
                 )
             )
             updateSchedule() // Обновим расписание
