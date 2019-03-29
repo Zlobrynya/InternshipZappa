@@ -54,102 +54,12 @@ class CodeFEmailActivity : AppCompatActivity() {
                 if (s.isNullOrBlank()){
                     allCorrect()
                 } else {
-                    secondNumber.requestFocus()
                 }
             }
 
         })
 
-        secondNumber.setOnKeyListener(object: View.OnKeyListener{
-            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                Log.d("DEL", "Слышь, удали")
-                if (keyCode == KeyEvent.KEYCODE_DEL && secondNumber.text.toString().isNullOrBlank()){
-                    Log.d("DEL", "и скайрим купи")
-                    firstNumber.requestFocus()
-                    allCorrect()
-                }
-                return true
-            }
-        })
-        secondNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
 
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrBlank()){
-                    firstNumber.requestFocus()
-                    allCorrect()
-                } else {
-                    thirdNumber.requestFocus()
-                }
-            }
-
-        })
-
-        thirdNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrBlank()){
-                    allCorrect()
-                    secondNumber.requestFocus()
-                } else {
-                    fourthNumber.requestFocus()
-                }
-            }
-
-        })
-
-        fourthNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (fourthNumber.text.toString() == "") {
-                    allCorrect()
-                    thirdNumber.requestFocus()
-                } else {
-                    fifthNumber.requestFocus()
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-        })
-
-        fifthNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (fifthNumber.text.toString() == "") {
-                    allCorrect()
-                    fourthNumber.requestFocus()
-                } else {
-
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-        })
 
         val id = intent.getStringExtra("id")
 
@@ -167,8 +77,7 @@ class CodeFEmailActivity : AppCompatActivity() {
                         newRegister.name = intent.getStringExtra("name")
                         newRegister.phone = intent.getStringExtra("phone")
 
-                        code = firstNumber.text.toString() + secondNumber.text.toString() +
-                                thirdNumber.text.toString() + fourthNumber.text.toString() + fifthNumber.text.toString()
+                        code = firstNumber.text.toString()
                         Log.d("code", "$code")
 
                         newRegister.code = code
@@ -246,8 +155,7 @@ class CodeFEmailActivity : AppCompatActivity() {
                         userCredentials.name = intent.getStringExtra("change_name")
                         userCredentials.phone = intent.getStringExtra("change_phone")
                         userCredentials.birthday = intent.getStringExtra("change_birthday")
-                        code = firstNumber.text.toString() + secondNumber.text.toString() +
-                                thirdNumber.text.toString() + fourthNumber.text.toString() + fifthNumber.text.toString()
+                        code = firstNumber.text.toString()
                         Log.d("code", "$code")
 
                         userCredentials.code = code.toInt()
@@ -308,19 +216,13 @@ class CodeFEmailActivity : AppCompatActivity() {
     private fun allWrong() {
         allert_text.visibility = View.VISIBLE
         firstNumber.setTextColor(resources.getColor(R.color.color_accent))
-        secondNumber.setTextColor(resources.getColor(R.color.color_accent))
-        thirdNumber.setTextColor(resources.getColor(R.color.color_accent))
-        fourthNumber.setTextColor(resources.getColor(R.color.color_accent))
-        fifthNumber.setTextColor(resources.getColor(R.color.color_accent))
+
     }
 
     private fun allCorrect() {
         allert_text.visibility = View.GONE
         firstNumber.setTextColor(resources.getColor(R.color.white))
-        secondNumber.setTextColor(resources.getColor(R.color.white))
-        thirdNumber.setTextColor(resources.getColor(R.color.white))
-        fourthNumber.setTextColor(resources.getColor(R.color.white))
-        fifthNumber.setTextColor(resources.getColor(R.color.white))
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -22,103 +22,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout3"
-        android:layout_width="384dp"
-        android:layout_height="102dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="8dp"
+    <EditText
+        android:id="@+id/firstNumber"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:digits="0123456789"
+        android:ems="10"
+        android:inputType="number"
+        android:letterSpacing="0.7"
+        android:maxLength="5"
+        android:textAlignment="inherit"
+        android:textColor="@color/white"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12">
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        app:layout_constraintVertical_bias="0.039"></EditText>
 
-        <EditText
-            android:id="@+id/firstNumber"
-            android:layout_width="52dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="32dp"
-            android:digits="0123456789"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></EditText>
+    <View
+        android:id="@+id/view12"
+        android:layout_width="12dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_app"
+        app:layout_constraintBottom_toBottomOf="@+id/firstNumber"
+        app:layout_constraintEnd_toEndOf="@+id/firstNumber"
+        app:layout_constraintHorizontal_bias="0.811"
+        app:layout_constraintStart_toStartOf="@+id/firstNumber"
+        app:layout_constraintTop_toTopOf="@+id/firstNumber"
+        app:layout_constraintVertical_bias="0.918" />
 
-        <EditText
-            android:id="@+id/secondNumber"
-            android:layout_width="52dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="16dp"
-            android:digits="0123456789"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/firstNumber"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/thirdNumber"
-            android:layout_width="52dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="12dp"
-            android:digits="0123456789"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/secondNumber"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/fourthNumber"
-            android:layout_width="52dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="16dp"
-            android:digits="0123456789"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/thirdNumber"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/fifthNumber"
-            android:layout_width="52dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:digits="0123456789"
-            android:ems="10"
-            android:inputType="number"
-            android:maxLength="1"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="48sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/fourthNumber"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-    </android.support.constraint.ConstraintLayout>
+    <View
+        android:id="@+id/view11"
+        android:layout_width="12dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_app"
+        app:layout_constraintBottom_toBottomOf="@+id/firstNumber"
+        app:layout_constraintEnd_toEndOf="@+id/firstNumber"
+        app:layout_constraintHorizontal_bias="0.606"
+        app:layout_constraintStart_toStartOf="@+id/firstNumber"
+        app:layout_constraintTop_toTopOf="@+id/firstNumber"
+        app:layout_constraintVertical_bias="0.918" />
 
     <Button
         android:id="@+id/button2"
@@ -140,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/wrong_code"
         android:textColor="@color/btn_continue"
@@ -148,8 +98,34 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+        app:layout_constraintTop_toBottomOf="@+id/firstNumber" />
+
+    <View
+        android:id="@+id/view9"
+        android:layout_width="12dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_app"
+        app:layout_constraintBottom_toBottomOf="@+id/firstNumber"
+        app:layout_constraintEnd_toEndOf="@+id/firstNumber"
+        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintStart_toStartOf="@+id/firstNumber"
+        app:layout_constraintTop_toTopOf="@+id/firstNumber"
+        app:layout_constraintVertical_bias="0.918" />
+
+    <View
+        android:id="@+id/view10"
+        android:layout_width="12dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_app"
+        app:layout_constraintBottom_toBottomOf="@+id/firstNumber"
+        app:layout_constraintEnd_toEndOf="@+id/firstNumber"
+        app:layout_constraintHorizontal_bias="0.401"
+        app:layout_constraintStart_toStartOf="@+id/firstNumber"
+        app:layout_constraintTop_toTopOf="@+id/firstNumber"
+        app:layout_constraintVertical_bias="0.918" />
 
 </android.support.constraint.ConstraintLayout>
