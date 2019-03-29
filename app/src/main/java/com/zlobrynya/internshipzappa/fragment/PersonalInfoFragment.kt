@@ -233,7 +233,7 @@ class PersonalInfoFragment : Fragment() {
                         intent.putExtra("phone", fm_phone.text)
                         //finish()
                         //closeFragment() // Закроем фрагмент
-                        context.startActivity(intent)
+                        startActivityForResult(intent, REQUEST_CODE_BOOKING_END)
                     }
                 }
 
@@ -347,6 +347,7 @@ class PersonalInfoFragment : Fragment() {
 
         if (requestCode == REQUEST_CODE_BOOKING_END) {
             if (resultCode == Activity.RESULT_OK) {
+                Log.d("BOOP", "Activity.RESULT_OK")
                 val trans = fragmentManager!!.beginTransaction()
                 val personalInfoFragment = fragmentManager!!.findFragmentByTag("PERSONAL_INFO")
                 val tableSelectFragment = fragmentManager!!.findFragmentByTag("TABLE_SELECT")
