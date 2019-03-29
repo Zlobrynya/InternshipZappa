@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import com.zlobrynya.internshipzappa.R
@@ -39,53 +40,60 @@ class CodeFEmailActivity : AppCompatActivity() {
         //принимаем параметры и формируем отсылку
 
 
+
         firstNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (firstNumber.text.toString() == "") {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.isNullOrBlank()){
                     allCorrect()
                 } else {
                     secondNumber.requestFocus()
                 }
             }
 
+        })
+
+        secondNumber.setOnKeyListener(object: View.OnKeyListener{
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                Log.d("DEL", "Слышь, удали")
+                if (keyCode == KeyEvent.KEYCODE_DEL && secondNumber.text.toString().isNullOrBlank()){
+                    Log.d("DEL", "и скайрим купи")
+                    firstNumber.requestFocus()
+                    allCorrect()
+                }
+                return true
+            }
+        })
+        secondNumber.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-        })
-
-        secondNumber.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (secondNumber.text.toString() == "") {
-                    allCorrect()
+                if (s.isNullOrBlank()){
                     firstNumber.requestFocus()
+                    allCorrect()
                 } else {
                     thirdNumber.requestFocus()
                 }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
             }
 
         })
 
         thirdNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (thirdNumber.text.toString() == "") {
-                    allCorrect()
-                    secondNumber.requestFocus()
-                } else {
-                    fourthNumber.requestFocus()
-                }
+
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -93,7 +101,12 @@ class CodeFEmailActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
+                if (s.isNullOrBlank()){
+                    allCorrect()
+                    secondNumber.requestFocus()
+                } else {
+                    fourthNumber.requestFocus()
+                }
             }
 
         })
