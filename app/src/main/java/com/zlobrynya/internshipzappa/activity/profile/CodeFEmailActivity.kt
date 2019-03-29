@@ -51,9 +51,8 @@ class CodeFEmailActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrBlank()){
+                if (s!!.length < 5){
                     allCorrect()
-                } else {
                 }
             }
 
