@@ -156,10 +156,16 @@ class RegisterActivity : AppCompatActivity() {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val password = reg_password_input_layout.editText!!.text.toString()
                         val validatePassword = validatePassword(password)
+                        val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
+                        val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
                         if (!hasFocus && !validatePassword) {
                             reg_password_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                            reg_password.setCompoundDrawables(null, null, icon, null)
+                        } else if (!hasFocus && !validateConfirmPassword){
+                            reg_password_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                             reg_password.setCompoundDrawables(null, null, icon, null)
                         } else {
                             reg_password_input_layout.isErrorEnabled = false
@@ -193,6 +199,8 @@ class RegisterActivity : AppCompatActivity() {
                                     getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                             reg_password.setCompoundDrawables(null, null, icon, null)
                         } else {
+                            reg_password_input_layout.isErrorEnabled = false
+                            reg_password.setCompoundDrawables(null, null, null, null)
                             reg_confirm_password_input_layout.isErrorEnabled = false
                             reg_confirm_password.setCompoundDrawables(null, null, null, null)
 
