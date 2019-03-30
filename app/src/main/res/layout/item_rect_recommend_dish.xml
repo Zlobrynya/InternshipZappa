@@ -19,7 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="94dp"
             android:background="@drawable/layout_bg"
+            android:elevation="0dp"
             app:cardBackgroundColor="@color/color_app"
+            app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -28,6 +30,7 @@
                 android:id="@+id/topingPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="94dp"
+                android:elevation="0dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -79,16 +82,14 @@
             android:id="@+id/topingPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/no_price"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topingVes" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
