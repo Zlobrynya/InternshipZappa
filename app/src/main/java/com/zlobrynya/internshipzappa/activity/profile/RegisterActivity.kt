@@ -163,6 +163,11 @@ class RegisterActivity : AppCompatActivity() {
                             reg_password_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.error_password)
                             reg_password.setCompoundDrawables(null, null, icon, null)
+                        } else if (!hasFocus && confirmPassword.isEmpty()) {
+                            reg_password_input_layout.isErrorEnabled = false
+                            reg_password.setCompoundDrawables(null, null, null, null)
+                            reg_confirm_password_input_layout.isErrorEnabled = false
+                            reg_confirm_password.setCompoundDrawables(null, null, null, null)
                         } else if (!hasFocus && !validateConfirmPassword){
                             reg_confirm_password_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
