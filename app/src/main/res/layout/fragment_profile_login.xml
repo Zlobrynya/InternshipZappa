@@ -6,6 +6,14 @@
     android:background="@color/color_app"
     tools:context=".fragment.ProfileLoginFragment">
 
+    <ImageView
+        android:id="@+id/profile_logo"
+        android:layout_width="158dp"
+        android:layout_height="170dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo_bar" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
