@@ -283,28 +283,30 @@ class PersonalInfoFragment : Fragment() {
 
                 override fun onNext(t: Response<userDataDTO>) {
                     Log.i("checkMyCredentials", "${t.code()}")
-
-                    if (t.isSuccessful) {
-                        /**
-                         * TODO при получении проверять, что поля не равны нулл
-                         */
-                        val data = t.body()!!.data
-                        Log.i("checkMyCredentials", t.body().toString())
-                        Log.i("checkMyCredentials", data.toString())
-                        //Log.i("checkMyCredentials", data.birthday)
-                        Log.i("checkMyCredentials", data.email)
-                        Log.i("checkMyCredentials", data.name)
-                        Log.i("checkMyCredentials", data.phone)
-                        Log.i("checkMyCredentials", data.reg_date)
-                        fm_username.text = data.name
-                        fm_phone.text = data.phone
-                    } else {
-                        /**
-                         * TODO
-                         * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
-                         *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
-                         *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
-                         */
+                    val view = this@PersonalInfoFragment.view
+                    if (view != null) {
+                        if (t.isSuccessful) {
+                            /**
+                             * TODO при получении проверять, что поля не равны нулл
+                             */
+                            val data = t.body()!!.data
+                            Log.i("checkMyCredentials", t.body().toString())
+                            Log.i("checkMyCredentials", data.toString())
+                            //Log.i("checkMyCredentials", data.birthday)
+                            Log.i("checkMyCredentials", data.email)
+                            Log.i("checkMyCredentials", data.name)
+                            Log.i("checkMyCredentials", data.phone)
+                            Log.i("checkMyCredentials", data.reg_date)
+                            fm_username.text = data.name
+                            fm_phone.text = data.phone
+                        } else {
+                            /**
+                             * TODO
+                             * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
+                             *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
+                             *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
+                             */
+                        }
                     }
                 }
 
