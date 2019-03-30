@@ -41,50 +41,79 @@ class PasswordChange : AppCompatActivity() {
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        reg_password.addTextChangedListener(object : TextWatcher {
+        change_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                change_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                        val password = change_password_input_layout.editText!!.text.toString()
+                        val validatePassword = validatePassword(password)
+                        val confirmPassword = change_confirm_password_input_layout.editText!!.text.toString()
+                        val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
+
+                        if (!hasFocus && !validatePassword) {
+                            /*
+                            change_password_input_layout.error =
+                                    getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                            change_password.setCompoundDrawables(null, null, icon, null)*/
+                        } else if (!hasFocus && confirmPassword.isEmpty()) {
+                            change_password_input_layout.isErrorEnabled = false
+                            change_password.setCompoundDrawables(null, null, null, null)
+                            change_confirm_password_input_layout.isErrorEnabled = false
+                            change_confirm_password.setCompoundDrawables(null, null, null, null)
+                        } else if (!hasFocus && !validateConfirmPassword) {
+                            change_confirm_password_input_layout.error =
+                                    getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                            change_confirm_password.setCompoundDrawables(null, null, icon, null)
+
+                            change_password_input_layout.error =
+                                    getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                            change_password.setCompoundDrawables(null, null, icon, null)
+                        } else {
+                            change_password_input_layout.isErrorEnabled = false
+                            change_password.setCompoundDrawables(null, null, null, null)
+                            change_confirm_password_input_layout.isErrorEnabled = false
+                            change_confirm_password.setCompoundDrawables(null, null, null, null)
+                        }
+                    }
+
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val password = reg_password_input_layout.editText!!.text.toString()
-                val validatePassword = validatePassword(password)
-
-                if (!validatePassword) {
-                    reg_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_password)
-                    reg_password.setCompoundDrawables(null, null, icon, null)
-                    btn_change_pass.background = resources.getDrawable(R.drawable.btn_not_click)
-                } else {
-                    reg_password_input_layout.isErrorEnabled = false
-                    reg_password.setCompoundDrawables(null, null, null, null)
-                }
             }
 
         })
 
-        reg_confirm_password.addTextChangedListener(object : TextWatcher {
+        change_confirm_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                val password = change_password_input_layout.editText!!.text.toString()
+                val confirmPassword = change_confirm_password_input_layout.editText!!.text.toString()
+                val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
+
+                if (!validateConfirmPassword) {
+                    change_confirm_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    change_confirm_password.setCompoundDrawables(null, null, icon, null)
+
+                    change_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    change_password.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    change_password_input_layout.isErrorEnabled = false
+                    change_password.setCompoundDrawables(null, null, null, null)
+                    change_confirm_password_input_layout.isErrorEnabled = false
+                    change_confirm_password.setCompoundDrawables(null, null, null, null)
+                }
+
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val password = reg_password_input_layout.editText!!.text.toString()
-                val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
-                val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
-
-                if (!validateConfirmPassword) {
-                    reg_confirm_password_input_layout.error =
-                        getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                    reg_confirm_password.setCompoundDrawables(null, null, icon, null)
-                    btn_change_pass.background = resources.getDrawable(R.drawable.btn_not_click)
-                } else {
-                    reg_confirm_password_input_layout.isErrorEnabled = false
-                    reg_confirm_password.setCompoundDrawables(null, null, null, null)
-                }
             }
 
         })
@@ -98,8 +127,8 @@ class PasswordChange : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val password = reg_password_input_layout.editText!!.text.toString()
-                val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
+                val password = change_password_input_layout.editText!!.text.toString()
+                val confirmPassword = change_confirm_password_input_layout.editText!!.text.toString()
                 val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
                 if (change_password_code_email.text.toString().length < 5) {
@@ -120,8 +149,8 @@ class PasswordChange : AppCompatActivity() {
         })
 
         btn_change_pass.setOnClickListener {
-            val password = reg_password_input_layout.editText!!.text.toString()
-            val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
+            val password = change_password_input_layout.editText!!.text.toString()
+            val confirmPassword = change_confirm_password_input_layout.editText!!.text.toString()
 
             val validatePassword = validatePassword(password)
             val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
@@ -165,7 +194,7 @@ class PasswordChange : AppCompatActivity() {
     }
 
     private fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
-        return confirmPassword.matches("((?=.*[a-z0-9]).{4,20})".toRegex()) && password == confirmPassword
+        return confirmPassword.matches("((?=.*[a-zA-Z0-9]).{4,20})".toRegex()) && password == confirmPassword
     }
 
     private fun allert(text: String) {
