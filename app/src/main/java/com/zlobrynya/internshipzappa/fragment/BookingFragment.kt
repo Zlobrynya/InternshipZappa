@@ -707,25 +707,25 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<tableList>) {
-                    Log.d("onNextTA", "зашёл")
-                    if (t.isSuccessful) {
-                        Log.i("BOOP", "Код удачи${t.code()}")
-                        if (t.body() != null) {
-                            if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету
-                                showNoTablesAvailableAlert()
-                            } else { // Если свободные столики есть
-                                val responseBody = t.body() as tableList
-                                Log.d("BOOP", "Число столиков ${responseBody.data.size}")
-                                openTableSelectFragment(args, responseBody)
-                            }
-                        } else { // Если свободных столиков нету
-                            Log.d("BOOP", "Прилетел нулл")
-                        }
-                    } else { // В случае ошибок
-                        Log.i("BOOP", "Код ошибки ${t.code()}")
-                    }
                     val view = this@BookingFragment.view
                     if (view != null) {
+                        Log.d("onNextTA", "зашёл")
+                        if (t.isSuccessful) {
+                            Log.i("BOOP", "Код удачи${t.code()}")
+                            if (t.body() != null) {
+                                if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету
+                                    showNoTablesAvailableAlert()
+                                } else { // Если свободные столики есть
+                                    val responseBody = t.body() as tableList
+                                    Log.d("BOOP", "Число столиков ${responseBody.data.size}")
+                                    openTableSelectFragment(args, responseBody)
+                                }
+                            } else { // Если свободных столиков нету
+                                Log.d("BOOP", "Прилетел нулл")
+                            }
+                        } else { // В случае ошибок
+                            Log.i("BOOP", "Код ошибки ${t.code()}")
+                        }
                         view.progress_spinner.visibility = View.GONE
                     }
                 }

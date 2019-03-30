@@ -408,18 +408,19 @@ class EditProfileFragment : Fragment() {
                                 override fun onNext(t: Response<verifyRespDTO>) {
                                     Log.i("checkCode", "${t.code()}")
 
-                                    if (t.isSuccessful) {
-                                        val intent = Intent(context, CodeFEmailActivity::class.java)
-                                        intent.putExtra("change_name", newChange.name)
-                                        intent.putExtra("change_phone", newChange.phone)
-                                        intent.putExtra("change_email", newChange.email)
-                                        intent.putExtra("change_birthday", newChange.birthday)
-                                        intent.putExtra("new_email", newChange.new_email)
-                                        intent.putExtra("id", "1")
-                                        startActivity(intent)
-                                    }
                                     val view = this@EditProfileFragment.view
                                     if (view != null) {
+                                        Log.d("BOOP", "Не нулловая вьюшка")
+                                        if (t.isSuccessful) {
+                                            val intent = Intent(context, CodeFEmailActivity::class.java)
+                                            intent.putExtra("change_name", newChange.name)
+                                            intent.putExtra("change_phone", newChange.phone)
+                                            intent.putExtra("change_email", newChange.email)
+                                            intent.putExtra("change_birthday", newChange.birthday)
+                                            intent.putExtra("new_email", newChange.new_email)
+                                            intent.putExtra("id", "1")
+                                            startActivity(intent)
+                                        }
                                         view.progress_spinner.visibility = View.GONE
                                     }
                                 }
