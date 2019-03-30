@@ -168,7 +168,7 @@ class RegisterActivity : AppCompatActivity() {
                             reg_password.setCompoundDrawables(null, null, null, null)
                             reg_confirm_password_input_layout.isErrorEnabled = false
                             reg_confirm_password.setCompoundDrawables(null, null, null, null)
-                        } else if (!hasFocus && !validateConfirmPassword){
+                        } else if (!hasFocus && !validateConfirmPassword) {
                             reg_confirm_password_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                             reg_confirm_password.setCompoundDrawables(null, null, icon, null)
@@ -197,26 +197,26 @@ class RegisterActivity : AppCompatActivity() {
 
         reg_confirm_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                        val password = reg_password_input_layout.editText!!.text.toString()
-                        val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
-                        val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
+                val password = reg_password_input_layout.editText!!.text.toString()
+                val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
+                val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
-                        if (!validateConfirmPassword) {
-                            reg_confirm_password_input_layout.error =
-                                getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                            reg_confirm_password.setCompoundDrawables(null, null, icon, null)
+                if (!validateConfirmPassword) {
+                    reg_confirm_password_input_layout.error =
+                        getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    reg_confirm_password.setCompoundDrawables(null, null, icon, null)
 
-                            reg_password_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                            reg_password.setCompoundDrawables(null, null, icon, null)
-                        } else {
-                            reg_password_input_layout.isErrorEnabled = false
-                            reg_password.setCompoundDrawables(null, null, null, null)
-                            reg_confirm_password_input_layout.isErrorEnabled = false
-                            reg_confirm_password.setCompoundDrawables(null, null, null, null)
-                        }
-
+                    reg_password_input_layout.error =
+                        getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    reg_password.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    reg_password_input_layout.isErrorEnabled = false
+                    reg_password.setCompoundDrawables(null, null, null, null)
+                    reg_confirm_password_input_layout.isErrorEnabled = false
+                    reg_confirm_password.setCompoundDrawables(null, null, null, null)
                 }
+
+            }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -300,16 +300,17 @@ class RegisterActivity : AppCompatActivity() {
 
                                 override fun onNext(t: Response<verifyRespDTO>) {
                                     Log.i("checkCode", "${t.code()}")
-
-                                    if (t.isSuccessful) {
-                                        val intent = Intent(applicationContext, CodeFEmailActivity::class.java)
-                                        intent.putExtra("name", reg_username.text.toString())
-                                        intent.putExtra("phone", reg_phone_number.text.toString())
-                                        intent.putExtra("email", reg_email.text.toString())
-                                        intent.putExtra("password", reg_password.text.toString())
-                                        intent.putExtra("code", t.body()!!.email_code)
-                                        intent.putExtra("id", "0")
-                                        startActivity(intent)
+                                    if (registerActivityIsRunning) {
+                                        if (t.isSuccessful) {
+                                            val intent = Intent(applicationContext, CodeFEmailActivity::class.java)
+                                            intent.putExtra("name", reg_username.text.toString())
+                                            intent.putExtra("phone", reg_phone_number.text.toString())
+                                            intent.putExtra("email", reg_email.text.toString())
+                                            intent.putExtra("password", reg_password.text.toString())
+                                            intent.putExtra("code", t.body()!!.email_code)
+                                            intent.putExtra("id", "0")
+                                            startActivity(intent)
+                                        }
                                     }
                                     progress_spinner.visibility = View.GONE
                                 }
@@ -366,4 +367,20 @@ class RegisterActivity : AppCompatActivity() {
         finish()
         return true
     }
+
+    override fun onStart() {
+        super.onStart()
+        registerActivityIsRunning = true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        registerActivityIsRunning = false
+    }
+
+    companion object {
+        var registerActivityIsRunning: Boolean = false
+    }
+
+
 }

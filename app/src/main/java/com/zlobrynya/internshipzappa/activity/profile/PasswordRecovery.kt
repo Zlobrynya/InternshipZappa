@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.os.SystemClock
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
@@ -25,8 +26,9 @@ import kotlinx.android.synthetic.main.activity_password_recovery.*
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Response
 
-class PasswordRecovery: AppCompatActivity() {
+class PasswordRecovery : AppCompatActivity() {
 
+    var canClick: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +39,9 @@ class PasswordRecovery: AppCompatActivity() {
 
         val newVerify = verifyEmailDTO()
 
-        register_email.addTextChangedListener(object: TextWatcher {
+        register_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                register_email.onFocusChangeListener = object : View.OnFocusChangeListener{
+                register_email.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                     }
 
@@ -68,12 +70,14 @@ class PasswordRecovery: AppCompatActivity() {
 
         btnSendPassChange.setOnClickListener {
             val email = register_email_input_layout.editText!!.text.toString()
-
             val validateEmail = validateEmail(email)
             if (validateEmail) {
                 newVerify.email = email
                 btnSendPassChange.background = resources.getDrawable(R.drawable.btn_can_click)
-                checkExistenceEmail(newVerify, icon)
+                if (canClick) {
+                    canClick = false
+                    checkExistenceEmail(newVerify, icon)
+                }
             } else {
                 Toast.makeText(this, "Введите корректные данные", Toast.LENGTH_SHORT).show()
                 btnSendPassChange.background = resources.getDrawable(R.drawable.btn_not_click)
@@ -91,8 +95,8 @@ class PasswordRecovery: AppCompatActivity() {
     }
 
 
-    private fun checkExistenceEmail(newVerify: verifyEmailDTO, icon: Drawable){
-
+    private fun checkExistenceEmail(newVerify: verifyEmailDTO, icon: Drawable) {
+        progress_spinner_recovery.visibility = View.VISIBLE
         RetrofitClientInstance.getInstance()
             .getEmailExistence(newVerify.email)
             .subscribeOn(Schedulers.io())
@@ -105,20 +109,26 @@ class PasswordRecovery: AppCompatActivity() {
 
                 override fun onNext(t: Response<respDTO>) {
                     Log.i("checkEmailExistence", t.code().toString())
-                    if(t.isSuccessful) {
+                    if (t.isSuccessful) {
                         verifyEmail(newVerify)
-                    }else{
-                        register_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.user_not_exist)
+                    } else {
+                        register_email_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.user_not_exist)
                         register_email.setCompoundDrawables(null, null, icon, null)
+                        progress_spinner_recovery.visibility = View.GONE
+                        canClick = true
                     }
                 }
+
                 override fun onError(e: Throwable) {
                     Log.i("checkReg", "that's not fineIn")
                 }
             })
     }
 
-    private fun verifyEmail(newVerify: verifyEmailDTO){
+    private fun verifyEmail(newVerify: verifyEmailDTO) {
+
+        progress_spinner_recovery.visibility = View.VISIBLE
         RetrofitClientInstance.getInstance()
             .postVerifyData(newVerify)
             .subscribeOn(Schedulers.io())
@@ -131,11 +141,13 @@ class PasswordRecovery: AppCompatActivity() {
 
                 override fun onNext(t: Response<verifyRespDTO>) {
                     Log.i("checkCode", "${t.code()}")
-
-                    if(t.isSuccessful) {
-                        val intent = Intent(applicationContext, PasswordChange::class.java)
-                        intent.putExtra("email", newVerify.email)
-                        startActivity(intent)
+                    if (passwordRecoveryActivityIsRunning) {
+                        if (t.isSuccessful) {
+                            val intent = Intent(applicationContext, PasswordChange::class.java)
+                            intent.putExtra("email", newVerify.email)
+                            startActivity(intent)
+                        }
+                        progress_spinner_recovery.visibility = View.GONE
                     }
                 }
 
@@ -154,5 +166,22 @@ class PasswordRecovery: AppCompatActivity() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onStart() {
+        Log.d("BOOP", "password start")
+        super.onStart()
+        canClick = true
+        passwordRecoveryActivityIsRunning = true
+    }
+
+    override fun onStop() {
+        Log.d("BOOP", "password stop")
+        super.onStop()
+        passwordRecoveryActivityIsRunning = false
+    }
+
+    companion object {
+        var passwordRecoveryActivityIsRunning: Boolean = false
     }
 }

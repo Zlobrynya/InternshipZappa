@@ -22,7 +22,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_change_password.*
 import retrofit2.Response
 
-class PasswordChange: AppCompatActivity() {
+class PasswordChange : AppCompatActivity() {
+
+    var canClick: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +41,7 @@ class PasswordChange: AppCompatActivity() {
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        reg_password.addTextChangedListener(object: TextWatcher {
+        reg_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -62,7 +64,7 @@ class PasswordChange: AppCompatActivity() {
 
         })
 
-        reg_confirm_password.addTextChangedListener(object: TextWatcher {
+        reg_confirm_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -75,7 +77,8 @@ class PasswordChange: AppCompatActivity() {
                 val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
                 if (!validateConfirmPassword) {
-                    reg_confirm_password_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    reg_confirm_password_input_layout.error =
+                        getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                     reg_confirm_password.setCompoundDrawables(null, null, icon, null)
                     btn_change_pass.background = resources.getDrawable(R.drawable.btn_not_click)
                 } else {
@@ -86,7 +89,7 @@ class PasswordChange: AppCompatActivity() {
 
         })
 
-        change_password_code_email.addTextChangedListener(object: TextWatcher{
+        change_password_code_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -99,14 +102,15 @@ class PasswordChange: AppCompatActivity() {
                 val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
                 val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
-                if (change_password_code_email.text.toString().length < 5){
-                    change_password_code_email_layout.error = getString(com.zlobrynya.internshipzappa.R.string.code_null)
+                if (change_password_code_email.text.toString().length < 5) {
+                    change_password_code_email_layout.error =
+                        getString(com.zlobrynya.internshipzappa.R.string.code_null)
                     change_password_code_email.setCompoundDrawables(null, null, icon, null)
                     btn_change_pass.background = resources.getDrawable(R.drawable.btn_not_click)
                 } else {
                     change_password_code_email_layout.isErrorEnabled = false
                     change_password_code_email.setCompoundDrawables(null, null, null, null)
-                    if(validateConfirmPassword(password, confirmPassword)){
+                    if (validateConfirmPassword(password, confirmPassword)) {
                         btn_change_pass.background = resources.getDrawable(R.drawable.btn_can_click)
                         btn_change_pass.isEnabled = true
                     }
@@ -123,11 +127,14 @@ class PasswordChange: AppCompatActivity() {
             val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
 
-            if (validatePassword && validateConfirmPassword){
+            if (validatePassword && validateConfirmPassword) {
 
                 newPassRec.code = change_password_code_email_layout.editText!!.text.toString()
                 newPassRec.password = password
-                postNewPass(newPassRec)
+                if (canClick) {
+                    canClick = false
+                    postNewPass(newPassRec)
+                }
             }
         }
     }
@@ -136,20 +143,21 @@ class PasswordChange: AppCompatActivity() {
         return password.matches("((?=.*[a-z0-9]).{4,20})".toRegex())
     }
 
-    private fun postNewPass(newPassRec: passwordRecoveryDTO){
+    private fun postNewPass(newPassRec: passwordRecoveryDTO) {
         RetrofitClientInstance.getInstance()
             .postPassRecData(newPassRec)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe(object : Observer<Response<respDTO>>{
+            ?.subscribe(object : Observer<Response<respDTO>> {
                 override fun onComplete() {}
                 override fun onSubscribe(d: Disposable) {}
-                override fun onNext(t: Response<respDTO>){
+                override fun onNext(t: Response<respDTO>) {
                     Log.i("checkPassRec", t.code().toString())
-                    if(t.isSuccessful){
+                    if (t.isSuccessful) {
                         allert(getString(R.string.change_pass_good))
                     }
                 }
+
                 override fun onError(e: Throwable) {
                     Log.i("check", "that's not fineIn")
                 }
@@ -188,6 +196,11 @@ class PasswordChange: AppCompatActivity() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        canClick = true
     }
 
 }
