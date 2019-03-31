@@ -2,7 +2,6 @@ package com.zlobrynya.internshipzappa.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_profile_login.view.*
  */
 class ProfileLoginFragment : Fragment() {
 
-    var lastCLickTime: Long = 0
+    var canClickLoginButton: Boolean = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_profile_login, container, false)
@@ -32,10 +31,8 @@ class ProfileLoginFragment : Fragment() {
         when (it.id) {
             // Кнопка залогиниться
             R.id.login_button -> {
-                if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
-                    return@OnClickListener
-                } else {
-                    lastCLickTime = SystemClock.elapsedRealtime()
+                if (canClickLoginButton) {
+                    canClickLoginButton = false
                     openLoginActivity()
                 }
             }
@@ -48,6 +45,11 @@ class ProfileLoginFragment : Fragment() {
     private fun openLoginActivity() {
         val intent = Intent(context, LoginActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        canClickLoginButton = true
     }
 
 }
