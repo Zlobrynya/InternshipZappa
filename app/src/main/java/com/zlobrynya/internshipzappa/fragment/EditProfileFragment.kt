@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
@@ -352,12 +353,15 @@ class EditProfileFragment : Fragment() {
                         closeFragment()
                         reloadActivity()
                     } else {
-                        /**
-                         * TODO
-                         * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
-                         *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
-                         *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
-                         */
+                        if (t.code() == 401) {
+                            Toast.makeText(
+                                context,
+                                "Ваша сессия истекла, пожалуйста авторизуйтесь снова",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        closeFragment()
+                        reloadActivity()
                     }
                 }
 
