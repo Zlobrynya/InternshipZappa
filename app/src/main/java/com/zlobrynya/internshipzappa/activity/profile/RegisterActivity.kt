@@ -356,7 +356,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun validatePassword(password: String): Boolean {
-        return password.matches("((?=.*[a-z0A-Z-9]).{4,20})".toRegex())
+        return password.matches("((?=.*[a-zA-Z0-9]).{4,20})".toRegex())
     }
 
     private fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
