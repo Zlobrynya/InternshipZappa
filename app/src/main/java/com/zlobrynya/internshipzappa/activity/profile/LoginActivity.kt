@@ -3,9 +3,10 @@ package com.zlobrynya.internshipzappa.activity.profile
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -25,7 +26,9 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
-    var lastCLickTime: Long = 0
+    var canClickRegisterButton: Boolean = true
+    var canClickForgotButton: Boolean = true
+    var canClickLoginButton: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +43,8 @@ class LoginActivity : AppCompatActivity() {
 
 
         btnLinkToRegisterActivity.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
-                return@setOnClickListener
-            } else {
-                lastCLickTime = SystemClock.elapsedRealtime()
+            if (canClickRegisterButton) {
+                canClickRegisterButton = false
                 val i = Intent(this, RegisterActivity::class.java)
                 startActivity(i)
             }
@@ -109,89 +110,88 @@ class LoginActivity : AppCompatActivity() {
         })
 
         forgot_password.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
-                return@setOnClickListener
-            } else {
-                lastCLickTime = SystemClock.elapsedRealtime()
+            if (canClickForgotButton) {
+                canClickForgotButton = false
                 val intent = Intent(this, PasswordRecovery::class.java)
                 startActivity(intent)
             }
         }
 
         btnLogin.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
-                return@setOnClickListener
-            } else {
-                lastCLickTime = SystemClock.elapsedRealtime()
-                val email = log_email_input_layout.editText!!.text.toString()
-                val password = log_password_input_layout.editText!!.text.toString()
-
-                val validateEmail = validateEmail(email)
-                val validatePassword = validatePassword(password)
-
-                newAuth.email = email
-                newAuth.password = password
-                Log.i("checkAuth", newAuth.email)
-                Log.i("checkAuth", newAuth.password)
-                if (validateEmail && validatePassword) {
-
-                    RetrofitClientInstance.getInstance()
-                        .postAuthData(newAuth)
-                        .subscribeOn(Schedulers.io())
-                        ?.observeOn(AndroidSchedulers.mainThread())
-                        ?.subscribe(object : Observer<Response<authRespDTO>> {
-
-                            override fun onComplete() {}
-
-                            override fun onSubscribe(d: Disposable) {}
-
-                            override fun onNext(t: Response<authRespDTO>) {
-                                Log.i("checkAuth", "${t.code()}")
-                                if (t.isSuccessful) {
-                                    val sharedPreferencesStat = applicationContext.getSharedPreferences(
-                                        applicationContext.getString(R.string.user_info),
-                                        Context.MODE_PRIVATE
-                                    )
-                                    val savedEmail = applicationContext.getString(R.string.user_email)
-                                    val access_token = applicationContext.getString(R.string.access_token)
-                                    val editor = sharedPreferencesStat.edit()
-                                    editor.putString(savedEmail, t.body()!!.email)
-                                    editor.putString(access_token, t.body()!!.access_token)
-                                    editor.apply()
-
-                                    Log.i("checkAuth", t.body()!!.email)
-                                    Log.i("checkAuth", t.body()!!.access_token)
-                                    //onBackPressed()
-                                    //updateUserBookingList()
-                                    setResult(Activity.RESULT_OK)
-                                    finish()
-                                } else {
-                                    log_email_input_layout.error =
-                                        getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
-                                    log_email.setCompoundDrawables(null, null, icon, null)
-                                    log_password_input_layout.error =
-                                        getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
-                                    log_password.setCompoundDrawables(null, null, icon, null)
-                                    Log.i("checkAuth", "введены некоректные данные")
-                                    Toast.makeText(this@LoginActivity, "Неверный пароль или E-mail", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
-                            }
-
-                            override fun onError(e: Throwable) {
-                                Log.i("checkAuth", "that's not fineIn")
-                                Toast.makeText(
-                                    this@LoginActivity,
-                                    "Проверьте ваше интернет подключение",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                        })
-
-                }
+            Log.d("BOOP", "$canClickLoginButton клик")
+            if (canClickLoginButton) {
+                canClickLoginButton = false
+                login(newAuth, icon)
             }
         }
+    }
+
+    private fun login(newAuth: authDTO, icon: Drawable) {
+        val email = log_email_input_layout.editText!!.text.toString()
+        val password = log_password_input_layout.editText!!.text.toString()
+
+        val validateEmail = validateEmail(email)
+        val validatePassword = validatePassword(password)
+
+        newAuth.email = email
+        newAuth.password = password
+        Log.i("checkAuth", newAuth.email)
+        Log.i("checkAuth", newAuth.password)
+        if (validateEmail && validatePassword) {
+
+            RetrofitClientInstance.getInstance()
+                .postAuthData(newAuth)
+                .subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(object : Observer<Response<authRespDTO>> {
+
+                    override fun onComplete() {}
+
+                    override fun onSubscribe(d: Disposable) {}
+
+                    override fun onNext(t: Response<authRespDTO>) {
+                        Log.i("checkAuth", "${t.code()}")
+                        if (t.isSuccessful) {
+                            val sharedPreferencesStat = applicationContext.getSharedPreferences(
+                                applicationContext.getString(R.string.user_info),
+                                Context.MODE_PRIVATE
+                            )
+                            val savedEmail = applicationContext.getString(R.string.user_email)
+                            val access_token = applicationContext.getString(R.string.access_token)
+                            val editor = sharedPreferencesStat.edit()
+                            editor.putString(savedEmail, t.body()!!.email)
+                            editor.putString(access_token, t.body()!!.access_token)
+                            editor.apply()
+
+                            Log.i("checkAuth", t.body()!!.email)
+                            Log.i("checkAuth", t.body()!!.access_token)
+                            //onBackPressed()
+                            //updateUserBookingList()
+                            setResult(Activity.RESULT_OK)
+                            finish()
+                        } else {
+                            log_email_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
+                            log_email.setCompoundDrawables(null, null, icon, null)
+                            log_password_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
+                            log_password.setCompoundDrawables(null, null, icon, null)
+                            Log.i("checkAuth", "введены некоректные данные")
+                            Toast.makeText(this@LoginActivity, "Неверный пароль или E-mail", Toast.LENGTH_SHORT)
+                                .show()
+                            canClickLoginButton = true
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.i("checkAuth", "that's not fineIn")
+                        showNoInternetConnectionAlert(newAuth, icon)
+                        canClickLoginButton = true
+                    }
+
+                })
+
+        } else canClickLoginButton = true
     }
 
     private fun validateEmail(email: String): Boolean {
@@ -222,6 +222,14 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onResume() {
+        canClickRegisterButton = true
+        canClickLoginButton = true
+        canClickForgotButton = true
+        alertIsShown = false
+        super.onResume()
+    }
+
     /**
      * Обновляет список броней юзера
      */
@@ -229,6 +237,37 @@ class LoginActivity : AppCompatActivity() {
         val fragment = supportFragmentManager.findFragmentByTag("USER_BOOKING_LIST")
         if (fragment != null) {
             fragment.onResume()
+        }
+    }
+
+    private var alertIsShown = false
+    /**
+     * Выводит диалоговое окно с сообщением об отсутствии интернета
+     */
+    private fun showNoInternetConnectionAlert(authDTO: authDTO, icon: Drawable) {
+        if (!alertIsShown) {
+            alertIsShown = true
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
+            builder.setTitle("Ошибка соединения")
+                .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+                .setCancelable(false)
+                .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        login(authDTO, icon)
+                        alertIsShown = false
+                    }
+                }
+                .setNegativeButton("ОТМЕНА") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        alertIsShown = false
+                    }
+                }
+            val alert = builder.create()
+            alert.show()
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
         }
     }
 }

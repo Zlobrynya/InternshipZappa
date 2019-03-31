@@ -109,13 +109,13 @@ class EditProfileFragment : Fragment() {
 
         view.edit_profile_dob.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
-                DatePickerDialog(
-                    context!!, R.style.DatePickerTheme,
-                    dateSetListener,
+                val dialog = DatePickerDialog(context!!, R.style.DatePickerTheme, dateSetListener,
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
-                ).show()
+                    calendar.get(Calendar.DAY_OF_MONTH))
+                dialog.datePicker.maxDate = calendar.timeInMillis
+                dialog.setTitle("")
+                dialog.show()
             }
 
         })
