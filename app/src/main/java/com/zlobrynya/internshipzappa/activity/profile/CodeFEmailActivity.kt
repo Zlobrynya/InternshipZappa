@@ -112,7 +112,7 @@ class CodeFEmailActivity : AppCompatActivity() {
                         code = firstNumber.text.toString()
                         Log.d("code", "$code")
 
-                        userCredentials.code = code.toInt()
+                        if(code != "") userCredentials.code = code.toInt()
 
 
                         //Log.i("checkChange", userCredentials.email)
