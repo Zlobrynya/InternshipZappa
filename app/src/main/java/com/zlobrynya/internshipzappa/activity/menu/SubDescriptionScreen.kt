@@ -82,8 +82,8 @@ class SubDescriptionScreen : AppCompatActivity() {
         Glide.with(this@SubDescriptionScreen)
             .asBitmap()
             .load(dish.photo) // Изображение для теста. Исходное значение dish.photo
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            //.skipMemoryCache(true)
             .placeholder(R.drawable.menu)
             .centerCrop()
             .error(R.drawable.menu)

@@ -64,8 +64,8 @@ class AdapterRecommendDish(private val values: ArrayList<DishClientDTO>): Recycl
             Glide.with(context)
                 .asBitmap()
                 .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.skipMemoryCache(true)
                 .placeholder(R.drawable.no_toping)
                 .error(R.drawable.no_toping)
                 .into(object:SimpleTarget<Bitmap>(){

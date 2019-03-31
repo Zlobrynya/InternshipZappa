@@ -19,6 +19,9 @@ import com.zlobrynya.internshipzappa.activity.menu.FullDescriptionScreen
 import com.zlobrynya.internshipzappa.activity.menu.SubDescriptionScreen
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import kotlinx.android.synthetic.main.item_menu.view.*
+import com.bumptech.glide.request.RequestOptions
+
+
 
 /*
 * Адаптер для RecyclerMenu отображение каточек блюда активити MenuActivity
@@ -75,12 +78,16 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
                 }
             }
 
+
+            val myOptions = RequestOptions()
+                .override(500, 400)
             //Glide
             Glide.with(this)
                 .asBitmap()
+                .apply(myOptions)
                 .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.skipMemoryCache(true)
                 .placeholder(R.drawable.menu)
                 .error(R.drawable.menu)
                 .into(object: SimpleTarget<Bitmap>(){
