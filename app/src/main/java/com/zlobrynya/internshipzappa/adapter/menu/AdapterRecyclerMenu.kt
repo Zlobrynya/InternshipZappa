@@ -50,16 +50,19 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
     inner class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         var idDish = 0
         var subDish = "null"
+        var dish = DishClientDTO()
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishClientDTO) = with(itemView){
             //В класс помощник записываем данные
+            Log.i("wtf2", dishDTO.toString())
             nameDish?.text = dishDTO.name.replace("\'", "\"")
             shortDescDish?.text = dishDTO.desc_short.replace("\'", "\"")
             if(shortDescDish?.text == "")shortDescDish.visibility = View.GONE
             idDish = dishDTO.item_id
             subDish = dishDTO.sub_menu
+            dish = dishDTO
             Log.i("delivery", dishDTO.delivery)
-            priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
+            priceDish.text = if (dishDTO.price.toInt() == 0) ""
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
             if (dishDTO.weight.contains("null")){
@@ -98,7 +101,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
         }
 
         override fun onClick(view: View) {
-            Log.i("qq", subDish)
+            Log.i("qq", dish.toString())
             if(subDish == "null") {
                 Log.i("qq", subDish)
                 val intent = Intent(context, FullDescriptionScreen::class.java)

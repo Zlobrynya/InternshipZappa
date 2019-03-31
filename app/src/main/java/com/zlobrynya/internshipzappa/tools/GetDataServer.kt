@@ -233,6 +233,7 @@ class GetDataServer(val context: Context) {
                                 val dishes = body?.menu
                                 dishes?.forEach {
                                     //экранирование ковычек
+                                    Log.i("dish", it.toString())
                                     try {
                                         if (it.class_name == null){it.class_name = ""}
                                         if (it.desc_long == null){it.desc_long = ""}
@@ -258,13 +259,14 @@ class GetDataServer(val context: Context) {
                                 dishes?.forEach {
                                     if(!it.sub_menu!!.isEmpty()){
                                         it.sub_menu!!.forEach {
-                                            if (it.name == null){it.name = ""}
+                                            /*if (it.name == null){it.name = ""}
                                             if (it.parent_name == null){it.parent_name = ""}
-                                            if (it.weight == null){it.weight = ""}
+                                            if (it.weight == null){it.weight = ""}*/
 
                                             it.name = it.name.replace('\"', '\'')
                                             it.parent_name = it.parent_name.replace('\"', '\'')
                                             it.weight = it.weight.replace('\"', '\'')
+                                            Log.i("dish", it.toString())
                                         }
                                         subMenuDB.addAllData(it.sub_menu!!)
                                     }

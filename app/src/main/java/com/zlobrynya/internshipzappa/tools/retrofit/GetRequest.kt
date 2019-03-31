@@ -2,6 +2,9 @@ package com.zlobrynya.internshipzappa.tools.retrofit
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.UserBookingList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
@@ -37,4 +40,14 @@ interface GetRequest {
     @Headers("Content-Type: application/json")
     @GET("check_auth")
     fun getStatusData(@Header("Authorization") authorization: String): Observable<Response<respDTO>>
+
+    //запрос на получение бронирований пользователя
+    @Headers("Content-Type: application/json")
+    @GET("show_user_booking")
+    fun postUserBookings(@Header("Authorization") authorization: String): Observable<Response<UserBookingList>>
+
+    //запрос на получение данных пользователя
+    @Headers("Content-Type: application/json")
+    @GET("view_user_credentials")
+    fun postViewUserCredentials(@Header("Authorization") authorization: String): Observable<Response<userDataDTO>>
 }

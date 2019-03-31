@@ -52,11 +52,11 @@ class RetrofitClientInstance {
 
     fun getEmailExistence(url: String) : Observable<Response<respDTO>> = getRequest!!.getEmailExistence(url)
 
-    fun postUserBookings(authorization: String, userEmail: verifyEmailDTO): Observable<Response<UserBookingList>> = postRequest!!.postUserBookings(authorization, userEmail)
+    fun postUserBookings(authorization: String): Observable<Response<UserBookingList>> = getRequest!!.postUserBookings(authorization)
 
-    fun postDeleteUserBookings(authorization: String, deleteBooking: deleteBookingDTO): Observable<Response<respDTO>> = postRequest!!.postDeleteUserBookings(authorization, deleteBooking)
+    fun postDeleteUserBookings(authorization: String, bookingId: String): Observable<Response<respDTO>> = postRequest!!.postDeleteUserBookings(authorization, bookingId)
 
-    fun postViewUserCredentials(authorization: String, userEmail: verifyEmailDTO): Observable<Response<userDataDTO>> = postRequest!!.postViewUserCredentials(authorization, userEmail)
+    fun postViewUserCredentials(authorization: String): Observable<Response<userDataDTO>> = getRequest!!.postViewUserCredentials(authorization)
 
     fun postChangeUserCredentials(authorization: String, userData: changeUserDataDTO): Observable<Response<changeUserDataRespDTO>> = postRequest!!.postChangeUserCredentials(authorization, userData)
 

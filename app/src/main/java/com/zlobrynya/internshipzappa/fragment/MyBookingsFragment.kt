@@ -134,12 +134,12 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-        val newEmail = verifyEmailDTO()
-        newEmail.email = sharedPreferences.getString(this.getString(R.string.user_email), "")
+       /* val newEmail = verifyEmailDTO()
+        newEmail.email = sharedPreferences.getString(this.getString(R.string.user_email), "")*/
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null").toString()
 
         RetrofitClientInstance.getInstance()
-            .postUserBookings(jwt, newEmail)
+            .postUserBookings(jwt)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : Observer<Response<UserBookingList>> {
@@ -190,13 +190,13 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-        val newDeleteBooking = deleteBookingDTO()
+        /*val newDeleteBooking = deleteBookingDTO()
         newDeleteBooking.email = sharedPreferences.getString(this.getString(R.string.user_email), "")!!.toString()
-        newDeleteBooking.booking_id = bookingId
+        newDeleteBooking.booking_id = bookingId*/
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
 
         RetrofitClientInstance.getInstance()
-            .postDeleteUserBookings(jwt, newDeleteBooking)
+            .postDeleteUserBookings(jwt, bookingId.toString())
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : Observer<Response<respDTO>> {

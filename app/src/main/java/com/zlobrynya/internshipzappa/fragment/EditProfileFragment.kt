@@ -234,7 +234,7 @@ class EditProfileFragment : Fragment() {
                     newChangeData.birthday = outputDateStr
                     newChangeData.name = newName
                     newChangeData.new_email = newEmail
-                    newChangeData.email = email
+                    //newChangeData.email = email
                     newChangeData.phone = newPhone
                     if (SystemClock.elapsedRealtime() - lastCLickTime < 10000) {
                         return@setOnClickListener
@@ -249,7 +249,7 @@ class EditProfileFragment : Fragment() {
                     newChangeData.birthday = outputDateStr
                     newChangeData.name = newName
                     newChangeData.new_email = ""
-                    newChangeData.email = email
+                    //newChangeData.email = email
                     newChangeData.phone = newPhone
                     changeUserCredentials(newChangeData)
                     closeFragment()
@@ -317,7 +317,7 @@ class EditProfileFragment : Fragment() {
         Log.i("checkChangeCredentials", newChangeUser.phone)
         //Log.i("checkChangeCredentials", newChangeUser.birthday)
         Log.i("checkChangeCredentials", newChangeUser.code.toString())
-        Log.i("checkChangeCredentials", newChangeUser.email)
+        //Log.i("checkChangeCredentials", newChangeUser.email)
         Log.i("checkChangeCredentials", newChangeUser.new_email)
 
         val sharedPreferences =
@@ -415,7 +415,7 @@ class EditProfileFragment : Fragment() {
                                             val intent = Intent(context, CodeFEmailActivity::class.java)
                                             intent.putExtra("change_name", newChange.name)
                                             intent.putExtra("change_phone", newChange.phone)
-                                            intent.putExtra("change_email", newChange.email)
+                                            //intent.putExtra("change_email", newChange.email)
                                             intent.putExtra("change_birthday", newChange.birthday)
                                             intent.putExtra("new_email", newChange.new_email)
                                             intent.putExtra("id", "1")

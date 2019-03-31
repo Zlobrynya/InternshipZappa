@@ -272,7 +272,7 @@ class PersonalInfoFragment : Fragment() {
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
 
         RetrofitClientInstance.getInstance()
-            .postViewUserCredentials(jwt, newShowUser)
+            .postViewUserCredentials(jwt)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : Observer<Response<userDataDTO>> {

@@ -77,6 +77,7 @@ class SubMenuDB(val context: Context) {
         if (dish.name.isEmpty())
             dish.name = context.getString(R.string.no_name)
 
+
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + "\"" + dish.parent_name + "\",\"" +
                 dish.name +  "\",\"" + dish.weight + "\"," + dish.price + ");"
         sqLiteDatabase!!.execSQL(query)

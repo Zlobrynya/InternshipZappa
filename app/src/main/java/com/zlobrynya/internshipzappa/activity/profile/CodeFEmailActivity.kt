@@ -150,7 +150,7 @@ class CodeFEmailActivity : AppCompatActivity() {
                         )!!.toString()
 
                         userCredentials.new_email = intent.getStringExtra("new_email")
-                        userCredentials.email = intent.getStringExtra("change_email")
+                        //userCredentials.email = intent.getStringExtra("change_email")
                         userCredentials.name = intent.getStringExtra("change_name")
                         userCredentials.phone = intent.getStringExtra("change_phone")
                         userCredentials.birthday = intent.getStringExtra("change_birthday")
@@ -160,7 +160,7 @@ class CodeFEmailActivity : AppCompatActivity() {
                         userCredentials.code = code.toInt()
 
 
-                        Log.i("checkChange", userCredentials.email)
+                        //Log.i("checkChange", userCredentials.email)
                         Log.i("checkChange", userCredentials.code.toString())
                         Log.i("checkChange", userCredentials.phone)
                         Log.i("checkChange", userCredentials.new_email)
