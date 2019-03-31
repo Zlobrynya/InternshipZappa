@@ -43,7 +43,7 @@ const val REQUEST_CODE_BOOKING_END: Int = 12
  */
 class PersonalInfoFragment : Fragment() {
 
-    var canClickEditProfile: Boolean = true
+    var canClickContinue: Boolean = true
 
     private val blockCharacterSet: String = ".,- "
 
@@ -165,8 +165,8 @@ class PersonalInfoFragment : Fragment() {
             // TODO эти данные больше не нужно получать из полей в XML, а получать из ШередПреференс
             //val name = view.username_input_layout.text.toString()
             val name = "KEK"
-            if (canClickEditProfile) {
-                canClickEditProfile = false
+            if (canClickContinue) {
+                canClickContinue = false
                 networkRxjavaPost(newBooking, it.context)
             }
         }
@@ -238,7 +238,7 @@ class PersonalInfoFragment : Fragment() {
                 override fun onError(e: Throwable) {
                     Log.i("check", "that's not fineIn")
                     showNoInternetConnectionAlert(newBooking, context)
-                    canClickEditProfile = true
+                    canClickContinue = true
                 }
 
             })
@@ -324,7 +324,7 @@ class PersonalInfoFragment : Fragment() {
 
     override fun onResume() {
         Log.d("BOOP", "onResume personalInfoFragment")
-        canClickEditProfile = true
+        canClickContinue = true
         showUserCredentials()
         super.onResume()
     }
