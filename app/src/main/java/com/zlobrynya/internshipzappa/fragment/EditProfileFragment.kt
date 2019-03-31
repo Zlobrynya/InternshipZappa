@@ -369,7 +369,6 @@ class EditProfileFragment : Fragment() {
                     Log.i("check", "that's not fineIn")
                     //запрос не выполнен, всё плохо
                     showNoInternetConnectionAlert(newChangeUser, 2)
-                    canClickSaveButton = true
                 }
 
             })
@@ -379,7 +378,6 @@ class EditProfileFragment : Fragment() {
         val view = this.view
         if (view != null) {
             view.progress_spinner.visibility = View.VISIBLE
-            canClickSaveButton = false
         }
         val newVerify = verifyEmailDTO()
         newVerify.email = newChange.new_email
@@ -439,7 +437,6 @@ class EditProfileFragment : Fragment() {
                                         view.progress_spinner.visibility = View.GONE
                                     }
                                     showNoInternetConnectionAlert(newChange, 1)
-                                    canClickSaveButton = true
                                 }
 
                             })
@@ -452,7 +449,6 @@ class EditProfileFragment : Fragment() {
                         view.progress_spinner.visibility = View.GONE
                     }
                     showNoInternetConnectionAlert(newChange, 1)
-                    canClickSaveButton = true
                 }
             })
     }
@@ -482,6 +478,7 @@ class EditProfileFragment : Fragment() {
                     run {
                         dialog.dismiss()
                         alertIsShown = false
+                        canClickSaveButton = true
                     }
                 }
             val alert = builder.create()

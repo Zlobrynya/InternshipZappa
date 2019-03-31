@@ -238,7 +238,6 @@ class PersonalInfoFragment : Fragment() {
                 override fun onError(e: Throwable) {
                     Log.i("check", "that's not fineIn")
                     showNoInternetConnectionAlert(newBooking, context)
-                    canClickContinue = true
                 }
 
             })
@@ -387,6 +386,7 @@ class PersonalInfoFragment : Fragment() {
                 .setNegativeButton("ОТМЕНА") { dialog, which ->
                     run {
                         dialog.dismiss()
+                        canClickContinue = true
                         alertIsShown = false
                     }
                 }

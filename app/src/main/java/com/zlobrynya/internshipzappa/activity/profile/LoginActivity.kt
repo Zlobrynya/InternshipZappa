@@ -179,14 +179,12 @@ class LoginActivity : AppCompatActivity() {
                             Log.i("checkAuth", "введены некоректные данные")
                             Toast.makeText(this@LoginActivity, "Неверный пароль или E-mail", Toast.LENGTH_SHORT)
                                 .show()
-                            canClickLoginButton = true
                         }
                     }
 
                     override fun onError(e: Throwable) {
                         Log.i("checkAuth", "that's not fineIn")
                         showNoInternetConnectionAlert(newAuth, icon)
-                        canClickLoginButton = true
                     }
 
                 })
@@ -262,6 +260,7 @@ class LoginActivity : AppCompatActivity() {
                     run {
                         dialog.dismiss()
                         alertIsShown = false
+                        canClickLoginButton = true
                     }
                 }
             val alert = builder.create()

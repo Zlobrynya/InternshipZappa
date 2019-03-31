@@ -309,7 +309,6 @@ class RegisterActivity : AppCompatActivity() {
                                     Log.i("check", "that's not fineIn")
                                     progress_spinner.visibility = View.GONE
                                     showNoInternetConnectionAlert(newVerify)
-                                    canClickRegisterButton = true
                                 }
 
                             })
@@ -319,7 +318,6 @@ class RegisterActivity : AppCompatActivity() {
                 override fun onError(e: Throwable) {
                     progress_spinner.visibility = View.GONE
                     showNoInternetConnectionAlert(newVerify)
-                    canClickRegisterButton = true
                 }
             })
     }
@@ -399,6 +397,7 @@ class RegisterActivity : AppCompatActivity() {
                     run {
                         dialog.dismiss()
                         alertIsShown = false
+                        canClickRegisterButton = true
                     }
                 }
             val alert = builder.create()
