@@ -226,6 +226,7 @@ class LoginActivity : AppCompatActivity() {
         canClickRegisterButton = true
         canClickLoginButton = true
         canClickForgotButton = true
+        alertIsShown = false
         super.onResume()
     }
 
@@ -239,24 +240,34 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private var alertIsShown = false
     /**
      * Выводит диалоговое окно с сообщением об отсутствии интернета
      */
     private fun showNoInternetConnectionAlert(authDTO: authDTO, icon: Drawable) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
-        builder.setTitle("Ошибка соединения")
-            .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
-            .setCancelable(false)
-            .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
-                run {
-                    dialog.dismiss()
-                    login(authDTO, icon)
+        if (!alertIsShown) {
+            alertIsShown = true
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
+            builder.setTitle("Ошибка соединения")
+                .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+                .setCancelable(false)
+                .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        login(authDTO, icon)
+                        alertIsShown = false
+                    }
                 }
-            }
-            .setNegativeButton("ОТМЕНА") { dialog, which -> dialog.dismiss() }
-        val alert = builder.create()
-        alert.show()
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
-        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+                .setNegativeButton("ОТМЕНА") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        alertIsShown = false
+                    }
+                }
+            val alert = builder.create()
+            alert.show()
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+        }
     }
 }
