@@ -19,6 +19,9 @@ import com.zlobrynya.internshipzappa.activity.menu.FullDescriptionScreen
 import com.zlobrynya.internshipzappa.activity.menu.SubDescriptionScreen
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import kotlinx.android.synthetic.main.item_menu.view.*
+import com.bumptech.glide.request.RequestOptions
+
+
 
 /*
 * Адаптер для RecyclerMenu отображение каточек блюда активити MenuActivity
@@ -50,16 +53,19 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
     inner class Holder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
         var idDish = 0
         var subDish = "null"
+        var dish = DishClientDTO()
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishClientDTO) = with(itemView){
             //В класс помощник записываем данные
+            Log.i("wtf2", dishDTO.toString())
             nameDish?.text = dishDTO.name.replace("\'", "\"")
             shortDescDish?.text = dishDTO.desc_short.replace("\'", "\"")
             if(shortDescDish?.text == "")shortDescDish.visibility = View.GONE
             idDish = dishDTO.item_id
             subDish = dishDTO.sub_menu
+            dish = dishDTO
             Log.i("delivery", dishDTO.delivery)
-            priceDish.text = if (dishDTO.price.toInt() == 0) context.getString(R.string.munis)
+            priceDish.text = if (dishDTO.price.toInt() == 0) ""
                 else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
 
             if (dishDTO.weight.contains("null")){
@@ -72,12 +78,16 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
                 }
             }
 
+
+            val myOptions = RequestOptions()
+                .override(500, 400)
             //Glide
             Glide.with(this)
                 .asBitmap()
+                .apply(myOptions)
                 .load(dishDTO.photo) // Изображение для теста. Исходное значение dishDTO.photo
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                //.skipMemoryCache(true)
                 .placeholder(R.drawable.menu)
                 .error(R.drawable.menu)
                 .into(object: SimpleTarget<Bitmap>(){
@@ -98,7 +108,7 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
         }
 
         override fun onClick(view: View) {
-            Log.i("qq", subDish)
+            Log.i("qq", dish.toString())
             if(subDish == "null") {
                 Log.i("qq", subDish)
                 val intent = Intent(context, FullDescriptionScreen::class.java)

@@ -3,8 +3,7 @@ package com.zlobrynya.internshipzappa.activity.profile
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.os.SystemClock
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
@@ -23,7 +21,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_password_recovery.*
-import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Response
 
 class PasswordRecovery : AppCompatActivity() {
@@ -110,7 +107,7 @@ class PasswordRecovery : AppCompatActivity() {
                 override fun onNext(t: Response<respDTO>) {
                     Log.i("checkEmailExistence", t.code().toString())
                     if (t.isSuccessful) {
-                        verifyEmail(newVerify)
+                        verifyEmail(newVerify, icon)
                     } else {
                         register_email_input_layout.error =
                             getString(com.zlobrynya.internshipzappa.R.string.user_not_exist)
@@ -121,13 +118,13 @@ class PasswordRecovery : AppCompatActivity() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("checkReg", "that's not fineIn")
+                    progress_spinner_recovery.visibility = View.GONE
+                    showNoInternetConnectionAlert(newVerify, icon)
                 }
             })
     }
 
-    private fun verifyEmail(newVerify: verifyEmailDTO) {
-
+    private fun verifyEmail(newVerify: verifyEmailDTO, icon: Drawable) {
         progress_spinner_recovery.visibility = View.VISIBLE
         RetrofitClientInstance.getInstance()
             .postVerifyData(newVerify)
@@ -152,6 +149,8 @@ class PasswordRecovery : AppCompatActivity() {
                 }
 
                 override fun onError(e: Throwable) {
+                    progress_spinner_recovery.visibility = View.GONE
+                    showNoInternetConnectionAlert(newVerify, icon)
                     Log.i("check", "that's not fineIn")
                 }
 
@@ -183,5 +182,37 @@ class PasswordRecovery : AppCompatActivity() {
 
     companion object {
         var passwordRecoveryActivityIsRunning: Boolean = false
+    }
+
+    private var alertIsShown = false
+    /**
+     * Выводит диалоговое окно с сообщением об отсутствии интернета
+     */
+    private fun showNoInternetConnectionAlert(newVerify: verifyEmailDTO, icon: Drawable) {
+        if (!alertIsShown) {
+            alertIsShown = true
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
+            builder.setTitle("Ошибка соединения")
+                .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+                .setCancelable(false)
+                .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        alertIsShown = false
+                        checkExistenceEmail(newVerify, icon)
+                    }
+                }
+                .setNegativeButton("ОТМЕНА") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        alertIsShown = false
+                        canClick = true
+                    }
+                }
+            val alert = builder.create()
+            alert.show()
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+        }
     }
 }

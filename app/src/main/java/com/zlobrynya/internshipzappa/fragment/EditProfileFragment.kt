@@ -5,16 +5,16 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
+import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.Menu2Activity
 import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
@@ -35,13 +35,13 @@ import java.util.*
 
 /**
  * Фрагмент редактирования профиля.
- *
  */
 class EditProfileFragment : Fragment() {
 
-    var lastCLickTime: Long = 0
+    var canClickCalendar: Boolean = true
+    var canClickSaveButton: Boolean = true
 
-    var calendar = Calendar.getInstance()
+    private var calendar = Calendar.getInstance()
 
     /**
      * Обработчик нажатий на стрелочку в тулбаре
@@ -95,30 +95,31 @@ class EditProfileFragment : Fragment() {
         Log.d("ALOHA5", sharedPreferences?.getString(savedEmail, "").toString())
         Log.d("ALOHA6", sharedPreferences?.getString(savedPhone, "").toString())
 
-        val dateSetListener = object : DatePickerDialog.OnDateSetListener {
-            override fun onDateSet(
-                view: DatePicker, year: Int, monthOfYear: Int,
-                dayOfMonth: Int
-            ) {
-                calendar.set(Calendar.YEAR, year)
-                calendar.set(Calendar.MONTH, monthOfYear)
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                updateDate()
-            }
+        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, monthOfYear)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            updateDate()
         }
 
-        view.edit_profile_dob.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                DatePickerDialog(
-                    context!!, R.style.DatePickerTheme,
-                    dateSetListener,
+        view.edit_profile_dob.setOnClickListener {
+            if (canClickCalendar) {
+                canClickCalendar = false
+                val dialog = DatePickerDialog(
+                    context!!, R.style.DatePickerTheme, dateSetListener,
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)
-                ).show()
+                )
+                dialog.datePicker.maxDate = calendar.timeInMillis
+                dialog.setTitle("")
+                dialog.setCancelable(false)
+                dialog.setOnDismissListener {
+                    canClickCalendar = true
+                }
+                dialog.show()
             }
-
-        })
+        }
 
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
 
@@ -229,33 +230,29 @@ class EditProfileFragment : Fragment() {
                 //не трогать
                 val newChangeData = changeUserDataDTO()
                 val email = arguments!!.getString("email")
-                if (email != newEmail) {
-                    Log.d("BOOP", "Валидация прошла")
-                    newChangeData.birthday = outputDateStr
-                    newChangeData.name = newName
-                    newChangeData.new_email = newEmail
-                    newChangeData.email = email
-                    newChangeData.phone = newPhone
-                    if (SystemClock.elapsedRealtime() - lastCLickTime < 10000) {
-                        return@setOnClickListener
-                    } else {
-                        lastCLickTime = SystemClock.elapsedRealtime()
+                if (canClickSaveButton) {
+                    canClickSaveButton = false
+                    if (email != newEmail) {
+                        Log.d("BOOP", "Валидация прошла")
+                        newChangeData.birthday = outputDateStr
+                        newChangeData.name = newName
+                        newChangeData.new_email = newEmail
+                        //newChangeData.email = email
+                        newChangeData.phone = newPhone
                         checkExistenceEmail(newChangeData)
+                    } else {
+                        /**
+                         * TODO поменять дату на нужный формат
+                         */
+                        newChangeData.birthday = outputDateStr
+                        newChangeData.name = newName
+                        newChangeData.new_email = ""
+                        //newChangeData.email = email
+                        newChangeData.phone = newPhone
+                        changeUserCredentials(newChangeData)
                     }
-                } else {
-                    /**
-                     * TODO поменять дату на нужный формат
-                     */
-                    newChangeData.birthday = outputDateStr
-                    newChangeData.name = newName
-                    newChangeData.new_email = ""
-                    newChangeData.email = email
-                    newChangeData.phone = newPhone
-                    changeUserCredentials(newChangeData)
-                    closeFragment()
-                    reloadActivity()
                 }
-            }
+            } else canClickSaveButton = true
 
         }
 
@@ -264,7 +261,8 @@ class EditProfileFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        lastCLickTime = 0
+        canClickCalendar = true
+        canClickSaveButton = true
     }
 
     /**
@@ -286,6 +284,8 @@ class EditProfileFragment : Fragment() {
         val myFormat = "dd.MM.yyyy" // mention the format you need
         val sdf = SimpleDateFormat(myFormat, Locale.US)
         edit_profile_dob.text = sdf.format(calendar.time).toEditable()
+        canClickCalendar = true
+        calendar = Calendar.getInstance()
     }
 
     private fun validatePhone(phone: String): Boolean {
@@ -317,7 +317,7 @@ class EditProfileFragment : Fragment() {
         Log.i("checkChangeCredentials", newChangeUser.phone)
         //Log.i("checkChangeCredentials", newChangeUser.birthday)
         Log.i("checkChangeCredentials", newChangeUser.code.toString())
-        Log.i("checkChangeCredentials", newChangeUser.email)
+        //Log.i("checkChangeCredentials", newChangeUser.email)
         Log.i("checkChangeCredentials", newChangeUser.new_email)
 
         val sharedPreferences =
@@ -350,19 +350,26 @@ class EditProfileFragment : Fragment() {
                         val editor = sharedPreferencesStat.edit()
                         editor.putString(access_token, t.body()!!.access_token)
                         editor.apply()*/
+                        closeFragment()
+                        reloadActivity()
                     } else {
-                        /**
-                         * TODO
-                         * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
-                         *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
-                         *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
-                         */
+                        if (t.code() == 401) {
+                            Toast.makeText(
+                                context,
+                                "Ваша сессия истекла, пожалуйста авторизуйтесь снова",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        closeFragment()
+                        reloadActivity()
                     }
                 }
 
                 override fun onError(e: Throwable) {
                     Log.i("check", "that's not fineIn")
                     //запрос не выполнен, всё плохо
+                    showNoInternetConnectionAlert(newChangeUser, 2)
+                    canClickSaveButton = true
                 }
 
             })
@@ -372,6 +379,7 @@ class EditProfileFragment : Fragment() {
         val view = this.view
         if (view != null) {
             view.progress_spinner.visibility = View.VISIBLE
+            canClickSaveButton = false
         }
         val newVerify = verifyEmailDTO()
         newVerify.email = newChange.new_email
@@ -415,7 +423,7 @@ class EditProfileFragment : Fragment() {
                                             val intent = Intent(context, CodeFEmailActivity::class.java)
                                             intent.putExtra("change_name", newChange.name)
                                             intent.putExtra("change_phone", newChange.phone)
-                                            intent.putExtra("change_email", newChange.email)
+                                            //intent.putExtra("change_email", newChange.email)
                                             intent.putExtra("change_birthday", newChange.birthday)
                                             intent.putExtra("new_email", newChange.new_email)
                                             intent.putExtra("id", "1")
@@ -426,7 +434,12 @@ class EditProfileFragment : Fragment() {
                                 }
 
                                 override fun onError(e: Throwable) {
-                                    Log.i("check", "that's not fineIn")
+                                    val view = this@EditProfileFragment.view
+                                    if (view != null) {
+                                        view.progress_spinner.visibility = View.GONE
+                                    }
+                                    showNoInternetConnectionAlert(newChange, 1)
+                                    canClickSaveButton = true
                                 }
 
                             })
@@ -434,8 +447,47 @@ class EditProfileFragment : Fragment() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("checkReg", "that's not fineIn")
+                    val view = this@EditProfileFragment.view
+                    if (view != null) {
+                        view.progress_spinner.visibility = View.GONE
+                    }
+                    showNoInternetConnectionAlert(newChange, 1)
+                    canClickSaveButton = true
                 }
             })
+    }
+
+    private var alertIsShown = false
+    /**
+     * Выводит диалоговое окно с сообщением об отсутствии интернета
+     */
+    private fun showNoInternetConnectionAlert(newChange: changeUserDataDTO, callback: Int) {
+        if (!alertIsShown) {
+            alertIsShown = true
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
+            builder.setTitle("Ошибка соединения")
+                .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+                .setCancelable(false)
+                .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        alertIsShown = false
+                        when (callback) {
+                            1 -> checkExistenceEmail(newChange)
+                            2 -> changeUserCredentials(newChange)
+                        }
+                    }
+                }
+                .setNegativeButton("ОТМЕНА") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        alertIsShown = false
+                    }
+                }
+            val alert = builder.create()
+            alert.show()
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+        }
     }
 }

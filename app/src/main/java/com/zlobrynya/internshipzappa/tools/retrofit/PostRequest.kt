@@ -40,21 +40,11 @@ interface PostRequest {
 
     //запрос на получение бронирований пользователя
     @Headers("Content-Type: application/json")
-    @POST("show_user_booking")
-    fun postUserBookings(@Header("Authorization") authorization: String, @Body userEmail: verifyEmailDTO): Observable<Response<UserBookingList>>
-
-    //запрос на получение бронирований пользователя
-    @Headers("Content-Type: application/json")
-    @POST("delete_user_booking")
-    fun postDeleteUserBookings(@Header("Authorization") authorization: String, @Body deleteBooking: deleteBookingDTO): Observable<Response<respDTO>>
-
-    //запрос на получение данных пользователя
-    @Headers("Content-Type: application/json")
-    @POST("view_user_credentials")
-    fun postViewUserCredentials(@Header("Authorization") authorization: String, @Body userEmail: verifyEmailDTO): Observable<Response<userDataDTO>>
+    @DELETE("delete_user_booking/{booking_id}")
+    fun postDeleteUserBookings(@Header("Authorization") authorization: String, @Path(value = "booking_id", encoded = true) bookingId: String): Observable<Response<respDTO>>
 
     //запрос на изменение данных пользователя
     @Headers("Content-Type: application/json")
-    @POST("change_user_credentials")
+    @PATCH("change_user_credentials")
     fun postChangeUserCredentials(@Header("Authorization") authorization: String, @Body userChangedData: changeUserDataDTO): Observable<Response<changeUserDataRespDTO>>
 }

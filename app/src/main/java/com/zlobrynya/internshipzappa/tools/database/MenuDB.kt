@@ -3,6 +3,7 @@ package com.zlobrynya.internshipzappa.tools.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
+import android.util.Log
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
@@ -93,8 +94,10 @@ class MenuDB(val context: Context) {
         if (dish.photo.isEmpty())
             dish.photo = "null"
         if (!dish.sub_menu!!.isEmpty()){
+            Log.i("wtf", dish.sub_menu.toString())
             subCheck = "not_null"
         }
+
         val query = "INSERT INTO " + NAME_TABLE + " VALUES(" + dish.item_id + ",\"" +
                 dish.name +  "\"," + dish.price + ",\"" + dish.photo + "\",\"" +
                 dish.desc_long + "\",\"" + dish.desc_short + "\",\"" + dish.weight + "\",\"" +

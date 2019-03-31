@@ -1,26 +1,17 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
 import android.support.annotation.RequiresApi
-import android.support.design.widget.TextInputEditText
-import android.telephony.PhoneNumberUtils
+import android.support.v7.app.AlertDialog
 import android.text.Editable
-import android.text.InputFilter
-import android.text.Spanned
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.Menu2Activity
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
@@ -29,14 +20,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.Observer
-import kotlinx.android.synthetic.main.activity_personal_info.*
 import kotlinx.android.synthetic.main.activity_register.*
 import retrofit2.Response
-import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
-    var lastCLickTime: Long = 0
+    var canClickRegisterButton: Boolean = true
 
     /*private val blockCharacterSet: String = ".,-~@№:;_=#^|$%&*! "
 
@@ -227,6 +216,7 @@ class RegisterActivity : AppCompatActivity() {
         })
 
         btnRegister.setOnClickListener {
+            Log.d("BOOP", "$canClickRegisterButton клик")
             val name = reg_username_input_layout.editText!!.text.toString()
             val phone = reg_phone_number_input_layout.editText!!.text.toString()
             val email = reg_email_input_layout.editText!!.text.toString()
@@ -245,23 +235,22 @@ class RegisterActivity : AppCompatActivity() {
                 val newVerify = verifyEmailDTO()
 
                 newVerify.email = reg_email.text.toString()
-                if (SystemClock.elapsedRealtime() - lastCLickTime < 10000) {
-                    lastCLickTime = 0
-                } else {
-                    lastCLickTime = SystemClock.elapsedRealtime()
+                if (canClickRegisterButton) {
+                    canClickRegisterButton = false
                     checkExistenceEmail(newVerify)
                 }
-                lastCLickTime = 0
             } else {
                 Toast.makeText(this@RegisterActivity, "Заполните данные", Toast.LENGTH_SHORT)
                     .show()
+                canClickRegisterButton = true
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        lastCLickTime = 0
+        canClickRegisterButton = true
+        alertIsShown = false
     }
 
     private fun checkExistenceEmail(newVerify: verifyEmailDTO) {
@@ -287,6 +276,7 @@ class RegisterActivity : AppCompatActivity() {
                         reg_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.exist_email)
                         reg_email.setCompoundDrawables(null, null, icon, null)
                         progress_spinner.visibility = View.GONE
+                        canClickRegisterButton = true
                     } else {
                         RetrofitClientInstance.getInstance()
                             .postVerifyData(newVerify)
@@ -310,13 +300,16 @@ class RegisterActivity : AppCompatActivity() {
                                             intent.putExtra("code", t.body()!!.email_code)
                                             intent.putExtra("id", "0")
                                             startActivity(intent)
-                                        }
+                                        } else canClickRegisterButton = true
                                     }
                                     progress_spinner.visibility = View.GONE
                                 }
 
                                 override fun onError(e: Throwable) {
                                     Log.i("check", "that's not fineIn")
+                                    progress_spinner.visibility = View.GONE
+                                    showNoInternetConnectionAlert(newVerify)
+                                    canClickRegisterButton = true
                                 }
 
                             })
@@ -324,7 +317,9 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("checkReg", "that's not fineIn")
+                    progress_spinner.visibility = View.GONE
+                    showNoInternetConnectionAlert(newVerify)
+                    canClickRegisterButton = true
                 }
             })
     }
@@ -356,7 +351,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun validatePassword(password: String): Boolean {
-        return password.matches("((?=.*[a-z0A-Z-9]).{4,20})".toRegex())
+        return password.matches("((?=.*[a-zA-Z0-9]).{4,20})".toRegex())
     }
 
     private fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
@@ -382,5 +377,35 @@ class RegisterActivity : AppCompatActivity() {
         var registerActivityIsRunning: Boolean = false
     }
 
+    private var alertIsShown = false
+    /**
+     * Выводит диалоговое окно с сообщением об отсутствии интернета
+     */
+    private fun showNoInternetConnectionAlert(newVerify: verifyEmailDTO) {
+        if (!alertIsShown) {
+            alertIsShown = true
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
+            builder.setTitle("Ошибка соединения")
+                .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+                .setCancelable(false)
+                .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        checkExistenceEmail(newVerify)
+                        alertIsShown = false
+                    }
+                }
+                .setNegativeButton("ОТМЕНА") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        alertIsShown = false
+                    }
+                }
+            val alert = builder.create()
+            alert.show()
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+        }
+    }
 
 }

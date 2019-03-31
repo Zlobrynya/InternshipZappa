@@ -5,9 +5,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.support.v7.app.AlertDialog
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.Log
@@ -43,7 +43,7 @@ const val REQUEST_CODE_BOOKING_END: Int = 12
  */
 class PersonalInfoFragment : Fragment() {
 
-    var lastCLickTime: Long = 0
+    var canClickContinue: Boolean = true
 
     private val blockCharacterSet: String = ".,- "
 
@@ -165,10 +165,8 @@ class PersonalInfoFragment : Fragment() {
             // TODO эти данные больше не нужно получать из полей в XML, а получать из ШередПреференс
             //val name = view.username_input_layout.text.toString()
             val name = "KEK"
-            if (SystemClock.elapsedRealtime() - lastCLickTime < 1000) {
-                return@setOnClickListener
-            } else {
-                lastCLickTime = SystemClock.elapsedRealtime()
+            if (canClickContinue) {
+                canClickContinue = false
                 networkRxjavaPost(newBooking, it.context)
             }
         }
@@ -239,6 +237,8 @@ class PersonalInfoFragment : Fragment() {
 
                 override fun onError(e: Throwable) {
                     Log.i("check", "that's not fineIn")
+                    showNoInternetConnectionAlert(newBooking, context)
+                    canClickContinue = true
                 }
 
             })
@@ -272,7 +272,7 @@ class PersonalInfoFragment : Fragment() {
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
 
         RetrofitClientInstance.getInstance()
-            .postViewUserCredentials(jwt, newShowUser)
+            .postViewUserCredentials(jwt)
             .subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe(object : Observer<Response<userDataDTO>> {
@@ -324,6 +324,7 @@ class PersonalInfoFragment : Fragment() {
 
     override fun onResume() {
         Log.d("BOOP", "onResume personalInfoFragment")
+        canClickContinue = true
         showUserCredentials()
         super.onResume()
     }
@@ -362,6 +363,37 @@ class PersonalInfoFragment : Fragment() {
                     fragmentManager!!.popBackStack()
                 }
             }
+        }
+    }
+
+    private var alertIsShown = false
+    /**
+     * Выводит диалоговое окно с сообщением об отсутствии интернета
+     */
+    private fun showNoInternetConnectionAlert(newBooking: bookingUserDTO, context: Context) {
+        if (!alertIsShown) {
+            alertIsShown = true
+            val builder: AlertDialog.Builder = AlertDialog.Builder(context, R.style.AlertDialogCustom)
+            builder.setTitle("Ошибка соединения")
+                .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
+                .setCancelable(false)
+                .setPositiveButton("ПОВТОРИТЬ") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        networkRxjavaPost(newBooking, context)
+                        alertIsShown = false
+                    }
+                }
+                .setNegativeButton("ОТМЕНА") { dialog, which ->
+                    run {
+                        dialog.dismiss()
+                        alertIsShown = false
+                    }
+                }
+            val alert = builder.create()
+            alert.show()
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
         }
     }
 }
