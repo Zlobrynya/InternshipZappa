@@ -10,13 +10,12 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.Menu2Activity
+import com.zlobrynya.internshipzappa.activity.MenuActivity
 import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
@@ -62,7 +61,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun reloadActivity() {
-        val intent = Intent(context, Menu2Activity::class.java)
+        val intent = Intent(context, MenuActivity::class.java)
         startActivity(intent)
     }
 
@@ -90,10 +89,6 @@ class EditProfileFragment : Fragment() {
         val savedDate = context?.getString(R.string.key_user_date)
         val savedEmail = context?.getString(R.string.key_user_email)
         val savedPhone = context?.getString(R.string.key_user_phone)
-        Log.d("ALOHA3", sharedPreferences?.getString(savedName, "").toString())
-        Log.d("ALOHA4", sharedPreferences?.getString(savedDate, "").toString())
-        Log.d("ALOHA5", sharedPreferences?.getString(savedEmail, "").toString())
-        Log.d("ALOHA6", sharedPreferences?.getString(savedPhone, "").toString())
 
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             calendar.set(Calendar.YEAR, year)
@@ -233,7 +228,6 @@ class EditProfileFragment : Fragment() {
                 if (canClickSaveButton) {
                     canClickSaveButton = false
                     if (email != newEmail) {
-                        Log.d("BOOP", "Валидация прошла")
                         newChangeData.birthday = outputDateStr
                         newChangeData.name = newName
                         newChangeData.new_email = newEmail
@@ -313,13 +307,6 @@ class EditProfileFragment : Fragment() {
      */
     private fun changeUserCredentials(newChangeUser: changeUserDataDTO) {
 
-        Log.i("checkChangeCredentials", newChangeUser.name)
-        Log.i("checkChangeCredentials", newChangeUser.phone)
-        //Log.i("checkChangeCredentials", newChangeUser.birthday)
-        Log.i("checkChangeCredentials", newChangeUser.code.toString())
-        //Log.i("checkChangeCredentials", newChangeUser.email)
-        Log.i("checkChangeCredentials", newChangeUser.new_email)
-
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
@@ -335,13 +322,11 @@ class EditProfileFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<changeUserDataRespDTO>) {
-                    Log.i("checkChangeCredentials", "${t.code()}")
 
                     if (t.isSuccessful) {
                         /**
                          * TODO при получении проверять, что поля не равны нулл
                          */
-                        Log.i("checkChangeCredentials", "${t.code()}")
                         /*val sharedPreferencesStat = context!!.getSharedPreferences(
                             context!!.getString(R.string.user_info),
                             Context.MODE_PRIVATE
@@ -366,7 +351,6 @@ class EditProfileFragment : Fragment() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
                     //запрос не выполнен, всё плохо
                     showNoInternetConnectionAlert(newChangeUser, 2)
                 }
@@ -392,10 +376,7 @@ class EditProfileFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    Log.i("checkEmailExistence", t.code().toString())
                     if (t.isSuccessful) {
-                        Log.i("checkEmailExistence", "${t.code()}")
-                        Log.i("checkEmailExistence", t.body()!!.desc)
                         val view = this@EditProfileFragment.view
                         if (view != null) {
                             view.progress_spinner.visibility = View.GONE
@@ -412,11 +393,9 @@ class EditProfileFragment : Fragment() {
                                 override fun onSubscribe(d: Disposable) {}
 
                                 override fun onNext(t: Response<verifyRespDTO>) {
-                                    Log.i("checkCode", "${t.code()}")
 
                                     val view = this@EditProfileFragment.view
                                     if (view != null) {
-                                        Log.d("BOOP", "Не нулловая вьюшка")
                                         if (t.isSuccessful) {
                                             val intent = Intent(context, CodeFEmailActivity::class.java)
                                             intent.putExtra("change_name", newChange.name)

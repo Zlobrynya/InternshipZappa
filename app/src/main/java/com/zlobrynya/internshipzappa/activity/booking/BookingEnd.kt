@@ -3,7 +3,6 @@ package com.zlobrynya.internshipzappa.activity.booking
 import android.app.Activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import com.zlobrynya.internshipzappa.R
 import kotlinx.android.synthetic.main.activity_end_booking.*
@@ -44,7 +43,6 @@ class BookingEnd : AppCompatActivity() {
      * Закрывает активити, снимает со стека все предыдушие фрагменты
      */
     private fun finishBooking() {
-        Log.d("BOOP", "Завершаем бронирование")
         setResult(Activity.RESULT_OK)
         this.finish()
     }

@@ -6,13 +6,11 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.Menu2Activity
+import com.zlobrynya.internshipzappa.activity.MenuActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.passwordRecoveryDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import io.reactivex.Observer
@@ -181,14 +179,13 @@ class PasswordChange : AppCompatActivity() {
                 override fun onComplete() {}
                 override fun onSubscribe(d: Disposable) {}
                 override fun onNext(t: Response<respDTO>) {
-                    Log.i("checkPassRec", t.code().toString())
                     if (t.isSuccessful) {
                         allert(getString(R.string.change_pass_good))
                     }
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
+
                 }
             })
     }
@@ -206,8 +203,7 @@ class PasswordChange : AppCompatActivity() {
                 getString(R.string.OK)
             ) { dialog, _ ->
                 run {
-                    Log.i("check", "it's fine")
-                    val intent = Intent(this, Menu2Activity::class.java)
+                    val intent = Intent(this, MenuActivity::class.java)
                     startActivity(intent)
                 }
             }

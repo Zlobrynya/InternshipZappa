@@ -7,7 +7,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -105,7 +104,6 @@ class PasswordRecovery : AppCompatActivity() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    Log.i("checkEmailExistence", t.code().toString())
                     if (t.isSuccessful) {
                         verifyEmail(newVerify, icon)
                     } else {
@@ -137,7 +135,6 @@ class PasswordRecovery : AppCompatActivity() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<verifyRespDTO>) {
-                    Log.i("checkCode", "${t.code()}")
                     if (passwordRecoveryActivityIsRunning) {
                         if (t.isSuccessful) {
                             val intent = Intent(applicationContext, PasswordChange::class.java)
@@ -151,31 +148,28 @@ class PasswordRecovery : AppCompatActivity() {
                 override fun onError(e: Throwable) {
                     progress_spinner_recovery.visibility = View.GONE
                     showNoInternetConnectionAlert(newVerify, icon)
-                    Log.i("check", "that's not fineIn")
                 }
 
             })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.getItemId()) {
+        return when (item.itemId) {
             android.R.id.home -> {
                 this.finish()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onStart() {
-        Log.d("BOOP", "password start")
         super.onStart()
         canClick = true
         passwordRecoveryActivityIsRunning = true
     }
 
     override fun onStop() {
-        Log.d("BOOP", "password stop")
         super.onStop()
         passwordRecoveryActivityIsRunning = false
     }

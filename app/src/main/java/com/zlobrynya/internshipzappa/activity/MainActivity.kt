@@ -1,7 +1,6 @@
 package com.zlobrynya.internshipzappa.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -147,7 +146,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun startMenu() {
-        val intent = Intent(this, Menu2Activity::class.java)
+        val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -19,17 +19,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.Menu2Activity"
+            android:name=".activity.MenuActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="locked" />
-        <activity
-            android:name=".activity.booking.PersonalInfoActivity"
-            android:screenOrientation="locked">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zlobrynya.internshipzappa.activity.booking.TableSelectActivity" />
-        </activity>
         <activity
             android:name=".activity.profile.RegisterActivity"
             android:screenOrientation="locked" />
@@ -39,10 +32,6 @@
         <activity
             android:name=".activity.profile.LoginActivity"
             android:screenOrientation="locked" />
-        <activity
-            android:name=".activity.booking.TableSelectActivity"
-            android:screenOrientation="locked"
-            android:theme="@style/AppTheme.NoBar" />
 
         <activity
             android:name=".activity.menu.FullDescriptionScreen"
@@ -61,10 +50,6 @@
         <activity android:name=".activity.profile.CodeFEmailActivity"
             android:screenOrientation="locked">
         </activity>
-        <activity
-            android:name=".activity.MenuActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="locked" />
         <activity
             android:name=".activity.profile.PasswordRecovery"
             android:screenOrientation="locked"/>

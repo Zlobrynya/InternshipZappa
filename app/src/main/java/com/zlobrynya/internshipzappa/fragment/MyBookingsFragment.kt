@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +16,8 @@ import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterUserBookings
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.UserBookingDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.UserBookingList
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.deleteBookingDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
 import com.zlobrynya.internshipzappa.util.StaticMethods
@@ -56,7 +53,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
         if (view != null) {
             postUserBookings(view)
         }
-        Log.d("BOOP", "onResume MyBookingsFragment")
     }
 
     /**
@@ -149,7 +145,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<UserBookingList>) {
-                    Log.i("checkMyBooking", "${t.code()}")
 
                     if (t.isSuccessful) {
                         /**
@@ -175,7 +170,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
                     //запрос не выполнен, всё плохо
                 }
 
@@ -206,7 +200,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    Log.i("checkMyBooking", "${t.code()}")
 
                     if (t.isSuccessful) {
                         /*
@@ -231,7 +224,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
                     //запрос не выполнен, всё плохо
                 }
 

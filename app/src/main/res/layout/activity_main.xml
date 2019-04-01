@@ -8,7 +8,6 @@
         android:background="@color/back_launch">
 
     <ImageView
-        android:id="@+id/launch"
         android:layout_width="208dp"
         android:layout_height="220dp"
         android:scaleType="fitCenter"

@@ -3,7 +3,6 @@ package com.zlobrynya.internshipzappa.fragment
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,18 +18,16 @@ import retrofit2.Response
 /**
  * Фрагмент-контейнер для фрагментов связанных с профилем
  */
-class RootFragment2 : Fragment() {
+class ProfileRootFragment : Fragment() {
 
     val profileFragment = ProfileFragment() // Фрагмент для авторизованного юзера
     val profileLoginFragment = ProfileLoginFragment() // Фрагмент для неавторизованного юзера
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_root_2, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_profile_root, container, false)
     }
 
     override fun onResume() {
-        Log.d("BOOP", "RootFramgent2 onResume")
         super.onResume()
         checkStatus()
     }
@@ -58,10 +55,6 @@ class RootFragment2 : Fragment() {
         //newStatus.uuid = authStatus
         //newStatus.email = sharedPreferencesStat?.getString(savedEmail, "null").toString()
 
-
-        Log.i("checkStatusData", authStatus)
-
-
         RetrofitClientInstance.getInstance()
             .getStatusData(authStatus)
             .subscribeOn(Schedulers.io())
@@ -73,18 +66,15 @@ class RootFragment2 : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    Log.d("BOOP", "Код ${t.code()}")
                     if (t.isSuccessful) { // Юзер авторизован
-                        Log.d("BOOP", "Юзер авторизован")
                         replaceFragment(profileFragment)
                     } else { // Юзер не авторизован
-                        Log.d("BOOP", "Не авторизован")
                         replaceFragment(profileLoginFragment)
                     }
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.d("BOOP", "Вообще ошибка")
+
                 }
             })
     }

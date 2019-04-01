@@ -7,12 +7,11 @@ import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.Menu2Activity
+import com.zlobrynya.internshipzappa.activity.MenuActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
@@ -52,7 +51,7 @@ class ProfileFragment : Fragment() {
             editor.putString(access_token, "")
             editor.apply()
 
-            val intent = Intent(context, Menu2Activity::class.java)
+            val intent = Intent(context, MenuActivity::class.java)
             startActivity(intent)
 
         }
@@ -82,7 +81,6 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onResume() {
-        Log.d("BOOP", "onResume profileFragment")
         showUserCredentials()
         super.onResume()
     }
@@ -119,20 +117,12 @@ class ProfileFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<userDataDTO>) {
-                    Log.i("checkMyCredentials", "${t.code()}")
 
                     if (t.isSuccessful) {
                         /**
                          * TODO при получении проверять, что поля не равны нулл
                          */
                         val data = t.body()!!.data
-                        Log.i("checkMyCredentials", t.body().toString())
-                        Log.i("checkMyCredentials", data.toString())
-                        //Log.i("checkMyCredentials", data.birthday)
-                        Log.i("checkMyCredentials", data.email)
-                        Log.i("checkMyCredentials", data.name)
-                        Log.i("checkMyCredentials", data.phone)
-                        Log.i("checkMyCredentials", data.reg_date)
                         profile_username.text = data.name
                         if (data.birthday != null) {
                             val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd")
@@ -161,7 +151,6 @@ class ProfileFragment : Fragment() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
                     //запрос не выполнен, всё плохо
                 }
 

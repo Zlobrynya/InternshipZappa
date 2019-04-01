@@ -1,75 +1,118 @@
 package com.zlobrynya.internshipzappa.activity
 
-import android.content.Intent
-import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.os.Bundle
+import android.support.v4.view.ViewPager
+import android.support.v7.app.ActionBar
+import android.util.Log
+import android.view.MenuItem
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
-import kotlinx.android.synthetic.main.activity_menu.*
-import com.zlobrynya.internshipzappa.fragment.KontaktiFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
-import com.zlobrynya.internshipzappa.fragment.BookingFragment
-import android.widget.Toast
-import com.zlobrynya.internshipzappa.fragment.ProfileFragment
+import kotlinx.android.synthetic.main.activity_menu.*
+import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import com.zlobrynya.internshipzappa.fragment.*
 
+const val MENU_PAGE: Int = 0
+const val BOOKING_PAGE: Int = 1
+const val PROFILE_PAGE: Int = 3
 
-class MenuActivity: AppCompatActivity() {
+class MenuActivity : AppCompatActivity() {
 
-    private val menuFragment: Fragment = MenuFragment()
+    private val menuFragment: MenuFragment = MenuFragment()
+    private val bookingRootFragment: BookingRootFragment = BookingRootFragment()
+    private val profileRootFragment: ProfileRootFragment = ProfileRootFragment()
 
-    private val bookingFragment: Fragment = BookingFragment()
+    internal var prevMenuItem: MenuItem? = null
+    private var toolbar: ActionBar? = null
 
-    private val profileFragment: Fragment = ProfileFragment()
-
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        var selectedFragment: Fragment? = null
-        when (item.itemId) {
-
-            // Меню
-            R.id.navigation_menu -> {
-                selectedFragment = menuFragment
-            }
-
-            // Бронирование
-            R.id.navigation_booking -> {
-                selectedFragment = bookingFragment
-            }
-
-            // Профиль
-            R.id.navigation_profile -> {
-                selectedFragment = profileFragment
-            }
-        }
-        // Загружаем фрагмент
-        if (selectedFragment != null) {
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, selectedFragment).commit()
-        }
-        true
-    }
-
-    lateinit var toolbar: ActionBar
+    private var mPagerAdapter: SlidePagerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+        hideToolbar()
+        initNavigation()
+        initAdapter()
+    }
 
-        toolbar = supportActionBar!!
-        toolbar.hide()
-        //supportActionBar!!.setTitle(R.string.menu_toolbar)
-        //supportActionBar!!.elevation = 0.0F
+    /**
+     * Инициалирует навигацию по вкладкам
+     */
+    private fun initNavigation() {
+        navigation2.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_menu -> {
+                    viewpager2.currentItem = MENU_PAGE
+                }
+                R.id.navigation_booking -> {
+                    viewpager2.currentItem = BOOKING_PAGE
+                }
+                R.id.navigation_profile -> {
+                    viewpager2.currentItem = PROFILE_PAGE
+                }
+            }
+            false
+        }
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        viewpager2.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
 
-        if (savedInstanceState == null) {
-            navigation.selectedItemId = R.id.navigation_menu
+            override fun onPageSelected(position: Int) {
+                if (prevMenuItem != null) {
+                    prevMenuItem!!.isChecked = false
+                } else {
+                    navigation2.menu.getItem(0).isChecked = false
+                }
+                Log.d("page", "onPageSelected: $position")
+                navigation2.menu.getItem(position).isChecked = true
+                prevMenuItem = navigation2.menu.getItem(position)
+
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+        })
+
+        viewpager2.offscreenPageLimit = 3 // Установим отступ для кеширования страниц
+    }
+
+    /**
+     * Инициализирует адаптер
+     */
+    private fun initAdapter() {
+        mPagerAdapter = SlidePagerAdapter(supportFragmentManager)
+        viewpager2.adapter = mPagerAdapter
+    }
+
+    /**
+     * Скрывает тулбар
+     */
+    private fun hideToolbar() {
+        toolbar = supportActionBar
+        toolbar!!.hide()
+    }
+
+    /**
+     * Кастомный адаптер для постраничной навигации
+     */
+    inner class SlidePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
+        override fun getItem(position: Int): Fragment {
+
+            return when (position) {
+                MENU_PAGE -> menuFragment
+                BOOKING_PAGE -> bookingRootFragment // На вкладку "Бронь" положим фрагмент-контейнер
+                else -> profileRootFragment
+            }
+        }
+
+        override fun getCount(): Int {
+            return 3
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
 }
-

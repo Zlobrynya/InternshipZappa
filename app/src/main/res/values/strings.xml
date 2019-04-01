@@ -1,29 +1,23 @@
 <resources>
     <string name="app_name">На Рогах</string>
-    <string name="menu_toolbar">Меню</string>
 
     <!-- allert messege -->
     <string name="code_404">Сервер не доступен.</string>
     <string name="code_0">Проверьте интернет соединение.</string>
     <string name="code_503">Техническое обслуживание сервера.</string>
-    <string name="code_else">Случилось что то непостижимое, раз вы увидели это сообщение. Попробуйте попозже зайти.</string>
     <string name="something_wrong">Ошибка соединения</string>
     <string name="repeat_connection">ПОВТОРИТЬ</string>
-    <string name="call">Позвонить в ресторан</string>
     <string name="offline">Приложение запустится в офлайн режиме. Меню может оказаться неактуальным.</string>
     <string name="well">ПРОДОЛЖИТЬ</string>
     <string name="close_app">Закрыть приложение</string>
 
 
     <!-- layout -->
-    <string name="topping">Вкусно</string>
     <string name="default_num">1</string>
     <string name="no_name">Без наименования</string>
     <string name="no_price">-</string>
     <string name="plus">+</string>
     <string name="munis">-</string>
-    <string name="read_more">ПОДРОБНЕЕ</string>
-    <string name="great_choice">Отличный выбор</string>
     <string name="recommendation">К этому блюду рекомендуют:</string>
     <string name="add">ДОБАВИТЬ</string>
 
@@ -33,7 +27,6 @@
     <string name="ml">\u0020мл</string>
     <string name="zero_num">0</string>
     <string name="category_topping">Топинги</string>
-    <string name="category_drinks">Напитки</string>
 
     <!-- название парметров (ключи) -->
     <string name="key_time">timeK</string>
@@ -50,19 +43,8 @@
 
     <!-- доп строки адаптер топингов/рекоменд -->
     <string name="max_order">15</string>
-    <string name="topping_delete">Топинг убран из заказа</string>
-    <string name="title_activity_booking">BookingActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
 
     <!-- строки фрагмента с контактной информацией -->
-    <string name="hAdress">Адрес</string>
-    <string name="adress">Первомайский пр-т, 2</string>
-    <string name="hContacts">Контакты</string>
-    <string name="phone">тел: +7 (8142) 63-23-89</string>
-    <string name="instagram">Instagram: narogah.ptz</string>
-    <string name="vk">VK: https://vk.com/narogah_ptz</string>
 
     <string name="hint_email">E-mail</string>
     <string name="hint_password">Пароль</string>
@@ -87,7 +69,6 @@
     <string name="period">%1$s - %2$s</string>
 
     <string name="btn_continue">Продолжить</string>
-    <string name="enter_personal_info">Укажите ваши данные</string>
     <string name="personal_info">Ваши данные</string>
     <string name="your_bron">Ваша бронь</string>
     <string name="table">Стол</string>
@@ -125,7 +106,5 @@
     <string name="wrong_password_email">Неверный пароль или E-mail</string>
     <string name="label_hint_dob">Дата рождения</string>
 
-    <string name="btn_edit">Редактировать</string>
-    <string name="error_date">Введите дату рождения</string>
     <string name="text_profile_login">Войдите для просмотра профиля</string>
 </resources>

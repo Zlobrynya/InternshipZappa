@@ -8,7 +8,6 @@
     android:background="@color/color_app">
 
     <ScrollView
-        android:id="@+id/reg_scrollView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -22,7 +21,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/reg_CS1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"

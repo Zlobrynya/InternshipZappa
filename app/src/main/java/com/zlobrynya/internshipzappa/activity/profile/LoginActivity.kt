@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
@@ -118,7 +117,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btnLogin.setOnClickListener {
-            Log.d("BOOP", "$canClickLoginButton клик")
             if (canClickLoginButton) {
                 canClickLoginButton = false
                 login(newAuth, icon)
@@ -135,8 +133,6 @@ class LoginActivity : AppCompatActivity() {
 
         newAuth.email = email
         newAuth.password = password
-        Log.i("checkAuth", newAuth.email)
-        Log.i("checkAuth", newAuth.password)
         if (validateEmail && validatePassword) {
 
             RetrofitClientInstance.getInstance()
@@ -150,7 +146,6 @@ class LoginActivity : AppCompatActivity() {
                     override fun onSubscribe(d: Disposable) {}
 
                     override fun onNext(t: Response<authRespDTO>) {
-                        Log.i("checkAuth", "${t.code()}")
                         if (t.isSuccessful) {
                             val sharedPreferencesStat = applicationContext.getSharedPreferences(
                                 applicationContext.getString(R.string.user_info),
@@ -163,10 +158,6 @@ class LoginActivity : AppCompatActivity() {
                             editor.putString(access_token, t.body()!!.access_token)
                             editor.apply()
 
-                            Log.i("checkAuth", t.body()!!.email)
-                            Log.i("checkAuth", t.body()!!.access_token)
-                            //onBackPressed()
-                            //updateUserBookingList()
                             setResult(Activity.RESULT_OK)
                             finish()
                         } else {
@@ -176,14 +167,12 @@ class LoginActivity : AppCompatActivity() {
                             log_password_input_layout.error =
                                 getString(com.zlobrynya.internshipzappa.R.string.wrong_password_email)
                             log_password.setCompoundDrawables(null, null, icon, null)
-                            Log.i("checkAuth", "введены некоректные данные")
                             Toast.makeText(this@LoginActivity, "Неверный пароль или E-mail", Toast.LENGTH_SHORT)
                                 .show()
                         }
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.i("checkAuth", "that's not fineIn")
                         showNoInternetConnectionAlert(newAuth, icon)
                     }
 
@@ -202,7 +191,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         /*super.onBackPressed()
-        val intent = Intent(this, Menu2Activity::class.java)
+        val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish()*/
 

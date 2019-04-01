@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -226,10 +225,6 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
         //newStatus.uuid = authStatus
         //newStatus.email = sharedPreferencesStat?.getString(savedEmail, "null").toString()
 
-
-        Log.i("checkStatusData", authStatus)
-
-
         RetrofitClientInstance.getInstance()
             .getStatusData(authStatus)
             .subscribeOn(Schedulers.io())
@@ -241,18 +236,15 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    Log.d("BOOP", "Код ${t.code()}")
                     if (t.isSuccessful) { // Юзер авторизован
-                        Log.d("BOOP", "Юзер авторизован")
                         openPersonalInfo(position) // Откроем фрагмент с персональной инфой
                     } else { // Юзер не авторизован
-                        Log.d("BOOP", "Не авторизован")
                         openLoginActivity() // Откроем аквтивити авторизации
                     }
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.d("BOOP", "Вообще ошибка")
+
                 }
             })
     }
@@ -307,7 +299,6 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
                 // Юзер авторизовался
                 prepare(selectedPosition)
                 //openPersonalInfo(selectedPosition) // Откроем фрагмент с персональной инфой
-                Log.d("BOOP", "Выбранный стол $selectedPosition")
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 // Юзер закрыл авторизацию
             }

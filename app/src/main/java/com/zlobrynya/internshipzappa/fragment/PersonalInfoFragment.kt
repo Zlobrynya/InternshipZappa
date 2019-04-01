@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AlertDialog
 import android.text.InputFilter
 import android.text.Spanned
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -83,16 +82,6 @@ class PersonalInfoFragment : Fragment() {
         val seatCount = arguments!!.getInt("seat_count", 1).toString()
         val seatPosition = arguments!!.getString("seat_position")
         val seatType = arguments!!.getString("seat_type")
-
-        Log.d("bookdata", bookDateBegin)
-        Log.d("bookdata", bookTimeBegin)
-        Log.d("bookdata", bookTimeEnd)
-        Log.d("bookdata", bookDateEnd)
-        Log.d("bookdata", bookTableId.toString())
-        Log.d("bookdata", bookDateBegin)
-        Log.d("bookdata", seatCount)
-        Log.d("bookdata", seatType)
-
 
         val newBooking = bookingUserDTO()
         newBooking.date = bookDateBegin!!.toString()
@@ -182,9 +171,6 @@ class PersonalInfoFragment : Fragment() {
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null")!!.toString()
         newBooking.email = sharedPreferences.getString(this.getString(R.string.user_email), "")!!.toString()
 
-        Log.i("checkDateFrom", newBooking.date)
-        Log.i("checkDateFrom", newBooking.date_to)
-
         RetrofitClientInstance.getInstance()
             .postReserve(jwt, newBooking)
             .subscribeOn(Schedulers.io())
@@ -196,9 +182,7 @@ class PersonalInfoFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    Log.d("booking", t.code().toString())
                     if (t.isSuccessful) {
-                        Log.i("check1", "${t.code()}")
                         if (t.body() != null) {
                             val code = t.code()
                             if (code == 200) {
@@ -224,7 +208,6 @@ class PersonalInfoFragment : Fragment() {
                             startActivityForResult(intent, REQUEST_CODE_BOOKING_END)
                         }
                     } else {
-                        Log.i("check2", "${t.code()}")
                         val intent = Intent(context, BookingEnd::class.java)
                         intent.putExtra("code", t.code())
                         intent.putExtra("name", fm_username.text)
@@ -236,7 +219,6 @@ class PersonalInfoFragment : Fragment() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
                     showNoInternetConnectionAlert(newBooking, context)
                 }
 
@@ -281,7 +263,6 @@ class PersonalInfoFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<userDataDTO>) {
-                    Log.i("checkMyCredentials", "${t.code()}")
                     val view = this@PersonalInfoFragment.view
                     if (view != null) {
                         if (t.isSuccessful) {
@@ -289,13 +270,6 @@ class PersonalInfoFragment : Fragment() {
                              * TODO при получении проверять, что поля не равны нулл
                              */
                             val data = t.body()!!.data
-                            Log.i("checkMyCredentials", t.body().toString())
-                            Log.i("checkMyCredentials", data.toString())
-                            //Log.i("checkMyCredentials", data.birthday)
-                            Log.i("checkMyCredentials", data.email)
-                            Log.i("checkMyCredentials", data.name)
-                            Log.i("checkMyCredentials", data.phone)
-                            Log.i("checkMyCredentials", data.reg_date)
                             fm_username.text = data.name
                             fm_phone.text = data.phone
                         } else {
@@ -310,7 +284,6 @@ class PersonalInfoFragment : Fragment() {
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("check", "that's not fineIn")
                     Toast.makeText(
                         context,
                         "Проверьте ваше интернет подключение",
@@ -322,7 +295,6 @@ class PersonalInfoFragment : Fragment() {
     }
 
     override fun onResume() {
-        Log.d("BOOP", "onResume personalInfoFragment")
         canClickContinue = true
         showUserCredentials()
         super.onResume()
@@ -349,7 +321,6 @@ class PersonalInfoFragment : Fragment() {
 
         if (requestCode == REQUEST_CODE_BOOKING_END) {
             if (resultCode == Activity.RESULT_OK) {
-                Log.d("BOOP", "Activity.RESULT_OK")
                 val trans = fragmentManager!!.beginTransaction()
                 val personalInfoFragment = fragmentManager!!.findFragmentByTag("PERSONAL_INFO")
                 val tableSelectFragment = fragmentManager!!.findFragmentByTag("TABLE_SELECT")

@@ -8,7 +8,6 @@ import android.support.annotation.RequiresApi
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
@@ -26,24 +25,6 @@ import retrofit2.Response
 class RegisterActivity : AppCompatActivity() {
 
     var canClickRegisterButton: Boolean = true
-
-    /*private val blockCharacterSet: String = ".,-~@№:;_=#^|$%&*! "
-
-    private val filter = object : InputFilter {
-        override fun filter(
-            source: CharSequence,
-            start: Int,
-            end: Int,
-            dest: Spanned,
-            dstart: Int,
-            dend: Int
-        ): CharSequence? {
-            if (source != null && blockCharacterSet.contains(("" + source))) {
-                return ""
-            }
-            return null
-        }
-    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -216,7 +197,6 @@ class RegisterActivity : AppCompatActivity() {
         })
 
         btnRegister.setOnClickListener {
-            Log.d("BOOP", "$canClickRegisterButton клик")
             val name = reg_username_input_layout.editText!!.text.toString()
             val phone = reg_phone_number_input_layout.editText!!.text.toString()
             val email = reg_email_input_layout.editText!!.text.toString()
@@ -267,10 +247,7 @@ class RegisterActivity : AppCompatActivity() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
-                    Log.i("checkEmailExistence", t.code().toString())
                     if (t.isSuccessful) {
-                        Log.i("checkEmailExistence", "${t.code()}")
-                        Log.i("checkEmailExistence", t.body()!!.desc)
                         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
                         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
                         reg_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.exist_email)
@@ -289,7 +266,6 @@ class RegisterActivity : AppCompatActivity() {
                                 override fun onSubscribe(d: Disposable) {}
 
                                 override fun onNext(t: Response<verifyRespDTO>) {
-                                    Log.i("checkCode", "${t.code()}")
                                     if (registerActivityIsRunning) {
                                         if (t.isSuccessful) {
                                             val intent = Intent(applicationContext, CodeFEmailActivity::class.java)
@@ -306,7 +282,6 @@ class RegisterActivity : AppCompatActivity() {
                                 }
 
                                 override fun onError(e: Throwable) {
-                                    Log.i("check", "that's not fineIn")
                                     progress_spinner.visibility = View.GONE
                                     showNoInternetConnectionAlert(newVerify)
                                 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,8 +23,6 @@ import com.zlobrynya.internshipzappa.util.CustomTimePickerDialog
 import com.zlobrynya.internshipzappa.util.PositiveClickListener
 import kotlinx.android.synthetic.main.fragment_booking.*
 import java.text.SimpleDateFormat
-import android.net.NetworkInfo
-import android.net.ConnectivityManager
 import android.content.Context
 import android.os.SystemClock
 import android.support.v7.app.AlertDialog
@@ -192,9 +189,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     private fun updateGui() {
         bookingView.book_time_select.text = timeOpen.substring(0, timeOpen.length - 3)
 
-        Log.d("YOLO", "$overlap")
-        Log.d("YOLO", "Ближайшая доступная бронь $timeOpen")
-        Log.d("YOLO", "Время конца работы $timeClose")
         val localCalendar = Calendar.getInstance()
         val format = SimpleDateFormat("HH:mm:ss")
 
@@ -207,7 +201,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         calendar.set(Calendar.SECOND, 0)
         bookTimeAndDate = calendar.time
         //setInitialDateTime()
-        Log.d("JOPA", "$bookTimeAndDate")
         if (overlap) localCalendar.add(Calendar.DATE, 1)
 
         localCalendar.set(Calendar.HOUR_OF_DAY, format.parse(timeClose).hours)
@@ -216,33 +209,26 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
 
 
         val difference: Long = end - begin
-        Log.d("YOLO", "Разница в миллисекундах $difference")
 
         when { // Посмотрим разницу между выбранным временем и временем закрытия ресторана
             difference >= FOUR_HOURS -> { // Осталось больше 4 часов
-                Log.d("TOPKEK", "Осталось 4+ часа")
                 updateDurationVisibility(5, false)
             }
             difference == THREE_AND_HALF_HOURS -> { // Осталось 3.5 часа
-                Log.d("TOPKEK", "3 с половиной часа доступно")
                 updateDurationVisibility(4, false)
             }
             difference == THREE_HOURS -> { // Осталось 3 часа
-                Log.d("TOPKEK", "3 часа доступно")
                 updateDurationVisibility(3, false)
             }
             difference == TWO_AND_HALF_HOURS -> { // Осталось 2.5 часа
-                Log.d("TOPKEK", "2 с половиной часа доступно")
                 updateDurationVisibility(2, false)
             }
             difference == TWO_HOURS -> { // Осталось 2 часа
-                Log.d("TOPKEK", "2 часа доступно")
                 updateDurationVisibility(1, false)
 
 
             }
             else -> { // Осталось меньше двух часов (забронировать вообще нельзя)
-                Log.d("TOPKEK", "Меньше двух часов")
                 Toast.makeText(
                     context,
                     "От начала вашей брони до закрытия ресторана менее двух часов",
@@ -261,7 +247,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         val dayOfWeek = dayOfWeekFormat.format(calendar.time)
         for (i in 0 until timeTable.size) {
             if (timeTable[i].week_day.toLowerCase() == dayOfWeek.toLowerCase()) {
-                Log.d("TOPKEK", "Выбранный день недели $dayOfWeek")
                 timeOpen = timeTable[i].time_from
                 timeClose = timeTable[i].time_to
 
@@ -281,13 +266,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                     val localCalendar = Calendar.getInstance()
                     val currentHour = localCalendar.get(Calendar.HOUR_OF_DAY) + 4
                     if (currentHour > hoursOpen) {
-                        Log.d("TOPKEK", "Необходимо ограничить время начала брони")
                         timeOpen = "$currentHour:00:00"
                     }
                 }
                 break
             }
-            Log.e("updateSch", timeClose)
         }
 
         //bookTimeAndDate = null // Сбросим выбранное время
@@ -372,8 +355,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         localCalendar.set(Calendar.MINUTE, minutesOfClose)
         localCalendar.set(Calendar.SECOND, 0)
 
-        Log.d("TOPKEK", "Закрытие в ${localCalendar.time}")
-        Log.d("TOPKEK", "Выбранное время $bookTimeAndDate")
         val timeClose: Long = localCalendar.timeInMillis
         val timeSelected = bookTimeAndDate!!.time
         val difference: Long = timeClose - timeSelected
@@ -381,29 +362,23 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
 
         when { // Посмотрим разницу между выбранным временем и временем закрытия ресторана
             difference >= FOUR_HOURS -> { // Осталось больше 4 часов
-                Log.d("TOPKEK", "Осталось 4+ часа")
                 updateDurationVisibility(5, true)
             }
             difference == THREE_AND_HALF_HOURS -> { // Осталось 3.5 часа
-                Log.d("TOPKEK", "3 с половиной часа доступно")
                 updateDurationVisibility(4, true)
             }
             difference == THREE_HOURS -> { // Осталось 3 часа
-                Log.d("TOPKEK", "3 часа доступно")
                 updateDurationVisibility(3, true)
             }
             difference == TWO_AND_HALF_HOURS -> { // Осталось 2.5 часа
-                Log.d("TOPKEK", "2 с половиной часа доступно")
                 updateDurationVisibility(2, true)
             }
             difference == TWO_HOURS -> { // Осталось 2 часа
-                Log.d("TOPKEK", "2 часа доступно")
                 updateDurationVisibility(1, true)
 
 
             }
             else -> { // Осталось меньше двух часов (забронировать вообще нельзя)
-                Log.d("TOPKEK", "Меньше двух часов")
                 Toast.makeText(
                     context,
                     "От начала вашей брони до закрытия ресторана менее двух часов",
@@ -444,11 +419,9 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         val timeFormat = SimpleDateFormat("HH:mm:ss") // Форматирование для времени
 
         val args = Bundle()
-        Log.i("checkDateFrom", bookTimeAndDate.toString())
         args.putString("book_date_begin", dateFormat.format(bookTimeAndDate!!.time)) // Заполняем дату начала брони
         args.putString("book_time_begin", timeFormat.format(calendar.timeInMillis)) // Заполняем время начала брони
         args.putString("book_date_end", dateFormat.format(calendar.timeInMillis)) // Заполняем дату конца брони
-        Log.i("checkDateFrom", dateFormat.format(bookTimeAndDate!!.time))
         val newBooking = bookingDataDTO() // Объект для POST запроса
         newBooking.date = dateFormat.format(bookTimeAndDate!!.time)
         newBooking.time_from = timeFormat.format(calendar.timeInMillis)
@@ -505,10 +478,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 newBooking.time_to = timeFormat.format(calendar.timeInMillis + FOUR_HOURS)
             }
         }
-        Log.d("TOPKEK2", "date from ${newBooking.date}")
-        Log.d("TOPKEK2", "time from ${newBooking.time_from}")
-        Log.d("TOPKEK2", "date to ${newBooking.date_to}")
-        Log.d("TOPKEK2", "time to ${newBooking.time_to}")
         networkRxJavaPost(newBooking, args)
     }
 
@@ -537,7 +506,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 schedule.add(localCalendar.time)
             }
         }
-        Log.i("checkDateFrom", schedule.toString())
     }
 
     /**
@@ -551,8 +519,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         val calendar: Calendar = Calendar.getInstance()
         calendar.set(Calendar.SECOND, 0)
         val timeNow = calendar.timeInMillis
-        Log.d("TOPKEK", "Текущее время ${calendar.time}")
-        Log.d("TOPKEK", "Текущее время ${timeClose}")
 
 
         val hourOfClose: Int = SimpleDateFormat("HH:mm:ss").parse(timeClose).hours
@@ -565,11 +531,9 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         calendar.set(Calendar.HOUR_OF_DAY, hourOfClose)
         calendar.set(Calendar.MINUTE, minutesOfClose)
         calendar.set(Calendar.SECOND, 0)
-        Log.d("TOPKEK", "Закрытие ресторана в ${calendar.time}")
 
         val timeClose = calendar.timeInMillis
         isTodayAvailable = timeClose - timeNow > 1000 * 60 * 60 * (2 + 3)
-        Log.d("TOPKEK", isTodayAvailable.toString())
     }
 
     /**
@@ -614,14 +578,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
         )
         calendar.set(Calendar.SECOND, 0)
         bookTimeAndDate = calendar.time // Запишем выбранное время
-        Log.d(
-            "TOPKEK",
-            DateUtils.formatDateTime(
-                activity,
-                calendar.timeInMillis,
-                DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
-            )
-        )
     }
 
     /**
@@ -635,14 +591,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
             calendar.set(Calendar.MONTH, schedule[position].month)
             calendar.set(Calendar.YEAR, schedule[position].year + 1900)
             calendar.set(Calendar.SECOND, 0)
-            Log.d(
-                "TOPKEK",
-                DateUtils.formatDateTime(
-                    activity,
-                    calendar.timeInMillis,
-                    DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_SHOW_YEAR
-                )
-            )
             updateSchedule() // Обновим расписание
             //book_time_select.text = "Время" // Обновим значение во вьюшке
             updateGui()
@@ -709,29 +657,25 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
                 override fun onNext(t: Response<tableList>) {
                     val view = this@BookingFragment.view
                     if (view != null) {
-                        Log.d("onNextTA", "зашёл")
                         if (t.isSuccessful) {
-                            Log.i("BOOP", "Код удачи${t.code()}")
                             if (t.body() != null) {
                                 if (t.body()!!.data.isEmpty()) { // Если свободных столиков нету
                                     showNoTablesAvailableAlert()
                                 } else { // Если свободные столики есть
                                     val responseBody = t.body() as tableList
-                                    Log.d("BOOP", "Число столиков ${responseBody.data.size}")
                                     openTableSelectFragment(args, responseBody)
                                 }
                             } else { // Если свободных столиков нету
-                                Log.d("BOOP", "Прилетел нулл")
                             }
                         } else { // В случае ошибок
-                            Log.i("BOOP", "Код ошибки ${t.code()}")
+
                         }
                         view.progress_spinner.visibility = View.GONE
                     }
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.i("BOOP", "Вообще ошибка")
+
                 }
             })
     }
@@ -741,7 +685,6 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      * @param args Аргументы
      */
     private fun openTableSelectFragment(args: Bundle, tableList: tableList) {
-        Log.d("TOPKEK2", "${tableList.data.size}")
         val trans = fragmentManager!!.beginTransaction()
         val tableSelectFragment = TableSelectFragment()
         args.putParcelable("table_list", TableParceling(tableList))
