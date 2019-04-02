@@ -122,6 +122,14 @@ class EditProfileFragment : Fragment() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
+        view.edit_profile_username.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    view.hideKeyboard()
+                }
+            }
+        }
+
         view.edit_profile_username.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 edit_profile_username.onFocusChangeListener = object : View.OnFocusChangeListener {
@@ -148,6 +156,14 @@ class EditProfileFragment : Fragment() {
             }
 
         })
+
+        view.edit_profile_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    view.hideKeyboard()
+                }
+            }
+        }
 
         view.edit_profile_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -176,11 +192,7 @@ class EditProfileFragment : Fragment() {
             }
 
         })
-        /**
-         * TODO: Илюха делай по аналогии скрытие клавы везде где есть ввод, оно работает
-         * сам метод можешь вынести и к нему обращатсья
-         * метод пока что лежит тут 484 строка
-         */
+
         view.edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
@@ -480,6 +492,7 @@ class EditProfileFragment : Fragment() {
             alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
         }
     }
+
     fun View.hideKeyboard() {
         Log.d("Закрывай клаву", "тварь")
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
