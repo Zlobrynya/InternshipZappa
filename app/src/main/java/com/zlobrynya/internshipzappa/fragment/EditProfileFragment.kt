@@ -481,6 +481,7 @@ class EditProfileFragment : Fragment() {
         }
     }
     fun View.hideKeyboard() {
+        Log.d("Закрывай клаву", "тварь")
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
