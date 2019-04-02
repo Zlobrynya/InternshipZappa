@@ -10,9 +10,11 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.MenuActivity
@@ -174,6 +176,18 @@ class EditProfileFragment : Fragment() {
             }
 
         })
+        /**
+         * TODO: Илюха делай по аналогии скрытие клавы везде где есть ввод, оно работает
+         * сам метод можешь вынести и к нему обращатсья
+         * метод пока что лежит тут 484 строка
+         */
+        view.edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    view.hideKeyboard()
+                }
+            }
+        }
 
         view.edit_profile_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -466,4 +480,9 @@ class EditProfileFragment : Fragment() {
             alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
         }
     }
+    fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+
 }
