@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -9,12 +10,14 @@ import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -39,6 +42,14 @@ class RegisterActivity : AppCompatActivity() {
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+
+        reg_username.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
 
         reg_username.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -67,6 +78,14 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
+        reg_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
+
         reg_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 reg_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
@@ -92,6 +111,14 @@ class RegisterActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })
+
+        reg_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
 
         reg_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -119,6 +146,14 @@ class RegisterActivity : AppCompatActivity() {
             }
 
         })
+
+        reg_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
 
         reg_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -164,6 +199,14 @@ class RegisterActivity : AppCompatActivity() {
             }
 
         })
+
+        reg_confirm_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
 
         reg_confirm_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -329,6 +372,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun validateConfirmPassword(password: String, confirmPassword: String): Boolean {
         return password == confirmPassword
+    }
+
+    fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onSupportNavigateUp(): Boolean {

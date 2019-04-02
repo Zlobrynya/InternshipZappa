@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
@@ -34,6 +36,14 @@ class PasswordRecovery : AppCompatActivity() {
         val icon: Drawable = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
 
         val newVerify = verifyEmailDTO()
+
+        register_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
 
         register_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -90,6 +100,10 @@ class PasswordRecovery : AppCompatActivity() {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
+    fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 
     private fun checkExistenceEmail(newVerify: verifyEmailDTO, icon: Drawable) {
         progress_spinner_recovery.visibility = View.VISIBLE
