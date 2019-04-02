@@ -229,7 +229,7 @@ class EditProfileFragment : Fragment() {
         })
 
         view.btnSaveChanges.setOnClickListener {
-            Log.i("qq", "working")
+            Log.i("qq", "working" + canClickSaveButton.toString())
             val newName = edit_profile_username_input_layout.editText!!.text.toString()
             val newDate = edit_profile_dob_input_layout.editText!!.text.toString()
             val newEmail = edit_profile_email_input_layout.editText!!.text.toString()

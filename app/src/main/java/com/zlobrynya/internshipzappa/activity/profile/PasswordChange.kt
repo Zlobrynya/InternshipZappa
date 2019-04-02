@@ -207,6 +207,12 @@ class PasswordChange : AppCompatActivity() {
                 override fun onNext(t: Response<respDTO>) {
                     if (t.isSuccessful) {
                         allert(getString(R.string.change_pass_good))
+                    }else{
+                        val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
+                        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+                        change_password_code_email_layout.error = getString(com.zlobrynya.internshipzappa.R.string.wrong_code)
+                        change_password_code_email.setCompoundDrawables(null, null, icon, null)
+
                     }
                 }
 
