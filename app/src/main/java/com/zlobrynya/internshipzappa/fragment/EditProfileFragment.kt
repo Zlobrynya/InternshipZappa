@@ -26,6 +26,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import retrofit2.Response
@@ -228,6 +229,7 @@ class EditProfileFragment : Fragment() {
         })
 
         view.btnSaveChanges.setOnClickListener {
+            Log.i("qq", "working")
             val newName = edit_profile_username_input_layout.editText!!.text.toString()
             val newDate = edit_profile_dob_input_layout.editText!!.text.toString()
             val newEmail = edit_profile_email_input_layout.editText!!.text.toString()
@@ -246,7 +248,7 @@ class EditProfileFragment : Fragment() {
             val validateName = validateName(newName)
             val validatePhone = validatePhone(newPhone)
             val validateEmail = validateEmail(newEmail)
-
+            Log.i("qq", validateEmail(newEmail).toString())
             if (validateName && validateEmail && validatePhone) {
                 //не трогать
                 val newChangeData = changeUserDataDTO()
@@ -385,6 +387,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun checkExistenceEmail(newChange: changeUserDataDTO) {
+        Log.i("qq", "qq")
         val view = this.view
         if (view != null) {
             view.progress_spinner.visibility = View.VISIBLE
@@ -402,12 +405,20 @@ class EditProfileFragment : Fragment() {
                 override fun onSubscribe(d: Disposable) {}
 
                 override fun onNext(t: Response<respDTO>) {
+                    Log.i("qq", t.code().toString())
                     if (t.isSuccessful) {
                         val view = this@EditProfileFragment.view
                         if (view != null) {
                             view.progress_spinner.visibility = View.GONE
                         }
+                        val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
+                        icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
+                        edit_profile_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.exist_email)
+                        edit_profile_email.setCompoundDrawables(null, null, icon, null)
+                        canClickSaveButton = true
+
                     } else {
+                        Log.i("qq", "qq1")
                         RetrofitClientInstance.getInstance()
                             .postVerifyData(newVerify)
                             .subscribeOn(Schedulers.io())
@@ -419,7 +430,7 @@ class EditProfileFragment : Fragment() {
                                 override fun onSubscribe(d: Disposable) {}
 
                                 override fun onNext(t: Response<verifyRespDTO>) {
-
+                                    Log.i("qq", t.code().toString())
                                     val view = this@EditProfileFragment.view
                                     if (view != null) {
                                         if (t.isSuccessful) {
@@ -431,6 +442,8 @@ class EditProfileFragment : Fragment() {
                                             intent.putExtra("new_email", newChange.new_email)
                                             intent.putExtra("id", "1")
                                             startActivity(intent)
+                                        }else{
+
                                         }
                                         view.progress_spinner.visibility = View.GONE
                                     }
