@@ -10,8 +10,8 @@ import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
@@ -21,6 +21,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Response
+
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -35,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
 
         supportActionBar!!.title = "Вход"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setBackgroundDrawable(resources.getDrawable(R.drawable.actionbar))
+        supportActionBar!!.setBackgroundDrawable(resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.actionbar))
         supportActionBar!!.elevation = 0F
 
         val newAuth = authDTO()
@@ -59,6 +61,10 @@ class LoginActivity : AppCompatActivity() {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val email = log_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
+
+                        if(!hasFocus){
+                            hideKeyboard(v!!)
+                        }
 
                         if (!hasFocus && !validateEmail) {
                             log_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
@@ -86,6 +92,10 @@ class LoginActivity : AppCompatActivity() {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val password = log_password_input_layout.editText!!.text.toString()
                         val validatePassword = validatePassword(password)
+
+                        if(!hasFocus){
+                            hideKeyboard(v!!)
+                        }
 
                         if (!hasFocus && !validatePassword) {
                             log_password_input_layout.error =
@@ -148,11 +158,11 @@ class LoginActivity : AppCompatActivity() {
                     override fun onNext(t: Response<authRespDTO>) {
                         if (t.isSuccessful) {
                             val sharedPreferencesStat = applicationContext.getSharedPreferences(
-                                applicationContext.getString(R.string.user_info),
+                                applicationContext.getString(com.zlobrynya.internshipzappa.R.string.user_info),
                                 Context.MODE_PRIVATE
                             )
-                            val savedEmail = applicationContext.getString(R.string.user_email)
-                            val access_token = applicationContext.getString(R.string.access_token)
+                            val savedEmail = applicationContext.getString(com.zlobrynya.internshipzappa.R.string.user_email)
+                            val access_token = applicationContext.getString(com.zlobrynya.internshipzappa.R.string.access_token)
                             val editor = sharedPreferencesStat.edit()
                             editor.putString(savedEmail, t.body()!!.email)
                             editor.putString(access_token, t.body()!!.access_token)
@@ -187,6 +197,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validatePassword(password: String): Boolean {
         return password.matches("((?=.*[a-z0-9]).{4,20})".toRegex())
+    }
+
+    fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onBackPressed() {
@@ -234,7 +249,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showNoInternetConnectionAlert(authDTO: authDTO, icon: Drawable) {
         if (!alertIsShown) {
             alertIsShown = true
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this, com.zlobrynya.internshipzappa.R.style.AlertDialogCustom)
             builder.setTitle("Ошибка соединения")
                 .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
                 .setCancelable(false)
@@ -254,8 +269,8 @@ class LoginActivity : AppCompatActivity() {
                 }
             val alert = builder.create()
             alert.show()
-            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
-            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(com.zlobrynya.internshipzappa.R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(com.zlobrynya.internshipzappa.R.color.color_accent))
         }
     }
 }
