@@ -84,7 +84,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/no_price"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold"
