@@ -72,10 +72,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_hint"
-            android:digits="abcdefghijklmnopqrstuvwxyz0123456789"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
             android:hint="@string/hint_password"
             android:importantForAutofill="noExcludeDescendants"
             android:inputType="textPassword"
+            android:maxLength="20"
             android:singleLine="true"
             android:textColor="@color/white" />
     </android.support.design.widget.TextInputLayout>
