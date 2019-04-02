@@ -55,6 +55,14 @@ class LoginActivity : AppCompatActivity() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
+        log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
+
         log_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
@@ -85,6 +93,14 @@ class LoginActivity : AppCompatActivity() {
             }
 
         })
+
+        log_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
 
         log_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

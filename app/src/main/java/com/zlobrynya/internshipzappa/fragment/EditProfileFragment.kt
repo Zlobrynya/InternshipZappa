@@ -122,16 +122,20 @@ class EditProfileFragment : Fragment() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
+        view.edit_profile_username.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    view.hideKeyboard()
+                }
+            }
+        }
+
         view.edit_profile_username.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 edit_profile_username.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val name = edit_profile_username_input_layout.editText!!.text.toString()
                         val validateName = validateName(name)
-
-                        if(!hasFocus){
-                            view.hideKeyboard()
-                        }
 
                         if (!hasFocus && !validateName) {
                             edit_profile_username_input_layout.error =
@@ -153,16 +157,20 @@ class EditProfileFragment : Fragment() {
 
         })
 
+        view.edit_profile_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    view.hideKeyboard()
+                }
+            }
+        }
+
         view.edit_profile_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 edit_profile_email.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val email = edit_profile_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
-
-                        if(!hasFocus){
-                            view.hideKeyboard()
-                        }
 
                         if (!hasFocus && !validateEmail) {
                             edit_profile_email_input_layout.error =
@@ -185,16 +193,20 @@ class EditProfileFragment : Fragment() {
 
         })
 
+        view.edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    view.hideKeyboard()
+                }
+            }
+        }
+
         view.edit_profile_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
                         val phone = edit_profile_phone_number_input_layout.editText!!.text.toString()
                         val validatePhone = validatePhone(phone)
-
-                        if(!hasFocus){
-                            view.hideKeyboard()
-                        }
 
                         if (!hasFocus && !validatePhone) {
                             edit_profile_phone_number_input_layout.error =
