@@ -1,5 +1,6 @@
 package com.zlobrynya.internshipzappa.activity.profile
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,10 +10,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.MenuActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -34,6 +37,13 @@ class CodeFEmailActivity : AppCompatActivity() {
 
         //принимаем параметры и формируем отсылку
 
+        firstNumber.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(!hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
 
         firstNumber.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -196,6 +206,11 @@ class CodeFEmailActivity : AppCompatActivity() {
         allert_text.visibility = View.GONE
         firstNumber.setTextColor(resources.getColor(R.color.white))
 
+    }
+
+    fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
