@@ -51,50 +51,24 @@ class PasswordChange : AppCompatActivity() {
             }
         }
 
-        change_password.setOnClickListener {
-            change_password_input_layout.error =
-                    getString(com.zlobrynya.internshipzappa.R.string.password_rule)
-        }
         change_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                if (change_password.length()<3) {
-                    change_password_input_layout.error =
-                            getString(com.zlobrynya.internshipzappa.R.string.password_rule)
-                    change_password.setCompoundDrawables(null, null, icon, null)
+                val password = change_password_input_layout.editText!!.text.toString()
+                val validatePassword = validatePassword(password)
+                val confirmPassword = change_confirm_password_input_layout.editText!!.text.toString()
+                val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
+
+                if (validateConfirmPassword(password, confirmPassword) && change_password_code_email.length()>3) {
+                    btn_change_pass.background = resources.getDrawable(R.drawable.btn_can_click)
+                    btn_change_pass.isEnabled = true
+                } else {
+                    btn_change_pass.background = resources.getDrawable(R.drawable.btn_not_click)
+                    btn_change_pass.isEnabled = false
                 }
+
+
                 change_password.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        val password = change_password_input_layout.editText!!.text.toString()
-                        val validatePassword = validatePassword(password)
-                        val confirmPassword = change_confirm_password_input_layout.editText!!.text.toString()
-                        val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
-
-                        if (!hasFocus && confirmPassword.isEmpty()) {
-                            change_password_input_layout.isErrorEnabled = false
-                            change_password.setCompoundDrawables(null, null, null, null)
-                            change_confirm_password_input_layout.isErrorEnabled = false
-                            change_confirm_password.setCompoundDrawables(null, null, null, null)
-                        } else if (!hasFocus && !validateConfirmPassword) {
-                            change_confirm_password_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                            change_confirm_password.setCompoundDrawables(null, null, icon, null)
-
-                            change_password_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                            change_password.setCompoundDrawables(null, null, icon, null)
-                        } else {
-                            change_password_input_layout.isErrorEnabled = false
-                            change_password.setCompoundDrawables(null, null, null, null)
-                            change_confirm_password_input_layout.isErrorEnabled = false
-                            change_confirm_password.setCompoundDrawables(null, null, null, null)
-                            if (validateConfirmPassword(password, confirmPassword) && change_password_code_email.length()>4) {
-                                btn_change_pass.background = resources.getDrawable(R.drawable.btn_can_click)
-                                btn_change_pass.isEnabled = true
-                            } else {
-                                btn_change_pass.background = resources.getDrawable(R.drawable.btn_not_click)
-                                btn_change_pass.isEnabled = false
-                            }
-                        }
                     }
 
                 }
@@ -104,6 +78,51 @@ class PasswordChange : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val password = change_password_input_layout.editText!!.text.toString()
+                val validatePassword = validatePassword(password)
+                val confirmPassword = change_confirm_password_input_layout.editText!!.text.toString()
+                val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
+
+                if (!change_password.isFocused && confirmPassword.isEmpty()) {
+                    change_password_input_layout.isErrorEnabled = false
+                    change_password.setCompoundDrawables(null, null, null, null)
+                    change_confirm_password_input_layout.isErrorEnabled = false
+                    change_confirm_password.setCompoundDrawables(null, null, null, null)
+                } else if(change_password.isFocused && !confirmPassword.isEmpty()){
+                    change_confirm_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    change_confirm_password.setCompoundDrawables(null, null, icon, null)
+                    change_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    change_password.setCompoundDrawables(null, null, icon, null)
+                } else if (!change_password.isFocused && !validateConfirmPassword) {
+                    change_confirm_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    change_confirm_password.setCompoundDrawables(null, null, icon, null)
+
+                    change_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    change_password.setCompoundDrawables(null, null, icon, null)
+                    if(!validatePassword && change_password.length()<4){
+                        change_password_input_layout.isHelperTextEnabled = false
+                        change_password_input_layout.error =
+                                getString(com.zlobrynya.internshipzappa.R.string.password_rule)
+                        change_password_input_layout.isErrorEnabled = true
+                        change_password.setCompoundDrawables(null, null, icon, null)
+                    }
+                } else if(!validatePassword && change_password.length()<4){
+                    change_password_input_layout.isHelperTextEnabled = false
+                    change_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.password_rule)
+                    change_password_input_layout.isErrorEnabled = true
+                    change_password.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    change_password_input_layout.isHelperTextEnabled = true
+                    change_password_input_layout.isErrorEnabled = false
+                    change_password.setCompoundDrawables(null, null, null, null)
+                    change_confirm_password_input_layout.isErrorEnabled = false
+                    change_confirm_password.setCompoundDrawables(null, null, null, null)
+                }
             }
 
         })
@@ -122,43 +141,37 @@ class PasswordChange : AppCompatActivity() {
                 val confirmPassword = change_confirm_password_input_layout.editText!!.text.toString()
                 val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
-                change_confirm_password_input_layout.error =
-                        getString(com.zlobrynya.internshipzappa.R.string.password_rule)
+                if (validateConfirmPassword(password, confirmPassword) && change_password_code_email.length()<4) {
+                    btn_change_pass.background = resources.getDrawable(R.drawable.btn_can_click)
+                    btn_change_pass.isEnabled = true
+                } else {
+                    btn_change_pass.background = resources.getDrawable(R.drawable.btn_not_click)
+                    btn_change_pass.isEnabled = false
+                }
 
-                if (change_confirm_password.length() < 3) {
+                if (change_confirm_password.length()<4) {
+                    change_confirm_password_input_layout.isHelperTextEnabled = false
                     change_confirm_password_input_layout.error =
                             getString(com.zlobrynya.internshipzappa.R.string.password_rule)
+                    change_confirm_password_input_layout.isErrorEnabled = true
                     change_confirm_password.setCompoundDrawables(null, null, icon, null)
+                } else if(!validateConfirmPassword && change_confirm_password.isFocused){
+                    change_confirm_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    change_confirm_password.setCompoundDrawables(null, null, icon, null)
+
+                    change_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    change_password.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    change_confirm_password_input_layout.isHelperTextEnabled = true
+                    change_password_input_layout.isErrorEnabled = false
+                    change_password.setCompoundDrawables(null, null, null, null)
+                    change_confirm_password_input_layout.isErrorEnabled = false
+                    change_confirm_password.setCompoundDrawables(null, null, null, null)
                 }
 
-                change_password.onFocusChangeListener = object : View.OnFocusChangeListener {
-                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
-
-                        if (!validateConfirmPassword) {
-                            change_confirm_password_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                            change_confirm_password.setCompoundDrawables(null, null, icon, null)
-
-                            change_password_input_layout.error =
-                                    getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                            change_password.setCompoundDrawables(null, null, icon, null)
-                        } else {
-                            change_password_input_layout.isErrorEnabled = false
-                            change_password.setCompoundDrawables(null, null, null, null)
-                            change_confirm_password_input_layout.isErrorEnabled = false
-                            change_confirm_password.setCompoundDrawables(null, null, null, null)
-                            if (validateConfirmPassword(password, confirmPassword) && change_password_code_email.length() > 4) {
-                                btn_change_pass.background = resources.getDrawable(R.drawable.btn_can_click)
-                                btn_change_pass.isEnabled = true
-                            } else {
-                                btn_change_pass.background = resources.getDrawable(R.drawable.btn_not_click)
-                                btn_change_pass.isEnabled = false
-                            }
-                        }
-                    }
-                }
             }
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
