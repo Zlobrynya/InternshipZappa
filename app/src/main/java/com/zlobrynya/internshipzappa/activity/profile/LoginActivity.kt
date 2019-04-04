@@ -23,8 +23,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Response
 
 
-
-
 class LoginActivity : AppCompatActivity() {
 
     var canClickRegisterButton: Boolean = true
@@ -57,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
 
         log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                if(!hasFocus){
+                if (!hasFocus) {
                     hideKeyboard(v!!)
                 }
             }
@@ -70,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
                         val email = log_email_input_layout.editText!!.text.toString()
                         val validateEmail = validateEmail(email)
 
-                        if(!hasFocus){
+                        if (!hasFocus) {
                             hideKeyboard(v!!)
                         }
 
@@ -96,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
 
         log_password.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                if(!hasFocus){
+                if (!hasFocus) {
                     hideKeyboard(v!!)
                 }
             }
@@ -109,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
                         val password = log_password_input_layout.editText!!.text.toString()
                         val validatePassword = validatePassword(password)
 
-                        if(!hasFocus){
+                        if (!hasFocus) {
                             hideKeyboard(v!!)
                         }
 
@@ -177,8 +175,10 @@ class LoginActivity : AppCompatActivity() {
                                 applicationContext.getString(com.zlobrynya.internshipzappa.R.string.user_info),
                                 Context.MODE_PRIVATE
                             )
-                            val savedEmail = applicationContext.getString(com.zlobrynya.internshipzappa.R.string.user_email)
-                            val access_token = applicationContext.getString(com.zlobrynya.internshipzappa.R.string.access_token)
+                            val savedEmail =
+                                applicationContext.getString(com.zlobrynya.internshipzappa.R.string.user_email)
+                            val access_token =
+                                applicationContext.getString(com.zlobrynya.internshipzappa.R.string.access_token)
                             val editor = sharedPreferencesStat.edit()
                             editor.putString(savedEmail, t.body()!!.email)
                             editor.putString(access_token, t.body()!!.access_token)
@@ -195,6 +195,7 @@ class LoginActivity : AppCompatActivity() {
                             log_password.setCompoundDrawables(null, null, icon, null)
                             Toast.makeText(this@LoginActivity, "Неверный пароль или E-mail", Toast.LENGTH_SHORT)
                                 .show()
+                            canClickLoginButton = true
                         }
                     }
 
@@ -265,7 +266,8 @@ class LoginActivity : AppCompatActivity() {
     private fun showNoInternetConnectionAlert(authDTO: authDTO, icon: Drawable) {
         if (!alertIsShown) {
             alertIsShown = true
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this, com.zlobrynya.internshipzappa.R.style.AlertDialogCustom)
+            val builder: AlertDialog.Builder =
+                AlertDialog.Builder(this, com.zlobrynya.internshipzappa.R.style.AlertDialogCustom)
             builder.setTitle("Ошибка соединения")
                 .setMessage("Без подключения к сети невозможно продолжить бронирование.\nПроверьте соединение и попробуйте снова")
                 .setCancelable(false)
@@ -285,8 +287,10 @@ class LoginActivity : AppCompatActivity() {
                 }
             val alert = builder.create()
             alert.show()
-            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(com.zlobrynya.internshipzappa.R.color.color_accent))
-            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(com.zlobrynya.internshipzappa.R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(resources.getColor(com.zlobrynya.internshipzappa.R.color.color_accent))
+            alert.getButton(AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(resources.getColor(com.zlobrynya.internshipzappa.R.color.color_accent))
         }
     }
 }
