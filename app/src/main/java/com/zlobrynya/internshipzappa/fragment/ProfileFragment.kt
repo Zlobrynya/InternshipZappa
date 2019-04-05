@@ -63,7 +63,11 @@ class ProfileFragment : Fragment() {
                 lastCLickTime = SystemClock.elapsedRealtime()
                 val args = Bundle()
                 args.putString("name", profile_username.text.toString())
-                args.putString("dob", profile_dob.text.toString())
+                if (profile_dob.text.toString() == "Не указана") {
+                    args.putString("dob", "")
+                } else {
+                    args.putString("dob", profile_dob.text.toString())
+                }
                 args.putString("email", profile_email.text.toString())
                 args.putString("phone", profile_phone.text.toString())
 
@@ -131,7 +135,7 @@ class ProfileFragment : Fragment() {
                             val outputDateStr = outputFormat.format(date)
                             profile_dob.text = outputDateStr
                         } else {
-                            profile_dob.text = ""
+                            profile_dob.text = "Не указана"
                         }
                         profile_email.text = data.email
                         profile_phone.text = data.phone
