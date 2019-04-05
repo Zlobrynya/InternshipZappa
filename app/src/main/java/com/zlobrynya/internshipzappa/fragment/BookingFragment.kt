@@ -541,11 +541,11 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      */
     private fun initBookingDurationList() {
         booking.clear()
-        booking.add(BookDuration("2 ч", true))
-        booking.add(BookDuration("2 ч\n30мин", true))
-        booking.add(BookDuration("3 ч", true))
-        booking.add(BookDuration("3 ч\n30мин", true))
-        booking.add(BookDuration("4 ч", true))
+        booking.add(BookDuration("2\nчаса", true))
+        booking.add(BookDuration("2,5\nчаса", true))
+        booking.add(BookDuration("3\nчаса", true))
+        booking.add(BookDuration("3,5\nчаса", true))
+        booking.add(BookDuration("4\nчаса", true))
     }
 
     /**
