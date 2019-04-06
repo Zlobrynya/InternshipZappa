@@ -34,7 +34,7 @@ class BookingContainerFragment : Fragment() {
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = SectionsPageAdapter(fragmentManager)
         adapter.addFragment(BookingFragment(), "Новая бронь")
-        adapter.addFragment(MyBookingsFragment(), "Мои брони")
+        adapter.addFragment(MyBookingsFragment(), "Мои бронирования")
         viewPager.adapter = adapter
     }
 

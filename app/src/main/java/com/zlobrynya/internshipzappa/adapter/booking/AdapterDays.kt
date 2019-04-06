@@ -109,7 +109,7 @@ class AdapterDays(private val values: ArrayList<Date>, onDateListener: OnDateLis
      * @param date Дата
      */
     private fun getDayNumber(date: Date): String {
-        val dateNumberFormat = SimpleDateFormat("dd") // Шаблон для вывода числа
+        val dateNumberFormat = SimpleDateFormat("d") // Шаблон для вывода числа
         return dateNumberFormat.format(date)
     }
 
