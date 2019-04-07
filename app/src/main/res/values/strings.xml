@@ -22,6 +22,7 @@
     <string name="add">ДОБАВИТЬ</string>
 
     <!--доп строки общие-->
+    <string name="from">от\u0020</string>
     <string name="rub">\u0020₽</string>
     <string name="gr">\u0020г</string>
     <string name="ml">\u0020мл</string>
