@@ -50,17 +50,26 @@ class AdapterRecommendDish(private val values: ArrayList<DishClientDTO>): Recycl
             val subDish = dishDTO.sub_menu
 
             if(subDish != "null"){
+                var listOfPrices: List<Int> = listOf()
                 val subMenu = SubMenuDB(context)
                 var minPrice = 9999
                 val subDish = subMenu.getCategoryDish(dishDTO.name)
                 subDish.forEach {
-                    if (it.price < minPrice) minPrice = it.price
+                    listOfPrices = listOfPrices.plus(it.price)
                 }
-                if (minPrice == 0){
-                    topingPrice.text = ""
-                }else {
-                    topingPrice.text =
-                        context.getString(R.string.from) + minPrice.toString() + context.getString(R.string.rub)
+                listOfPrices = listOfPrices.distinct()
+                if(listOfPrices.size > 1) {
+                    subDish.forEach {
+                        if (it.price < minPrice) minPrice = it.price
+                    }
+                    if (minPrice == 0) {
+                        topingPrice.text = ""
+                    } else {
+                        topingPrice.text =
+                            context.getString(R.string.from) + minPrice.toString() + context.getString(R.string.rub)
+                    }
+                }else{
+                    topingPrice.text = listOfPrices[0].toString() + context.getString(R.string.rub)
                 }
                 subMenu.closeDataBase()
             }else{
