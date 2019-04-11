@@ -41,6 +41,8 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      */
     private val bookingList: ArrayList<UserBookingDTO> = ArrayList()
 
+    private var canClickDiscard: Boolean = true
+
     var userBookingList: UserBookingList? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,6 +53,7 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
     override fun onResume() {
         super.onResume()
+        canClickDiscard = true
         val handler = Handler()
         handler.post(object : Runnable {
             override fun run() {
@@ -83,7 +86,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
     /**
      * Набивает данными список броней пользователя
-     * TODO переделать под сервер, добавить проверку на пустое количество броней
      */
     private fun initBookingList(userBookingList: List<UserBookingDTO>, view: View) {
         if (userBookingList.isEmpty()) { // Если список пустой (броней нету)
@@ -106,6 +108,7 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         view.user_bookings_recycler.layoutManager = layoutManager
         view.user_bookings_recycler.adapter = AdapterUserBookings(bookingList, this)
+        canClickDiscard = true
         return view
     }
 
@@ -115,13 +118,14 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      * @param isButtonClick Произошло ли нажатие на кнопку "Отменить"
      */
     override fun onDiscardClick(position: Int, isButtonClick: Boolean) {
-        if (isButtonClick) {
+        if (isButtonClick && canClickDiscard) {
+            canClickDiscard = false
             prepare(position)
         }
     }
 
     /**
-     * Проверяет доступ в интернет и в зависимости от результата вызывает showNoInternetConnectionAlert или preparePostParams
+     * Проверяет доступ в интернет и в зависимости от результата вызывает showNoInternetConnectionAlert или confirmDiscard
      */
     private fun prepare(position: Int) {
         if (!StaticMethods.checkInternetConnection(context)) showNoInternetConnectionAlert(position)
@@ -216,7 +220,11 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                         /*
                         Юзер авторизован, удаляем бронь
                          */
-                        this@MyBookingsFragment.onResume()
+                        val view = this@MyBookingsFragment.view
+                        if (view != null) {
+                            view.progress_spinner_my_bookings.visibility = View.GONE
+                            postUserBookings(view)
+                        }
                     } else {
                         /*
                         Юзер не авторизован, пишем что сессия истекла
@@ -229,20 +237,27 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                                 view.user_not_authorized.visibility = View.VISIBLE
                                 view.no_user_bookings_text_view.visibility = View.GONE
                                 view.user_bookings_recycler.visibility = View.GONE
+                                view.progress_spinner_my_bookings.visibility = View.GONE
                             }
                         }
+                        canClickDiscard = true
                     }
                 }
 
                 override fun onError(e: Throwable) {
-                    //запрос не выполнен, всё плохо
+                    val view = this@MyBookingsFragment.view
+                    if (view != null) {
+                        view.progress_spinner_my_bookings.visibility = View.GONE
+                    }
+                    canClickDiscard = true
+                    Toast.makeText(context, "Проблема с подключением к серверу", Toast.LENGTH_SHORT).show()
                 }
 
             })
     }
 
     /**
-     * Выводит с просьбой отменить бронь
+     * Выводит алерт с просьбой подтвердить отмену брони
      */
     private fun confirmDiscard(position: Int) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
@@ -257,10 +272,19 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
             .setPositiveButton("Да") { dialog, which ->
                 run {
                     dialog.dismiss()
+                    val view = this@MyBookingsFragment.view
+                    if (view != null) {
+                        view.progress_spinner_my_bookings.visibility = View.VISIBLE
+                    }
                     postDeleteUserBookings(bookingList[position].booking_id)
                 }
             }
-            .setNegativeButton("Нет") { dialog, which -> dialog.dismiss() }
+            .setNegativeButton("Нет") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    canClickDiscard = true
+                }
+            }
         val alert = builder.create()
         alert.show()
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
@@ -305,7 +329,12 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                     prepare(position)
                 }
             }
-            .setNegativeButton("ОТМЕНА") { dialog, which -> dialog.dismiss() }
+            .setNegativeButton("ОТМЕНА") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    canClickDiscard = true
+                }
+            }
         val alert = builder.create()
         alert.show()
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
