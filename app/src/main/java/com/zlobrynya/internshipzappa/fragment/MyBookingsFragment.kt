@@ -41,6 +41,8 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      */
     private val bookingList: ArrayList<UserBookingDTO> = ArrayList()
 
+    var userBookingList: UserBookingList? = null
+
     private var canClickDiscard: Boolean = true
     private var canClickLoginButton: Boolean = true
 
@@ -344,13 +346,5 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
         alert.show()
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
         alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(resources.getColor(R.color.color_accent))
-    }
-
-    companion object {
-        var userBookingList: UserBookingList? = null
-
-        fun releaseBookings() {
-            userBookingList = null
-        }
     }
 }
