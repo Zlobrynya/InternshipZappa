@@ -89,9 +89,11 @@ class PasswordChange : AppCompatActivity() {
                             getString(com.zlobrynya.internshipzappa.R.string.error_password)
                     change_password_input_layout.isErrorEnabled = true
                     change_password.setCompoundDrawables(null, null, icon, null)
-                } else if (!change_password.isFocused && !validatePassword) {
+                } else if (!validatePassword) {
+                    change_password_input_layout.isHelperTextEnabled = false
                     change_password_input_layout.error =
                             getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                    change_password_input_layout.isErrorEnabled = true
                     change_password.setCompoundDrawables(null, null, icon, null)
                 } else if (!validateConfirmPassword && confirmPassword.isEmpty()) {
                     change_password_input_layout.isErrorEnabled = false
@@ -140,13 +142,19 @@ class PasswordChange : AppCompatActivity() {
                     btn_change_pass.isEnabled = false
                 }
 
-                if (change_confirm_password.length()<8) {
+                if (change_confirm_password.length()<8){
                     change_confirm_password_input_layout.isHelperTextEnabled = false
                     change_confirm_password_input_layout.error =
                             getString(com.zlobrynya.internshipzappa.R.string.error_password)
                     change_confirm_password_input_layout.isErrorEnabled = true
                     change_confirm_password.setCompoundDrawables(null, null, icon, null)
-                } else if(!validateConfirmPassword){
+                } else if (!validatePassword(change_confirm_password.text.toString())){
+                    change_confirm_password_input_layout.isHelperTextEnabled = false
+                    change_confirm_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                    change_confirm_password_input_layout.isErrorEnabled = true
+                    change_confirm_password.setCompoundDrawables(null, null, icon, null)
+                } else if (!validateConfirmPassword) {
                     change_confirm_password_input_layout.error =
                             getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                     change_confirm_password.setCompoundDrawables(null, null, icon, null)
@@ -221,7 +229,7 @@ class PasswordChange : AppCompatActivity() {
             val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
 
-            if (validatePassword && validateConfirmPassword && change_password_code_email.length()>7) {
+            if (validatePassword && validateConfirmPassword && change_password_code_email.length()>4) {
 
                 newPassRec.code = change_password_code_email_layout.editText!!.text.toString()
                 newPassRec.password = password

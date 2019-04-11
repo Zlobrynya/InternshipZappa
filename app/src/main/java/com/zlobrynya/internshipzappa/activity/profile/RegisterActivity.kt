@@ -168,10 +168,11 @@ class RegisterActivity : AppCompatActivity() {
                             getString(com.zlobrynya.internshipzappa.R.string.error_password)
                     reg_password_input_layout.isErrorEnabled = true
                     reg_password.setCompoundDrawables(null, null, icon, null)
-                } else if (!reg_password.isFocused && !validatePassword) {
+                } else if (!validatePassword) {
+                    reg_password_input_layout.isHelperTextEnabled = false
                     reg_password_input_layout.error =
                             getString(com.zlobrynya.internshipzappa.R.string.error_password)
-                    reg_password.setCompoundDrawables(null, null, icon, null)
+                    reg_password_input_layout.isErrorEnabled = true
                 } else if (!validateConfirmPassword && confirmPassword.isEmpty()) {
                     reg_password_input_layout.isErrorEnabled = false
                     reg_password.setCompoundDrawables(null, null, null, null)
@@ -218,6 +219,12 @@ class RegisterActivity : AppCompatActivity() {
                 val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
                 if (reg_confirm_password.length()<8){
+                    reg_confirm_password_input_layout.isHelperTextEnabled = false
+                    reg_confirm_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                    reg_confirm_password_input_layout.isErrorEnabled = true
+                    reg_confirm_password.setCompoundDrawables(null, null, icon, null)
+                } else if (!validatePassword(reg_confirm_password.text.toString())){
                     reg_confirm_password_input_layout.isHelperTextEnabled = false
                     reg_confirm_password_input_layout.error =
                             getString(com.zlobrynya.internshipzappa.R.string.error_password)
