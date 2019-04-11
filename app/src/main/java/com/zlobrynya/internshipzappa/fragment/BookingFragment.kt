@@ -186,7 +186,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
     /**
      * В текстовом поле меняем время брони на ближайшее и убираем недоступные варианты брони
      */
-    private fun updateGui() {
+    private fun updateGui(click: Boolean = false) {
         bookingView.book_time_select.text = timeOpen.substring(0, timeOpen.length - 3)
 
         val localCalendar = Calendar.getInstance()
@@ -212,19 +212,19 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
 
         when { // Посмотрим разницу между выбранным временем и временем закрытия ресторана
             difference >= FOUR_HOURS -> { // Осталось больше 4 часов
-                updateDurationVisibility(5, false)
+                updateDurationVisibility(5, click)
             }
             difference == THREE_AND_HALF_HOURS -> { // Осталось 3.5 часа
-                updateDurationVisibility(4, false)
+                updateDurationVisibility(4, click)
             }
             difference == THREE_HOURS -> { // Осталось 3 часа
-                updateDurationVisibility(3, false)
+                updateDurationVisibility(3, click)
             }
             difference == TWO_AND_HALF_HOURS -> { // Осталось 2.5 часа
-                updateDurationVisibility(2, false)
+                updateDurationVisibility(2, click)
             }
             difference == TWO_HOURS -> { // Осталось 2 часа
-                updateDurationVisibility(1, false)
+                updateDurationVisibility(1, click)
 
 
             }
@@ -394,7 +394,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
      * @param count Количество доступных вариантов брони
      */
     private fun updateDurationVisibility(count: Int, click: Boolean) {
-        selectedDuration = 0
+        if (click) selectedDuration = 0
 
         // Сбросим выбор на 2 часа
         if (click) bookingView.book_duration_recycler.findViewHolderForAdapterPosition(0)!!.itemView.performClick()
@@ -593,7 +593,7 @@ class BookingFragment : Fragment(), AdapterDays.OnDateListener, AdapterBookingDu
             calendar.set(Calendar.SECOND, 0)
             updateSchedule() // Обновим расписание
             //book_time_select.text = "Время" // Обновим значение во вьюшке
-            updateGui()
+            updateGui(true)
         }
     }
 
