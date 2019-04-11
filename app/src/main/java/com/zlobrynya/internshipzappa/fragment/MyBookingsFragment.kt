@@ -4,9 +4,9 @@ package com.zlobrynya.internshipzappa.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +30,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 /**
  * Фрагмент мои брони
  */
@@ -40,6 +41,8 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      */
     private val bookingList: ArrayList<UserBookingDTO> = ArrayList()
 
+    var userBookingList: UserBookingList? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_my_bookings, container, false)
         view.login_button.setOnClickListener(onClickListener)
@@ -48,11 +51,16 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
     override fun onResume() {
         super.onResume()
-        bookingList.clear()
-        val view = this.view
-        if (view != null) {
-            postUserBookings(view)
-        }
+        val handler = Handler()
+        handler.post(object : Runnable {
+            override fun run() {
+                val view = this@MyBookingsFragment.view
+                if (view != null) {
+                    postUserBookings(view)
+                    handler.postDelayed(this, 1000)
+                }
+            }
+        })
     }
 
     /**
@@ -97,9 +105,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
     private fun initRecyclerView(view: View): View {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         view.user_bookings_recycler.layoutManager = layoutManager
-        view.user_bookings_recycler.addItemDecoration(
-            DividerItemDecoration(context, DividerItemDecoration.VERTICAL) // Разделитель элементов внутри ресайклера
-        )
         view.user_bookings_recycler.adapter = AdapterUserBookings(bookingList, this)
         return view
     }
@@ -130,8 +135,8 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-       /* val newEmail = verifyEmailDTO()
-        newEmail.email = sharedPreferences.getString(this.getString(R.string.user_email), "")*/
+        /* val newEmail = verifyEmailDTO()
+         newEmail.email = sharedPreferences.getString(this.getString(R.string.user_email), "")*/
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null").toString()
 
         RetrofitClientInstance.getInstance()
@@ -150,12 +155,18 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                         /**
                          * Если юзер авторизован, то вызываем initBookingList для наполнения списка броней
                          */
-                        val userBookingList = t.body()
-                        if (userBookingList != null) {
-                            view.user_not_authorized.visibility = View.GONE
-                            view.login_button.visibility = View.GONE
-                            initBookingList(userBookingList.bookings, view)
+                        if (t.body() != null) {
+                            if (t.body() != userBookingList) {
+                                bookingList.clear()
+                                userBookingList = t.body()
+                                if (userBookingList != null) {
+                                    view.user_not_authorized.visibility = View.GONE
+                                    view.login_button.visibility = View.GONE
+                                    initBookingList(userBookingList!!.bookings, view)
+                                }
+                            }
                         }
+
                     } else {
                         /*
                         Если юзер не авторизован, то скрываем рейсайклер и выводим сообщение
