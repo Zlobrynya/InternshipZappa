@@ -41,9 +41,10 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      */
     private val bookingList: ArrayList<UserBookingDTO> = ArrayList()
 
-    private var canClickDiscard: Boolean = true
-
     var userBookingList: UserBookingList? = null
+
+    private var canClickDiscard: Boolean = true
+    private var canClickLoginButton: Boolean = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_my_bookings, container, false)
@@ -54,6 +55,8 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
     override fun onResume() {
         super.onResume()
         canClickDiscard = true
+        canClickLoginButton = true
+        userBookingList = null
         val handler = Handler()
         handler.post(object : Runnable {
             override fun run() {
@@ -72,7 +75,12 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
     private val onClickListener = View.OnClickListener {
         when (it.id) {
             // Кнопка залогиниться
-            R.id.login_button -> openLoginActivity()
+            R.id.login_button -> {
+                if (canClickLoginButton) {
+                    canClickLoginButton = false
+                    openLoginActivity()
+                }
+            }
         }
     }
 
@@ -170,7 +178,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                                 }
                             }
                         }
-
                     } else {
                         /*
                         Если юзер не авторизован, то скрываем рейсайклер и выводим сообщение
