@@ -157,38 +157,41 @@ class RegisterActivity : AppCompatActivity() {
 
         reg_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                reg_password.onFocusChangeListener = object : View.OnFocusChangeListener {
-                    override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        val password = reg_password_input_layout.editText!!.text.toString()
-                        val validatePassword = validatePassword(password)
-                        val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
-                        val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
+                val password = reg_password_input_layout.editText!!.text.toString()
+                val validatePassword = validatePassword(password)
+                val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
+                val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
-                        if (!hasFocus && !validatePassword) {
-                            reg_password_input_layout.error =
-                                getString(com.zlobrynya.internshipzappa.R.string.error_password)
-                            reg_password.setCompoundDrawables(null, null, icon, null)
-                        } else if (!hasFocus && confirmPassword.isEmpty()) {
-                            reg_password_input_layout.isErrorEnabled = false
-                            reg_password.setCompoundDrawables(null, null, null, null)
-                            reg_confirm_password_input_layout.isErrorEnabled = false
-                            reg_confirm_password.setCompoundDrawables(null, null, null, null)
-                        } else if (!hasFocus && !validateConfirmPassword) {
-                            reg_confirm_password_input_layout.error =
-                                getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                            reg_confirm_password.setCompoundDrawables(null, null, icon, null)
+                if (reg_password.length()<8){
+                    reg_password_input_layout.isHelperTextEnabled = false
+                    reg_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                    reg_password_input_layout.isErrorEnabled = true
+                    reg_password.setCompoundDrawables(null, null, icon, null)
+                } else if (!reg_password.isFocused && !validatePassword) {
+                    reg_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                    reg_password.setCompoundDrawables(null, null, icon, null)
+                } else if (!validateConfirmPassword && confirmPassword.isEmpty()) {
+                    reg_password_input_layout.isErrorEnabled = false
+                    reg_password.setCompoundDrawables(null, null, null, null)
+                    reg_confirm_password_input_layout.isErrorEnabled = false
+                    reg_confirm_password.setCompoundDrawables(null, null, null, null)
+                } else if (!validateConfirmPassword) {
+                    reg_confirm_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    reg_confirm_password.setCompoundDrawables(null, null, icon, null)
 
-                            reg_password_input_layout.error =
-                                getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
-                            reg_password.setCompoundDrawables(null, null, icon, null)
-                        } else {
-                            reg_password_input_layout.isErrorEnabled = false
-                            reg_password.setCompoundDrawables(null, null, null, null)
-                            reg_confirm_password_input_layout.isErrorEnabled = false
-                            reg_confirm_password.setCompoundDrawables(null, null, null, null)
-                        }
-                    }
-
+                    reg_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
+                    reg_password.setCompoundDrawables(null, null, icon, null)
+                } else {
+                    reg_password_input_layout.isHelperTextEnabled = true
+                    reg_confirm_password_input_layout.isHelperTextEnabled = true
+                    reg_password_input_layout.isErrorEnabled = false
+                    reg_password.setCompoundDrawables(null, null, null, null)
+                    reg_confirm_password_input_layout.isErrorEnabled = false
+                    reg_confirm_password.setCompoundDrawables(null, null, null, null)
                 }
             }
 
@@ -214,7 +217,13 @@ class RegisterActivity : AppCompatActivity() {
                 val confirmPassword = reg_confirm_password_input_layout.editText!!.text.toString()
                 val validateConfirmPassword = validateConfirmPassword(password, confirmPassword)
 
-                if (!validateConfirmPassword) {
+                if (reg_confirm_password.length()<8){
+                    reg_confirm_password_input_layout.isHelperTextEnabled = false
+                    reg_confirm_password_input_layout.error =
+                            getString(com.zlobrynya.internshipzappa.R.string.error_password)
+                    reg_confirm_password_input_layout.isErrorEnabled = true
+                    reg_confirm_password.setCompoundDrawables(null, null, icon, null)
+                } else if (!validateConfirmPassword) {
                     reg_confirm_password_input_layout.error =
                         getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                     reg_confirm_password.setCompoundDrawables(null, null, icon, null)
@@ -223,6 +232,8 @@ class RegisterActivity : AppCompatActivity() {
                         getString(com.zlobrynya.internshipzappa.R.string.error_confirm_password)
                     reg_password.setCompoundDrawables(null, null, icon, null)
                 } else {
+                    reg_password_input_layout.isHelperTextEnabled = true
+                    reg_confirm_password_input_layout.isHelperTextEnabled = true
                     reg_password_input_layout.isErrorEnabled = false
                     reg_password.setCompoundDrawables(null, null, null, null)
                     reg_confirm_password_input_layout.isErrorEnabled = false

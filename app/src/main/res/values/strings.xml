@@ -108,6 +108,4 @@
     <string name="label_hint_dob">Дата рождения</string>
 
     <string name="text_profile_login">Войдите для просмотра профиля</string>
-
-    <string name="password_rule">Пароль не может быть меньше 4 символов</string>
 </resources>

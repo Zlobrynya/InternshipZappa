@@ -274,6 +274,8 @@ class PersonalInfoFragment : Fragment() {
                                 fm_phone.text = data.phone
                             }
                             401 -> {
+                                closeFragment()
+                                Toast.makeText(context, "Ваша сессия истекла. Пожалуйста, авторизуйтесь.", Toast.LENGTH_SHORT).show()
                                 /*val intent = Intent(context, LoginActivity::class.java)
                                 startActivity(intent)*/
                             }
