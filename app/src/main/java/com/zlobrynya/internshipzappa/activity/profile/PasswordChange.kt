@@ -244,7 +244,7 @@ class PasswordChange : AppCompatActivity() {
     }
 
     private fun validatePassword(password: String): Boolean {
-        return password.matches("((?=.*[a-z0-9]).{4,20})".toRegex())
+        return password.matches("^(?=.*\\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#\$%^&*()\\-_=+{}|?>.<,:;~`’]{8,32}$".toRegex())
     }
 
     private fun postNewPass(newPassRec: passwordRecoveryDTO, icon: Drawable?) {

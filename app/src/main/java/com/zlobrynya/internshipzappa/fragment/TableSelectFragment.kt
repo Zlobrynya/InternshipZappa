@@ -116,9 +116,6 @@ class TableSelectFragment : Fragment(), AdapterTable.OnTableListener {
     private fun initRecycler() {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         tableView.table_recycler.layoutManager = layoutManager
-        tableView.table_recycler.addItemDecoration(
-            DividerItemDecoration(context, DividerItemDecoration.VERTICAL) // Разделитель элементов внутри ресайклера
-        )
         tableView.table_recycler.adapter = AdapterTable(tableList, this)
     }
 

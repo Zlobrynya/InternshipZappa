@@ -20,7 +20,7 @@ import com.zlobrynya.internshipzappa.activity.menu.SubDescriptionScreen
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import kotlinx.android.synthetic.main.item_menu.view.*
 import com.bumptech.glide.request.RequestOptions
-
+import com.zlobrynya.internshipzappa.tools.database.SubMenuDB
 
 
 /*
@@ -65,8 +65,37 @@ class AdapterRecyclerMenu(private val myDataset: ArrayList<DishClientDTO>, val c
             subDish = dishDTO.sub_menu
             dish = dishDTO
             Log.i("delivery", dishDTO.delivery)
-            priceDish.text = if (dishDTO.price.toInt() == 0) ""
-                else (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
+
+            if(subDish != "null"){
+                var listOfPrices: List<Int> = listOf()
+                val subMenu = SubMenuDB(context)
+                var minPrice = 9999
+                val subDish = subMenu.getCategoryDish(dish.name)
+                subDish.forEach {
+                    listOfPrices = listOfPrices.plus(it.price)
+                }
+                listOfPrices = listOfPrices.distinct()
+                if(listOfPrices.size > 1) {
+                    subDish.forEach {
+                        if (it.price < minPrice) minPrice = it.price
+                    }
+                    if (minPrice == 0) {
+                        priceDish.text = ""
+                    } else {
+                        priceDish.text =
+                            context.getString(R.string.from) + minPrice.toString() + context.getString(R.string.rub)
+                    }
+                }else{
+                    priceDish.text = listOfPrices[0].toString() + context.getString(R.string.rub)
+                }
+                subMenu.closeDataBase()
+            }else{
+                if (dishDTO.price.toInt() == 0){
+                    priceDish.text = ""
+                }else {
+                    priceDish.text = (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
+                }
+            }
 
             if (dishDTO.weight.contains("null")){
                 vesDish.visibility = View.GONE

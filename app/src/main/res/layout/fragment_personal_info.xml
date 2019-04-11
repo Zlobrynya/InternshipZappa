@@ -5,8 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:tag="PERSONAL_INFO"
-    android:background="@color/color_app">
+    android:background="@color/color_app"
+    android:clickable="true"
+    android:focusable="true"
+    android:tag="PERSONAL_INFO">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/fm_enter_personal_info"
@@ -31,18 +33,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/personal_info"
         android:textColor="@color/white"
         android:textSize="24sp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fm_enter_personal_info"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.02"
-        app:layout_constraintHorizontal_bias="0.5"
-        android:textStyle="bold"/>
+        app:layout_constraintVertical_bias="0.02" />
 
     <TextView
         android:id="@+id/label_name"
@@ -55,9 +57,9 @@
         android:text="@string/label_name"
         android:textColor="@color/color_hint"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/personal_info"
         app:layout_constraintVertical_bias="0.02" />
 
@@ -146,7 +148,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:layout_constraintVertical_bias="0.02"/>
+        app:layout_constraintVertical_bias="0.02" />
 
     <TextView
         android:id="@+id/fm_selected_table"
@@ -164,7 +166,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9"
-        app:layout_constraintVertical_bias="0.02"/>
+        app:layout_constraintVertical_bias="0.02" />
 
     <TextView
         android:id="@+id/textView10"
@@ -182,7 +184,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fm_selected_table"
-        app:layout_constraintVertical_bias="0.04"/>
+        app:layout_constraintVertical_bias="0.04" />
 
     <TextView
         android:id="@+id/fm_selected_date"
@@ -217,7 +219,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fm_selected_table"
-        app:layout_constraintVertical_bias="0.04"/>
+        app:layout_constraintVertical_bias="0.04" />
 
     <TextView
         android:id="@+id/fm_selected_time"

@@ -4,9 +4,9 @@ package com.zlobrynya.internshipzappa.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +30,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 /**
  * Фрагмент мои брони
  */
@@ -40,6 +41,10 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      */
     private val bookingList: ArrayList<UserBookingDTO> = ArrayList()
 
+    private var canClickDiscard: Boolean = true
+
+    var userBookingList: UserBookingList? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_my_bookings, container, false)
         view.login_button.setOnClickListener(onClickListener)
@@ -48,11 +53,17 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
     override fun onResume() {
         super.onResume()
-        bookingList.clear()
-        val view = this.view
-        if (view != null) {
-            postUserBookings(view)
-        }
+        canClickDiscard = true
+        val handler = Handler()
+        handler.post(object : Runnable {
+            override fun run() {
+                val view = this@MyBookingsFragment.view
+                if (view != null) {
+                    postUserBookings(view)
+                    handler.postDelayed(this, 1000)
+                }
+            }
+        })
     }
 
     /**
@@ -75,7 +86,6 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
     /**
      * Набивает данными список броней пользователя
-     * TODO переделать под сервер, добавить проверку на пустое количество броней
      */
     private fun initBookingList(userBookingList: List<UserBookingDTO>, view: View) {
         if (userBookingList.isEmpty()) { // Если список пустой (броней нету)
@@ -97,10 +107,8 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
     private fun initRecyclerView(view: View): View {
         val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         view.user_bookings_recycler.layoutManager = layoutManager
-        view.user_bookings_recycler.addItemDecoration(
-            DividerItemDecoration(context, DividerItemDecoration.VERTICAL) // Разделитель элементов внутри ресайклера
-        )
         view.user_bookings_recycler.adapter = AdapterUserBookings(bookingList, this)
+        canClickDiscard = true
         return view
     }
 
@@ -110,13 +118,14 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
      * @param isButtonClick Произошло ли нажатие на кнопку "Отменить"
      */
     override fun onDiscardClick(position: Int, isButtonClick: Boolean) {
-        if (isButtonClick) {
+        if (isButtonClick && canClickDiscard) {
+            canClickDiscard = false
             prepare(position)
         }
     }
 
     /**
-     * Проверяет доступ в интернет и в зависимости от результата вызывает showNoInternetConnectionAlert или preparePostParams
+     * Проверяет доступ в интернет и в зависимости от результата вызывает showNoInternetConnectionAlert или confirmDiscard
      */
     private fun prepare(position: Int) {
         if (!StaticMethods.checkInternetConnection(context)) showNoInternetConnectionAlert(position)
@@ -130,8 +139,8 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
 
         val sharedPreferences =
             activity!!.getSharedPreferences(this.getString(R.string.user_info), Context.MODE_PRIVATE)
-       /* val newEmail = verifyEmailDTO()
-        newEmail.email = sharedPreferences.getString(this.getString(R.string.user_email), "")*/
+        /* val newEmail = verifyEmailDTO()
+         newEmail.email = sharedPreferences.getString(this.getString(R.string.user_email), "")*/
         val jwt = sharedPreferences.getString(this.getString(R.string.access_token), "null").toString()
 
         RetrofitClientInstance.getInstance()
@@ -150,12 +159,18 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                         /**
                          * Если юзер авторизован, то вызываем initBookingList для наполнения списка броней
                          */
-                        val userBookingList = t.body()
-                        if (userBookingList != null) {
-                            view.user_not_authorized.visibility = View.GONE
-                            view.login_button.visibility = View.GONE
-                            initBookingList(userBookingList.bookings, view)
+                        if (t.body() != null) {
+                            if (t.body() != userBookingList) {
+                                bookingList.clear()
+                                userBookingList = t.body()
+                                if (userBookingList != null) {
+                                    view.user_not_authorized.visibility = View.GONE
+                                    view.login_button.visibility = View.GONE
+                                    initBookingList(userBookingList!!.bookings, view)
+                                }
+                            }
                         }
+
                     } else {
                         /*
                         Если юзер не авторизован, то скрываем рейсайклер и выводим сообщение
@@ -205,7 +220,11 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                         /*
                         Юзер авторизован, удаляем бронь
                          */
-                        this@MyBookingsFragment.onResume()
+                        val view = this@MyBookingsFragment.view
+                        if (view != null) {
+                            view.progress_spinner_my_bookings.visibility = View.GONE
+                            postUserBookings(view)
+                        }
                     } else {
                         /*
                         Юзер не авторизован, пишем что сессия истекла
@@ -218,20 +237,27 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                                 view.user_not_authorized.visibility = View.VISIBLE
                                 view.no_user_bookings_text_view.visibility = View.GONE
                                 view.user_bookings_recycler.visibility = View.GONE
+                                view.progress_spinner_my_bookings.visibility = View.GONE
                             }
                         }
+                        canClickDiscard = true
                     }
                 }
 
                 override fun onError(e: Throwable) {
-                    //запрос не выполнен, всё плохо
+                    val view = this@MyBookingsFragment.view
+                    if (view != null) {
+                        view.progress_spinner_my_bookings.visibility = View.GONE
+                    }
+                    canClickDiscard = true
+                    Toast.makeText(context, "Проблема с подключением к серверу", Toast.LENGTH_SHORT).show()
                 }
 
             })
     }
 
     /**
-     * Выводит с просьбой отменить бронь
+     * Выводит алерт с просьбой подтвердить отмену брони
      */
     private fun confirmDiscard(position: Int) {
         val builder: AlertDialog.Builder = AlertDialog.Builder(context as Context, R.style.AlertDialogCustom)
@@ -246,10 +272,19 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
             .setPositiveButton("Да") { dialog, which ->
                 run {
                     dialog.dismiss()
+                    val view = this@MyBookingsFragment.view
+                    if (view != null) {
+                        view.progress_spinner_my_bookings.visibility = View.VISIBLE
+                    }
                     postDeleteUserBookings(bookingList[position].booking_id)
                 }
             }
-            .setNegativeButton("Нет") { dialog, which -> dialog.dismiss() }
+            .setNegativeButton("Нет") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    canClickDiscard = true
+                }
+            }
         val alert = builder.create()
         alert.show()
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))
@@ -294,7 +329,12 @@ class MyBookingsFragment : Fragment(), AdapterUserBookings.OnDiscardClickListene
                     prepare(position)
                 }
             }
-            .setNegativeButton("ОТМЕНА") { dialog, which -> dialog.dismiss() }
+            .setNegativeButton("ОТМЕНА") { dialog, which ->
+                run {
+                    dialog.dismiss()
+                    canClickDiscard = true
+                }
+            }
         val alert = builder.create()
         alert.show()
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.color_accent))

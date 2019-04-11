@@ -22,6 +22,7 @@
     <string name="add">ДОБАВИТЬ</string>
 
     <!--доп строки общие-->
+    <string name="from">от\u0020</string>
     <string name="rub">\u0020₽</string>
     <string name="gr">\u0020г</string>
     <string name="ml">\u0020мл</string>
@@ -78,7 +79,7 @@
     <string name="error_email">Введите корректный E-mail</string>
     <string name="exist_email">Эта почта уже занята</string>
     <string name="error_name">Введите корректное имя</string>
-    <string name="error_password">Неверный пароль или E-mail</string>
+    <string name="error_password">Пароль должен содержать от 8 до 32 символов, включая как минимум одну латинскую букву и одну цифру</string>
     <string name="hint_confirm_password">Введите пароль еще раз</string>
     <string name="error_confirm_password">Пароли не совпадают</string>
 

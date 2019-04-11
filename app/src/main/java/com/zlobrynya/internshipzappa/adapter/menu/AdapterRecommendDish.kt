@@ -18,7 +18,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.zlobrynya.internshipzappa.tools.database.SubMenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
+import kotlinx.android.synthetic.main.item_menu.view.*
 
 
 /*
@@ -45,8 +47,38 @@ class AdapterRecommendDish(private val values: ArrayList<DishClientDTO>): Recycl
         // Установка данных в view
         @SuppressLint("SetTextI18n")
         fun bind(dishDTO: DishClientDTO) = with(itemView){
-            topingPrice.text = if (dishDTO.price == 0.0) "-"
-            else dishDTO.price.toInt().toString() + context.getString(R.string.rub)
+            val subDish = dishDTO.sub_menu
+
+            if(subDish != "null"){
+                var listOfPrices: List<Int> = listOf()
+                val subMenu = SubMenuDB(context)
+                var minPrice = 9999
+                val subDish = subMenu.getCategoryDish(dishDTO.name)
+                subDish.forEach {
+                    listOfPrices = listOfPrices.plus(it.price)
+                }
+                listOfPrices = listOfPrices.distinct()
+                if(listOfPrices.size > 1) {
+                    subDish.forEach {
+                        if (it.price < minPrice) minPrice = it.price
+                    }
+                    if (minPrice == 0) {
+                        topingPrice.text = ""
+                    } else {
+                        topingPrice.text =
+                            context.getString(R.string.from) + minPrice.toString() + context.getString(R.string.rub)
+                    }
+                }else{
+                    topingPrice.text = listOfPrices[0].toString() + context.getString(R.string.rub)
+                }
+                subMenu.closeDataBase()
+            }else{
+                if (dishDTO.price.toInt() == 0){
+                    topingPrice.text = ""
+                }else {
+                    topingPrice.text = (dishDTO.price.toInt()).toString() + context.getString(R.string.rub)
+                }
+            }
 
             if (dishDTO.weight.contains("null")){
                 topingVes.visibility = View.GONE
@@ -80,44 +112,6 @@ class AdapterRecommendDish(private val values: ArrayList<DishClientDTO>): Recycl
                         topingPhoto.setImageDrawable(errorDrawable)
                     }
                 })
-
-            /*btnToping.setOnClickListener(this@ViewHolder)
-            btnPlus.setOnClickListener(this@ViewHolder)
-            btnMinus.setOnClickListener(this@ViewHolder)*/
-
-
         }
-
-        /*override fun onClick(view: View) = with(itemView) {
-            when (view){
-                btnToping -> {
-                    btnToping.visibility = View.GONE
-                    btnPlus.visibility = View.VISIBLE
-                    btnMinus.visibility = View.VISIBLE
-                    tvCounter.visibility = View.VISIBLE
-                }
-                btnPlus -> {
-                    tvCounter.text = (tvCounter.text.toString().toInt() + 1).toString()
-                    if (tvCounter.text == context.getString(R.string.max_order))
-                        btnPlus.visibility = View.GONE
-                }
-                btnMinus -> {
-                    tvCounter.text = (tvCounter.text.toString().toInt() - 1).toString()
-                    when (tvCounter.text){
-                        context.getString(R.string.zero_num) ->{
-                            btnToping.visibility = View.VISIBLE
-                            btnPlus.visibility = View.GONE
-                            btnMinus.visibility = View.GONE
-                            tvCounter.visibility = View.GONE
-                            tvCounter.text = context.getString(R.string.default_num)
-                            Toast.makeText(itemView.context, context.getString(R.string.topping_delete), Toast.LENGTH_SHORT).show()
-                        }
-                        (context.getString(R.string.max_order).toInt() - 1).toString() ->{
-                            btnPlus.visibility = View.VISIBLE
-                        }
-                    }
-                }
-            }
-        }*/
     }
 }
