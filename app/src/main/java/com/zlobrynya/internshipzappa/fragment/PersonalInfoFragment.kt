@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AlertDialog
 import android.text.InputFilter
 import android.text.Spanned
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import android.widget.Toast
 
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
+import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
@@ -265,21 +267,38 @@ class PersonalInfoFragment : Fragment() {
                 override fun onNext(t: Response<userDataDTO>) {
                     val view = this@PersonalInfoFragment.view
                     if (view != null) {
-                        if (t.isSuccessful) {
-                            /**
+                        when(t.code()){
+                            200 -> {
+                                val data = t.body()!!.data
+                                fm_username.text = data.name
+                                fm_phone.text = data.phone
+                            }
+                            401 -> {
+                                /*val intent = Intent(context, LoginActivity::class.java)
+                                startActivity(intent)*/
+                            }
+                            else -> {
+                                Log.i("errorCode", t.code().toString())
+                                Toast.makeText(context, "Ошибка соединения с сервером. Пожалуйста, повторите попытку позже", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+                        /*if (t.isSuccessful) {
+                            *//**
                              * TODO при получении проверять, что поля не равны нулл
-                             */
+                             *//*
                             val data = t.body()!!.data
                             fm_username.text = data.name
                             fm_phone.text = data.phone
                         } else {
-                            /**
+                            *//**
                              * TODO
                              * юзер неавторизирован или ещё какая херня, но запрос выполнен. Посмотреть код t.code() и обработать
                              *если 401 запустить активити авторизации, если успешно авторизовался выкинуть обратно сюда и обновить
                              *содержимое фрагмента, видимо через отслеживание результата активити опять, хз
-                             */
-                        }
+                             *//*
+
+                        }*/
                     }
                 }
 
