@@ -63,10 +63,20 @@ class LoginActivity : AppCompatActivity() {
 
         log_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+                val email = log_email_input_layout.editText!!.text.toString()
+                val validateEmail = validateEmail(email)
+                val password = log_password_input_layout.editText!!.text.toString()
+                val validatePassword = validatePassword(password)
+
+                if (validateEmail && validatePassword){
+                    btnLogin.background = getDrawable(com.zlobrynya.internshipzappa.R.drawable.btn_can_click)
+                    btnLogin.isEnabled = true
+                } else {
+                    btnLogin.background = getDrawable(com.zlobrynya.internshipzappa.R.drawable.btn_not_click)
+                    btnLogin.isEnabled = false
+                }
                 log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        val email = log_email_input_layout.editText!!.text.toString()
-                        val validateEmail = validateEmail(email)
 
                         if (!hasFocus) {
                             hideKeyboard(v!!)
@@ -102,10 +112,22 @@ class LoginActivity : AppCompatActivity() {
 
         log_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
+
+                val email = log_email_input_layout.editText!!.text.toString()
+                val validateEmail = validateEmail(email)
+                val password = log_password_input_layout.editText!!.text.toString()
+                val validatePassword = validatePassword(password)
+
+                if (validateEmail && validatePassword){
+                    btnLogin.background = getDrawable(com.zlobrynya.internshipzappa.R.drawable.btn_can_click)
+                    btnLogin.isEnabled = true
+                } else {
+                    btnLogin.background = getDrawable(com.zlobrynya.internshipzappa.R.drawable.btn_not_click)
+                    btnLogin.isEnabled = false
+                }
+
                 log_password.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                        val password = log_password_input_layout.editText!!.text.toString()
-                        val validatePassword = validatePassword(password)
 
                         if (!hasFocus) {
                             hideKeyboard(v!!)
@@ -213,7 +235,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validatePassword(password: String): Boolean {
-        return password.matches("((?=.*[a-z0-9]).{4,20})".toRegex())
+        return password.matches("^(?=.*\\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#\$%^&*()\\-_=+{}|?>.<,:;~`’]{8,32}$".toRegex())
     }
 
     fun hideKeyboard(view: View) {
