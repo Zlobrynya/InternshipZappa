@@ -17,6 +17,7 @@ import com.zlobrynya.internshipzappa.activity.MenuActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.passwordRecoveryDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -43,13 +44,21 @@ class PasswordChange : AppCompatActivity() {
         val icon = resources.getDrawable(com.zlobrynya.internshipzappa.R.drawable.error)
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        change_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+        changePasswordConstraint.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
+
+        /*change_password.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         change_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -120,13 +129,13 @@ class PasswordChange : AppCompatActivity() {
 
         })
 
-        change_confirm_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*change_confirm_password.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         change_confirm_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -180,13 +189,13 @@ class PasswordChange : AppCompatActivity() {
 
         })
 
-        change_password_code_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*change_password_code_email.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         change_password_code_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

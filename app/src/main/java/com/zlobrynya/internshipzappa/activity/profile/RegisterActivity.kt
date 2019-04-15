@@ -43,13 +43,21 @@ class RegisterActivity : AppCompatActivity() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        reg_username.onFocusChangeListener = object : View.OnFocusChangeListener {
+        registerConstraint.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
+
+        /*reg_username.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         reg_username.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -78,13 +86,13 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-        reg_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*reg_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         reg_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -112,13 +120,13 @@ class RegisterActivity : AppCompatActivity() {
             }
         })
 
-        reg_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*reg_email.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         reg_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -147,13 +155,13 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-        reg_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*reg_password.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         reg_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -204,13 +212,13 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-        reg_confirm_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*reg_confirm_password.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         reg_confirm_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

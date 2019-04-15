@@ -22,6 +22,7 @@ import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -123,13 +124,21 @@ class EditProfileFragment : Fragment() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        view.edit_profile_username.onFocusChangeListener = object : View.OnFocusChangeListener {
+        view.editProfileConstraint.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(hasFocus){
+                    view.hideKeyboard()
+                }
+            }
+        }
+
+        /*view.edit_profile_username.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     view.hideKeyboard()
                 }
             }
-        }
+        }*/
 
         view.edit_profile_username.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -158,13 +167,13 @@ class EditProfileFragment : Fragment() {
 
         })
 
-        view.edit_profile_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*view.edit_profile_email.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     view.hideKeyboard()
                 }
             }
-        }
+        }*/
 
         view.edit_profile_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -194,13 +203,13 @@ class EditProfileFragment : Fragment() {
 
         })
 
-        view.edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*view.edit_profile_phone_number.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     view.hideKeyboard()
                 }
             }
-        }
+        }*/
 
         view.edit_profile_phone_number.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
