@@ -17,10 +17,12 @@ import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmail
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_menu.*
 import kotlinx.android.synthetic.main.activity_password_recovery.*
 import retrofit2.Response
 
@@ -37,13 +39,21 @@ class PasswordRecovery : AppCompatActivity() {
 
         val newVerify = verifyEmailDTO()
 
-        register_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+        passwordRecoveryConstraint.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
+
+        /*register_email.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if(!hasFocus){
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         register_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

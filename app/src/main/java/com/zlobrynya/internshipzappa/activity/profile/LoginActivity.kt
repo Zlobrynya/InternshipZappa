@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -53,13 +54,21 @@ class LoginActivity : AppCompatActivity() {
 
         icon?.setBounds(0, 0, icon.intrinsicWidth, icon.intrinsicHeight)
 
-        log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
+        loginConstraint.onFocusChangeListener = object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if(hasFocus){
+                    hideKeyboard(v!!)
+                }
+            }
+        }
+
+        /*log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if (!hasFocus) {
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         log_email.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -77,10 +86,6 @@ class LoginActivity : AppCompatActivity() {
                 }
                 log_email.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-
-                        if (!hasFocus) {
-                            hideKeyboard(v!!)
-                        }
 
                         if (!hasFocus && !validateEmail) {
                             log_email_input_layout.error = getString(com.zlobrynya.internshipzappa.R.string.error_email)
@@ -102,13 +107,13 @@ class LoginActivity : AppCompatActivity() {
 
         })
 
-        log_password.onFocusChangeListener = object : View.OnFocusChangeListener {
+        /*log_password.onFocusChangeListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
                 if (!hasFocus) {
                     hideKeyboard(v!!)
                 }
             }
-        }
+        }*/
 
         log_password.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -128,10 +133,6 @@ class LoginActivity : AppCompatActivity() {
 
                 log_password.onFocusChangeListener = object : View.OnFocusChangeListener {
                     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-
-                        if (!hasFocus) {
-                            hideKeyboard(v!!)
-                        }
 
                         if (!hasFocus && !validatePassword) {
                             log_password_input_layout.error =
