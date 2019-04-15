@@ -28,9 +28,9 @@ class AdapterTable(private val values: ArrayList<Table>, onTableListener: OnTabl
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (values[position].seatPosition == "") {
-            holder.seatType.text = "${values[position].seatType}"
+            holder.seatType.text = "${values[position].seatType}".toUpperCase()
         } else {
-            holder.seatType.text = "${values[position].seatType}, ${values[position].seatPosition}"
+            holder.seatType.text = "${values[position].seatType}, ${values[position].seatPosition}".toUpperCase()
         }
 
         when (values[position].seatCount) {
