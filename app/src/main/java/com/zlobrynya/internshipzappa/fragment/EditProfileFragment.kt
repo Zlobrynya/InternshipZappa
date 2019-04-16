@@ -11,10 +11,12 @@ import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.MenuActivity
@@ -75,6 +77,11 @@ class EditProfileFragment : Fragment() {
 
         initToolBar(view)
 
+        view.edit_profile_phone_number.setOnEditorActionListener(object: TextView.OnEditorActionListener{
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                return false
+            }
+        })
 
         val username = arguments!!.getString("name")
         val dob = arguments!!.getString("dob")
