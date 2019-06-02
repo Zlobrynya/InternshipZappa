@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
+
+        android:layout_marginBottom="2dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/color_app">
+
+        <TextView
+                android:id="@+id/nameTopping"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp" app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+                android:id="@+id/weightTopping"
+                android:layout_width="0dp"
+                android:textSize="12sp"
+                android:layout_height="15dp"
+                android:textColor="#99FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" android:layout_marginTop="2dp"
+                app:layout_constraintTop_toBottomOf="@+id/nameTopping"/>
+        <TextView
+                android:id="@+id/priceTopping"
+                android:layout_width="wrap_content"
+                android:textSize="20sp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent"/>
+        <Button
+                android:id="@+id/addButton"
+                android:text="@string/add"
+                android:textColor="@color/white"
+                android:layout_width="100dp"
+                android:layout_height="28dp"
+                android:background="@drawable/button_border"
+
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+
+        <FrameLayout
+                android:id="@+id/counterOn"
+                android:layout_width="84dp"
+                android:layout_height="28dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/frameLayout2" android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/frameLayout2">
+            <Button
+                    android:id="@+id/plusButton"
+                    android:text="@string/plus"
+                    android:textColor="@color/white"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="56dp"
+                    android:textSize="20sp"
+                    android:background="@drawable/button_border"
+            />
+            <TextView
+                    android:id="@+id/counter"
+                    android:layout_marginStart="28dp"
+                    android:layout_width="28dp"
+                    android:textSize="20sp"
+                    android:text="@string/default_num"
+                    android:layout_height="28dp"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+            />
+            <Button
+                    android:id="@+id/minusButton"
+                    android:text="@string/munis"
+                    android:textColor="@color/white"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/button_border"
+                    android:textSize="20sp"
+            />
+        </FrameLayout>
+        <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
+                                                     android:layout_height="1dp"
+                                                     android:background="@drawable/separator"
+                                                     android:id="@+id/frameLayout2"
+                                                     app:layout_constraintBottom_toBottomOf="parent"
+                                                     app:layout_constraintEnd_toEndOf="parent"
+                                                     app:layout_constraintStart_toStartOf="parent">
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>

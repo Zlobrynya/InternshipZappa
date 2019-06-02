@@ -1,3 +1,111 @@
 <resources>
-    <string name="app_name">InternshipZappa</string>
+    <string name="app_name">На Рогах</string>
+
+    <!-- allert messege -->
+    <string name="code_404">Сервер не доступен.</string>
+    <string name="code_0">Проверьте интернет соединение.</string>
+    <string name="code_503">Техническое обслуживание сервера.</string>
+    <string name="something_wrong">Ошибка соединения</string>
+    <string name="repeat_connection">ПОВТОРИТЬ</string>
+    <string name="offline">Приложение запустится в офлайн режиме. Меню может оказаться неактуальным.</string>
+    <string name="well">ПРОДОЛЖИТЬ</string>
+    <string name="close_app">Закрыть приложение</string>
+
+
+    <!-- layout -->
+    <string name="default_num">1</string>
+    <string name="no_name">Без наименования</string>
+    <string name="no_price">-</string>
+    <string name="plus">+</string>
+    <string name="munis">-</string>
+    <string name="recommendation">К этому блюду рекомендуют:</string>
+    <string name="add">ДОБАВИТЬ</string>
+
+    <!--доп строки общие-->
+    <string name="from">от\u0020</string>
+    <string name="rub">\u0020₽</string>
+    <string name="gr">\u0020г</string>
+    <string name="ml">\u0020мл</string>
+    <string name="zero_num">0</string>
+    <string name="category_topping">Топинги</string>
+
+    <!-- название парметров (ключи) -->
+    <string name="key_time">timeK</string>
+    <string name="key_shared_time">time</string>
+    <string name="key_id">id</string>
+    <string name="key_category">category</string>
+    <string name="key_shared_log">logK</string>
+    <string name="key_shared_name">endpoint</string>
+    <string name="key_shared_users">users</string>
+    <string name="key_user_name">users</string>
+    <string name="key_user_date">date</string>
+    <string name="key_user_email">email</string>
+    <string name="key_user_phone">phone</string>
+
+    <!-- доп строки адаптер топингов/рекоменд -->
+    <string name="max_order">15</string>
+
+    <!-- строки фрагмента с контактной информацией -->
+
+    <string name="hint_email">E-mail</string>
+    <string name="hint_password">Пароль</string>
+    <string name="hint_forgot">Забыли пароль?</string>
+    <string name="btn_login">Войти</string>
+    <string name="btn_link_to_register">Регистрация</string>
+
+    <string name="btn_register">Зарегистрироваться</string>
+    <string name="hint_username">Имя</string>
+    <string name="label_hint_phone_number">Телефон</string>
+
+    <!-- конец бронирования -->
+    <string name="otclonena">%1$s, к сожалению, выбранный Вами стол уже забронирован.</string>
+    <string name="izmeni">Измените время, дату визита или столик и попробуйте снова.</string>
+    <string name="prinyal">%1$s, заявка на бронирование принята.</string>
+    <string name="recall">В ближайшее время вам позвонит наш администратор и уточнит детали.</string>
+    <string name="back">Вернуться</string>
+    <string name="table4">№%1$d на %2$s места, %3$s</string>
+    <string name="table68">№%1$d на %2$s мест, %3$s</string>
+    <string name="table43">№%1$d на %2$s места, %3$s, %4$s</string>
+    <string name="table683">№%1$d на %2$s мест, %3$s, %4$s</string>
+    <string name="period">%1$s - %2$s</string>
+
+    <string name="btn_continue">Продолжить</string>
+    <string name="personal_info">Ваши данные</string>
+    <string name="your_bron">Ваша бронь</string>
+    <string name="table">Стол</string>
+    <string name="data">Дата</string>
+    <string name="time">Время</string>
+    <string name="error_phone">Введите корректный номер телефона</string>
+    <string name="error_email">Введите корректный E-mail</string>
+    <string name="exist_email">Эта почта уже занята</string>
+    <string name="error_name">Введите корректное имя</string>
+    <string name="error_password">Пароль должен содержать от 8 до 32 символов, включая как минимум одну латинскую букву и одну цифру</string>
+    <string name="hint_confirm_password">Введите пароль еще раз</string>
+    <string name="error_confirm_password">Пароли не совпадают</string>
+
+    <string name="enter_email">Введите код из E-mail сообщения</string>
+    <string name="wrong_code">Код введен неверно</string>
+
+    <!-- инфа о юзере -->
+    <string name="user_info">user_info</string>
+    <string name="user_email">email</string>
+    <string name="access_token">access_token</string>
+    <string name="label_name">Имя</string>
+
+    <string name="send_code">Отправить код</string>
+
+    <string name="change_password_letter">На указанный почтовый адрес мы отправим вам письмо с кодом, для смены пароля</string>
+    <string name="send">Отправить</string>
+    <string name="user_not_exist">Введенного вами адреса нет в базе</string>
+    <string name="code_from_email">Код из E-mail</string>
+    <string name="change_password">Изменить пароль</string>
+    <string name="change_pass_good">Ваш пароль успешно изменен. Мы рады, что вы снова с нами.</string>
+    <string name="OK">OK</string>
+    <string name="pass_changed">Пароль изменен</string>
+    <string name="code_null">Поле состоит из 5 символов</string>
+
+    <string name="wrong_password_email">Неверный пароль или E-mail</string>
+    <string name="label_hint_dob">Дата рождения</string>
+
+    <string name="text_profile_login">Войдите для просмотра профиля</string>
 </resources>
