@@ -13,9 +13,11 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.MenuActivity
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.changeUserDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.changeUserDataRespDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.regRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

@@ -8,19 +8,22 @@ import com.zlobrynya.internshipzappa.tools.database.CategoryDB
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.database.SubMenuDB
 import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
-import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
-import io.reactivex.*
+import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
 
 
 /*

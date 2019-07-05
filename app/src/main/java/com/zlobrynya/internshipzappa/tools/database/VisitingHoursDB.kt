@@ -3,7 +3,6 @@ package com.zlobrynya.internshipzappa.tools.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatDTO
 
 class VisitingHoursDB(context: Context) {
     private var database: Database? = null

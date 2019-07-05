@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -15,7 +15,6 @@ import android.widget.Toast
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.authRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

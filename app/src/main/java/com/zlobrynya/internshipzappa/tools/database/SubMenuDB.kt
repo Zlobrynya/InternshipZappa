@@ -1,11 +1,9 @@
 package com.zlobrynya.internshipzappa.tools.database
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishSubDTO
 
 

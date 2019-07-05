@@ -7,16 +7,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.adapter.booking.AdapterTable
-
 import com.zlobrynya.internshipzappa.adapter.booking.Table
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO

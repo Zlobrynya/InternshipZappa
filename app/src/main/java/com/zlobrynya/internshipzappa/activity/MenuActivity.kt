@@ -1,18 +1,19 @@
 package com.zlobrynya.internshipzappa.activity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.fragment.BookingRootFragment
+import com.zlobrynya.internshipzappa.fragment.ProfileRootFragment
 import com.zlobrynya.internshipzappa.fragment.menu.MenuFragment
 import kotlinx.android.synthetic.main.activity_menu.*
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import com.zlobrynya.internshipzappa.fragment.*
 
 const val MENU_PAGE: Int = 0
 const val BOOKING_PAGE: Int = 1

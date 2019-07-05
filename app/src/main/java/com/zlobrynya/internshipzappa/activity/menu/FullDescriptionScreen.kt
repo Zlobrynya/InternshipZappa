@@ -1,23 +1,22 @@
 package com.zlobrynya.internshipzappa.activity.menu
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
-import com.zlobrynya.internshipzappa.adapter.menu.AdapterRecommendDish
-import com.zlobrynya.internshipzappa.R
-import com.zlobrynya.internshipzappa.tools.database.MenuDB
-import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import android.view.MenuItem
+import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.adapter.menu.AdapterRecommendDish
+import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
+import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import java.util.*
 
 

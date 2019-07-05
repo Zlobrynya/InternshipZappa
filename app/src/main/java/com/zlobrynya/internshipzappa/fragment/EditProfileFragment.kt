@@ -21,20 +21,20 @@ import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.MenuActivity
 import com.zlobrynya.internshipzappa.activity.profile.CodeFEmailActivity
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.changeUserDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.changeUserDataRespDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyRespDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import retrofit2.Response
 import java.text.DateFormat
-
 import java.text.SimpleDateFormat
 import java.util.*
 

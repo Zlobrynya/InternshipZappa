@@ -15,10 +15,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
 import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.booking.BookingEnd
-import com.zlobrynya.internshipzappa.activity.profile.LoginActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO

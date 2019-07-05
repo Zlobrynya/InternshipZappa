@@ -19,10 +19,8 @@ import com.zlobrynya.internshipzappa.adapter.menu.AdapterSubMenuDescription
 import com.zlobrynya.internshipzappa.tools.database.MenuDB
 import com.zlobrynya.internshipzappa.tools.database.SubMenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishSubDTO
-import kotlinx.android.synthetic.main.activity_full_description_screen.*
 import kotlinx.android.synthetic.main.activity_sub_description_screen.*
-import java.util.ArrayList
+import java.util.*
 
 class SubDescriptionScreen : AppCompatActivity() {
 

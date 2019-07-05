@@ -2,13 +2,13 @@ package com.zlobrynya.internshipzappa.adapter.booking
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
-import java.util.*
+import android.view.ViewGroup
 import android.widget.TextView
 import com.zlobrynya.internshipzappa.R
 import kotlinx.android.synthetic.main.item_booking_duration.view.*
+import java.util.*
 
 
 /**

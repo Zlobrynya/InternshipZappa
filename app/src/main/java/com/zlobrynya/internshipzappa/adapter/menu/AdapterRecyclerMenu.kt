@@ -3,24 +3,24 @@ package com.zlobrynya.internshipzappa.adapter.menu
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.view.ViewGroup
-import com.zlobrynya.internshipzappa.R
-import android.view.LayoutInflater
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import com.zlobrynya.internshipzappa.R
 import com.zlobrynya.internshipzappa.activity.menu.FullDescriptionScreen
 import com.zlobrynya.internshipzappa.activity.menu.SubDescriptionScreen
+import com.zlobrynya.internshipzappa.tools.database.SubMenuDB
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import kotlinx.android.synthetic.main.item_menu.view.*
-import com.bumptech.glide.request.RequestOptions
-import com.zlobrynya.internshipzappa.tools.database.SubMenuDB
 
 
 /*

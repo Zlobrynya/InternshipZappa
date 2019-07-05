@@ -1,7 +1,9 @@
 package com.zlobrynya.internshipzappa.tools.retrofit
 
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.*
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingUserDTO
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import io.reactivex.Observable
 import retrofit2.Response

@@ -1,17 +1,18 @@
 package com.zlobrynya.internshipzappa.tools.retrofit
 
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.userDataDTO
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.verifyEmailDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.UserBookingList
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import io.reactivex.Observable
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
+import retrofit2.http.Path
 
 
 interface GetRequest {

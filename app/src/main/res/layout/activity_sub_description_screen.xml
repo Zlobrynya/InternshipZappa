@@ -23,7 +23,6 @@
         app:layout_constraintVertical_bias="0.0">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/CS1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -70,7 +69,6 @@
                 app:layout_constraintVertical_bias="0.0"></ImageView>
 
             <View
-                android:id="@+id/view3"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/shape"

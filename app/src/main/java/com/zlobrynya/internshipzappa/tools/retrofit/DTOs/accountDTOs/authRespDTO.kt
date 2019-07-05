@@ -1,7 +1,6 @@
 package com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 data class authRespDTO (
     @SerializedName("code") var code: Int = 0,

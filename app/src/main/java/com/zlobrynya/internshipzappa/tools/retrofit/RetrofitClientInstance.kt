@@ -1,10 +1,9 @@
 package com.zlobrynya.internshipzappa.tools.retrofit
 
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.CheckDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.*
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.*
-
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.CatList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishList
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import io.reactivex.Observable

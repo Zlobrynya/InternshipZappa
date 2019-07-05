@@ -1,41 +1,41 @@
 package com.zlobrynya.internshipzappa.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.zlobrynya.internshipzappa.adapter.booking.AdapterBookingDuration
-import com.zlobrynya.internshipzappa.adapter.booking.AdapterDays
-import kotlinx.android.synthetic.main.fragment_booking.view.*
-import java.util.*
-import kotlin.collections.ArrayList
-import android.text.format.DateUtils
 import android.widget.Toast
 import com.zlobrynya.internshipzappa.R
+import com.zlobrynya.internshipzappa.adapter.booking.AdapterBookingDuration
+import com.zlobrynya.internshipzappa.adapter.booking.AdapterDays
 import com.zlobrynya.internshipzappa.adapter.booking.BookDuration
 import com.zlobrynya.internshipzappa.tools.database.VisitingHoursDB
-import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
-import com.zlobrynya.internshipzappa.util.CustomTimePickerDialog
-import com.zlobrynya.internshipzappa.util.PositiveClickListener
-import kotlinx.android.synthetic.main.fragment_booking.*
-import java.text.SimpleDateFormat
-import android.content.Context
-import android.os.SystemClock
-import android.support.v7.app.AlertDialog
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.bookingDataDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.tableList
+import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.bookingDTOs.visitingHoursDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
+import com.zlobrynya.internshipzappa.util.CustomTimePickerDialog
+import com.zlobrynya.internshipzappa.util.PositiveClickListener
 import com.zlobrynya.internshipzappa.util.StaticMethods
 import com.zlobrynya.internshipzappa.util.TableParceling
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_booking.*
+import kotlinx.android.synthetic.main.fragment_booking.view.*
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Число дней, добавляемых к дате в календаре

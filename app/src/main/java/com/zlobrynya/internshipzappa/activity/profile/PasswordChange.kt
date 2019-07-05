@@ -17,7 +17,6 @@ import com.zlobrynya.internshipzappa.activity.MenuActivity
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.accountDTOs.passwordRecoveryDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.respDTO
 import com.zlobrynya.internshipzappa.tools.retrofit.RetrofitClientInstance
-import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

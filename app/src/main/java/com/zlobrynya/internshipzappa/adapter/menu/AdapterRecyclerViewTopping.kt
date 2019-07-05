@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zlobrynya.internshipzappa.R
-import android.view.LayoutInflater
 import com.zlobrynya.internshipzappa.tools.retrofit.DTOs.menuDTOs.DishClientDTO
 import kotlinx.android.synthetic.main.item_topping_menu.view.*
 
