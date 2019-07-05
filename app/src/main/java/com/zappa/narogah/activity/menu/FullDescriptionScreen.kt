@@ -1,0 +1,141 @@
+package com.zappa.narogah.activity.menu
+
+import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.view.MenuItem
+import android.view.View
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
+import com.zappa.narogah.R
+import com.zappa.narogah.adapter.menu.AdapterRecommendDish
+import com.zappa.narogah.tools.database.MenuDB
+import com.zappa.narogah.tools.retrofit.DTOs.menuDTOs.DishClientDTO
+import kotlinx.android.synthetic.main.activity_full_description_screen.*
+import java.util.*
+
+
+class FullDescriptionScreen : AppCompatActivity() {
+
+    private lateinit var menuDB: MenuDB
+
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_full_description_screen)
+
+        val intent = intent
+        val id = intent.getIntExtra(getString(R.string.key_id),0)
+
+        //ToolBar
+        toolbar.setBackgroundColor(resources.getColor(R.color.black_alpha_40))
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+
+        //что бы при открытии скрол был наверху, а не так что бы при открытии активити оказывались по середине
+        scrollView.smoothScrollTo(0,0)
+
+        //Создание RecyclerView
+        val layoutManager = LinearLayoutManager(this@FullDescriptionScreen, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.layoutManager = layoutManager
+
+        menuDB = MenuDB(this)
+        val dish = menuDB.getDescriptionDish(id)
+        showDishDescription(dish)
+
+        val array = listRecDish(dish.recommended)
+        if (!array.isEmpty())
+            recyclerView.adapter =
+                AdapterRecommendDish(listRecDish(dish.recommended))
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun showDishDescription(dish: DishClientDTO){
+        //Проверка получены ли данные
+        dishCena.text = if (dish.price == 0.0) getString(R.string.munis) else (dish.price.toInt()).toString() + getString(R.string.rub)
+
+        if (dish.weight == ""){
+            dishVes.visibility = View.GONE
+        } else{
+            if(dish.class_name == "НАПИТКИ"){
+                dishVes.text = dish.weight + getString(R.string.ml)
+            }else {
+                dishVes.text = dish.weight + getString(R.string.gr)
+            }
+        }
+
+        dishName.text = dish.name.replace("\'", "\"")
+
+        if (dish.desc_long.isEmpty()){
+            dishOpisanie.visibility = View.GONE
+        } else{
+            dishOpisanie.text = dish.desc_long.replace("\'", "\"")
+        }
+
+        //Glide
+        Glide.with(this@FullDescriptionScreen)
+            .asBitmap()
+            .load(dish.photo) // Изображение для теста. Исходное значение dish.photo
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            //.skipMemoryCache(true)
+            .placeholder(R.drawable.menu)
+            .error(R.drawable.menu)
+            .into(object: SimpleTarget<Bitmap>(){
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    progressBar.visibility = View.GONE
+                    dishPhoto.setImageBitmap(resource)
+                }
+
+                override fun onLoadFailed(errorDrawable: Drawable?) {
+                    super.onLoadFailed(errorDrawable)
+                    progressBar.visibility = View.GONE
+                    dishPhoto.setImageDrawable(errorDrawable)
+                }
+            })
+    }
+
+    fun listRecDish(str: String): ArrayList<DishClientDTO> {
+        val list: ArrayList<DishClientDTO> = ArrayList()
+        if (!str.isEmpty()){
+            val delimiter = ';'
+            val parts = str.split(delimiter)
+            for (i in 0 until parts.size){
+                if (!parts.get(i).contains("null"))
+                    list.add(menuDB.getDescriptionDish(parts.get(i).toInt()))
+            }
+            if (list.size == 0)
+                textView7.visibility = View.GONE
+        }else{
+            textView7.visibility = View.GONE
+        }
+        return list
+    }
+
+    override fun onDestroy() {
+        menuDB.closeDataBase()
+        super.onDestroy()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                this.finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+    }
+}
+

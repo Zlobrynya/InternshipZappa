@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.zlobrynya.narogah">
+    package="com.zappa.narogah">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -19,26 +19,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.zlobrynya.narogah.activity.MenuActivity"
+            android:name="com.zappa.narogah.activity.MenuActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="locked" />
         <activity
-            android:name="com.zlobrynya.narogah.activity.profile.RegisterActivity"
+            android:name="com.zappa.narogah.activity.profile.RegisterActivity"
             android:screenOrientation="locked" />
         <activity
-            android:name="com.zlobrynya.narogah.activity.booking.BookingEnd"
+            android:name="com.zappa.narogah.activity.booking.BookingEnd"
             android:screenOrientation="locked" />
         <activity
-            android:name="com.zlobrynya.narogah.activity.profile.LoginActivity"
+            android:name="com.zappa.narogah.activity.profile.LoginActivity"
             android:screenOrientation="locked" />
 
         <activity
-            android:name="com.zlobrynya.narogah.activity.menu.FullDescriptionScreen"
+            android:name="com.zappa.narogah.activity.menu.FullDescriptionScreen"
             android:screenOrientation="locked"
             android:theme="@style/AppTheme.NoBar" />
         <activity
-            android:name="com.zlobrynya.narogah.activity.MainActivity"
+            android:name="com.zappa.narogah.activity.MainActivity"
             android:screenOrientation="locked"
             android:theme="@style/AppTheme.NoBar">
             <intent-filter>
@@ -47,17 +47,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.zlobrynya.narogah.activity.profile.CodeFEmailActivity"
+        <activity android:name="com.zappa.narogah.activity.profile.CodeFEmailActivity"
             android:screenOrientation="locked">
         </activity>
         <activity
-            android:name="com.zlobrynya.narogah.activity.profile.PasswordRecovery"
+            android:name="com.zappa.narogah.activity.profile.PasswordRecovery"
             android:screenOrientation="locked"/>
         <activity
-            android:name="com.zlobrynya.narogah.activity.profile.PasswordChange"
+            android:name="com.zappa.narogah.activity.profile.PasswordChange"
             android:screenOrientation="locked"/>
         <activity
-            android:name="com.zlobrynya.narogah.activity.menu.SubDescriptionScreen"
+            android:name="com.zappa.narogah.activity.menu.SubDescriptionScreen"
             android:screenOrientation="locked"
             android:theme="@style/AppTheme.NoBar"/>
     </application>
